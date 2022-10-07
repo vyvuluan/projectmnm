@@ -1,5 +1,8 @@
 import React from 'react'
 import * as Bt from 'react-bootstrap'
+import { RiMapPinFill } from 'react-icons/ri'
+import { HiMail } from 'react-icons/hi'
+import { BsTelephoneFill } from 'react-icons/bs'
 
 export default function contact() {
     return (
@@ -21,7 +24,7 @@ export default function contact() {
                 </div>
 
                 <Bt.Row className='px-xl-5'>
-                    <Bt.Col lg={7} mb={5}>
+                    <Bt.Col lg={7} className='mb-5'>
                         <Bt.FormGroup className='mb-3' controlId='formContactName'>
                             <Bt.FormControl type='text' placeholder='Họ và tên của bạn' className='rounded-0'></Bt.FormControl>
                         </Bt.FormGroup>
@@ -38,9 +41,14 @@ export default function contact() {
                     </Bt.Col>
 
                     <Bt.Col lg={5} mb={5}>
-                        <h5 className='fw-semibold mb-2'>Thông tin liên hệ</h5>
-                        <p className='text-muted'>Justo sed diam ut sed amet duo amet lorem amet stet sea ipsum, sed duo amet et. Est elitr dolor elitr erat sit sit. Dolor diam et erat clita ipsum justo sed.</p>
-
+                        <h5 className='fw-semibold mb-2'>Lưu ý</h5>
+                        <p className='text-muted'>Chúng tôi sẽ trả lời bằng mail sau khi tiết nhận thông tin quý khách đã gửi từ 3-5 ngày làm việc. Hoặc liên hệ trực tiếp đến số điện thoại bên dưới để được hỗ trợ sớm nhất, xin cảm ơn.</p>
+                        <div className='d-flex flex-column mb-3'>
+                            <h5 className='fw-semibold mb-3'>Thông tin liên hệ</h5>
+                            <p className='mb-2'><RiMapPinFill className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</p>
+                            <p className='mb-2'><HiMail className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />l3mstore@support.com</p>
+                            <p className='mb-2'><BsTelephoneFill className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />+84 01234 43210</p>
+                        </div>
                     </Bt.Col>
                 </Bt.Row>
             </Bt.Container>
