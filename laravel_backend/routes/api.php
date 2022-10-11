@@ -57,6 +57,7 @@ Route::resource('products', ProductController::class);
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
 //Api giỏ hàng
 Route::post('addtocart', [CartController::class,'addtocart']);
+Route::get('cart', [CartController::class,'viewcart']);
 
 // Api ncc , nsx
 Route::resource('ncc', NccController::class);

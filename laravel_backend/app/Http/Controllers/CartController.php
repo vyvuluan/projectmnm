@@ -6,9 +6,41 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Cart;
 use Illuminate\Http\Request;
+use LDAP\Result;
 
 class CartController extends Controller
 {
+    public function viewcart()
+    {
+        // Đây là bản test vì chưa có login
+            $maKH= 1;
+            $cartItem = Cart::where('maKH',$maKH)->get();
+            return response()->json([
+                'status'=>200 ,
+                'cart'=>$cartItem,
+                ]);
+
+                // Bản chính thức
+        //   if(auth('sanctum')->check())
+        // {
+        //     $maKH= auth('sanctum')->user()->id;
+        //     $cartItem = Cart::where('id',$maKH)->get();
+        //     return response()->json([
+        //         'status'=>401 ,
+        //         'cart'=>$cartItem,
+        //         ]);
+            
+                   
+        // }
+        // else
+        // {
+        //     return response()->json([
+        //         'status'=>401,
+        //         'message'=>'Đăng nhập để xem giở',
+        //         ]);
+        // }
+
+    }
     public function addtocart(Request $request)
     {
         // Đây chỉ là bản test vì chưa có login
