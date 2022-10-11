@@ -4,13 +4,13 @@ import {Slideshow, Features,SectionTitle,Product } from "../../form/index.js"
 const HomePage = () => {
     return (
         <>
-        <Header/>
+       
         <Slideshow/>
         <SectionTitle title = "Service"/>
         <Features/>
         <SectionTitle title ="Sản phẩm bán chạy nhất"/>
         <Product item={products}/>
-        <Footer/>
+     
         </>
     )
 }

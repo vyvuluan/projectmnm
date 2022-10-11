@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 
 import "./style.css";
-
+import Category from "../category";
 const Slideshows = () => {
   const images = [
     "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
@@ -47,76 +47,83 @@ const Slideshows = () => {
   }, [index]);
   return (
     <>
-      <div id="header-carousel" className="carousel slide">
-        <div className="carousel-inner">
-          <div
-            className="carousel-item active"
-            style={{
-              height: "410px",
-              whiteSpace: "nowrap",
-              transition: "ease 1000ms",
-              transform: `translate3d(${-index * 100}%,0,0)`,
-            }}
-          >
-            {images.map((image, index) => (
-              <>
-                <img
-                  key={index}
-                  className="img-fluid "
-                  // style={{ width:"100%"}}
-                  src={image}
-                  alt="Image"
-                ></img>
-              </>
-            ))}
-          </div>
-          <div className=" carousel-caption d-flex flex-column align-items-center justify-content-center">
-            <div
-              className="p-3"
-              style={{
-                maxWidth: "700px",
-              }}
-            >
-              <h4 className="text-light text-uppercase font-weight-medium mb-3">
-                10% Off Your First Order
-              </h4>
-              <h3 className="display-4 text-white font-weight-semi-bold mb-4">
-                Fashionable Dress
-              </h3>
-              <a href="" className="btn btn-light py-2 px-3">
-                Shop Now
-              </a>
+      <div className="container-fluid mb-5" >
+        <div class="row border-top px-xl-5 " style={{flexDirection: "row", flexWrap: "nowrap"}} >
+          {/* -------------------------------------------------------------------------  */}
+          <Category></Category>
+          {/* ----------------------------------------------------------------- */}
+          <div id="header-carousel" className="carousel slide col">
+            <div className="carousel-inner">
+              <div
+                className="carousel-item active"
+                style={{
+                  height: "410px",
+                  whiteSpace: "nowrap",
+                  transition: "ease 1000ms",
+                  transform: `translate3d(${-index * 100}%,0,0)`,
+                }}
+              >
+                {images.map((image, index) => (
+                  <>
+                    <img
+                      key={index}
+                      className="img-fluid "
+                      // style={{ width:"100%"}}
+                      src={image}
+                      alt="Image"
+                    ></img>
+                  </>
+                ))}
+              </div>
+              <div className=" carousel-caption d-flex flex-column align-items-center justify-content-center">
+                <div
+                  className="p-3"
+                  style={{
+                    maxWidth: "700px",
+                  }}
+                >
+                  <h4 className="text-light text-uppercase font-weight-medium mb-3">
+                    10% Off Your First Order
+                  </h4>
+                  <h3 className="display-4 text-white font-weight-semi-bold mb-4">
+                    Fashionable Dress
+                  </h3>
+                  <a href="" className="btn btn-light py-2 px-3">
+                    Shop Now
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <a
-          className="carousel-control-prev"
-          href="#header-carousel"
-          data-slide="prev"
-          onClick={handleOnclickPre}
-        >
-          <div
-            className="btn btn-dark"
-            style={{ width: "45px", height: "45px" }}
-          >
-            <span className="carousel-control-prev-icon mb-n2"></span>
+            <a
+              className="carousel-control-prev"
+              data-slide="prev"
+              onClick={handleOnclickPre}
+            >
+              <div
+                className="btn btn-dark"
+                style={{ width: "45px", height: "45px" }}
+              >
+                <span className="carousel-control-prev-icon mb-n2"></span>
+              </div>
+            </a>
+            <a
+              className="carousel-control-next"
+              data-slide="next"
+              onClick={handleOnclickNext}
+            >
+              <div
+                className="btn btn-dark"
+                style={{ width: "45px", height: "45px" }}
+              >
+                <span className="carousel-control-next-icon mb-n2"></span>
+              </div>
+            </a>
           </div>
-        </a>
-        <a
-          className="carousel-control-next"
-          href="#header-carousel"
-          data-slide="next"
-          onClick={handleOnclickNext}
-        >
-          <div
-            className="btn btn-dark"
-            style={{ width: "45px", height: "45px" }}
-          >
-            <span className="carousel-control-next-icon mb-n2"></span>
           </div>
-        </a>
-      </div>
+          </div>
+        
+      
     </>
   );
 };
