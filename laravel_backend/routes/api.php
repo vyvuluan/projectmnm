@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\PasswordResetController;
 use  App\Http\Controllers\UserController;
+use  App\Http\Controllers\ContactContrller;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,7 @@ Route::post('/register', [UserController::class,'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class,'logout']);
+    Route::post('/contact', [ContactContrller::class,'store']);
 });
 
 Route::get('/login/{provider}', [UserController::class,'redirectToProvider']);

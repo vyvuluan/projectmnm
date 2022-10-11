@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,6 +76,9 @@ class UserController extends Controller
         {
             $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
         }
+        $customer = new Customer();
+        $customer->user_id = $user->id;
+        $customer->save();
         return response()->json([
             'status' => 200,
             'username' => $user->username,
