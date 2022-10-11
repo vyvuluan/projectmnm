@@ -24,9 +24,9 @@ class ContactContrller extends Controller
             $contact->id = auth('sanctum')->user()->customer->id;
             $contact->message  = $request->message;
             $contact->save();
-            
+
             return response()->json([
-                                
+
                 'message' => 'Thành công',
                 'contact' => $contact->message,
             ]);
@@ -34,10 +34,10 @@ class ContactContrller extends Controller
         else
         {
             return response()->json([
-                                
+
                 'message' => 'Cần đăng nhập',
             ]);
         }
     }
-    
+
 }
