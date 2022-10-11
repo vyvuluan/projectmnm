@@ -14,12 +14,12 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        
+
         if (! $user || ! Hash::check($request->password, $user->password) ) {
-            
-            
+
+
             return response()->json([
-                'status' => 401,                
+                'status' => 401,
                 'message' => 'error',
             ]);
         }
@@ -49,7 +49,7 @@ class UserController extends Controller
         ]);
     }
     public function register(Request $request)
-    {   
+    {
         if(empty($request->role_id))
         {
             $user = User::create([
@@ -67,7 +67,7 @@ class UserController extends Controller
                 'role_id' => $request->role_id,
             ]);
         }
-        
+
         if($user->role_id == 2) //admin
         {
             $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
@@ -90,7 +90,7 @@ class UserController extends Controller
     {
         auth()->user()->tokens()->delete();
         return response()->json([
-            'status' => 200,     
+            'status' => 200,
             'message' => 'logout successfully',
         ]);
     }
@@ -147,7 +147,7 @@ class UserController extends Controller
         $token = $userCreated->createToken($user->getEmail() .'_Token')->plainTextToken;
 
         return response()->json([
-        'status' => 200,     
+        'status' => 200,
         'message' => 'logout successfully',
         'userCreated' =>$userCreated ,
         'Access-Token' => $token]);
@@ -163,5 +163,5 @@ class UserController extends Controller
             return response()->json(['error' => 'Please login using facebook, github or google'], 422);
         }
     }
-    
+
 }

@@ -17,6 +17,12 @@ class Product extends Model
         'maNCC',
         'gia',
         'baohanh',
-        'description',
-        'detailProduc'];
+        'ctSanPham',
+        'moTa'];
+        public function loaisp()
+        {
+            return $this->belongsTo(loaisp::class,'maLoai','id');
+        }
+
 }
+

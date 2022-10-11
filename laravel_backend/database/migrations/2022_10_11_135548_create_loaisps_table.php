@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ct_phieu_xuats', function (Blueprint $table) {
-            $table->bigInteger('px_id');
-            $table->bigInteger('product_id');
-            $table->integer('soluong');
-            $table->integer('gia');
+        Schema::create('loaisps', function (Blueprint $table) {
+            $table->id();
+            $table->string('tenLoai');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ct_phieu_xuats');
+        Schema::dropIfExists('loaisps');
     }
 };
