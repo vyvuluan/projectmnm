@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use PHPUnit\Framework\Constraint\Count;
 
 class PaymentController extends Controller
@@ -29,23 +30,27 @@ class PaymentController extends Controller
 
 
     public function execPostRequest($url, $data)
-{
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($data))
-    );
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-    //execute post
-    $result = curl_exec($ch);
-    //close connection
-    curl_close($ch);
-    return $result;
-}
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data)
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        //execute post
+        $result = curl_exec($ch);
+        //close connection
+        curl_close($ch);
+        return $result;
+    }
     public function momopay()
     {
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
@@ -54,47 +59,49 @@ class PaymentController extends Controller
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
         $amount = "10000";
-        $orderId = time() ."";
+        $orderId = time() . "";
         $redirectUrl = "http://localhost:8000/";
         $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
-        $extraData="";
+        $extraData = "";
 
 
 
 
-    // $extraData = $_POST["extraData"];
+        // $extraData = $_POST["extraData"];
 
-    $requestId = time() . "";
-    $requestType = "payWithATM";
-    // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
-    //before sign HMAC SHA256 signature
-    $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
-    $signature = hash_hmac("sha256", $rawHash, $secretKey);
-    $data = array('partnerCode' => $partnerCode,
-        'partnerName' => "Test",
-        "storeId" => "MomoTestStore",
-        'requestId' => $requestId,
-        'amount' => $amount,
-        'orderId' => $orderId,
-        'orderInfo' => $orderInfo,
-        'redirectUrl' => $redirectUrl,
-        'ipnUrl' => $ipnUrl,
-        'lang' => 'vi',
-        'extraData' => $extraData,
-        'requestType' => $requestType,
-        'signature' => $signature);
-    $result = $this->execPostRequest($endpoint, json_encode($data));
-    $jsonResult = json_decode($result, true);  // decode json
-    return redirect()->to($jsonResult['payUrl']);
+        $requestId = time() . "";
+        $requestType = "payWithATM";
+        // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+        //before sign HMAC SHA256 signature
+        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+        $signature = hash_hmac("sha256", $rawHash, $secretKey);
+        $data = array(
+            'partnerCode' => $partnerCode,
+            'partnerName' => "Test",
+            "storeId" => "MomoTestStore",
+            'requestId' => $requestId,
+            'amount' => $amount,
+            'orderId' => $orderId,
+            'orderInfo' => $orderInfo,
+            'redirectUrl' => $redirectUrl,
+            'ipnUrl' => $ipnUrl,
+            'lang' => 'vi',
+            'extraData' => $extraData,
+            'requestType' => $requestType,
+            'signature' => $signature
+        );
+        $result = $this->execPostRequest($endpoint, json_encode($data));
+        $jsonResult = json_decode($result, true);  // decode json
+        return redirect()->to($jsonResult['payUrl']);
 
-    //Just a example, please check more in there
+        //Just a example, please check more in there
 
-    // header('Location: ' . $jsonResult['payUrl']);
+        // header('Location: ' . $jsonResult['payUrl']);
 
     }
     public function vnpay()
     {
-        $code = rand(00,9999);
+        $code = rand(00, 9999);
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         /*
          * To change this license header, choose License Headers in Project Properties.
@@ -105,20 +112,20 @@ class PaymentController extends Controller
         $vnp_TmnCode = "NKRQ52E0"; //Website ID in VNPAY System
         $vnp_HashSecret = "VATQXAPFIHFDXEHICPTLXBTTUHCSNUIL"; //Secret key
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-       // $vnp_Returnurl = "http://localhost/vnpay_php/vnpay_return.php";
+        // $vnp_Returnurl = "http://localhost/vnpay_php/vnpay_return.php";
         $vnp_Returnurl = "http://localhost:8000/api/saveorder";
         $vnp_apiUrl = "http://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
         //Config input format
         //Expire
         $startTime = date("YmdHis");
-        $expire = date('YmdHis',strtotime('+15 minutes',strtotime($startTime)));
+        $expire = date('YmdHis', strtotime('+15 minutes', strtotime($startTime)));
 
 
 
         $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = 'Noi dung thanh toan';
         $vnp_OrderType = 'other';
-        $vnp_Amount = 10000*100;
+        $vnp_Amount = 10000 * 100;
         $vnp_Locale = 'vn';
         $vnp_BankCode = 'NCB';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -162,19 +169,19 @@ class PaymentController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
-        $returnData = array('code' => '00'
-            , 'message' => 'success'
-            , 'data' => $vnp_Url);
-            if (isset($_POST['redirect'])) {
-                header('Location: ' . $vnp_Url);
-                die();
-            } else {
-                echo json_encode($returnData);
-            }
-            // vui lòng tham khảo thêm tại code demo
+        $returnData = array(
+            'code' => '00', 'message' => 'success', 'data' => $vnp_Url
+        );
+        if (isset($_POST['redirect'])) {
+            header('Location: ' . $vnp_Url);
+            die();
+        } else {
+            echo json_encode($returnData);
+        }
+        // vui lòng tham khảo thêm tại code demo
     }
     public function saveorder(Request $request)
     {
@@ -213,58 +220,59 @@ class PaymentController extends Controller
         $Status =  $inputData['vnp_ResponseCode'];
 
 
-        if($Status='00' && $secureHash == $vnp_SecureHash)
-        {
+        if ($Status = '00' && $secureHash == $vnp_SecureHash) {
             $get = DB::table('phieu_xuats')
-	        ->select('id')
-	        ->get();
+                ->select('id')
+                ->get();
             $datapay = [
                 'status' => '1',
                 'customer_id' => '113',
             ];
             PhieuXuat::insert($datapay);
-              //return response($get);
+            return Redirect::to('http://localhost:3000')->with('message', $datapay);
+            //return redirect('localhost:3000')->with('message', $datapay);
+            //return response($get);
 
-                    // if(empty($get))
-                    // {
-                    //     $ngayMua=getdate();
-                    //     $datapay = [
-                    //         'status' => 'Hoàn Thành',
-                    //         'customer_id' => '113',
-                    //         'employee_id' => '',
+            // if(empty($get))
+            // {
+            //     $ngayMua=getdate();
+            //     $datapay = [
+            //         'status' => 'Hoàn Thành',
+            //         'customer_id' => '113',
+            //         'employee_id' => '',
 
-                    //     ];
-                    //     PhieuXuat::insert($datapay);
-                    // }
-                    // else
-                    // {
-                    //             foreach( $get as $key => $value )
-                    //             {
+            //     ];
+            //     PhieuXuat::insert($datapay);
+            // }
+            // else
+            // {
+            //             foreach( $get as $key => $value )
+            //             {
 
-                    //                 $arr[]= get_object_vars($value);
-                    //                 $return = $arr[$key];
-                    //                 $id = $return['OrderId'];
-                    //                 if( $id == $orderId)
-                    //                 {
-                    //                     $orderId++;
+            //                 $arr[]= get_object_vars($value);
+            //                 $return = $arr[$key];
+            //                 $id = $return['OrderId'];
+            //                 if( $id == $orderId)
+            //                 {
+            //                     $orderId++;
 
-                    //                 }
-                    //             }
+            //                 }
+            //             }
 
-                    //                 $datapay = [
-                    //                     'id'=> $orderId,
-                    //                     'status' => 'Hoàn Thành',
-                    //                     'customer_id' => '113',
-                    //                     'employee_id' => '',
-                    //                 ];
-                    //                 PhieuXuat::insert($datapay);
-                    //                 //return response($orderId);
+            //                 $datapay = [
+            //                     'id'=> $orderId,
+            //                     'status' => 'Hoàn Thành',
+            //                     'customer_id' => '113',
+            //                     'employee_id' => '',
+            //                 ];
+            //                 PhieuXuat::insert($datapay);
+            //                 //return response($orderId);
 
 
 
-                    // }
-            }
+            // }
         }
+    }
 
 
 
