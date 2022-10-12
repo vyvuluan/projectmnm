@@ -11,6 +11,7 @@ use  App\Http\Controllers\NccController;
 use  App\Http\Controllers\NsxController;
 use  App\Http\Controllers\PaymentController;
 use  App\Http\Controllers\CartController;
+use  App\Http\Controllers\LoaispController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,13 +49,11 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
                             // API Long
 //Api sản phẩm
 Route::resource('products', ProductController::class);
-
-// Route::resource('products/add', ProductController::class)->only('store');
-// Route::delete('products/delete/{id}', [ProductController::class,'destroy']);
-// Route::get('products/edit/{id}', [ProductController::class,'edit']);
-// Route::put('products/update/{id}', [ProductController::class,'update']);
+//Api loại sản phẩm
+Route::resource('loaisp', LoaispController::class);
         // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
+
 //Api giỏ hàng
 Route::post('addtocart', [CartController::class,'addtocart']);
 Route::get('cart', [CartController::class,'viewcart']);
@@ -67,3 +66,10 @@ Route::resource('nsx', NsxController::class);
 Route::post('pay', [PaymentController::class,'vnpay']);
 Route::post('momo', [PaymentController::class,'momopay']);
 Route::get('saveorder',[PaymentController::class,'saveorder']);
+
+
+
+// Route::resource('products/add', ProductController::class)->only('store');
+// Route::delete('products/delete/{id}', [ProductController::class,'destroy']);
+// Route::get('products/edit/{id}', [ProductController::class,'edit']);
+// Route::put('products/update/{id}', [ProductController::class,'update']);

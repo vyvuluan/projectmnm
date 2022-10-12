@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use  App\Models\Loaisp;
+use Validator;
 use Illuminate\Http\Request;
-use App\Models\Ncc;
-use App\Http\Resources\NccResource;
+use Illuminate\Http\Response;
 
-class NccController extends Controller
+class LoaispController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //return Ncc::all();
-        return NccResource::collection(Ncc::paginate(10));
+        //
     }
 
     /**
@@ -38,13 +37,30 @@ class NccController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'TenSP' => 'required',
-        //     'Gia' => 'required',
-        //     'Mota' => 'required',
+        // $this->validate($request, [
+        //     'tenLoai' =>'required|max:10'
         // ]);
-        $Ncc = Ncc::create($request->all());
-        return new NccResource($Ncc);
+        $validator = Validator::make($request->all(),[
+            'tenLoai' =>'required|max:10'
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $Loaisp = new Loaisp;
+            $Loaisp->tenLoai = $request->tenLoai;
+            $Loaisp->save();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Thêm loại sản phẩm thành công',
+            ]);
+        }
+        
     }
 
     /**
@@ -53,10 +69,9 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Ncc $Ncc)
+    public function show($id)
     {
-
-        return new NccResource($Ncc);
+        //
     }
 
     /**
@@ -77,10 +92,9 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Ncc $Ncc)
+    public function update(Request $request, $id)
     {
-        $Ncc->update($request->all());
-        return new NccResource($Ncc);
+        //
     }
 
     /**
@@ -89,9 +103,8 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ncc $Ncc)
+    public function destroy($id)
     {
-
-        $Ncc->delete();
+        //
     }
 }
