@@ -18,34 +18,37 @@ const Category = () => {
         >
           <div
             className="navbar-nav w-100 overflow-hidden"
-            style={{ height: "auto" , borderBottom: "1px solid #333"}}
+            style={{
+              height: "auto",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
           >
-            
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Shirts
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Jeans
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Swimwear
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Sleepwear
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Sportswear
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Jumpsuits
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Blazers
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Jackets
             </a>
-            <a href="" className="nav-item nav-link">
+            <a href="" className="nav-item nav-link border-bottom">
               Shoes
             </a>
           </div>
