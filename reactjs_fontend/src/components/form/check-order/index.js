@@ -1,15 +1,14 @@
 import React from "react";
 import "./style.css";
 import OrderDetail from "../order-detail";
-import Popup from "reactjs-popup";
 import { Link } from "react-router-dom";
 const CheckOrder = () => {
   return (
     <>
-      <div className="container padding-bottom-3x mb-1">
+      <div className="container padding-bottom-3x mb-5 mt-5">
         <form action="">
           <div className="card mb-3">
-            <div className="p-4 text-center text-white text-lg bg-info rounded-top">
+            <div className="p-4 text-center text-white text-lg bg-primary">
               <span className="text-uppercase">Đơn hàng số - </span>
               <span className="text-medium">001698653lp</span>
             </div>
@@ -83,10 +82,10 @@ const CheckOrder = () => {
               </label>
             </div>
             <div className="text-left text-sm-right">
-                <Link className="btn btn-outline-primary btn-rounded btn-sm " to={`/OrderDetail`}>
-                    Xem chi tiết đơn hàng
-                </Link>
-             
+              <Link className="btn btn-outline-primary btn-rounded btn-sm " to={`/OrderDetail`}>
+                Xem chi tiết đơn hàng
+              </Link>
+
             </div>
           </div>
         </form>

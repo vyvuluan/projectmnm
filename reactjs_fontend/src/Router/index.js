@@ -15,7 +15,9 @@ import {
   Resgiter,
   Slideshow,
   AccountInfor,
-  Category
+  Category,
+  Cart,
+  Contact
 } from "../components/form";
 export const PublicRouter = [
   {
@@ -59,9 +61,19 @@ export const PublicRouter = [
     component: Slideshow,
     layout: _Layout,
   },
-  
+  {
+    path: "/Cart",
+    component: Cart,
+    layout: _Layout,
+  },
+  {
+    path: "/Contact",
+    component: Contact,
+    layout: _Layout,
+  },
+
 ];
- {/* <Route path="/product" element={<Product />} />
+{/* <Route path="/product" element={<Product />} />
           <Route path="/detailProduct" element={<DetailProduct />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resgiter" element={<Resgiter />} />

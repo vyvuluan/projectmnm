@@ -2,7 +2,7 @@ import React from 'react'
 import * as Bt from 'react-bootstrap'
 import * as Icon from 'react-bootstrap-icons'
 import { FaSearch, FaShoppingCart, FaUser, FaShoppingBag } from 'react-icons/fa'
-
+import { Link } from 'react-router-dom'
 export default function Header() {
 
 
@@ -48,16 +48,12 @@ export default function Header() {
                         </Bt.Form>
                     </Bt.Col>
                     <Bt.Col lg={3} className='col-6 text-end'>
-                        <a href={'#'} className='btn border rounded-0 me-3'>
-                            <FaShoppingBag className='me-2 text-primary' style={{ width: 'auto', height: '25px' }} />
-                            <span className='fw-semibold'>Shop</span>
-                        </a>
-                        <a href={'#'} className='btn border rounded-0 me-3'>
+                        {/* <a href={'#'} className='btn border rounded-0 me-3'>
                             <FaUser style={{ width: 'auto', height: '25px' }} className='text-primary' />
-                        </a>
-                        <a href={'#'} className='btn border rounded-0'>
+                        </a> */}
+                        <Link to={`/Cart`} className='btn border rounded-0'>
                             <FaShoppingCart style={{ width: 'auto', height: '25px' }} className='text-primary' />
-                        </a>
+                        </Link>
                     </Bt.Col>
                 </Bt.Row>
                 {/* TopBar-end */}
@@ -83,7 +79,7 @@ export default function Header() {
                                     {/* <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Shop</Bt.NavLink>
                                     <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Laptop</Bt.NavLink>
                                     <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Máy tính để bàn</Bt.NavLink> */}
-                                    <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Liên hệ</Bt.NavLink>
+                                    <Bt.NavLink className='fs-5 fw-normal me-2'>Liên hệ</Bt.NavLink>
                                     <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Về chúng tôi</Bt.NavLink>
                                 </Bt.Nav>
 
