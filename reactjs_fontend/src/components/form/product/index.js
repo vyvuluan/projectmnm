@@ -13,21 +13,21 @@ const Product = (props) => {
             //console.log(index);
             for (let i = 0; i <= index; i++) {
               return (
-                <div className="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
                   <div className="card product-item border-0 mb-4">
                     <div className="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                       <img
                         className="img-fluid w-100"
-                        src={item.image}
+                        src={item.hinh}
                         alt="img product"
                       ></img>
                     </div>
                     <div className="text-center border-end border-start p-0 pt-4 pb-3 ">
-                      <h6 className="mb-3">{item.name}</h6>
+                      <h6 className="mb-3">{item.tenSP}</h6>
                       <div className="d-flex justify-content-center">
-                        <h6>{item.price}</h6>
+                        <h6>{item.gia}</h6>
                         <h6 className="text-muted ms-2">
-                          <del>{item.price}</del>
+                          <del>{item.gia}</del>
                         </h6>
                       </div>
                     </div>

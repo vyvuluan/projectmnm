@@ -48,7 +48,7 @@ const Slideshows = () => {
   return (
     <>
       <div className="container-fluid mb-5" >
-        <div class="row border-top px-xl-5 " style={{flexDirection: "row", flexWrap: "nowrap"}} >
+        <div className="row border-top px-xl-5 " style={{flexDirection: "row", flexWrap: "nowrap"}} >
           {/* -------------------------------------------------------------------------  */}
           <Category></Category>
           {/* ----------------------------------------------------------------- */}
