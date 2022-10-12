@@ -229,7 +229,7 @@ class PaymentController extends Controller
                 'customer_id' => '113',
             ];
             PhieuXuat::insert($datapay);
-            return Redirect::to('http://localhost:3000')->with('message', $datapay);
+            return Redirect::to('http://localhost:3000?Status=0&orderId='.$orderId.'&Amount='.$vnp_Amount);
             //return redirect('localhost:3000')->with('message', $datapay);
             //return response($get);
 
