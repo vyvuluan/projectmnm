@@ -2,14 +2,16 @@ import React from "react";
 import { useState } from "react";
 import "./style.css";
 import { Button } from "react-bootstrap";
-import LoginGoogle from "./loginGoogle.js"
-import { GoogleLogin } from "react-google-login";
-import { useEffect } from "react";  
-import './linkgg.js'
+import LoginGoogle from "./loginGoogle.js";
+
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./style.css";
+import { BsFillHouseFill } from "react-icons/bs";
 const Login = (props) => {
-  const handleCallbackResponse = (response)=>{
+  const handleCallbackResponse = (response) => {
     console.log("ID token : " + response.credential);
-  }
+  };
   // useEffect(()=>{
   //   google.accounts.id.initialize({
   //     client_id:"1082529749855-m2jvr7o57bsit6a8colcbsv0ro324ac6.apps.googleusercontent.com",
@@ -21,7 +23,6 @@ const Login = (props) => {
   //   )
   // }, [])
 
-
   let [authMode, setAuthMode] = useState("signin");
 
   const changeAuthMode = () => {
@@ -31,11 +32,18 @@ const Login = (props) => {
   if (authMode === "signin") {
     return (
       <>
-        
         <div id="SignIn" className="Auth-form-container">
           <form className="Auth-form">
             <div className="Auth-form-content">
+              <Link
+                style={{ marginTop: "-20px", position: "absolute" }}
+                to={`/`}
+              >
+                <BsFillHouseFill />
+              </Link> 
               <h3 className="Auth-form-title">Đăng Nhập</h3>
+              <p className="text-center mt-2"></p>
+
               <div className="text-center">
                 Chưa có tài khoản?{" "}
                 <span className="link-primary" onClick={changeAuthMode}>
@@ -64,29 +72,27 @@ const Login = (props) => {
                 </button>
               </div>
               <p className="text-center mt-2">
-                Quên <a href="#" >mật khẩu?</a>
+                Quên <a href="#">mật khẩu?</a>
               </p>
               <div className="loginOption">
-              <LoginGoogle/>
-            <Button
-              type="submit"
-              
-              variant="contained"
-              color="primary"
-              className="p-1 border m-1 btnCus shadow-sm "
-            
-            //   onClick={handleGoogleLogin}
-            >
-              <img
-                width="20px"
-                style={{ marginBottom: "3px", marginRight: "5px" }}
-                alt="Google sign-in"
-                src="https://img.icons8.com/fluency/48/000000/facebook-new.png"
-              />
-              Login with Facebook
-            </Button>
-           
-            </div>
+                <LoginGoogle />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className="p-1 border m-1 btnCus shadow-sm "
+
+                  //   onClick={handleGoogleLogin}
+                >
+                  <img
+                    width="20px"
+                    style={{ marginBottom: "3px", marginRight: "5px" }}
+                    alt="Google sign-in"
+                    src="https://img.icons8.com/fluency/48/000000/facebook-new.png"
+                  />
+                  Login with Facebook
+                </Button>
+              </div>
             </div>
           </form>
         </div>
@@ -140,10 +146,6 @@ const Login = (props) => {
             <button type="submit" className="btn btn-primary shadow-sm">
               Đăng Ký
             </button>
-            
-            
-            
-            
           </div>
         </div>
       </form>
