@@ -8,7 +8,7 @@ const Category = () => {
           className="btn shadow-none d-flex align-items-center bg-primary text-white"
           data-toggle="collapse"
           // href="#navbar-vertical"
-          style={{ height: "65px", paddingLeft: "10px" }}
+          style={{ height: "48px", paddingLeft: "10px" }}
         >
           <h5 className="m-0 font-size-30">Categories</h5>
         </a>
