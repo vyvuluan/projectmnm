@@ -13,6 +13,6 @@ class Cart extends Model
     protected $with =['product'];
     public function product()
     {
-        return $this->belongsto(Product::class,'id','maSP');
+        return $this->belongsto(Product::class,'maSP','id');
     }
 }
