@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('employee_id')->nullable();
             $table->bigInteger('customer_id');
             $table->integer('status');
+            $table->string('pt_ThanhToan');
             $table->timestamps();
         });
     }

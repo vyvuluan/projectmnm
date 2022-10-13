@@ -57,15 +57,18 @@ Route::resource('loaisp', LoaispController::class);
 //Api giỏ hàng
 Route::post('addtocart', [CartController::class,'addtocart']);
 Route::get('cart', [CartController::class,'viewcart']);
+Route::put('cart-updatequantity/{id_cart}/{scope}',[CartController::class,'updatequantity']);
+Route::delete('deletecart/{id_cart}',[CartController::class,'deletecart']);
 
 // Api ncc , nsx
 Route::resource('ncc', NccController::class);
 Route::resource('nsx', NsxController::class);
 
 //Api Thanh Toán
+Route::post('dathang', [PaymentController::class,'dathang']);
 Route::post('pay', [PaymentController::class,'vnpay']);
 Route::post('momo', [PaymentController::class,'momopay']);
-Route::get('saveorder',[PaymentController::class,'saveorder']);
+Route::get('saveorder',[PaymentController::class,'saveorder']); // api này front end không dùng
 
 
 

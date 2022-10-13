@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
+use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+
 use PHPUnit\Framework\Constraint\Count;
 
 class PaymentController extends Controller
@@ -16,6 +19,49 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function dathang(Request $request)
+    {
+        // if(auth('sanctum')->check())
+        // {
+        // $maKH= auth('sanctum')->user()->id;
+            $maKH=$request->maKH;
+            $payment = new PhieuXuat;
+            $payment->customer_id=$maKH;
+            $payment->status=0;
+            $payment->pt_ThanhToan='COD';
+            $payment->save();
+
+            $cart = Cart::where('maKH',$maKH)->get();
+            $pxChiTiet =[];
+            foreach ($cart as $item)
+            {
+                $pxChiTiet[]=[
+
+                    'product_id'=>$item->maSP,
+                    'soluong'=>$item->soLuongSP,
+                    'gia'=>$item->product->gia,
+                ];
+                $item->product->update([
+                    'soLuongSP'=>$item->product->soLuongSP - $item->soLuongSP
+                ]);
+            }
+            $payment->pxct()->createMany($pxChiTiet);
+            Cart::destroy($cart);
+            return response()->json([
+                'status'=>200 ,
+                'message'=>'Đặt hàng thành công',
+                ]);
+
+        // }
+        // else
+        // {
+        //     return response()->json([
+        //         'status'=>401,
+        //         'message'=>'Đăng nhập để thanh toán',
+        //         ]);
+        // }
+
+    }
 
 
 
@@ -221,15 +267,50 @@ class PaymentController extends Controller
 
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
-            $get = DB::table('phieu_xuats')
-                ->select('id')
-                ->get();
-            $datapay = [
-                'status' => '1',
-                'customer_id' => '113',
-            ];
-            PhieuXuat::insert($datapay);
-            return Redirect::to('http://localhost:3000?Status=0&orderId='.$orderId.'&Amount='.$vnp_Amount);
+              // if(auth('sanctum')->check())
+                // {
+                    // $maKH= auth('sanctum')->user()->id;
+                    $maKH=1;
+                    $payment = new PhieuXuat;
+                    $payment->customer_id=$maKH;
+                    $payment->status=0;
+                    $payment->pt_ThanhToan='VNPAY';
+                    $payment->save();
+
+                    $cart = Cart::where('maKH',$maKH)->get();
+                    $pxChiTiet =[];
+                    foreach ($cart as $item)
+                    {
+                        $pxChiTiet[]=[
+
+                            'product_id'=>$item->maSP,
+                            'soluong'=>$item->soLuongSP,
+                            'gia'=>$item->product->gia,
+                        ];
+                        $item->product->update([
+                            'soLuongSP'=>$item->product->soLuongSP - $item->soLuongSP
+                        ]);
+                    }
+                    $payment->pxct()->createMany($pxChiTiet);
+                    Cart::destroy($cart);
+                    return response()->json([
+                        'status'=>200 ,
+                        'message'=>'Đặt hàng thành công',
+                        ]);
+
+                    return Redirect::to('http://localhost:3000?Status=0&orderId='.$orderId.'&Amount='.$vnp_Amount);
+    // }
+    // else
+    // {
+    //     return response()->json([
+    //         'status'=>401,
+    //         'message'=>'Đăng nhập để thanh toán',
+    //         ]);
+    // }
+
+
+
+
             //return redirect('localhost:3000')->with('message', $datapay);
             //return response($get);
 

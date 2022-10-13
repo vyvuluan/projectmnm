@@ -16,7 +16,11 @@ class LoaispController extends Controller
      */
     public function index()
     {
-        //
+        $loaisp = Loaisp::all();
+        return response()->json([
+            'status'=>200,
+            'error'=>$loaisp,
+        ]);
     }
 
     /**
@@ -60,7 +64,7 @@ class LoaispController extends Controller
                 'message'=>'Thêm loại sản phẩm thành công',
             ]);
         }
-        
+
     }
 
     /**
@@ -82,7 +86,14 @@ class LoaispController extends Controller
      */
     public function edit($id)
     {
-        //
+        $Loaisp = Loaisp::find($id);
+        if($Loaisp)
+        {
+            return response()->json([
+                'status'=>200,
+                'loaisp'=>$Loaisp,
+            ]);
+        }
     }
 
     /**
@@ -94,7 +105,37 @@ class LoaispController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'tenLoai' =>'required|max:10'
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $Loaisp = Loaisp::find($id);
+            if($Loaisp)
+            {
+                $Loaisp->tenLoai = $request->tenLoai;
+                $Loaisp->save();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Cập nhật thành công ',
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Không tìm thấy loại sản phẩm',
+                ]);
+
+            }
+        }
     }
 
     /**
@@ -105,6 +146,6 @@ class LoaispController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }
