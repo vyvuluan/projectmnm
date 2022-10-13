@@ -12,7 +12,12 @@ class PhieuXuat extends Model
         'employee_id',
         'customer_id',
         'status',
-       
+        'pt_ThanhToan'
+
     ];
+    public function pxct()
+    {
+        return $this->hasMany(CtPhieuXuat::class,'px_id','id');
+    }
 
 }

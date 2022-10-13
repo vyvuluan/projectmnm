@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'TenSP',
+        'tenSP',
         'soLuongSP',
         'hinh',
         'maLoai',
@@ -17,6 +18,12 @@ class Product extends Model
         'maNCC',
         'gia',
         'baohanh',
-        'description',
-        'detailProduc'];
+        'ctSanPham',
+        'moTa'];
+        public function loaisp()
+        {
+            return $this->belongsTo(loaisp::class,'maLoai','id');
+        }
+
 }
+

@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('ct_phieu_xuats', function (Blueprint $table) {
-            $table->bigIncrements('px_id');
-            $table->bigIncrements('product_id');
+            $table->bigInteger('px_id');
+            $table->bigInteger('product_id');
             $table->integer('soluong');
             $table->integer('gia');
             $table->timestamps();

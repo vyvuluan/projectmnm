@@ -14,12 +14,12 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        
+
         if (! $user || ! Hash::check($request->password, $user->password) ) {
-            
-            
+
+
             return response()->json([
-                'status' => 401,                
+                'status' => 401,
                 'message' => 'error',
             ]);
         }
@@ -49,7 +49,7 @@ class UserController extends Controller
         ]);
     }
     public function register(Request $request)
-    {   
+    {
         if(empty($request->role_id))
         {
             $user = User::create([
@@ -67,7 +67,7 @@ class UserController extends Controller
                 'role_id' => $request->role_id,
             ]);
         }
-        
+
         if($user->role_id == 2) //admin
         {
             $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
@@ -90,7 +90,7 @@ class UserController extends Controller
     {
         auth()->user()->tokens()->delete();
         return response()->json([
-            'status' => 200,     
+            'status' => 200,
             'message' => 'logout successfully',
         ]);
     }
@@ -147,7 +147,7 @@ class UserController extends Controller
         $token = $userCreated->createToken($user->getEmail() .'_Token')->plainTextToken;
 
         return response()->json([
-        'status' => 200,     
+        'status' => 200,
         'message' => 'logout successfully',
         'userCreated' =>$userCreated ,
         'Access-Token' => $token]);
@@ -163,5 +163,117 @@ class UserController extends Controller
             return response()->json(['error' => 'Please login using facebook, github or google'], 422);
         }
     }
-    
+    public function detailUser()
+    {
+        if(auth('sanctum')->check())
+        {
+            return response()->json([
+                'data_user' => auth('sanctum')->user(),
+                'data_customer' => auth('sanctum')->user()->customer,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+    public function updateUser(Request $request)
+    {
+        $request->validate([
+            'ten' => 'required|max:255',
+            'ngaySinh' => 'required',
+            'diaChi' => 'required|max:255',
+            'sdt' => 'required|max:1000000000|numeric',
+            'gioiTinh' => 'required|max:1|numeric',
+
+        ],[
+            'ten.required' => 'Ô Tên Không được bỏ trống',
+            'ten.max' => 'Ô Tên tối đa 255 ký tự',
+            'ngaySinh.required' => 'Ô ngày sinh không được bỏ trống',
+            //'ngaySinh.strtotime' => 'Ô ngày sinh không đúng định dạng',
+            'diaChi.required' => 'Ô địa chỉ không được bỏ trống',
+            'diaChi.max' => 'Ô địa chỉ tối đa 255 ký tự',
+
+            'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+            'sdt.max' => 'Ô số điện thoại tối đa 11 ký tự',
+            'sdt.numeric' => 'Ô số điện thoại phải là số',
+
+            'gioiTinh.required' => 'Ô giới tính không được bỏ trống',
+            'gioiTinh.max' => 'Ô giới tính tối đa 1 ký tự',
+            'gioiTinh.numeric' => 'Ô giới tính phải là số',
+            
+        ]);
+        if(auth('sanctum')->check())
+        {
+            $customer = Customer::find(auth('sanctum')->user()->id);
+            
+            $customer->ten = $request->ten;
+            $customer->ngaySinh = date('Y-m-d', strtotime($request->ngaySinh));
+
+            $customer->diaChi = $request->diaChi;
+
+            $customer->sdt = $request->sdt;
+            $customer->gioiTinh = $request->gioiTinh;
+            $customer->save();
+            return response()->json([
+                'message' => 'update thành công',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+    public function changePass(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|max:255',
+            're_password' => 'required|max:255',
+        ],[
+            'password.required' => 'Ô password Không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+            
+            're_password.required' => 'Ô re-password không được bỏ trống',
+            're_password.max' => 'Ô re-password tối đa 255 ký tự',
+
+            
+            
+        ]);
+        if(auth('sanctum')->check())
+        {
+            $password = $request->password;
+            $re_password = $request->re_password;
+            if($password != $re_password)
+            {
+                return response()->json([
+                    'message' => 'password và nhập lại password không trùng khớp',
+                ]);
+            }
+            else
+            {
+                $user = User::find(auth('sanctum')->user()->id);
+            
+                $user->password = Hash::make($password);
+                $user->save();
+                return response()->json([
+                    'message' => 'update thành công',
+                ]);
+            }
+           
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+
 }

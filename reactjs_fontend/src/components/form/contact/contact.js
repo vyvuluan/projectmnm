@@ -18,8 +18,8 @@ export default function contact() {
                 </div>
             </Bt.Container>
 
-            <Bt.Container fluid pt={5}>
-                <div className='text-center mb-4'>
+            <Bt.Container pt={5}>
+                <div className='text-center mb-5'>
                     <h2 className='section-title px-5'><span className='px-2'>「 Liên hệ nếu có thắc mắc nào 」</span></h2>
                 </div>
 
@@ -37,7 +37,7 @@ export default function contact() {
                         <Bt.FormGroup className='mb-3' controlId='formContactMessage'>
                             <Bt.FormControl as='textarea' rows='6' placeholder='Lời nhắn' className='rounded-0'></Bt.FormControl>
                         </Bt.FormGroup>
-                        <Bt.Button variant='primary' className='rounded-0 mb-3'>Gửi lời nhắn</Bt.Button>
+                        <Bt.Button variant='primary' className='rounded-0'>Gửi lời nhắn</Bt.Button>
                     </Bt.Col>
 
                     <Bt.Col lg={5} mb={5}>

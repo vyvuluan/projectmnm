@@ -30,7 +30,7 @@ class PasswordResetController extends Controller
         if ($passwordReset) {
             $user->notify(new ResetPasswordRequest($passwordReset->token));
         }
-  
+
         return response()->json([
         'message' => 'We have e-mailed your password reset link!'
         ]);
@@ -38,7 +38,7 @@ class PasswordResetController extends Controller
 
     public function reset(Request $request, $token)
     {
-       
+
         $passwordReset = PasswordReset::where('token', $token)->firstOrFail();
         if (Carbon::parse($passwordReset->updated_at)->addMinutes(720)->isPast()) {
             $passwordReset->delete();

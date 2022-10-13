@@ -48,31 +48,33 @@ export default function Accountinfo() {
                         <Bt.Image className='thumbnail border rounded-0' width={'auto'} height={'500px'} src={product1}></Bt.Image>
                     </Bt.Col>
                     <Bt.Col lg={4} className='py-5 ps-5 text-start'>
-                        <Bt.FormGroup className='mb-3' controlId='formName'>
-                            <Bt.FormLabel className='fw-semibold fs-4'>Họ và tên</Bt.FormLabel>
-                            <Bt.FormControl type='text' placeholder='Nhập vào họ và tên' className='rounded-0'></Bt.FormControl>
-                        </Bt.FormGroup>
-                        <Bt.FormGroup className='mb-3' controlId='formSexual'>
-                            <Bt.FormLabel className='fw-semibold fs-4'>Giới tính</Bt.FormLabel>
-                            <br></br>
-                            <Bt.FormCheck className='form-check-inline'>
-                                <Bt.FormCheck.Input type='radio' id='flexRadio1'></Bt.FormCheck.Input>
-                                <Bt.FormCheck.Label for='flexRadio1'>Nam</Bt.FormCheck.Label>
-                            </Bt.FormCheck>
-                            <Bt.FormCheck className='form-check-inline'>
-                                <Bt.FormCheck.Input type='radio' id='flexRadio2'></Bt.FormCheck.Input>
-                                <Bt.FormCheck.Label for='flexRadio2'>Nữ</Bt.FormCheck.Label>
-                            </Bt.FormCheck>
-                        </Bt.FormGroup>
-                        <Bt.FormGroup className='mb-3' controlId='formAddress'>
-                            <Bt.FormLabel className='fw-semibold fs-4'>Địa chỉ</Bt.FormLabel>
-                            <Bt.FormControl type='text' placeholder='Nhập địa chỉ' className='rounded-0'></Bt.FormControl>
-                        </Bt.FormGroup>
-                        <Bt.FormGroup className='mb-3' controlId='formSDT'>
-                            <Bt.FormLabel className='fw-semibold fs-4'>Số điện thoại</Bt.FormLabel>
-                            <Bt.FormControl type='text' placeholder='Nhập vào số điện thoại' className='rounded-0'></Bt.FormControl>
-                        </Bt.FormGroup>
-                        <Bt.Button variant='primary' className='rounded-0 py-2 mt-3'>Lưu thay đổi</Bt.Button>
+                        <Bt.Form>
+                            <Bt.FormGroup className='mb-3' controlId='formName'>
+                                <Bt.FormLabel className='fw-semibold fs-4'>Họ và tên</Bt.FormLabel>
+                                <Bt.FormControl type='text' placeholder='Nhập vào họ và tên' className='rounded-0'></Bt.FormControl>
+                            </Bt.FormGroup>
+                            <Bt.FormGroup className='mb-3' controlId='formSexual'>
+                                <Bt.FormLabel className='fw-semibold fs-4'>Giới tính</Bt.FormLabel>
+                                <br></br>
+                                <Bt.FormCheck className='form-check-inline'>
+                                    <Bt.FormCheck.Input type='radio' id='flexRadio1'></Bt.FormCheck.Input>
+                                    <Bt.FormCheck.Label for='flexRadio1'>Nam</Bt.FormCheck.Label>
+                                </Bt.FormCheck>
+                                <Bt.FormCheck className='form-check-inline'>
+                                    <Bt.FormCheck.Input type='radio' id='flexRadio2'></Bt.FormCheck.Input>
+                                    <Bt.FormCheck.Label for='flexRadio2'>Nữ</Bt.FormCheck.Label>
+                                </Bt.FormCheck>
+                            </Bt.FormGroup>
+                            <Bt.FormGroup className='mb-3' controlId='formAddress'>
+                                <Bt.FormLabel className='fw-semibold fs-4'>Địa chỉ</Bt.FormLabel>
+                                <Bt.FormControl type='text' placeholder='Nhập địa chỉ' className='rounded-0'></Bt.FormControl>
+                            </Bt.FormGroup>
+                            <Bt.FormGroup className='mb-3' controlId='formSDT'>
+                                <Bt.FormLabel className='fw-semibold fs-4'>Số điện thoại</Bt.FormLabel>
+                                <Bt.FormControl type='text' placeholder='Nhập vào số điện thoại' className='rounded-0'></Bt.FormControl>
+                            </Bt.FormGroup>
+                            <Bt.Button variant='primary' className='rounded-0 py-2 mt-3'>Lưu thay đổi</Bt.Button>
+                        </Bt.Form>
                     </Bt.Col>
                 </Bt.Row>
             </Bt.Container>
