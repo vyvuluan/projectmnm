@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\loaisp;
-use App\Http\Resources\ProductResource;
+//use App\Http\Resources\ProductResource;
 use App\Models\Product as ModelsProduct;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;

@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('nccs', function (Blueprint $table) {
             $table->id();
             // $table->bigInteger('maNSX');
-            $table->string('tenNSX');
-            $table->string('quocGia');
+            $table->string('tenNCC');
+            $table->string('diaChi');
+            $table->string('sdt');
+          
             $table->timestamps();
         });
     }

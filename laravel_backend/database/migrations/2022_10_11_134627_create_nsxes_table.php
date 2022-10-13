@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             // $table->bigInteger('maNSX');
             $table->string('tenNCC');
-            $table->string('diaChi');
-            $table->string('sdt');
+            $table->string('quocGia');
             $table->timestamps();
 
         });

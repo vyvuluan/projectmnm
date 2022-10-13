@@ -107,7 +107,7 @@ class PaymentController extends Controller
         $amount = "10000";
         $orderId = time() . "";
         $redirectUrl = "http://localhost:8000/";
-        $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+        $ipnUrl = "http://localhost:8000/api/dathang";
         $extraData = "";
 
 

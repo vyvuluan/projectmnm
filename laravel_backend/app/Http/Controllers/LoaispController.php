@@ -19,7 +19,7 @@ class LoaispController extends Controller
         $loaisp = Loaisp::all();
         return response()->json([
             'status'=>200,
-            'error'=>$loaisp,
+            'Loaisp'=>$loaisp,
         ]);
     }
 
@@ -146,6 +146,23 @@ class LoaispController extends Controller
      */
     public function destroy($id)
     {
+        $Loaisp = Loaisp::find($id);
+        if($Loaisp)
+        {
+            $Loaisp->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Xoá thành công',
+                ]);
+        }   
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'Không tìm thấy Loại sản phẩm cần xoá',
+                ]);
+
+        }    
 
     }
 }
