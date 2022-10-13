@@ -41,7 +41,7 @@ const HomePage = () => {
       {listProduct ? (
         <Product item={listProduct} />
       ) : (
-        <div>không có sản phẩm</div>
+        <div className="text-center">không có sản phẩm</div>
       )}
     </>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { AiFillEye } from "react-icons/ai";
 import { BsFillCartFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 const Product = (props) => {
   const {item} = props;
@@ -38,7 +39,8 @@ const Product = (props) => {
                           className="text-decoration-none text-dark p-1"
                         >
                           <AiFillEye className="me-1 mb-1"></AiFillEye>
-                          <span>Xem chi tiết</span>
+                          
+                          <Link className="text-decoration-none" to="/DetailProduct"><span>Xem chi tiết</span></Link>
                         </a>
                       </div>
                       <div className="text-center">
@@ -47,7 +49,7 @@ const Product = (props) => {
                           className="text-decoration-none text-dark p-1"
                         >
                           <BsFillCartFill className="me-1 mb-1"></BsFillCartFill>
-                          <span>Thêm vào giỏ</span>
+                          <span><Link className="text-decoration-none"   >Thêm vào giỏ</Link></span>
                         </a>
                       </div>
                     </div>

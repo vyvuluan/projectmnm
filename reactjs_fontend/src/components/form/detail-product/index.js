@@ -12,7 +12,9 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { GrNext, GrPrevious } from "react-icons/gr";
-const DetailProduct = () => {
+const DetailProduct = (props) => {
+  const {item} = props;
+  
   return (
     <>
       <div className="container-fluid py-5">
