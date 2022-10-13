@@ -7,7 +7,7 @@ import { FaBars, FaSearch, FaBell, FaEnvelope, FaUser } from "react-icons/fa";
 const NavBarAdmin = () => {
   return (
     <>
-      <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+      <nav className="navbar navbar-expand navbar-light bg-dark topbar static-top shadow">
         <button
           id="sidebarToggleTop"
           className="btn btn-link d-md-none rounded-circle mr-3"
@@ -17,7 +17,12 @@ const NavBarAdmin = () => {
         </button>
         {/* form tìm kiếm */}
         <div className="row m-3 " style={{ color: "#d19c97" }}>
-          <h5>L3M Admin</h5>
+          {/* <h5>L3M Admin</h5> */}
+          <a href='#' className='text-decoration-none'>
+            <span className='fs-4 text-primary fw-bold'>L3M <span className='text-white'>SHOP</span></span>
+          </a>
+          <div className='text-muted fs-6'>ADMINISTRATOR</div>
+
         </div>
         <ul className="navbar-nav ml-auto">
           <li style={{ position: "relative" }}>

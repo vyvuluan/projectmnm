@@ -10,7 +10,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'TenSP',
+        'tenSP',
         'soLuongSP',
         'hinh',
         'maLoai',

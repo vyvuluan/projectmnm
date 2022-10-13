@@ -12,6 +12,7 @@ use  App\Http\Controllers\NsxController;
 use  App\Http\Controllers\PaymentController;
 use  App\Http\Controllers\CartController;
 use  App\Http\Controllers\LoaispController;
+use  App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,6 +38,12 @@ Route::get('/login/{provider}', [UserController::class,'redirectToProvider']);
 Route::get('/login/{provider}/callback', [UserController::class,'handleProviderCallback']);
 Route::post('reset-password', [PasswordResetController::class,'sendMail']);
 Route::put('reset-password/{token}',[PasswordResetController::class,'reset']);
+//api của trang chủ
+Route::get('/home', [HomeController::class,'home']);
+//api thông tin tài khoản
+Route::get('/detailUser', [UserController::class,'detailUser']);
+Route::put('/detailUser', [UserController::class,'updateUser']);
+Route::put('/changePass', [UserController::class,'changePass']);
 
 Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
     Route::get('noti', function () {

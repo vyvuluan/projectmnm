@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import SideNavBar from "./components/form-admin/sidebar/SideNavBar.js";
 import { PublicRouter } from "./Router";
 import { NavbarAdmin } from "./components/form-admin/index.js";
 function App() {
@@ -17,7 +17,7 @@ function App() {
             }
             return <Route path={item.path} element={Page} />;
           })}
-          {/* <Route path="/navbaradmin" element={<NavbarAdmin/>}></Route> */}
+          <Route path="/navbaradmin" element={<NavbarAdmin />}></Route>
         </Routes>
       </BrowserRouter>
     </>
