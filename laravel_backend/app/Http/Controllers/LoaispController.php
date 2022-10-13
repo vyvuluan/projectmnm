@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Nsx;
+use  App\Models\Loaisp;
 use Validator;
-use App\Http\Resources\NsxResource;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class NsxController extends Controller
+class LoaispController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $Nsx = Nsx::paginate();
+        $loaisp = Loaisp::all();
         return response()->json([
             'status'=>200,
-            'Nsx'=>$Nsx,
+            'Loaisp'=>$loaisp,
         ]);
     }
 
@@ -43,10 +41,11 @@ class NsxController extends Controller
      */
     public function store(Request $request)
     {
-       
+        // $this->validate($request, [
+        //     'tenLoai' =>'required|max:10'
+        // ]);
         $validator = Validator::make($request->all(),[
-            'tenNSX' =>'required|max:10',
-            'quocGia'=>'required|max:20',
+            'tenLoai' =>'required|max:10'
         ]);
         if($validator->fails())
         {
@@ -57,15 +56,15 @@ class NsxController extends Controller
         }
         else
         {
-            $Nsx = new Nsx();
-            $Nsx->tenNSX = $request->tenNSX;
-            $Nsx->quocGia = $request->quocGia;
-            $Nsx->save();
+            $Loaisp = new Loaisp;
+            $Loaisp->tenLoai = $request->tenLoai;
+            $Loaisp->save();
             return response()->json([
                 'status'=>200,
-                'message'=>'Thêm Nsx thành công',
+                'message'=>'Thêm loại sản phẩm thành công',
             ]);
         }
+
     }
 
     /**
@@ -74,10 +73,9 @@ class NsxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Nsx $Nsx)
+    public function show($id)
     {
-
-        return new NsxResource($Nsx);
+        //
     }
 
     /**
@@ -88,12 +86,12 @@ class NsxController extends Controller
      */
     public function edit($id)
     {
-        $Nsx = Nsx::find($id);
-        if($Nsx)
+        $Loaisp = Loaisp::find($id);
+        if($Loaisp)
         {
             return response()->json([
                 'status'=>200,
-                'loaisp'=>$Nsx,
+                'loaisp'=>$Loaisp,
             ]);
         }
     }
@@ -108,8 +106,7 @@ class NsxController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'tenNSX' =>'required|max:10',
-            'quocGia'=>'required|max:20',
+            'tenLoai' =>'required|max:10'
         ]);
         if($validator->fails())
         {
@@ -120,12 +117,11 @@ class NsxController extends Controller
         }
         else
         {
-            $Nsx = Nsx::find($id);
-            if($Nsx)
+            $Loaisp = Loaisp::find($id);
+            if($Loaisp)
             {
-                $Nsx->tenNSX = $request->tenNSX;
-                $Nsx->quocGia = $request->quocGia;
-                $Nsx->save();
+                $Loaisp->tenLoai = $request->tenLoai;
+                $Loaisp->save();
                 return response()->json([
                     'status'=>200,
                     'message'=>'Cập nhật thành công ',
@@ -148,12 +144,12 @@ class NsxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
-        $Nsx = Nsx::find($id);
-        if($Nsx)
+        $Loaisp = Loaisp::find($id);
+        if($Loaisp)
         {
-            $Nsx->delete();
+            $Loaisp->delete();
             return response()->json([
                 'status'=>200,
                 'message'=>'Xoá thành công',
@@ -163,9 +159,10 @@ class NsxController extends Controller
         {
             return response()->json([
                 'status'=>404,
-                'message'=>'Không tìm thấy nsx cần xoá',
+                'message'=>'Không tìm thấy Loại sản phẩm cần xoá',
                 ]);
 
         }    
+
     }
 }
