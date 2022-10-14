@@ -3,7 +3,8 @@ import React from "react";
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./style.css";
 import { FaBars, FaSearch, FaBell, FaEnvelope, FaUser } from "react-icons/fa";
-
+import SearchAdmin from "../search-admin";
+import ContactAdmin from "../contact-admin";
 const NavBarAdmin = () => {
   return (
     <>
@@ -25,35 +26,6 @@ const NavBarAdmin = () => {
 
         </div>
         <ul className="navbar-nav ml-auto">
-          <li style={{ position: "relative" }}>
-            <form className="d-none d-sm-inline-block form-inline ml-md-3  mw-100 navbar-search">
-              <div
-                className="input-group"
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "350px",
-                }}
-              >
-                <input
-                  type="text"
-                  className="form-control bg-light border-0 small"
-                  placeholder="Search for..."
-                  aria-label="Search"
-                  aria-describedby="basic-addon2"
-                ></input>
-
-                <button
-                  className="btn btn-primary rounded-end r-0"
-                  type="button"
-                >
-                  <FaSearch />
-                </button>
-              </div>
-            </form>
-          </li>
           {/* <!-- Nav Item - Alerts --> */}
           <li className="nav-item dropdown no-arrow mx-1">
             <a
@@ -67,7 +39,7 @@ const NavBarAdmin = () => {
             >
               <FaBell  />
               {/* <!-- Counter - Alerts --> */}
-              <span className="badge badge-danger badge-counter">3+</span>
+              <span className="badge badge-danger badge-counter d-none">3</span>
             </a>
             {/* <!-- Dropdown - Alerts --> */}
           </li>
@@ -85,7 +57,7 @@ const NavBarAdmin = () => {
             >
               <FaEnvelope />
               {/* <!-- Counter - Messages --> */}
-              <span className="badge badge-danger badge-counter">7</span>
+              <span className="badge badge-danger d-none  badge-counter">7</span>
             </a>
             {/* <!-- Dropdown - Messages --> */}
           </li>
@@ -104,6 +76,8 @@ const NavBarAdmin = () => {
           </li>
         </ul>
       </nav>
+      {/* <SearchAdmin/> */}
+      <ContactAdmin/>
     </>
   );
 };

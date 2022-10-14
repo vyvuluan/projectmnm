@@ -4,14 +4,14 @@ import { BsFillCartFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 const Product = (props) => {
-  const {item} = props;
-  
+  const { item } = props;
+
   return (
     <>
       <div className="container-fluid pt-5">
         <div className="row px-xl-5 pb-3">
           {item.map((item, index) => {
-            //console.log(index);
+            // console.log(item.hinh);
             for (let i = 0; i <= index; i++) {
               return (
                 <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -19,7 +19,7 @@ const Product = (props) => {
                     <div className="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                       <img
                         className="img-fluid w-100"
-                        src={`http://localhost:8000/${item.hinh}`}
+                        src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                         alt="img product"
                       ></img>
                     </div>
@@ -39,8 +39,13 @@ const Product = (props) => {
                           className="text-decoration-none text-dark p-1"
                         >
                           <AiFillEye className="me-1 mb-1"></AiFillEye>
-                          
-                          <Link className="text-decoration-none" to="/DetailProduct"><span>Xem chi tiết</span></Link>
+
+                          <Link
+                            className="text-decoration-none"
+                            to="/DetailProduct"
+                          >
+                            <span>Xem chi tiết</span>
+                          </Link>
                         </a>
                       </div>
                       <div className="text-center">
@@ -49,7 +54,11 @@ const Product = (props) => {
                           className="text-decoration-none text-dark p-1"
                         >
                           <BsFillCartFill className="me-1 mb-1"></BsFillCartFill>
-                          <span><Link className="text-decoration-none"   >Thêm vào giỏ</Link></span>
+                          <span>
+                            <Link className="text-decoration-none">
+                              Thêm vào giỏ
+                            </Link>
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -58,8 +67,6 @@ const Product = (props) => {
               );
             }
           })}
-          
-         
         </div>
       </div>
     </>
