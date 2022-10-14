@@ -27,17 +27,15 @@ const ContactAdmin = () => {
                 <th className="text-center" scope="row">
                   1
                 </th>
-                <td
-                  
-                  style={{ maxWidth: "auto", wordWrap: "break-word",  }}
-                >
+                <td style={{ maxWidth: "auto", wordWrap: "break-word" }}>
                   mess here
-
                 </td>
                 <td className="text-center">Otto</td>
                 <td className="text-center">
                   <a href="#">
-                  <MdDeleteForever style={{width:"20px", height:"20px"}} />
+                    <MdDeleteForever
+                      style={{ width: "20px", height: "20px" }}
+                    />
                   </a>
                 </td>
               </tr>
