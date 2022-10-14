@@ -1,6 +1,6 @@
 import React from "react";
 // import { Login, DetailProduct, CheckOrder } from "../components/form";
-import { HomePage } from "../components";
+import { HomePage, PageProducts } from "../components";
 import _Layout from "../_Layout";
 import {
   Login,
@@ -69,6 +69,11 @@ export const PublicRouter = [
   {
     path: "/Contact",
     component: Contact,
+    layout: _Layout,
+  },
+  {
+    path: "/pageproducts",
+    component: PageProducts,
     layout: _Layout,
   },
 
