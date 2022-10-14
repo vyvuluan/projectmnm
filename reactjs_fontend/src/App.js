@@ -8,7 +8,7 @@ import { NavbarAdmin } from "./components/form-admin/index.js";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
           {PublicRouter.map((item, index) => {
             let Page = <item.component />;
@@ -20,7 +20,9 @@ function App() {
           })}
           <Route path="/SideNavBar" element={<SideNavBar />}></Route>
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <NavbarAdmin />
+      <AdminLayout />
     </>
   );
 }

@@ -19,6 +19,7 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.2",
     "reactjs-popup": "^2.0.5",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

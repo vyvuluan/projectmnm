@@ -11,22 +11,21 @@ import { SideNavBarData } from './SideNavBarData.js'
 function SideNavBar() {
     return (
         <>
-            <B.TabContainer id='left-tabs-example' defaultActiveKey={'/Home'}>
-                < B.Col lg={2} className='d-flex flex-column flex-shrink-0 p-3 text-white bg-dark' style={{ height: '100vh' }}>
-                    {/* <div className='text-muted fs-6 ms-3'>ADMINISTRATIVE</div>
-                    <hr></hr> */}
-
+            <B.TabContainer fluid defaultActiveKey={'/Home'}>
+                <B.Row className='d-flex flex-column flex-shrink-0 p-3 text-white bg-dark' style={{ height: '100vh' }}>
                     <B.Nav variant='pills' className='flex-column mb-auto'>
                         <B.NavItem>
-                            {SideNavBarData.map(({ title, icon, path }) => (
-                                <B.NavLink className='text-white' eventKey={path}>
+                            {SideNavBarData.map(({ title, icon, path }, index) => (
+                                <B.NavLink key={index} className='text-white' eventKey={path}>
                                     <span className='fs-5 me-3'>{icon}</span>
                                     <span className='fs-5'>{title}</span>
                                 </B.NavLink>
                             ))}
                         </B.NavItem>
+                        {/* <B.Tabs className='mt-3'>
+                        </B.Tabs> */}
                     </B.Nav>
-                </B.Col>
+                </B.Row>
             </B.TabContainer>
         </>
     )
