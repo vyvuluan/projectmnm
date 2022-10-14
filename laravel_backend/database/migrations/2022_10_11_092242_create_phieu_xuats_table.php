@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('diaChi');
             $table->bigInteger('tongTien');
             $table->timestamps();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

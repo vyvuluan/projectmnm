@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Validator;
 use App\Models\loaisp;
 //use App\Http\Resources\ProductResource;
 use App\Models\Product as ModelsProduct;
@@ -59,35 +60,52 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'TenSP' => 'required',
-        //     'Gia' => 'required',
-        //     'Mota' => 'required',
-        // ]);
-        // $product = Product::create($request->all());
-        // return new ProductResource($product);
-        $product = new Product();
-        //$product->maSP = $request->maSP;
-        $product->tenSP = $request->tenSP;
-        $product->soLuongSP = $request->soLuongSP;
-        $product->maLoai = $request->maLoai;
-        $product->maNSX = $request->maNSX;
-        $product->maNCC = $request->maNCC;
-        $product->gia = $request->gia;
-        $product->baoHanh = $request->baoHanh;
-        $product->moTa= $request->moTa;
-        $product->ctSanPham= $request->ctSanPham;
-        if($request->hasFile('hinh'))
+        $validator = Validator::make($request->all(),[
+            'tenSP' =>'required',
+            'soLuongSP' =>'required|numeric',
+            'maNSX' =>'required|max:10',
+            'maNCC' =>'required|max:10',
+            'gia' =>'required|numeric',
+            'baoHanh' =>'required|numeric',
+            'moTa' =>'required',
+            'ctSanPham' =>'required',
+        ]);
+        if($validator->fails())
         {
-            $hinh = $request->file('hinh');
-            $ext= $hinh->getClientOriginalExtension();
-            $name = time().'_'.$hinh->getClientOriginalName();
-            Storage::disk('public')->put($name,File::get($hinh));
-            $product->hinh=$name;
-        }else{
-            $product->hinh='default.jpg';
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
         }
-        $product->save();
+        else
+        {
+            $product = new Product();
+            //$product->maSP = $request->maSP;
+            $product->tenSP = $request->tenSP;
+            $product->soLuongSP = $request->soLuongSP;
+            $product->maLoai = $request->maLoai;
+            $product->maNSX = $request->maNSX;
+            $product->maNCC = $request->maNCC;
+            $product->gia = $request->gia;
+            $product->baoHanh = $request->baoHanh;
+            $product->moTa= $request->moTa;
+            $product->ctSanPham= $request->ctSanPham;
+            if($request->hasFile('hinh'))
+            {
+                $hinh = $request->file('hinh');
+                $ext= $hinh->getClientOriginalExtension();
+                $name = time().'_'.$hinh->getClientOriginalName();
+                Storage::disk('public')->put($name,File::get($hinh));
+                $product->hinh=$name;
+            }else{
+                $product->hinh='default.jpg';
+            }
+            $product->save();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Thêm sản phẩm thành công ',
+            ]);
+        }
     }
 
     /**
@@ -126,31 +144,62 @@ class ProductController extends Controller
      */
     public function update(Request $request,$product)
     {
-        $product =  Product::find($product);
-        $product->tenSP = $request->tenSP;
-        $product->soLuongSP = $request->soLuongSP;
-        $product->maLoai = $request->maLoai;
-        $product->maNSX = $request->maNSX;
-        $product->maNCC = $request->maNCC;
-        $product->gia = $request->gia;
-        $product->baoHanh = $request->baoHanh;
-        $product->moTa= $request->moTa;
-        $product->ctSanPham= $request->ctSanPham;
-        if($request->hasFile('hinh'))
+        $validator = Validator::make($request->all(),[
+            'tenSP' =>'required',
+            'soLuongSP' =>'required|numeric',
+            'maNSX' =>'required|max:10',
+            'maNCC' =>'required|max:10',
+            'gia' =>'required|numeric',
+            'baoHanh' =>'required|numeric',
+            'moTa' =>'required',
+            'ctSanPham' =>'required',
+        ]);
+        if($validator->fails())
         {
-            $hinh = $request->file('hinh');
-            $ext= $hinh->getClientOriginalExtension();
-            $name = time().'_'.$hinh->getClientOriginalName();
-            Storage::disk('../public')->put($name,File::get($hinh));
-            $product->hinh=$name;
-        }else{
-            $product->hinh='default.jpg';
-        }
-        $product->save();
-        return response()->json([
-            'status'=>1,
-            'message'=>'oke',
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
             ]);
+        }
+        else
+        {
+            $product =  Product::find($product);
+            if($product)
+            {
+                $product->tenSP = $request->tenSP;
+                $product->soLuongSP = $request->soLuongSP;
+                $product->maLoai = $request->maLoai;
+                $product->maNSX = $request->maNSX;
+                $product->maNCC = $request->maNCC;
+                $product->gia = $request->gia;
+                $product->baoHanh = $request->baoHanh;
+                $product->moTa= $request->moTa;
+                $product->ctSanPham= $request->ctSanPham;
+                if($request->hasFile('hinh'))
+                {
+                    $hinh = $request->file('hinh');
+                    $ext= $hinh->getClientOriginalExtension();
+                    $name = time().'_'.$hinh->getClientOriginalName();
+                    Storage::disk('../public')->put($name,File::get($hinh));
+                    $product->hinh=$name;
+                }else{
+                    $product->hinh='default.jpg';
+                }
+                $product->save();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Cập nhật thành công',
+                    ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Không tìm thấy sản phẩm',
+                    ]);
+
+            }
+        }
     }
 
     /**
@@ -162,8 +211,21 @@ class ProductController extends Controller
     public function destroy($product)
     {
         $product = Product::find($product);
-        $product->delete();
-        return response($product);
+        if($product)
+        {
+            $product->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Xoá thành công',
+                ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'Không tìm thấy sản phẩm cần xoá',
+                ]);
+        }
     }
 
 }

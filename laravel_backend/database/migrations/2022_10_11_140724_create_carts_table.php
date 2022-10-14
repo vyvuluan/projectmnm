@@ -19,6 +19,9 @@ return new class extends Migration
             $table->bigInteger('maSP');
             $table->integer('soLuongSP');
             $table->timestamps();
+            $table->foreign('maKH')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('maSP')->references('id')->on('products')->onDelete('cascade');
+
         });
     }
 
