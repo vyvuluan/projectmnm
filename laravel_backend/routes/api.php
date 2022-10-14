@@ -44,6 +44,9 @@ Route::get('/home', [HomeController::class,'home']);
 Route::get('/detailUser', [UserController::class,'detailUser']);
 Route::put('/detailUser', [UserController::class,'updateUser']);
 Route::put('/changePass', [UserController::class,'changePass']);
+//api tình trạng đơn hàng
+Route::get('/getStatusDH/{id}', [PaymentController::class,'getStatus']);
+
 
 Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
     Route::get('noti', function () {

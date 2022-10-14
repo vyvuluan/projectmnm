@@ -355,6 +355,15 @@ class PaymentController extends Controller
         }
     }
 
+    public function getStatus($id)
+    {
+        $px = PhieuXuat::find($id);
+        return response()->json([
+            'id'=>$px->id,
+            'tinhTrang'=>$px->status,
+            'donHang' => $px,
+            ]);
+    }
 
 
 
