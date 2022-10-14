@@ -19,6 +19,8 @@ return new class extends Migration
             $table->bigInteger('customer_id');
             $table->integer('status');
             $table->string('pt_ThanhToan');
+            $table->string('diaChi');
+            $table->bigInteger('tongTien');
             $table->timestamps();
         });
     }
