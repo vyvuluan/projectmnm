@@ -20,4 +20,8 @@ class Customer extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function pxs()
+    {
+        return $this->hasMany(PhieuXuat::class);
+    }
 }
