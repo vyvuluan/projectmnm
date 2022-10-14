@@ -78,7 +78,7 @@ function TestTable() {
                                 <B.FormLabel>Loại sản phẩm</B.FormLabel>
                                 <B.FormControl type='text'></B.FormControl>
                             </B.FormGroup> */}
-                            <B.Button variant='primary' className='rounded-0 mt-3' type='submit'>Thêm sản phẩm</B.Button>
+                            <B.Button variant='primary' className='rounded-0 mt-3' type='submit'>Thêm loại sản phẩm</B.Button>
                         </B.Form>
                     </B.Col>
                 </B.Row>

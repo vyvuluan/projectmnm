@@ -142,7 +142,7 @@ class CartController extends Controller
             $cartItem->update();
             return response()->json([
                 'status'=>200,
-                'message'=>'Cập nhật giở hàng thành công',
+                'message'=>'Cập nhật giỏ hàng thành công',
                 ]);
 
 
