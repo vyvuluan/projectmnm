@@ -1,0 +1,12 @@
+
+.widgets{
+    display: flex;
+    padding: 20px;
+}
+.widget{
+    display: inline-block;
+    justify-content: space-between;
+    flex: 1;
+    padding: 10px;
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+}

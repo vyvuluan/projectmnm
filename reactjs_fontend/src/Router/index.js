@@ -1,6 +1,6 @@
 import React from "react";
 // import { Login, DetailProduct, CheckOrder } from "../components/form";
-import { HomePage, PageProducts, PageAdmin } from "../components";
+import { HomePage, PageProducts, PageAdmin, } from "../components";
 import _Layout from "../_Layout";
 import {
   Login,

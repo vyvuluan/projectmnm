@@ -9,11 +9,13 @@
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
+    "chart.js": "^3.9.1",
     "node-sass": "^7.0.3",
     "rc-footer": "^0.6.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-icons": "^1.9.1",
+    "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
     "react-google-login": "^5.2.2",
     "react-icons": "^4.4.0",
@@ -21,6 +23,7 @@
     "reactjs-popup": "^2.0.5",
     "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4"
+    
   },
   "scripts": {
     "start": "react-scripts start",
@@ -48,5 +51,6 @@
   },
   "devDependencies": {
     "react-scripts": "^5.0.1"
+    
   }
 }

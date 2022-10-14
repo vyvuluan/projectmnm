@@ -3,9 +3,10 @@ import { MdDeleteForever } from "react-icons/md";
 const ContactAdmin = () => {
   return (
     <>
-      <div class="table-responsive-md">
+      <div className="table-responsive-md"  style={{marginTop:"-45px"}}>
+          <h3>Liên hệ</h3>
         <form action="">
-          <table class="table table-hover ">
+          <table className="table table-hover ">
             <thead>
               <tr>
                 <th className="text-center" scope="col">

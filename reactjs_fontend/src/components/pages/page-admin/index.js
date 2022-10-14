@@ -1,10 +1,24 @@
 import React from "react";
-import { NavbarAdmin,SideBar } from "../../form-admin";
-const PageAdmin = () => {
+import * as B from 'react-bootstrap'
+
+import { NavbarAdmin,ContactAdmin,SideBar,SearchAdmin,DashBoard } from "../../form-admin";
+const PageAdmin = (props) => {
+
     return (
         <>
             <NavbarAdmin/>
-            <SideBar/>
+            <B.Container fluid>
+                <B.Row>
+                    <B.Col lg={2}>
+                        <SideBar/>
+                    </B.Col>
+                    <B.Col lg={10} className='mt-5'>
+                       <DashBoard/>
+                    </B.Col>
+                </B.Row>
+            </B.Container>
+
+            
         </>
     )
 }   
