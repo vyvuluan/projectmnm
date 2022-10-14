@@ -141,7 +141,7 @@ class ProductController extends Controller
             $hinh = $request->file('hinh');
             $ext= $hinh->getClientOriginalExtension();
             $name = time().'_'.$hinh->getClientOriginalName();
-            Storage::disk('public')->put($name,File::get($hinh));
+            Storage::disk('../public')->put($name,File::get($hinh));
             $product->hinh=$name;
         }else{
             $product->hinh='default.jpg';
