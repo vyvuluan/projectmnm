@@ -19,5 +19,9 @@ class PhieuXuat extends Model
     {
         return $this->hasMany(CtPhieuXuat::class,'px_id','id');
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
 }

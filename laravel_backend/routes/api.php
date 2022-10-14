@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BaoHanhController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
@@ -46,6 +47,9 @@ Route::put('/detailUser', [UserController::class,'updateUser']);
 Route::put('/changePass', [UserController::class,'changePass']);
 //api tình trạng đơn hàng
 Route::get('/getStatusDH/{id}', [PaymentController::class,'getStatus']);
+//api check bảo hành
+Route::get('/checkBaoHanh/{id}', [BaoHanhController::class,'checkBaoHanh']);
+
 
 
 Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
