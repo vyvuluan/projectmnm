@@ -28,10 +28,11 @@ const ContactAdmin = () => {
                   1
                 </th>
                 <td
-                  className="text-center"
-                  style={{ maxWidth: "auto", wordWrap: "break-word" }}
+                  
+                  style={{ maxWidth: "auto", wordWrap: "break-word",  }}
                 >
-                  Marksjhfjkdsfjsdahfkjashdfjka
+                  mess here
+
                 </td>
                 <td className="text-center">Otto</td>
                 <td className="text-center">
