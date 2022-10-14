@@ -12,7 +12,10 @@ class PhieuXuat extends Model
         'employee_id',
         'customer_id',
         'status',
-        'pt_ThanhToan'
+        'pt_ThanhToan',
+        'diaChi',
+        'tongTien'
+
 
     ];
     public function pxct()

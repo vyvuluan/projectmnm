@@ -132,9 +132,6 @@ export default function Header() {
                       Liên hệ
                     </Link>
                   </Bt.NavLink>
-                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
-                    Về chúng tôi
-                  </Bt.NavLink>
                 </Bt.Nav>
 
                 <Bt.Nav className="ms-auto py-2">

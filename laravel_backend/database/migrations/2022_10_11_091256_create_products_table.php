@@ -26,6 +26,8 @@ return new class extends Migration
             $table->bigInteger('maNCC');
             $table->bigInteger('maNSX');
             $table->timestamps();
+            $table->foreign('maNCC')->references('id')->on('nccs')->onDelete('cascade');
+            $table->foreign('maNSX')->references('id')->on('nsxes')->onDelete('cascade');
         });
     }
 

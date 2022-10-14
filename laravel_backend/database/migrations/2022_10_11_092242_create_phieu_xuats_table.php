@@ -19,7 +19,11 @@ return new class extends Migration
             $table->bigInteger('customer_id');
             $table->integer('status');
             $table->string('pt_ThanhToan');
+            $table->string('diaChi');
+            $table->bigInteger('tongTien');
             $table->timestamps();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

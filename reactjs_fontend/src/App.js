@@ -4,10 +4,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SideNavBar from "./components/form-admin/sidebar/SideNavBar.js";
 import { PublicRouter } from "./Router";
 import { NavbarAdmin } from "./components/form-admin/index.js";
+import TestTable from "./components/form-admin/TestTable";
+import AdminLayout from "./components/form-admin/adminlayout";
+
 function App() {
   return (
     <>
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
           {PublicRouter.map((item, index) => {
             let Page = <item.component />;
@@ -19,7 +22,9 @@ function App() {
           })}
           <Route path="/navbaradmin" element={<NavbarAdmin />}></Route>
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <NavbarAdmin />
+      <AdminLayout />
     </>
   );
 }

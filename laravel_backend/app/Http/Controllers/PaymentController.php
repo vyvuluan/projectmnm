@@ -29,7 +29,8 @@ class PaymentController extends Controller
             $payment->customer_id=$maKH;
             $payment->status=0;
             $payment->pt_ThanhToan='COD';
-            $payment->save();
+            $payment->diaChi=$request->diaChi;
+            $tongTien=0;
 
             $cart = Cart::where('maKH',$maKH)->get();
             $pxChiTiet =[];
@@ -44,7 +45,10 @@ class PaymentController extends Controller
                 $item->product->update([
                     'soLuongSP'=>$item->product->soLuongSP - $item->soLuongSP
                 ]);
+                $tongTien+=($item->soLuongSP)*($item->product->gia);
             }
+            $payment->tongTien=$tongTien;
+            $payment->save();
             $payment->pxct()->createMany($pxChiTiet);
             Cart::destroy($cart);
             return response()->json([
