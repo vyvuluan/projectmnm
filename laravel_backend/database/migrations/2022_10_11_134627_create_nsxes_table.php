@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('nsxes', function (Blueprint $table) {
             $table->id();
             // $table->bigInteger('maNSX');
-            $table->string('tenNCC');
+            $table->string('tenNSX');
             $table->string('quocGia');
             $table->timestamps();
 
