@@ -19,7 +19,7 @@ const Product = (props) => {
                     <div className="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                       <img
                         className="img-fluid w-100"
-                        src={item.hinh}
+                        src={`http://localhost:8000/${item.hinh}`}
                         alt="img product"
                       ></img>
                     </div>

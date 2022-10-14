@@ -65,7 +65,7 @@ const NavBarAdmin = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <FaBell />
+              <FaBell  />
               {/* <!-- Counter - Alerts --> */}
               <span className="badge badge-danger badge-counter">3+</span>
             </a>
