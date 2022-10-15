@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
                             // API Long
 //Api sản phẩm
 Route::resource('products', ProductController::class);
+Route::get('products-search', [ProductController::class,'search']);
 //Api loại sản phẩm
 Route::resource('loaisp', LoaispController::class);
         // Chi tiết sản phẩm

@@ -15,4 +15,12 @@ class Employee extends Model
         'gioiTinh',
         'user_id',
     ];
+    public function customer()
+    {
+        return $this->belongsTo(ChucVu::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

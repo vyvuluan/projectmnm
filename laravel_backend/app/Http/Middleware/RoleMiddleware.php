@@ -26,7 +26,7 @@ class RoleMiddleware
             else
             {
                 return response()->json([
-                    'message' => 'bạn không phải là admin',403
+                    'message' => 'bạn không có quyền truy cập',403
                 ]);
             }
         }
