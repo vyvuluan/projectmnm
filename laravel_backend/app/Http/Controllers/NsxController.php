@@ -11,11 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class NsxController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     //Backup không còn xài nữa
     public function index()
     {
         $Nsx = Nsx::paginate();
@@ -43,7 +39,7 @@ class NsxController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         $validator = Validator::make($request->all(),[
             'tenNSX' =>'required|max:10',
             'quocGia'=>'required|max:20',
@@ -158,7 +154,7 @@ class NsxController extends Controller
                 'status'=>200,
                 'message'=>'Xoá thành công',
                 ]);
-        }   
+        }
         else
         {
             return response()->json([
@@ -166,6 +162,6 @@ class NsxController extends Controller
                 'message'=>'Không tìm thấy nsx cần xoá',
                 ]);
 
-        }    
+        }
     }
 }

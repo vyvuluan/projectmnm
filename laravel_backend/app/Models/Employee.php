@@ -14,6 +14,7 @@ class Employee extends Model
         'diaChi',
         'gioiTinh',
         'user_id',
+        'cv_id',
     ];
     public function customer()
     {

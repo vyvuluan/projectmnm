@@ -1,22 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Ncc;
+use App\Models\Nsx;
 use Validator;
-use App\Http\Resources\NccResource;
+use App\Http\Resources\NsxResource;
 
-class NccController extends Controller
+class ManageNsxController extends Controller
 {
-    // Backup không còn xài nữa
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $Ncc = Ncc::paginate();
+        $Nsx = Nsx::paginate();
         return response()->json([
             'status'=>200,
-            'Nsx'=>$Ncc,
+            'Nsx'=>$Nsx,
         ]);
     }
 
@@ -38,10 +42,10 @@ class NccController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(),[
-            'tenNCC' =>'required|max:20',
-            'diaChi'=>'required|max:100',
-            'sdt'=>'required|numeric|digits:10',
+            'tenNSX' =>'required|max:10',
+            'quocGia'=>'required|max:20',
         ]);
         if($validator->fails())
         {
@@ -52,14 +56,13 @@ class NccController extends Controller
         }
         else
         {
-            $Ncc = new Ncc();
-            $Ncc->tenNCC = $request->tenNCC;
-            $Ncc->diaChi = $request->diaChi;
-            $Ncc->sdt = $request->sdt;
-            $Ncc->save();
+            $Nsx = new Nsx();
+            $Nsx->tenNSX = $request->tenNSX;
+            $Nsx->quocGia = $request->quocGia;
+            $Nsx->save();
             return response()->json([
                 'status'=>200,
-                'message'=>'Thêm Ncc thành công',
+                'message'=>'Thêm Nsx thành công',
             ]);
         }
     }
@@ -70,10 +73,10 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Ncc $Ncc)
+    public function show( Nsx $Nsx)
     {
 
-        return new NccResource($Ncc);
+        return new NsxResource($Nsx);
     }
 
     /**
@@ -84,12 +87,12 @@ class NccController extends Controller
      */
     public function edit($id)
     {
-        $Ncc = Ncc::find($id);
-        if($Ncc)
+        $Nsx = Nsx::find($id);
+        if($Nsx)
         {
             return response()->json([
                 'status'=>200,
-                'loaisp'=>$Ncc,
+                'loaisp'=>$Nsx,
             ]);
         }
     }
@@ -101,12 +104,11 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'tenNCC' =>'required|max:20',
-            'diaChi'=>'required|max:100',
-            'sdt'=>'required|numeric|digits:10',
+            'tenNSX' =>'required|max:10',
+            'quocGia'=>'required|max:20',
         ]);
         if($validator->fails())
         {
@@ -117,13 +119,12 @@ class NccController extends Controller
         }
         else
         {
-            $Ncc = Ncc::find($id);
-            if($Ncc)
+            $Nsx = Nsx::find($id);
+            if($Nsx)
             {
-                $Ncc->tenNCC = $request->tenNCC;
-                $Ncc->diaChi = $request->diaChi;
-                $Ncc->sdt = $request->sdt;
-                $Ncc->save();
+                $Nsx->tenNSX = $request->tenNSX;
+                $Nsx->quocGia = $request->quocGia;
+                $Nsx->save();
                 return response()->json([
                     'status'=>200,
                     'message'=>'Cập nhật thành công ',
@@ -133,7 +134,7 @@ class NccController extends Controller
             {
                 return response()->json([
                     'status'=>404,
-                    'message'=>'Không tìm Ncc cần tìm',
+                    'message'=>'Không tìm thấy loại sản phẩm',
                 ]);
 
             }
@@ -146,13 +147,12 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
-
-        $Ncc = Ncc::find($id);
-        if($Ncc)
+        $Nsx = Nsx::find($id);
+        if($Nsx)
         {
-            $Ncc->delete();
+            $Nsx->delete();
             return response()->json([
                 'status'=>200,
                 'message'=>'Xoá thành công',
@@ -162,7 +162,7 @@ class NccController extends Controller
         {
             return response()->json([
                 'status'=>404,
-                'message'=>'Không tìm thấy ncc cần xoá',
+                'message'=>'Không tìm thấy nsx cần xoá',
                 ]);
 
         }

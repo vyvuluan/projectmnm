@@ -79,7 +79,7 @@ class UserController extends Controller
         }
         else if($user->role_id == 3) //thủ kho
         {
-            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+            $token= $user->createToken($user->email.'_AdminToken',['server:thukho'])->plainTextToken;
             $emloyee = new Employee();
             $emloyee->user_id = $user->id;
             $emloyee->cv_id = 2;
@@ -87,7 +87,7 @@ class UserController extends Controller
         }
         else if($user->role_id == 4) //nhân viên bán hàng
         {
-            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+            $token= $user->createToken($user->email.'_AdminToken',['server:nhanvien'])->plainTextToken;
             $emloyee = new Employee();
             $emloyee->user_id = $user->id;
             $emloyee->cv_id = 3;
