@@ -19,6 +19,7 @@ import {
   Category,
   Cart,
   Contact,
+  Warrantycheck,
 } from "../components/form";
 import {
   DetailCustomer,
@@ -27,6 +28,7 @@ import {
   DashBoard,
   ListBill,
   ListBillDetail,
+  Account,
 } from "../components/form-admin";
 import { Chart } from "../components/form-admin/chart";
 export const PublicRouter = [
@@ -92,6 +94,11 @@ export const PublicRouter = [
     component: ForgotPass,
     layout: null,
   },
+  {
+    path: "/warranty",
+    component: Warrantycheck,
+    layout: _Layout,
+  },
   // {
   //   path: "/PageAdmin",
   //   component: PageAdmin,
@@ -128,6 +135,11 @@ export const PublicRouter_Admin = [
   {
     path: "/Chart",
     component: Chart,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Account",
+    component: Account,
     layout: _LayoutAdmin,
   },
 ];
