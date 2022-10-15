@@ -14,6 +14,7 @@ use  App\Http\Controllers\PaymentController;
 use  App\Http\Controllers\CartController;
 use  App\Http\Controllers\LoaispController;
 use  App\Http\Controllers\HomeController;
+use  App\Http\Controllers\admin\ManageUserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,6 +57,7 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
     Route::get('noti', function () {
         return 'tui là admin';
     });
+    Route::resource('manageUser', ManageUserController::class);
     // Route::post('/login', [UserController::class,'login']);
 });
 
