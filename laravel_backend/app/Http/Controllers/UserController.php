@@ -75,6 +75,7 @@ class UserController extends Controller
             $emloyee = new Employee();
             $emloyee->user_id = $user->id;
             $emloyee->cv_id = 1;
+            $emloyee->save();
         }
         else if($user->role_id == 3) //thủ kho
         {
@@ -82,6 +83,7 @@ class UserController extends Controller
             $emloyee = new Employee();
             $emloyee->user_id = $user->id;
             $emloyee->cv_id = 2;
+            $emloyee->save();
         }
         else if($user->role_id == 4) //nhân viên bán hàng
         {
@@ -89,6 +91,7 @@ class UserController extends Controller
             $emloyee = new Employee();
             $emloyee->user_id = $user->id;
             $emloyee->cv_id = 3;
+            $emloyee->save();
         }
         else //khách hàng
         {
