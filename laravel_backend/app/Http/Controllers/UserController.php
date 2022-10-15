@@ -26,15 +26,10 @@ class UserController extends Controller
         }
         else
         {
-            if($user->role_id == 2) //admin
-            {
-                $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
-            }
-            else
+            if($user->role_id == 1)
             {
                 $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
             }
-            // $token= $user->createToken($user->email.'_Token')->plainTextToken;
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
@@ -51,62 +46,27 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        if(empty($request->role_id))
-        {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-        }
-        else
-        {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role_id' => $request->role_id,
-            ]);
-        }
 
-        if($user->role_id == 2) //admin
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
-            $emloyee = new Employee();
-            $emloyee->user_id = $user->id;
-            $emloyee->cv_id = 1;
-            $emloyee->save();
-        }
-        else if($user->role_id == 3) //thủ kho
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:thukho'])->plainTextToken;
-            $emloyee = new Employee();
-            $emloyee->user_id = $user->id;
-            $emloyee->cv_id = 2;
-            $emloyee->save();
-        }
-        else if($user->role_id == 4) //nhân viên bán hàng
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:nhanvien'])->plainTextToken;
-            $emloyee = new Employee();
-            $emloyee->user_id = $user->id;
-            $emloyee->cv_id = 3;
-            $emloyee->save();
-        }
-        else //khách hàng
-        {
+        $user = User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        
+
             $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
             $customer = new Customer();
             $customer->user_id = $user->id;
             $customer->save();
-        }
+            return response()->json([
+                'status' => 200,
+                'username' => $user->username,
+                'token' => $token,
+                'message' => 'registered successfully',
+            ]);
         
-        return response()->json([
-            'status' => 200,
-            'username' => $user->username,
-            'token' => $token,
-            'message' => 'registered successfully',
-        ]);
+        
+        
     }
     public function logout()
     {

@@ -5,6 +5,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\ChucVu;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -30,6 +32,13 @@ class DatabaseSeeder extends Seeder
         ]);
         ChucVu::insert([
             ['ten' => 'Nhân viên bán hàng'],
+            
+        ]);
+        User::insert([
+            ['username' => 'admin113'],
+            ['passowrd' => Hash::make('admin113')],
+            ['email' => 'admin113@gmail.com'],
+            ['role_id' => 2],
             
         ]);
     }
