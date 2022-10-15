@@ -11,7 +11,7 @@ const _LayoutAdmin = (props) => {
           <B.Col lg={2}>
             <SideBar />
           </B.Col>
-          <B.Col lg={10} className="mt-5">
+          <B.Col lg={10} style={{ marginTop: '100px' }}>
             {props.children}
           </B.Col>
         </B.Row>
