@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,15 +26,10 @@ class UserController extends Controller
         }
         else
         {
-            if($user->role_id == 2) //admin
-            {
-                $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
-            }
-            else
+            if($user->role_id == 1)
             {
                 $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
             }
-            // $token= $user->createToken($user->email.'_Token')->plainTextToken;
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
@@ -50,41 +46,27 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        if(empty($request->role_id))
-        {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-        }
-        else
-        {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role_id' => $request->role_id,
-            ]);
-        }
 
-        if($user->role_id == 2) //admin
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
-        }
-        else
-        {
-            $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
-        }
-        $customer = new Customer();
-        $customer->user_id = $user->id;
-        $customer->save();
-        return response()->json([
-            'status' => 200,
-            'username' => $user->username,
-            'token' => $token,
-            'message' => 'registered successfully',
+        $user = User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
+        
+
+            $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
+            $customer = new Customer();
+            $customer->user_id = $user->id;
+            $customer->save();
+            return response()->json([
+                'status' => 200,
+                'username' => $user->username,
+                'token' => $token,
+                'message' => 'registered successfully',
+            ]);
+        
+        
+        
     }
     public function logout()
     {

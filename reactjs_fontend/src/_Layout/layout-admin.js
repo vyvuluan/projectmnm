@@ -1,19 +1,8 @@
 import React from "react";
+import { NavbarAdmin, SideBar } from "../components/form-admin";
 import * as B from "react-bootstrap";
 
-import {
-  NavbarAdmin,
-  ContactAdmin,
-  SideBar,
-  SearchAdmin,
-  DashBoard,
-  Customer,
-  DetailCustomer,
-  Bill,
-  ListBill,
-  ListBillDetail,
-} from "../../form-admin";
-const PageAdmin = () => {
+const _LayoutAdmin = (props) => {
   return (
     <>
       <NavbarAdmin />
@@ -23,11 +12,11 @@ const PageAdmin = () => {
             <SideBar />
           </B.Col>
           <B.Col lg={10} className="mt-5">
-            <DashBoard />
+            {props.children}
           </B.Col>
         </B.Row>
       </B.Container>
     </>
   );
 };
-export default PageAdmin;
+export default _LayoutAdmin;

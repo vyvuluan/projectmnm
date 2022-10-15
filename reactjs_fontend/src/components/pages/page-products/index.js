@@ -1,8 +1,11 @@
-import React,{useEffect,useState} from "react";
-import { SectionTitle, Product, Pagination } from "../../form/index.js";
+import React, { useEffect, useState } from "react";
+import { SectionTitle, Product, Pagination, Filter } from "../../form/index.js";
 import axios from "axios";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 const PageProducts = () => {
-    const [listProduct, setListProduct] = useState([]);
+  const [listProduct, setListProduct] = useState([]);
   useEffect(() => {
     const controller = new AbortController();
     axios
@@ -24,13 +27,22 @@ const PageProducts = () => {
   }, []);
   return (
     <>
-      <SectionTitle title="Sản phẩm" />
-      {listProduct ? (
-        <Product item={listProduct} />
-      ) : (
-        <div className="text-center">không có sản phẩm</div>
-      )}
-      <Pagination/>
+      <Container fluid>
+        <Row>
+          <Col xs={2}>
+            <Filter  />
+          </Col>
+          <Col>
+            <SectionTitle title="Sản phẩm" />
+            {listProduct ? (
+              <Product item={listProduct} />
+            ) : (
+              <div className="text-center">không có sản phẩm</div>
+            )}
+            <Pagination />
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

@@ -5,8 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-class RoleMiddleware
+class RoleNvMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,7 +18,7 @@ class RoleMiddleware
     {
         if(Auth::check())
         {
-            if(auth()->user()->tokenCan('server:admin'))
+            if(auth()->user()->tokenCan('server:nhanvien'))
             {
                 return $next($request);
             }
@@ -37,6 +36,5 @@ class RoleMiddleware
                 'message' => 'Hãy đăng nhập',
             ]);
         }
-        // return $next($request);
     }
 }

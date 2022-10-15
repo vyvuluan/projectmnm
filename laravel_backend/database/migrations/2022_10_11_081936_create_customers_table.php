@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('diaChi')->nullable();
             $table->integer('sdt')->nullable();
             $table->integer('gioiTinh')->nullable();
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

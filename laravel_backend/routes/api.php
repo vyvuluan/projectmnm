@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\ManageEmloyeeController;
 use App\Http\Controllers\BaoHanhController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,13 @@ use  App\Http\Controllers\PaymentController;
 use  App\Http\Controllers\CartController;
 use  App\Http\Controllers\LoaispController;
 use  App\Http\Controllers\HomeController;
+use  App\Http\Controllers\admin\ManageUserController;
+use App\Http\Controllers\admin\ManagePhieuXuatController;
+use App\Http\Controllers\admin\ManageProductController;
+use App\Http\Controllers\admin\ManageNccController;
+use App\Http\Controllers\admin\ManageNsxController;
+use  App\Http\Controllers\admin\ManageEmployeeController;
+use  App\Http\Controllers\admin\ManageLoaispController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -49,22 +57,61 @@ Route::put('/changePass', [UserController::class,'changePass']);
 Route::get('/getStatusDH/{id}', [PaymentController::class,'getStatus']);
 //api check bảo hành
 Route::get('/checkBaoHanh/{id}', [BaoHanhController::class,'checkBaoHanh']);
-
-
-
+//login ở admin
+Route::post('/loginAdmin', [ManageUserController::class,'login']);
+//admin
 Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
     Route::get('noti', function () {
         return 'tui là admin';
     });
-    // Route::post('/login', [UserController::class,'login']);
+    //get all user
+    Route::get('manageUser',[ ManageUserController::class,'index']);
+
+    Route::resource('manageEmployee', ManageEmployeeController::class);
+    //cấp tài khoản cho nhân viên
+    Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class,'createUser']);
+
+});
+
+
+
+//thủ kho
+Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
+            //Api Quản lý  Phiếu Xuất
+            Route::resource('px', ManagePhieuXuatController::class);
+            Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+
+            // Api quản lý ncc , nsx
+            Route::resource('ncc',ManageNccController::class);
+            Route::resource('nsx',ManageNsxController::class);
+
+            //Api Quản lý sản phẩm
+            Route::resource('products',ManageProductController::class);
+            Route::get('products-search', [ManageProductController::class,'search']);
+            //Api quản lý loại sản phẩm
+            Route::resource('loaisp', ManageLoaispController::class);
+            // Chi tiết sản phẩm
+            Route::get('products/chitiet/{id}', [ManageProductController::class,'ctsp']);
+
+});
+
+//nhân viên
+Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(function () {
+
+              //Api Quản lý  Phiếu Xuất
+              Route::resource('px', ManagePhieuXuatController::class);
+              Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+
 });
 
 
                             // API Long
+                            // API Khách hàng
 //Api sản phẩm
-Route::resource('products', ProductController::class);
+Route::resource('products/view', ProductController::class)->only('index');
+Route::get('products-search', [ProductController::class,'search']);
 //Api loại sản phẩm
-Route::resource('loaisp', LoaispController::class);
+Route::resource('loaisp/view', LoaispController::class)->only('index');
         // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
 
@@ -74,15 +121,18 @@ Route::get('cart', [CartController::class,'viewcart']);
 Route::put('cart-updatequantity/{id_cart}/{scope}',[CartController::class,'updatequantity']);
 Route::delete('deletecart/{id_cart}',[CartController::class,'deletecart']);
 
-// Api ncc , nsx
-Route::resource('ncc', NccController::class);
-Route::resource('nsx', NsxController::class);
-
 //Api Thanh Toán
 Route::post('dathang', [PaymentController::class,'dathang']);
 Route::post('pay', [PaymentController::class,'vnpay']);
 Route::post('momo', [PaymentController::class,'momopay']);
 Route::get('saveorder',[PaymentController::class,'saveorder']); // api này front end không dùng
+
+
+
+
+
+
+
 
 
 

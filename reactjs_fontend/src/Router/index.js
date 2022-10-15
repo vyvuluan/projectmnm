@@ -1,7 +1,8 @@
 import React from "react";
 // import { Login, DetailProduct, CheckOrder } from "../components/form";
-import { HomePage, PageProducts, PageAdmin, } from "../components";
+import { HomePage, PageProducts, PageAdmin } from "../components";
 import _Layout from "../_Layout";
+import _LayoutAdmin from "../_Layout/layout-admin";
 import {
   Login,
   CheckOrder,
@@ -18,9 +19,16 @@ import {
   Category,
   Cart,
   Contact,
-  Warranty,
 } from "../components/form";
-import Warrantycheck from "../components/form/warranty";
+import {
+  DetailCustomer,
+  Bill,
+  ContactAdmin,
+  DashBoard,
+  ListBill,
+  ListBillDetail,
+} from "../components/form-admin";
+import { Chart } from "../components/form-admin/chart";
 export const PublicRouter = [
   {
     path: "/Login",
@@ -78,19 +86,53 @@ export const PublicRouter = [
     component: PageProducts,
     layout: _Layout,
   },
+
   {
-    path: "/PageAdmin",
-    component: PageAdmin,
+    path: "/forgotpass",
+    component: ForgotPass,
     layout: null,
   },
-  {
-    path: "/Warrantycheck",
-    component: Warrantycheck,
-    layout: _Layout,
-  },
-
+  // {
+  //   path: "/PageAdmin",
+  //   component: PageAdmin,
+  //   layout: null,
+  // },
 ];
-{/* <Route path="/product" element={<Product />} />
+//chưa xử lý
+export const PublicRouter_Admin = [
+  {
+    path: "/PageAdmin",
+    component: DashBoard,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Bill",
+    component: Bill,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/contactAdmin",
+    component: ContactAdmin,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/ListBill",
+    component: ListBill,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/ListBillDetail",
+    component: ListBillDetail,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Chart",
+    component: Chart,
+    layout: _LayoutAdmin,
+  },
+];
+{
+  /* <Route path="/product" element={<Product />} />
           <Route path="/detailProduct" element={<DetailProduct />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resgiter" element={<Resgiter />} />
@@ -104,4 +146,5 @@ export const PublicRouter = [
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/accountInfor" element={<AccountInfor />} />
-          <Route path="/" element={<HomePage />} /> */}
+          <Route path="/" element={<HomePage />} /> */
+}
