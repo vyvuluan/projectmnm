@@ -1,9 +1,13 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import axios from "axios";
 import { PublicRouter, PublicRouter_Admin } from "./Router";
 
+axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.post["Accept"] = "application/json";
+axios.defaults.withCredentials = true;
 function App() {
   return (
     <>

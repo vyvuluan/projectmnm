@@ -51,7 +51,7 @@ export const PublicRouter = [
     layout: _Layout,
   },
   {
-    path: "/resgiter",
+    path: "/Register",
     component: Resgiter,
     layout: null,
   },
