@@ -3,5 +3,7 @@ export { default as SideBar } from "./sidebar/SideNavBar.js";
 export { default as SearchAdmin } from "./search-admin/index.js";
 export { default as ContactAdmin } from "./contact-admin/index.js";
 export { default as DashBoard } from "./dashboard/index.js";
+export { default as Customer } from "./customer/index.js";
+
 
 

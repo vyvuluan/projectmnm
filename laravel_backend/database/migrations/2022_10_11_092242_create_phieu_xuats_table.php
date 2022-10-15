@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('phieu_xuats', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('employee_id')->nullable();
-            $table->bigInteger('customer_id');
+            $table->bigInteger('employee_id')->nullable()->unsigned();
+            $table->bigInteger('customer_id')->unsigned();
             $table->integer('status');
             $table->string('pt_ThanhToan');
             $table->string('diaChi');
