@@ -40,6 +40,7 @@ export const SideNavBarData = [
     title: "Tài Khoản",
     path: "/account",
     icon: <MdOutlineManageAccounts />,
+    link: `/Account`
   },
   {
     title: "Nhà sản xuất",
