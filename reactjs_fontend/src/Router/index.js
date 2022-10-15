@@ -19,6 +19,7 @@ import {
   Category,
   Cart,
   Contact,
+  Warrantycheck,
 } from "../components/form";
 import {
   DetailCustomer,
@@ -91,6 +92,11 @@ export const PublicRouter = [
     path: "/forgotpass",
     component: ForgotPass,
     layout: null,
+  },
+  {
+    path: "/warranty",
+    component: Warrantycheck,
+    layout: _Layout,
   },
   // {
   //   path: "/PageAdmin",
