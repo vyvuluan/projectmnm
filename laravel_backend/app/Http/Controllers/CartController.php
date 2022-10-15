@@ -9,11 +9,13 @@ use Illuminate\Http\Request;
 use LDAP\Result;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+
 class CartController extends Controller
 {
     public function viewcart()
     {
-        // Đây là bản test vì chưa có login
+       
+      
             $maKH= 1;
             $cartItem = Cart::where('maKH',$maKH)->get();
             return response()->json([
@@ -44,6 +46,16 @@ class CartController extends Controller
     }
     public function addtocart(Request $request)
     {
+        // $product = Product::find($request->id);
+        // $data['id']=$product->id;
+        // $data['qty']=$request->soLuongSP;
+        // $data['name']=$product->tenSP;
+        // $data['price']=$product->gia;
+        // $data['weight']='123';
+        // $data['options']['image']=$product->hinh;
+        //  Cart::add($data);
+        //  $cart = Cart::content();
+        //  return $cart;
         // Đây chỉ là bản test vì chưa có login
             $maKH= $request->maKH;
             $maSP = $request->maSP;
