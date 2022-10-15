@@ -17,8 +17,10 @@ import {
   AccountInfor,
   Category,
   Cart,
-  Contact
+  Contact,
+  Warranty,
 } from "../components/form";
+import Warrantycheck from "../components/form/warranty";
 export const PublicRouter = [
   {
     path: "/Login",
@@ -80,6 +82,11 @@ export const PublicRouter = [
     path: "/PageAdmin",
     component: PageAdmin,
     layout: null,
+  },
+  {
+    path: "/Warrantycheck",
+    component: Warrantycheck,
+    layout: _Layout,
   },
 
 ];
