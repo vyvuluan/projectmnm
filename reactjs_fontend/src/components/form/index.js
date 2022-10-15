@@ -15,5 +15,7 @@ export { default as AccountInfor } from "./account-info/account-info.js";
 export { default as SectionTitle } from "./section-title/index.js";
 export { default as Category } from "./category/index.js";
 export { default as Pagination } from "./pagination/index.js";
+export { default as Warrantycheck } from "./warranty/index.js";
+
 
 

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import * as Bt from 'react-bootstrap'
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa'
+import { MdPayments } from 'react-icons/md'
+import { BsPaypal } from 'react-icons/bs'
 import axios from 'axios';
 import swal from 'sweetalert'
 import { useNavigate } from 'react-router-dom'
+import vnpay from '../../../img/vnpay.png'
 
 export default function Cart() {
 
@@ -94,7 +97,7 @@ export default function Cart() {
     var cart_HTML = '';
     if (cart.length > 0) {
         cart_HTML = <div className='table-responsive mb-5'>
-            <Bt.Table className='table-borderred text-center mb-0'>
+            <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
                 <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                     <tr>
                         <th>Sản phẩm</th>
@@ -159,37 +162,53 @@ export default function Cart() {
             <Bt.Container fluid pt={5}>
                 <Bt.Form>
                     <Bt.Row className='px-xl-5'>
-                        <div className='d-flex d-inline-block'>
-                            <Bt.Col lg={8}>
-                                {cart_HTML}
-                            </Bt.Col>
-                            <Bt.Col lg={4}>
-                                <Bt.Card className='border-secondary rounded-0' mb={5}>
-                                    <Bt.Card.Header className='bg-secondary border-0 rounded-0'>
-                                        <h3 className='fw-semibold m-0'>Thông tin giỏ hàng</h3>
-                                    </Bt.Card.Header>
-                                    <Bt.Card.Body>
-                                        <div className='d-flex justify-content-between mb-3 pt-1'>
-                                            <h6 className='fw-medium'>Tạm tính</h6>
-                                            <h6 className='fw-medium'>{formatMoney(totalCartPrice)}</h6>
-                                        </div>
-                                        <div className='d-flex justify-content-between mb-3 pt-1'>
-                                            <h6 className='fw-medium'>Thuế</h6>
-                                            <h6 className='fw-medium'>10%</h6>
-                                        </div>
-                                    </Bt.Card.Body>
-                                    <Bt.Card.Footer className='border-secondary bg-transparent d-grid gap-2'>
-                                        <div className='d-flex justify-content-between mt-2'>
-                                            <h5 className='fw-bold'>Tổng tiền</h5>
-                                            <h5 className='fw-bold'>{formatMoney(totalCartPrice * 1.1)} VND</h5>
-                                        </div>
-                                        <Bt.Button className='rounded-0 my-3 py-3' variant='primary'>
-                                            Tiến hành thanh toán
-                                        </Bt.Button>
-                                    </Bt.Card.Footer>
-                                </Bt.Card>
-                            </Bt.Col>
-                        </div>
+                        {/* <div className='d-flex d-inline-block'> */}
+                        <Bt.Col lg={8}>
+                            {cart_HTML}
+                        </Bt.Col>
+                        <Bt.Col lg={4}>
+                            <Bt.Card className='border-secondary rounded-0' mb={5}>
+                                <Bt.Card.Header className='bg-secondary border-0 rounded-0'>
+                                    <h3 className='fw-semibold m-0'>Thông tin giỏ hàng</h3>
+                                </Bt.Card.Header>
+                                <Bt.Card.Body>
+                                    <div className='d-flex justify-content-between mb-3 pt-1'>
+                                        <h6 className='fw-medium'>Tạm tính</h6>
+                                        <h6 className='fw-medium'>{formatMoney(totalCartPrice)}</h6>
+                                    </div>
+                                    <div className='d-flex justify-content-between mb-3 pt-1'>
+                                        <h6 className='fw-medium'>Thuế</h6>
+                                        <h6 className='fw-medium'>10%</h6>
+                                    </div>
+                                </Bt.Card.Body>
+                                <Bt.Card.Footer className='border-secondary bg-transparent d-grid gap-2'>
+                                    <div className='d-flex justify-content-between mt-2'>
+                                        <h5 className='fw-bold'>Tổng tiền</h5>
+                                        <h5 className='fw-bold'>{formatMoney(totalCartPrice * 1.1)} VND</h5>
+                                    </div>
+                                    {/* <Bt.Row className='text-center'> */}
+                                    {/* <Bt.Col lg={12}> */}
+                                    <Bt.Button className='rounded-0 mt-3 py-2' variant='primary'>
+                                        <MdPayments className='me-2 fs-4' />Thanh toán khi nhận hàng
+                                    </Bt.Button>
+                                    {/* </Bt.Col> */}
+                                    {/* <Bt.Col lg={12}> */}
+                                    <hr className='text-center mb-0' />
+                                    <p className='text-center my-0 fs-5 fw-semibold'>Thanh toán Online</p>
+                                    <Bt.Button className='rounded-0 py-2 text-lightgray' variant='primary'>
+                                        <BsPaypal className='me-2 fs-4' />Thanh toán qua Paypal
+                                    </Bt.Button>
+                                    {/* </Bt.Col> */}
+                                    {/* <Bt.Col lg={12}> */}
+                                    <Bt.Button className='rounded-0 py-2' variant='primary'>
+                                        <img src={vnpay} style={{ width: 'auto', height: '25px' }} />
+                                    </Bt.Button>
+                                    {/* </Bt.Col> */}
+                                    {/* </Bt.Row> */}
+                                </Bt.Card.Footer>
+                            </Bt.Card>
+                        </Bt.Col>
+                        {/* </div> */}
 
                     </Bt.Row>
                 </Bt.Form>

@@ -139,7 +139,7 @@ export default function Header() {
                     <Link className="text-decoration-none" to="/login">
                       Login
                     </Link>
-                  </Bt.NavLink>
+                  </Bt.NavLink> 
 
                   {/* <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
                     Register

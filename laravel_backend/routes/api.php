@@ -57,14 +57,15 @@ Route::put('/changePass', [UserController::class,'changePass']);
 Route::get('/getStatusDH/{id}', [PaymentController::class,'getStatus']);
 //api check bảo hành
 Route::get('/checkBaoHanh/{id}', [BaoHanhController::class,'checkBaoHanh']);
-
-
+//login ở admin
+Route::post('/loginAdmin', [ManageUserController::class,'login']);
 //admin
 Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
     Route::get('noti', function () {
         return 'tui là admin';
     });
-    Route::resource('manageUser', ManageUserController::class);
+    //get all user
+    Route::get('manageUser',[ ManageUserController::class,'index']);
 
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên

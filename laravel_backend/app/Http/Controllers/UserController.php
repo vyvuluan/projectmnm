@@ -14,6 +14,19 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|max:255',
+            'password' => 'required|max:255',
+        ],[
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.max' => 'Ô email tối đa 255 ký tự',
+            
+            'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+
+            
+            
+        ]);
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password) ) {
@@ -21,25 +34,20 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 401,
-                'message' => 'error',
+                'error' => 'Không đúng tài khoản hoặc mật khẩu',
             ]);
         }
         else
         {
-            if($user->role_id == 2) //admin
-            {
-                $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
-            }
-            else
+            if($user->role_id == 1)
             {
                 $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
             }
-            // $token= $user->createToken($user->email.'_Token')->plainTextToken;
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
                 'token' => $token,
-                'message' => 'login successfully',
+                'message' => 'Đăng nhập thành công',
             ]);
         }
     }
@@ -51,12 +59,35 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        if(empty($request->role_id))
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'username' => 'required|max:255|unique:users',
+            'password' => 'required|max:255',
+            're_password' => 'required|max:255',
+        ],[
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.email' => 'Địa chỉ email không hợp lệ',
+            'email.unique' => 'Địa chỉ email đã tồn tại',
+
+            'username.required' => 'Ô username không được bỏ trống',
+            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.unique' => 'username đã tồn tại',
+
+            'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+
+            're_password.required' => 'Ô re_password không được bỏ trống',
+            're_password.max' => 'Ô re_password tối đa 255 ký tự',
+
+            
+            
+        ]);
+        if($request->re_password != $request->password)
         {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+            return response()->json([
+                'status' => 401,
+                
+                'error' => 'Password và nhập lại password không trùng khớp',
             ]);
         }
         else
@@ -65,48 +96,20 @@ class UserController extends Controller
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role_id' => $request->role_id,
             ]);
+            
+    
+                $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
+                $customer = new Customer();
+                $customer->user_id = $user->id;
+                $customer->save();
+                return response()->json([
+                    'status' => 200,
+                    'username' => $user->username,
+                    'token' => $token,
+                    'message' => 'Đăng ký thành công',
+                ]);
         }
-
-        if($user->role_id == 2) //admin
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
-            $emloyee = new Employee();
-            $emloyee->user_id = $user->id;
-            $emloyee->cv_id = 1;
-            $emloyee->save();
-        }
-        else if($user->role_id == 3) //thủ kho
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:thukho'])->plainTextToken;
-            $emloyee = new Employee();
-            $emloyee->user_id = $user->id;
-            $emloyee->cv_id = 2;
-            $emloyee->save();
-        }
-        else if($user->role_id == 4) //nhân viên bán hàng
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:nhanvien'])->plainTextToken;
-            $emloyee = new Employee();
-            $emloyee->user_id = $user->id;
-            $emloyee->cv_id = 3;
-            $emloyee->save();
-        }
-        else //khách hàng
-        {
-            $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
-            $customer = new Customer();
-            $customer->user_id = $user->id;
-            $customer->save();
-        }
-        
-        return response()->json([
-            'status' => 200,
-            'username' => $user->username,
-            'token' => $token,
-            'message' => 'registered successfully',
-        ]);
     }
     public function logout()
     {

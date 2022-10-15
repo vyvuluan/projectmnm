@@ -13,8 +13,8 @@ import {
 } from "react-icons/ai";
 import { GrNext, GrPrevious } from "react-icons/gr";
 const DetailProduct = (props) => {
-  const {item} = props;
-  
+  const { item } = props;
+
   return (
     <>
       <div className="container-fluid py-5">
@@ -169,18 +169,18 @@ const DetailProduct = (props) => {
                 style={{ width: "130px" }}
               >
                 <div className="input-group-btn">
-                  <button className="btn btn-primary btn-minus">
+                  <button className="btn btn-primary btn-minus rounded-0">
                     <AiFillMinusCircle />
                   </button>
                 </div>
                 <input type="text" className="form-control text-center"></input>
                 <div className="input-group-btn">
-                  <button className="btn btn-primary btn-plus">
+                  <button className="btn btn-primary btn-plus rounded-0">
                     <AiFillPlusCircle />
                   </button>
                 </div>
               </div>
-              <button className="btn btn-primary px-3">
+              <button className="btn btn-primary px-3 rounded-0">
                 <AiOutlineShoppingCart /> Add To Cart
               </button>
             </div>

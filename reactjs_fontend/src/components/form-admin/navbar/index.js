@@ -8,7 +8,7 @@ import ContactAdmin from "../contact-admin";
 const NavBarAdmin = () => {
   return (
     <>
-      <nav className="navbar navbar-expand navbar-light bg-dark topbar static-top shadow">
+      <nav className="navbar navbar-expand navbar-light bg-dark topbar fixed-top">
         <button
           id="sidebarToggleTop"
           className="btn btn-link d-md-none rounded-circle mr-3"
