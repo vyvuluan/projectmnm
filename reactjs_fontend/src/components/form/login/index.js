@@ -40,7 +40,7 @@ const Login = (props) => {
                 to={`/`}
               >
                 <BsFillHouseFill />
-              </Link> 
+              </Link>
               <h3 className="Auth-form-title">Đăng Nhập</h3>
               <p className="text-center mt-2"></p>
 
@@ -72,7 +72,7 @@ const Login = (props) => {
                 </button>
               </div>
               <p className="text-center mt-2">
-                Quên <a href="#">mật khẩu?</a>
+                Quên <Link to="/forgotpass">mật khẩu?</Link>
               </p>
               <div className="loginOption">
                 <LoginGoogle />

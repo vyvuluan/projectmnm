@@ -227,6 +227,27 @@ class ProductController extends Controller
                 ]);
         }
     }
-
+    public function search(Request $request)
+    {
+        $product_query =  Product::with('loaisp');
+        //$product = $product_query->get();
+        if($request->keyword)
+        {
+         $product_query->where('tenSP','LIKE','%'.$request->keyword.'%');
+         //$product_query->where('moTa','LIKE','%'.$request->keyword.'%');
+         //$product_query->where('ctSanPham','LIKE','%'.$request->keyword.'%');
+        }
+        if($request->loaisp)
+        {
+            $product_query->whereHas('loaisp',function($query) use ($request){
+                    $query->where('tenLoai',$request->loaisp);
+            });
+        }
+        $product = $product_query->get();
+        return response()->json([
+            'data'=>$product,
+            'message'=>'kết quả',
+            ]);
+    }
 }
 

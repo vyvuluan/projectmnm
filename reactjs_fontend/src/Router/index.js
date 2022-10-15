@@ -19,6 +19,7 @@ import {
   Cart,
   Contact
 } from "../components/form";
+import { DetailCustomer,Bill } from "../components/form-admin";
 export const PublicRouter = [
   {
     path: "/Login",
@@ -76,11 +77,34 @@ export const PublicRouter = [
     component: PageProducts,
     layout: _Layout,
   },
+  
+  {
+    path: "/forgotpass",
+    component: ForgotPass,
+    layout: null,
+  },
   {
     path: "/PageAdmin",
     component: PageAdmin,
     layout: null,
   },
+
+  {
+    path: "/Bill",
+    component: Bill,
+    layout: null,
+  },
+
+];
+//chưa xử lý
+export const PublicRouter_Admin = [
+  {
+    path: "/detailCustomer",
+    component: DetailCustomer,
+    layout: null,
+    
+  },
+  
 
 ];
 {/* <Route path="/product" element={<Product />} />
