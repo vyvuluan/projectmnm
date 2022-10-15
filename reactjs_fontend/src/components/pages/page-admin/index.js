@@ -1,7 +1,7 @@
 import React from "react";
 import * as B from 'react-bootstrap'
 
-import { NavbarAdmin,ContactAdmin,SideBar,SearchAdmin,DashBoard } from "../../form-admin";
+import { NavbarAdmin,ContactAdmin,SideBar,SearchAdmin,DashBoard,Customer } from "../../form-admin";
 const PageAdmin = (props) => {
 
     return (
@@ -13,7 +13,7 @@ const PageAdmin = (props) => {
                         <SideBar/>
                     </B.Col>
                     <B.Col lg={10} className='mt-5'>
-                       <DashBoard/>
+                       <Customer/>
                     </B.Col>
                 </B.Row>
             </B.Container>
