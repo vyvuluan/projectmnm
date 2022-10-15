@@ -17,7 +17,7 @@ function App() {
             }
             return <Route path={item.path} element={Page} />;
           })}
-          <Route path="/SideNavBar" element={<SideNavBar />}></Route>
+          {/* <Route path="/SideNavBar" element={<SideNavBar />}></Route> */}
         </Routes>
       </BrowserRouter>
     </>
