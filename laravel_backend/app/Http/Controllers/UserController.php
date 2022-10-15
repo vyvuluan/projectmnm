@@ -14,6 +14,19 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|max:255',
+            'password' => 'required|max:255',
+        ],[
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.max' => 'Ô email tối đa 255 ký tự',
+            
+            'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+
+            
+            
+        ]);
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password) ) {
@@ -21,7 +34,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 401,
-                'message' => 'error',
+                'error' => 'Không đúng tài khoản hoặc mật khẩu',
             ]);
         }
         else
@@ -34,7 +47,7 @@ class UserController extends Controller
                 'status' => 200,
                 'username' => $user->username,
                 'token' => $token,
-                'message' => 'login successfully',
+                'message' => 'Đăng nhập thành công',
             ]);
         }
     }
@@ -46,27 +59,57 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'username' => 'required|max:255|unique:users',
+            'password' => 'required|max:255',
+            're_password' => 'required|max:255',
+        ],[
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.email' => 'Địa chỉ email không hợp lệ',
+            'email.unique' => 'Địa chỉ email đã tồn tại',
 
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'username.required' => 'Ô username không được bỏ trống',
+            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.unique' => 'username đã tồn tại',
+
+            'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+
+            're_password.required' => 'Ô re_password không được bỏ trống',
+            're_password.max' => 'Ô re_password tối đa 255 ký tự',
+
+            
+            
         ]);
-        
-
-            $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
-            $customer = new Customer();
-            $customer->user_id = $user->id;
-            $customer->save();
+        if($request->re_password != $request->password)
+        {
             return response()->json([
-                'status' => 200,
-                'username' => $user->username,
-                'token' => $token,
-                'message' => 'registered successfully',
+                'status' => 401,
+                
+                'error' => 'Password và nhập lại password không trùng khớp',
             ]);
-        
-        
-        
+        }
+        else
+        {
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            
+    
+                $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
+                $customer = new Customer();
+                $customer->user_id = $user->id;
+                $customer->save();
+                return response()->json([
+                    'status' => 200,
+                    'username' => $user->username,
+                    'token' => $token,
+                    'message' => 'Đăng ký thành công',
+                ]);
+        }
     }
     public function logout()
     {
