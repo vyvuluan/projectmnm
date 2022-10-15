@@ -5,20 +5,25 @@ import * as IoI from "react-icons/io";
 import * as RiI from "react-icons/ri";
 import * as HiI from "react-icons/hi";
 import { AiOutlineContacts } from "react-icons/ai";
-import {MdOutlineManageAccounts,MdOutlineRequestPage,MdOutlineInput} from "react-icons/md"
-import {BiBuildingHouse} from "react-icons/bi"
-
+import {
+  MdOutlineManageAccounts,
+  MdOutlineRequestPage,
+  MdOutlineInput,
+} from "react-icons/md";
+import { BiBuildingHouse } from "react-icons/bi";
 
 export const SideNavBarData = [
   {
     title: "Trang chủ",
     path: "/Home",
     icon: <HiI.HiHome />,
+    link: "/PageAdmin",
   },
   {
     title: "Báo cáo",
     path: "/reports",
     icon: <IoI.IoIosPaper />,
+    link: `/Chart`,
   },
   {
     title: "Sản phẩm",
@@ -29,6 +34,7 @@ export const SideNavBarData = [
     title: "Liên hệ",
     path: "/contact",
     icon: <AiOutlineContacts />,
+    link: `/ContactAdmin`,
   },
   {
     title: "Tài Khoản",
@@ -54,7 +60,6 @@ export const SideNavBarData = [
     title: "Phiếu xuất",
     path: "/outputForm",
     icon: <MdOutlineRequestPage />,
+    link: "/ListBill",
   },
-
-
 ];

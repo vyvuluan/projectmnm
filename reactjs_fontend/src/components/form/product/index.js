@@ -9,7 +9,7 @@ const Product = (props) => {
   return (
     <>
       <div className="container-fluid pt-5">
-        <div className="row px-xl-5 pb-3">
+        <div className="row px-xl-4 pb-3">
           {item.map((item, index) => {
             // console.log(item.hinh);
             for (let i = 0; i <= index; i++) {

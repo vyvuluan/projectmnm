@@ -19,11 +19,12 @@ const NavBarAdmin = () => {
         {/* form tìm kiếm */}
         <div className="row m-3 " style={{ color: "#d19c97" }}>
           {/* <h5>L3M Admin</h5> */}
-          <a href='#' className='text-decoration-none'>
-            <span className='fs-4 text-primary fw-bold'>L3M <span className='text-white'>SHOP</span></span>
+          <a href="#" className="text-decoration-none">
+            <span className="fs-4 text-primary fw-bold">
+              L3M <span className="text-white">SHOP</span>
+            </span>
           </a>
-          <div className='text-muted fs-6'>ADMINISTRATOR</div>
-
+          <div className="text-muted fs-6">ADMINISTRATOR</div>
         </div>
         <ul className="navbar-nav ml-auto">
           {/* <!-- Nav Item - Alerts --> */}
@@ -37,7 +38,7 @@ const NavBarAdmin = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <FaBell  />
+              <FaBell />
               {/* <!-- Counter - Alerts --> */}
               <span className="badge badge-danger badge-counter d-none">3</span>
             </a>
@@ -57,7 +58,9 @@ const NavBarAdmin = () => {
             >
               <FaEnvelope />
               {/* <!-- Counter - Messages --> */}
-              <span className="badge badge-danger d-none  badge-counter">7</span>
+              <span className="badge badge-danger d-none  badge-counter">
+                7
+              </span>
             </a>
             {/* <!-- Dropdown - Messages --> */}
           </li>
