@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,14 +72,32 @@ class UserController extends Controller
         if($user->role_id == 2) //admin
         {
             $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+            $emloyee = new Employee();
+            $emloyee->user_id = $user->id;
+            $emloyee->cv_id = 1;
         }
-        else
+        else if($user->role_id == 3) //thủ kho
+        {
+            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+            $emloyee = new Employee();
+            $emloyee->user_id = $user->id;
+            $emloyee->cv_id = 2;
+        }
+        else if($user->role_id == 4) //nhân viên bán hàng
+        {
+            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+            $emloyee = new Employee();
+            $emloyee->user_id = $user->id;
+            $emloyee->cv_id = 3;
+        }
+        else //khách hàng
         {
             $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
+            $customer = new Customer();
+            $customer->user_id = $user->id;
+            $customer->save();
         }
-        $customer = new Customer();
-        $customer->user_id = $user->id;
-        $customer->save();
+        
         return response()->json([
             'status' => 200,
             'username' => $user->username,
