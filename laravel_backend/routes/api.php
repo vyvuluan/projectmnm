@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\ManageEmloyeeController;
 use App\Http\Controllers\BaoHanhController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ use  App\Http\Controllers\CartController;
 use  App\Http\Controllers\LoaispController;
 use  App\Http\Controllers\HomeController;
 use  App\Http\Controllers\admin\ManageUserController;
+use  App\Http\Controllers\admin\ManageEmployeeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -52,13 +54,30 @@ Route::get('/getStatusDH/{id}', [PaymentController::class,'getStatus']);
 Route::get('/checkBaoHanh/{id}', [BaoHanhController::class,'checkBaoHanh']);
 
 
-
+//admin
 Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
     Route::get('noti', function () {
         return 'tui là admin';
     });
     Route::resource('manageUser', ManageUserController::class);
-    // Route::post('/login', [UserController::class,'login']);
+
+    Route::resource('manageEmployee', ManageEmployeeController::class);
+    //cấp tài khoản cho nhân viên
+    Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class,'createUser']);
+    
+});
+
+
+
+//thủ kho
+Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
+
+    
+});
+
+//nhân viên
+Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(function () {
+   
 });
 
 

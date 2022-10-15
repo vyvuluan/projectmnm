@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+
 class ManageUserController extends Controller
 {
     /**
@@ -28,8 +29,10 @@ class ManageUserController extends Controller
      */
     public function create()
     {
-        //
+        
     }
+    
+    
 
     /**
      * Store a newly created resource in storage.
@@ -39,7 +42,8 @@ class ManageUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        
     }
 
     /**
