@@ -1,13 +1,12 @@
 import React from "react";
-import { Table,FormLabel } from "react-bootstrap";
-import { AiFillEye } from 'react-icons/ai';
+import { Table, FormLabel } from "react-bootstrap";
+import { AiFillEye } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const ListBill = () => {
   return (
     <>
-        <FormLabel style={{ fontSize: "30px" }}>
-        Danh sách đơn hàng
-      </FormLabel>
+      <FormLabel style={{ fontSize: "30px" }}>Danh sách đơn hàng</FormLabel>
       <Table responsive>
         <thead>
           <tr>
@@ -21,7 +20,6 @@ const ListBill = () => {
             <th>Tổng tiền</th>
             <th>Ngày tạo</th>
             <th>Thao tác</th>
-
           </tr>
         </thead>
         <tbody>
@@ -31,13 +29,22 @@ const ListBill = () => {
             <td>Otto</td>
             <td>@md</td>
             <td>1</td>
-            <td style={{wordBreak: "break-word", maxWidth: "250px"}} >ádasdadd</td>
+            <td style={{ wordBreak: "break-word", maxWidth: "250px" }}>
+              ádasdadd
+            </td>
             <td>Otto</td>
             <td>@mdo</td>
-            <td><button onClick type="submit" className="border-0 bg-primary rounded ">
-                <AiFillEye className="me-1"/>Xem
-              </button>
-              
+            <td>
+              <Link to="/ListBillDetail">
+                <button
+                  onClick
+                  type="submit"
+                  className="border-0 bg-primary rounded "
+                >
+                  <AiFillEye className="me-1" />
+                  Xem
+                </button>
+              </Link>
             </td>
           </tr>
         </tbody>

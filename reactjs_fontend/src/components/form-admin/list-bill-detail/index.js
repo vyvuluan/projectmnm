@@ -1,14 +1,12 @@
 import React from "react";
-import { Table, FormLabel ,Button } from "react-bootstrap";
+import { Table, FormLabel, Button } from "react-bootstrap";
 import { AiFillEye } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const ListBillDetail = () => {
   return (
     <>
-      <FormLabel style={{ fontSize: "30px" }}>
-        Chi tiết đơn hàng
-      </FormLabel>
-       
+      <FormLabel style={{ fontSize: "30px" }}>Chi tiết đơn hàng</FormLabel>
 
       <Table responsive>
         <thead>
@@ -30,10 +28,16 @@ const ListBillDetail = () => {
           </tr>
         </tbody>
       </Table>
-      <Button variant="primary" className="rounded mr-2" type="submit"
-        style={{position:"absolute", top: "0", right: "0"}}>
+      <Link to="/ListBill">
+        <Button
+          variant="primary"
+          className="rounded mr-2"
+          type="submit"
+          style={{ position: "absolute", top: "0", right: "0" }}
+        >
           Quay lại
         </Button>
+      </Link>
     </>
   );
 };

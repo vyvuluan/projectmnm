@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Ncc;
+use  App\Models\Loaisp;
 use Validator;
-use App\Http\Resources\NccResource;
 
-class NccController extends Controller
+class ManageLoaispController extends Controller
 {
-    // Backup không còn xài nữa
     public function index()
     {
-        $Ncc = Ncc::paginate();
+        $loaisp = Loaisp::all();
         return response()->json([
             'status'=>200,
-            'Nsx'=>$Ncc,
+            'Loaisp'=>$loaisp,
         ]);
     }
 
@@ -38,10 +36,11 @@ class NccController extends Controller
      */
     public function store(Request $request)
     {
+        // $this->validate($request, [
+        //     'tenLoai' =>'required|max:10'
+        // ]);
         $validator = Validator::make($request->all(),[
-            'tenNCC' =>'required|max:20',
-            'diaChi'=>'required|max:100',
-            'sdt'=>'required|numeric|digits:10',
+            'tenLoai' =>'required|max:10'
         ]);
         if($validator->fails())
         {
@@ -52,16 +51,15 @@ class NccController extends Controller
         }
         else
         {
-            $Ncc = new Ncc();
-            $Ncc->tenNCC = $request->tenNCC;
-            $Ncc->diaChi = $request->diaChi;
-            $Ncc->sdt = $request->sdt;
-            $Ncc->save();
+            $Loaisp = new Loaisp;
+            $Loaisp->tenLoai = $request->tenLoai;
+            $Loaisp->save();
             return response()->json([
                 'status'=>200,
-                'message'=>'Thêm Ncc thành công',
+                'message'=>'Thêm loại sản phẩm thành công',
             ]);
         }
+
     }
 
     /**
@@ -70,10 +68,9 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Ncc $Ncc)
+    public function show($id)
     {
-
-        return new NccResource($Ncc);
+        //
     }
 
     /**
@@ -84,12 +81,12 @@ class NccController extends Controller
      */
     public function edit($id)
     {
-        $Ncc = Ncc::find($id);
-        if($Ncc)
+        $Loaisp = Loaisp::find($id);
+        if($Loaisp)
         {
             return response()->json([
                 'status'=>200,
-                'loaisp'=>$Ncc,
+                'loaisp'=>$Loaisp,
             ]);
         }
     }
@@ -101,12 +98,10 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'tenNCC' =>'required|max:20',
-            'diaChi'=>'required|max:100',
-            'sdt'=>'required|numeric|digits:10',
+            'tenLoai' =>'required|max:10'
         ]);
         if($validator->fails())
         {
@@ -117,13 +112,11 @@ class NccController extends Controller
         }
         else
         {
-            $Ncc = Ncc::find($id);
-            if($Ncc)
+            $Loaisp = Loaisp::find($id);
+            if($Loaisp)
             {
-                $Ncc->tenNCC = $request->tenNCC;
-                $Ncc->diaChi = $request->diaChi;
-                $Ncc->sdt = $request->sdt;
-                $Ncc->save();
+                $Loaisp->tenLoai = $request->tenLoai;
+                $Loaisp->save();
                 return response()->json([
                     'status'=>200,
                     'message'=>'Cập nhật thành công ',
@@ -133,7 +126,7 @@ class NccController extends Controller
             {
                 return response()->json([
                     'status'=>404,
-                    'message'=>'Không tìm Ncc cần tìm',
+                    'message'=>'Không tìm thấy loại sản phẩm',
                 ]);
 
             }
@@ -148,11 +141,10 @@ class NccController extends Controller
      */
     public function destroy($id)
     {
-
-        $Ncc = Ncc::find($id);
-        if($Ncc)
+        $Loaisp = Loaisp::find($id);
+        if($Loaisp)
         {
-            $Ncc->delete();
+            $Loaisp->delete();
             return response()->json([
                 'status'=>200,
                 'message'=>'Xoá thành công',
@@ -162,9 +154,10 @@ class NccController extends Controller
         {
             return response()->json([
                 'status'=>404,
-                'message'=>'Không tìm thấy ncc cần xoá',
+                'message'=>'Không tìm thấy Loại sản phẩm cần xoá',
                 ]);
 
         }
+
     }
 }
