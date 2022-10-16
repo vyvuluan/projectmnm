@@ -22,6 +22,7 @@ use App\Http\Controllers\admin\ManageNccController;
 use App\Http\Controllers\admin\ManageNsxController;
 use  App\Http\Controllers\admin\ManageEmployeeController;
 use  App\Http\Controllers\admin\ManageLoaispController;
+use  App\Http\Controllers\admin\ManageCustomerController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -69,7 +70,7 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
 
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên
-    Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class,'createUser']);
+    Route::post('manageEmployee/createUser/{id}', [ManageCustomerController::class,'createUser']);
 
 });
 
@@ -79,7 +80,9 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
 Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
             //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
-            Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+            Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
+            Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+            Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
 
             // Api quản lý ncc , nsx
             Route::resource('ncc',ManageNccController::class);
@@ -101,6 +104,9 @@ Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(fun
               //Api Quản lý  Phiếu Xuất
               Route::resource('px', ManagePhieuXuatController::class);
               Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+
+              //Api Quản lý khách hàng
+              Route::resource('customer', ManageCustomerController::class);
 
 });
 

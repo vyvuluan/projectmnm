@@ -27,6 +27,30 @@ class ManagePhieuXuatController extends Controller
             'data'=>$ctpx,
         ]);
     }
+    public function editpx($id)
+    {
+        $px = PhieuXuat::find($id);
+        if($px)
+        {
+            return response()->json([
+                'status'=>200,
+                'loaisp'=>$px,
+            ]);
+        }
+    }
+    public function editctpx($mapx,$masp)
+    {
+        $pxct = PhieuXuat::find($mapx)->pxct;
+        return $pxct;
+        $data=  $pxct->where('product_id',$masp);
+        if($data)
+        {
+            return response()->json([
+                'status'=>200,
+                'loaisp'=>$data,
+            ]);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -80,7 +104,7 @@ class ManagePhieuXuatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

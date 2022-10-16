@@ -15,7 +15,7 @@ const HomePage = () => {
   useEffect(() => {
     const controller = new AbortController();
     axios
-      .get("http://localhost:8000/api/products")
+      .get("http://localhost:8000/api/products/view")
       .then(function (response) {
         // handle success
         // console.log(response.data.data[0].hinh);

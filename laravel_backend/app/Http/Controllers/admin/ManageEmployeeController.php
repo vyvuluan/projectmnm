@@ -48,22 +48,57 @@ class ManageEmployeeController extends Controller
     }
     public function createUser(Request $request,$id)
     {
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'username' => 'required|max:255|unique:users',
+            'password' => 'required|max:255',
+            're_password' => 'required|max:255',
+        ],[
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.email' => 'Địa chỉ email không hợp lệ',
+            'email.unique' => 'Địa chỉ email đã tồn tại',
+
+            'username.required' => 'Ô username không được bỏ trống',
+            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.unique' => 'username đã tồn tại',
+
+            'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+
+            're_password.required' => 'Ô re_password không được bỏ trống',
+            're_password.max' => 'Ô re_password tối đa 255 ký tự',
+
+            
+            
         ]);
+        if($request->re_password != $request->password)
+        {
+            return response()->json([
+                'status' => 401,
+                
+                'error' => 'Password và nhập lại password không trùng khớp',
+            ]);
+        }
+        else
+        {
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role_id' => $request->role_id,
+            ]);
+            
+            $emloyee = Employee::find($id);
+            $emloyee->user_id = $user->id;
+            $emloyee->save();
+            
+            return response()->json([
+                'status' => 200,
+                'username' => $user->username,
+                'message' => 'Đăng ký thành công',
+            ]);
+        }
         
-        $emloyee = Employee::find($id);
-        $emloyee->user_id = $user->id;
-        $emloyee->save();
-        
-        return response()->json([
-            'status' => 200,
-            'username' => $user->username,
-            'message' => 'registered successfully',
-        ]);
     }
 
     /**
