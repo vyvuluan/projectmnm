@@ -81,8 +81,10 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
             //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
             Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
-            Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
-            Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
+                //Api Quản lý chi tiết phiếu xuất
+                Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+                Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
+                Route::put('updatectpx/{mapx}/{maspct}', [ManagePhieuXuatController::class,'updateCtpx']);
 
             // Api quản lý ncc , nsx
             Route::resource('ncc',ManageNccController::class);
@@ -90,23 +92,23 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
 
             //Api Quản lý sản phẩm
             Route::resource('products',ManageProductController::class);
-            Route::get('products-search', [ManageProductController::class,'search']);
+            Route::get('products-search', [ManageProductController::class,'search']); // Tìm Kiếm sản phẩm 
             //Api quản lý loại sản phẩm
             Route::resource('loaisp', ManageLoaispController::class);
-            // Chi tiết sản phẩm
-            Route::get('products/chitiet/{id}', [ManageProductController::class,'ctsp']);
+                // Chi tiết sản phẩm
+                Route::get('products/chitiet/{id}', [ManageProductController::class,'ctsp']);
 
 });
 
 //nhân viên
 Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(function () {
 
-              //Api Quản lý  Phiếu Xuất
-              Route::resource('px', ManagePhieuXuatController::class);
-              Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+            //Api Quản lý  Phiếu Xuất
+            Route::resource('px', ManagePhieuXuatController::class);
+            Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
 
-              //Api Quản lý khách hàng
-              Route::resource('customer', ManageCustomerController::class);
+            //Api Quản lý khách hàng
+            Route::resource('customer', ManageCustomerController::class);
 
 });
 
