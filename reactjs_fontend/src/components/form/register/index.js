@@ -32,30 +32,28 @@ const Resgiter = () => {
       re_password: registerInput.repass,
     };
     axios.get("/sanctum/csrf-cookie").then((response) => {
-      axios
-        .post("http://localhost:8000/api/register", data)
-        .then((res) => {
-          if (res.data.status === 200) {
-            localStorage.setItem("auth_token", res.data.token);
-            localStorage.setItem("auth_name", res.data.username);
-            console.log("thanh cong");
-            swal({
-              title: "Đăng ký thành công",
-              icon: "success",
-              button: "đóng",
-            });
+      axios.post("http://localhost:8000/api/register", data).then((res) => {
+        if (res.data.status === 200) {
+          localStorage.setItem("auth_token", res.data.token);
+          localStorage.setItem("auth_name", res.data.username);
+          // console.log("thanh cong");
+          swal({
+            title: "Đăng ký thành công",
+            icon: "success",
+            button: "đóng",
+          });
 
-            history("/");
-          } else {
-            console.log(res);
-            setErrorPass(res.data.error);
-          }
-        })
-        .catch(function (error1) {
-          console.log(error1.response.data.errors);
-          setErrorTrung(error1.response.data.errors);
-          console.log(errorTrung);
-        });
+          history("/");
+        } else if (res.data.status === 401) {
+          setErrorPass(res.data.error);
+        } else if (res.data.status === 400) {
+          console.log(res.data.error);
+          setErrorTrung(res.data.error);
+          // console.log(errorTrung.username);
+        }
+        
+      });
+      
     });
   };
 

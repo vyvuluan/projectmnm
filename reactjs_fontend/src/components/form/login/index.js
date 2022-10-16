@@ -1,38 +1,68 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 import { Button } from "react-bootstrap";
 import LoginGoogle from "./loginGoogle.js";
+import swal from "sweetalert";
+
+import "react-toastify/dist/ReactToastify.css";
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
 import { BsFillHouseFill } from "react-icons/bs";
-const Login = (props) => {
-  // useEffect(()=>{
-  //   google.accounts.id.initialize({
-  //     client_id:"1082529749855-m2jvr7o57bsit6a8colcbsv0ro324ac6.apps.googleusercontent.com",
-  //     callback: handleCallbackResponse
-  //   })
-  //   google.accounts.id.renderButton(
-  //     document.getElementById("SignIn"),
+import axios from "axios";
 
-  //   )
-  // }, [])
+const Login = () => {
 
-  // let [authMode, setAuthMode] = useState("signin");
+  const [loginInput, setLogin] = useState({
+    email: "",
+    password: "",
+  });
+  const history = useNavigate();
 
-  // const changeAuthMode = () => {
-  //   setAuthMode(authMode === "signin" ? "signup" : "signin");
-  // };
+  const handleInput = (e) => {
+    e.persist();
+    setLogin({ ...loginInput, [e.target.name]: [e.target.value] });
+  };
 
-  // if (authMode === "signin") {
-  //   return <></>;
-  // }
+  const loginSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      email: loginInput.email,
+      password: loginInput.password,
+    };
+    axios.get("/sanctum/csrf-cookie").then((response) => {
+    axios.post("/api/login", data).then((res) => {
+        if (res.data.status === 200) {
+          localStorage.setItem('auth_token', res.data.token);
+          localStorage.setItem('auth_name', res.data.username)
+          swal({
+            title: "Đăng nhập thành công",
+            icon: "success",
+            button: "đóng",
+          });
+
+          history("/");
+        }else if (res.data.status === 401) {
+          swal({
+            title: "Không đúng tài khoản hoặc mật khẩu",
+            icon: "warning",
+            button: "đóng",
+          });
+        }
+        else 
+        {
+          // setLogin({...loginInput})
+        }
+    });
+  });
+}
   return (
     <>
       <div id="SignIn" className="Auth-form-container">
-        <form className="Auth-form">
+        <form className="Auth-form" onSubmit={loginSubmit}>
           <div className="Auth-form-content">
             <Link style={{ marginTop: "-20px", position: "absolute" }} to={`/`}>
               <BsFillHouseFill />
@@ -41,22 +71,32 @@ const Login = (props) => {
             <p className="text-center mt-2"></p>
 
             <div className="text-center">
-              Chưa có tài khoản? <Link to="/Register"> <span className="link-primary">Đăng ký</span></Link>
+              Chưa có tài khoản?{" "}
+              <Link to="/Register">
+                {" "}
+                <span className="link-primary">Đăng ký</span>
+              </Link>
             </div>
             <div className="form-group mt-3">
               <label>Nhập email</label>
               <input
                 type="email"
+                name="email"
                 className="form-control mt-1 shadow-sm shadow-sm"
                 placeholder="Enter email"
+                onChange={handleInput}
+                value={loginInput.email}
               />
             </div>
             <div className="form-group mt-3">
               <label>Password</label>
               <input
                 type="password"
+                name="password"
                 className="form-control mt-1 shadow-sm shadow-sm"
                 placeholder="Enter password"
+                onChange={handleInput}
+                value={loginInput.password}
               />
             </div>
             <div className="d-grid gap-2 mt-3 ">
