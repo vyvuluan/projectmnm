@@ -103,12 +103,12 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
 //nhân viên
 Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(function () {
 
-              //Api Quản lý  Phiếu Xuất
-              Route::resource('px', ManagePhieuXuatController::class);
-              Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+            //Api Quản lý  Phiếu Xuất
+            Route::resource('px', ManagePhieuXuatController::class);
+            Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
 
-              //Api Quản lý khách hàng
-              Route::resource('customer', ManageCustomerController::class);
+            //Api Quản lý khách hàng
+            Route::resource('customer', ManageCustomerController::class);
 
 });
 
