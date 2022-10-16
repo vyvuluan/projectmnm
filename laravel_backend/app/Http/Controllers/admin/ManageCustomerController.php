@@ -158,6 +158,12 @@ class ManageCustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Customer = Customer::find($id);
+        $user = User::where('id', $Customer->user_id)->delete();
+        return response()->json([
+            'status' => 200,
+             'user' => $user,
+            'message' => 'xóa thành công',
+        ]);
     }
 }

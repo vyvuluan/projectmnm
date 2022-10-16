@@ -5,7 +5,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
+use App\Models\Product;
 use Validator;
+use Illuminate\Support\Facades\DB;
 class ManagePhieuXuatController extends Controller
 {
     /**
@@ -41,7 +43,6 @@ class ManagePhieuXuatController extends Controller
     public function editctpx($mapx,$masp)
     {
         $pxct = PhieuXuat::find($mapx)->pxct;
-        return $pxct;
         $data=  $pxct->where('product_id',$masp);
         if($data)
         {
@@ -104,8 +105,162 @@ class ManagePhieuXuatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $validator = Validator::make($request->all(),[
+            'employee_id' =>'required|numeric|max:10',
+            'status' =>'required|numeric|max:10',
+            'pt_ThanhToan' =>'required|max:10',
+            'diaChi' =>'required',
+            'tongTien' =>'required|numeric'
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $px = PhieuXuat::find($id);
+            if($px)
+            {
+                $px->employee_id= $request->employee_id;
+                $px->status= $request->status;
+                $px->pt_ThanhToan= $request->pt_ThanhToan;
+                $px->diaChi= $request->diaChi;
+                $px->tongTien= $request->tongTien;
+                $px->save();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Cập nhật phiếu thành công ',
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Không tìm thấy phiếu xuất',
+                ]);
+
+            }
+        }
     }
+    public function checksl($slgio,$slupdate,$slkho)
+    {
+        $temp = $slgio - $slupdate;
+        if ($temp+$slkho>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public function updateCtpx(Request $request,$mapx,$maspct)
+    {
+        $validator = Validator::make($request->all(),[
+            'product_id'=>'required|numeric',
+            'soluong' =>'required|numeric',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $pxct = PhieuXuat::find($mapx)->pxct;
+            $data=  $pxct->where('product_id',$maspct)->first();
+            if($data)
+            {
+                $checksp = Product::find($request->product_id);
+                if($checksp)
+                {
+                    if($checksp->id==$maspct)
+                    {
+                       
+                        $slgio = $data->soluong;
+                        $slupdate = $request->soluong;
+                        $slkho = $checksp->soLuongSP;
+                        if($this->checksl($slgio,$slupdate,$slkho))
+                        {    
+                            //$data->px_id=$mapx;                 
+                            $data->product_id = $checksp->id;
+                            $data->soluong = $slupdate;
+                            $data->gia = $checksp->gia;
+                            $checksp->soLuongSP = ($slgio - $slupdate)+$slkho;
+                            $checksp->save();
+                            DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
+                            ->update(['product_id' => $checksp->id,'soluong' => $slupdate,'gia' =>  $checksp->gia]);
+                            return response()->json([
+                                'status'=>200,
+                                'message'=>'Cập nhật Chi tiết phiếu Xuất thành công ',
+                            ]);
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'status'=>402,
+                                'message'=>'Kho không còn đủ hàng',
+                            ]);
+                        }
+                    }
+                    else
+                    {
+                        //$checksp->id=$maspct
+                        
+                        $slgio = $data->soluong;
+                        $slupdate = $request->soluong;
+                        $slkho = $checksp->soLuongSP;
+                        if($slkho>$slupdate)
+                        {                     
+                            // $data->product_id = $checksp->product_id;
+                            $spgio = Product::find($maspct);
+                            $spgio->soLuongSP += $slgio;
+                            $spgio->save();
+                            $checksp->soLuongSP -= $slupdate ;
+                            $checksp->save();
+                            DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
+                            ->update(['product_id' => $checksp->id,'soluong' => $slupdate,'gia' =>  $checksp->gia]);
+                            return response()->json([
+                                'status'=>200,
+                                'message'=>'Cập nhật Chi tiết phiếu Xuất thành công ',
+                            ]);
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'status'=>402,
+                                'message'=>'Kho không còn đủ hàng',
+                            ]);
+                        }
+
+                    }
+                }
+                else
+                {
+                    return response()->json([
+                        'status'=>401,
+                        'message'=>' Thông tin cập nhật không chính xác',
+                    ]);
+                }
+
+              
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Không tìm thấy Chi tiết phiếu xuất',
+                ]);
+
+            }
+        }
+    }
+   
 
     /**
      * Remove the specified resource from storage.
@@ -115,6 +270,6 @@ class ManagePhieuXuatController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }
