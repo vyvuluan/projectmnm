@@ -12,8 +12,8 @@ function SideNavBar() {
     <>
       <B.TabContainer fluid defaultActiveKey={"/Home"}>
         <B.Row
-          className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
-          style={{ height: "100vh", position:"fixed" }}
+          className="d-flex flex-column d-none d-md-none d-lg-block flex-shrink-0 p-3 text-white bg-dark"
+          style={{ height: "100vh", position: "fixed" }}
         >
           <B.Nav variant="pills" className="flex-column mb-auto" style={{ marginTop: '70px' }}>
             <B.NavItem>

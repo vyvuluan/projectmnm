@@ -10,7 +10,7 @@ function index() {
     return (
         <>
             <B.Container fluid>
-                <B.Row className='px-xl-5 mb-4'>
+                <B.Row className='pe-xl-5 mb-4'>
                     <B.Col lg={4}>
                         <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ NHÂN VIÊN</h1>
                     </B.Col>
@@ -45,7 +45,7 @@ function index() {
 
                 </B.Row>
 
-                <B.Row className='px-xl-5 mb-5'>
+                <B.Row className='pe-xl-5 mb-5'>
                     <B.Col lg={8}>
                         <B.Form >
                             <B.FormGroup>
@@ -97,7 +97,7 @@ function index() {
                                 <option>Nhân viên</option>
                             </B.FormSelect>
                         </B.FormGroup>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-50'>
+                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-100'>
                             <RiUserAddFill className='me-2' />
                             Cấp tài khoản
                         </B.Button>
@@ -105,7 +105,7 @@ function index() {
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
-                <B.Row className='px-xl-5'>
+                <B.Row className='pe-xl-5'>
                     <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
                         <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
                             <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>

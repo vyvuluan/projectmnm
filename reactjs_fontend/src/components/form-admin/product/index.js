@@ -5,12 +5,14 @@ import { FaUserEdit, FaSearch } from 'react-icons/fa'
 import { AiOutlineUserDelete, AiOutlineEdit } from 'react-icons/ai'
 import { CgExtensionAdd } from 'react-icons/cg'
 import { BiEdit } from 'react-icons/bi'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 function index() {
     return (
         <>
             <B.Container fluid>
-                <B.Row className='px-xl-5 mb-4'>
+                <B.Row className='pe-xl-5 mb-4'>
                     <B.Col lg={4}>
                         <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ SẢN PHẨM</h1>
                     </B.Col>
@@ -43,7 +45,7 @@ function index() {
 
                 </B.Row>
 
-                <B.Row className='px-xl-5 mb-5'>
+                <B.Row className='pe-xl-5 mb-5'>
                     <B.Col lg={8}>
                         <B.Form >
                             <B.FormGroup>
@@ -63,39 +65,57 @@ function index() {
                             <B.FormGroup>
                                 <B.FormControl type='file' className='rounded-0 shadow-none mb-3' placeholder='Hình'></B.FormControl>
                             </B.FormGroup>
+                            <CKEditor
+                                editor={ClassicEditor}
+                                data='<p>Mô tả sản phẩm</p>'
+                                onReady={editor => {
+                                    // You can store the "editor" and use when it is needed.
+                                }}
+                                onChange={(event, editor) => {
+                                    const data = editor.getData();
+                                }}
+                                onBlur={(event, editor) => {
+                                }}
+                                onFocus={(event, editor) => {
+                                }}
+                            />
                         </B.Form>
                     </B.Col>
                     <B.Col lg={4}>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <BsPersonPlusFill className='me-2' />
-                            Thêm sản phẩm
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <FaUserEdit className='me-2' />
-                            Sửa sản phẩm
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
-                            <AiOutlineUserDelete className='me-2' />
-                            Xóa sản phẩm
-                        </B.Button>
-                        <hr />
-                        <B.FormGroup>
-                            <B.FormControl type='text' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'></B.FormControl>
-                        </B.FormGroup>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-50'>
-                            <CgExtensionAdd className='me-2' />
-                            Thêm loại
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-50'>
-                            <AiOutlineEdit className='me-2' />
-                            Sửa loại
-                        </B.Button>
+                        <B.Form>
+                            <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+                                <BsPersonPlusFill className='me-2' />
+                                Thêm sản phẩm
+                            </B.Button>
+                            <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+                                <FaUserEdit className='me-2' />
+                                Sửa sản phẩm
+                            </B.Button>
+                            <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
+                                <AiOutlineUserDelete className='me-2' />
+                                Xóa sản phẩm
+                            </B.Button>
+                            <hr />
+                            <B.FormGroup>
+                                <B.FormControl type='text' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'></B.FormControl>
+                            </B.FormGroup>
+                            <div className='d-flex d-inline-block justify-content-between'>
+                                <B.Button variant='outline-primary' className='rounded-0 py-2 w-50 me-1'>
+                                    <CgExtensionAdd className='me-2' />
+                                    Thêm loại
+                                </B.Button>
+                                <B.Button variant='outline-primary' className='rounded-0 py-2 w-50 ms-1'>
+                                    <AiOutlineEdit className='me-2' />
+                                    Sửa loại
+                                </B.Button>
+                            </div>
+                        </B.Form>
 
                     </B.Col>
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
-                <B.Row className='px-xl-5'>
+                <B.Row className='pe-xl-5'>
                     <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
                         <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
                             <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>

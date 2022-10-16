@@ -9,7 +9,7 @@ function index() {
     return (
         <>
             <B.Container fluid>
-                <B.Row className='px-xl-5 mb-4'>
+                <B.Row className='pe-xl-5 mb-4'>
                     <B.Col lg={5}>
                         <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ NHÀ CUNG CẤP</h1>
                     </B.Col>
@@ -36,7 +36,7 @@ function index() {
 
                 </B.Row>
 
-                <B.Row className='px-xl-5 mb-5'>
+                <B.Row className='pe-xl-5 mb-5'>
                     <B.Col lg={8}>
                         <B.Form >
                             <B.FormGroup>
@@ -67,7 +67,7 @@ function index() {
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
-                <B.Row className='px-xl-5'>
+                <B.Row className='pe-xl-5'>
                     <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
                         <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
                             <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>
