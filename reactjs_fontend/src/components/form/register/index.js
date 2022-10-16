@@ -2,60 +2,60 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-// import { Toast } from "../toast";
+
 import swal from "sweetalert";
 
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Resgiter = () => {
-  // const [check, setCheck] = useState(true);
   const history = useNavigate();
 
   const [registerInput, setRegister] = useState({
     name: "",
     email: "",
     pass: "",
+    repass: "",
   });
-  const [pass, setPass] = useState();
-  const [repass, setRePass] = useState();
-
+  const [errorPass, setErrorPass] = useState();
+  const [errorTrung, setErrorTrung] = useState();
   const handleInput = (e) => {
     e.persist();
     setRegister({ ...registerInput, [e.target.name]: e.target.value });
-    console.log(e.target.value);
   };
 
   const registerSubmit = (e) => {
-    // setCheck(false);
-
     e.preventDefault();
     const data = {
       username: registerInput.name,
       email: registerInput.email,
       password: registerInput.pass,
+      re_password: registerInput.repass,
     };
     axios.get("/sanctum/csrf-cookie").then((response) => {
-      axios.post("http://localhost:8000/api/register", data).then((res) => {
-        // console.log(res);
-        const mess = res.data.message;
-        // console.log(mess);
-        if (res.data.status == 200) {
-          //setCheck(true)
-          localStorage.setItem("auth_token", res.data.token);
-          localStorage.setItem("auth_name", res.data.username);
-          console.log("thanh cong");
-          swal({
-            title: "Đăng ký thành công",
-            icon: "success",
-            button: "đóng",
-          });
+      axios
+        .post("http://localhost:8000/api/register", data)
+        .then((res) => {
+          if (res.data.status === 200) {
+            localStorage.setItem("auth_token", res.data.token);
+            localStorage.setItem("auth_name", res.data.username);
+            console.log("thanh cong");
+            swal({
+              title: "Đăng ký thành công",
+              icon: "success",
+              button: "đóng",
+            });
 
-          history("/");
-        } else {
-          console.log("khong dc");
-        }
-      });
+            history("/");
+          } else {
+            console.log(res);
+            setErrorPass(res.data.error);
+          }
+        })
+        .catch(function (error1) {
+          console.log(error1.response.data.errors);
+          setErrorTrung(error1.response.data.errors);
+          console.log(errorTrung);
+        });
     });
   };
 
@@ -80,8 +80,10 @@ const Resgiter = () => {
                 placeholder="example: Đỗ Đình Mạnh"
                 onChange={handleInput}
                 value={registerInput?.name}
+                required
               />
             </div>
+            <span className="error1">{errorTrung?.username}</span>
             <div className="form-group mt-3">
               <label>Email</label>
               <input
@@ -91,8 +93,11 @@ const Resgiter = () => {
                 placeholder="example: abc@gmail.com"
                 onChange={handleInput}
                 value={registerInput?.email}
+                required
               />
             </div>
+            <span className="error1">{errorTrung?.email}</span>
+
             <div className="form-group mt-3">
               <label>Password</label>
               <input
@@ -102,8 +107,10 @@ const Resgiter = () => {
                 placeholder="Nhập password"
                 onChange={handleInput}
                 value={registerInput?.pass}
+                required
               />
             </div>
+
             <div className="form-group mt-3">
               <label>Xác nhận mật khẩu</label>
               <input
@@ -112,17 +119,15 @@ const Resgiter = () => {
                 className="form-control mt-1 shadow-sm"
                 placeholder="Xác nhận password"
                 onChange={handleInput}
+                value={registerInput?.repass}
+                required
               />
             </div>
+            <span className="error1">{errorPass}</span>
             <div className="d-grid gap-2 mt-3">
               <button type="submit" className="btn btn-primary shadow-sm">
                 Đăng Ký
               </button>
-              {/* {!check ? (
-                <>
-                  <CheckToast mess="waiting...." />
-                </>
-              ) : null} */}
             </div>
           </div>
         </form>

@@ -86,7 +86,6 @@ class UserController extends Controller
         {
             return response()->json([
                 'status' => 401,
-                
                 'error' => 'Password và nhập lại password không trùng khớp',
             ]);
         }
