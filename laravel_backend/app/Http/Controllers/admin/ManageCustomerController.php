@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Request;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Validator;
-class CustomerController extends Controller
+use Validator;
+class ManageCustomerController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -91,7 +93,7 @@ class CustomerController extends Controller
         {
             return response()->json([
                 'status'=>200,
-                'loaisp'=>$Customer,
+                'data'=>$Customer,
             ]);
         }
     }
@@ -109,6 +111,8 @@ class CustomerController extends Controller
             'ten' =>'required|max:20',
             'ngaySinh' =>'required|max:30',
             'sdt'=>'required|numeric|digits:10',
+            'diaChi'=>'required|max:60',
+            'gioiTinh'=>'required|numeric',
            // 'user_id' =>'required|max:10',
         ]);
         if($validator->fails())
@@ -120,14 +124,15 @@ class CustomerController extends Controller
         }
         else
         {
-            $Customer = Customer::where('user_id',$id);
+            $Customer = Customer::where('user_id',$id)->first();
             if($Customer)
             {
             $Customer->ten = $request->ten;
             $Customer->ngaySinh = $request->ngaySinh;
             $Customer->sdt = $request->sdt;
+            $Customer->diaChi = $request->diaChi;
             $Customer->gioiTinh = $request->gioiTinh;
-            $Customer->user_id = $request->user_id;
+            //$Customer->user_id = $request->user_id;
             $Customer->save();
             return response()->json([
                 'status'=>200,

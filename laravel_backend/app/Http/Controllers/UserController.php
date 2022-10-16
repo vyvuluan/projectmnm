@@ -132,8 +132,7 @@ class UserController extends Controller
         if($request->re_password != $request->password)
         {
             return response()->json([
-                'status' => 400,
-                
+                'status' => 401,
                 'error' => 'Password và nhập lại password không trùng khớp',
             ]);
         }

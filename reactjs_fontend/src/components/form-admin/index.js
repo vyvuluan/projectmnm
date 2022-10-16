@@ -9,6 +9,11 @@ export { default as Bill } from "./bill/index.js";
 export { default as ListBill } from "./list-bill/index.js";
 export { default as ListBillDetail } from "./list-bill-detail/index.js";
 export { default as Account } from "./account/index.js";
+export { default as Emplyee } from "./employees/index.js";
+export { default as Products } from "./product/index.js";
+export { default as Ncc } from "./ncc/index.js";
+export { default as Nsx } from "./nsx/index.js";
+export { default as Phieunhap } from "./phieunhap/index.js";
 
 
 
