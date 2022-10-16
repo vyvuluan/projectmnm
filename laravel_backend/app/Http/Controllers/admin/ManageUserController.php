@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 class ManageUserController extends Controller
 {
     public function index()
@@ -18,19 +19,26 @@ class ManageUserController extends Controller
     
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|max:255',
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|max:255|email',
             'password' => 'required|max:255',
         ],[
-            'email.required' => 'Ô email Không được bỏ trống',
+            //'email.required' => 'Ô email Không được bỏ trống',
             'email.max' => 'Ô email tối đa 255 ký tự',
-            
-            'password.required' => 'Ô password không được bỏ trống',
+            'email.email' => 'Ô email không đúng định dạng',
+            'required' => 'ô :attribute không được bỏ trống',
+            //'password.required' => 'Ô password không được bỏ trống',
             'password.max' => 'Ô password tối đa 255 ký tự',
-
-            
-            
         ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+
         $user = User::where('email', $request->email)->first();
         if(empty($user))
         {
@@ -89,7 +97,6 @@ class ManageUserController extends Controller
                     ]);
                 }
                 // $token= $user->createToken($user->email.'_Token')->plainTextToken;
-                
             }
         }
         

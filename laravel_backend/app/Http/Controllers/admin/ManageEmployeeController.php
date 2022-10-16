@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 class ManageEmployeeController extends Controller
 {
     /**
@@ -48,7 +49,7 @@ class ManageEmployeeController extends Controller
     }
     public function createUser(Request $request,$id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'email' => 'required|email|unique:users',
             'username' => 'required|max:255|unique:users',
             'password' => 'required|max:255',
@@ -67,10 +68,14 @@ class ManageEmployeeController extends Controller
 
             're_password.required' => 'Ô re_password không được bỏ trống',
             're_password.max' => 'Ô re_password tối đa 255 ký tự',
-
-            
-            
         ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
         if($request->re_password != $request->password)
         {
             return response()->json([
@@ -141,6 +146,7 @@ class ManageEmployeeController extends Controller
         $emloyee = Employee::find($manageEmloyee);
         $emloyee = $emloyee->update($request->all());
         return response()->json([
+            'status' => 200,
             'emloyee' => $emloyee,
             'message' => 'sửa thành công',
         ]);
@@ -157,6 +163,7 @@ class ManageEmployeeController extends Controller
         $emloyee = Employee::find($manageEmloyee);
         $user = User::where('id', $emloyee->user_id)->delete();
         return response()->json([
+            'status' => 200,
              'user' => $user,
             'message' => 'xóa thành công',
         ]);
