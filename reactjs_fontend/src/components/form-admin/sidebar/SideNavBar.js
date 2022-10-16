@@ -10,10 +10,10 @@ import { SideNavBarData } from "./SideNavBarData.js";
 function SideNavBar() {
   return (
     <>
-      <B.TabContainer fluid defaultActiveKey={"/Home"} className='fixed-top'>
+      <B.TabContainer fluid defaultActiveKey={"/Home"}>
         <B.Row
           className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
-          style={{ height: "100vh" }}
+          style={{ height: "100vh", position:"fixed" }}
         >
           <B.Nav variant="pills" className="flex-column mb-auto" style={{ marginTop: '70px' }}>
             <B.NavItem>
