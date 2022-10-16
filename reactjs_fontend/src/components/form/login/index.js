@@ -24,7 +24,7 @@ const Login = () => {
 
   const handleInput = (e) => {
     e.persist();
-    setLogin({ ...loginInput, [e.target.name]: [e.target.value] });
+    setLogin({ ...loginInput, [e.target.name]: e.target.value });
   };
 
   const loginSubmit = (e) => {
@@ -33,6 +33,7 @@ const Login = () => {
       email: loginInput.email,
       password: loginInput.password,
     };
+    // console.log(data);
     axios.get("/sanctum/csrf-cookie").then((response) => {
     axios.post("/api/login", data).then((res) => {
         if (res.data.status === 200) {
@@ -43,18 +44,22 @@ const Login = () => {
             icon: "success",
             button: "đóng",
           });
-
           history("/");
         }else if (res.data.status === 401) {
+          // console.log(res.data);
           swal({
-            title: "Không đúng tài khoản hoặc mật khẩu",
+            title: res.data.error,
             icon: "warning",
             button: "đóng",
           });
         }
-        else 
+        else if (res.data.status == 400)
         {
-          // setLogin({...loginInput})
+          swal({
+            title: res.data.error,
+            icon: "warning",
+            button: "đóng",
+          });
         }
     });
   });
@@ -86,6 +91,7 @@ const Login = () => {
                 placeholder="Enter email"
                 onChange={handleInput}
                 value={loginInput.email}
+                required
               />
             </div>
             <div className="form-group mt-3">
@@ -97,6 +103,7 @@ const Login = () => {
                 placeholder="Enter password"
                 onChange={handleInput}
                 value={loginInput.password}
+                required
               />
             </div>
             <div className="d-grid gap-2 mt-3 ">
