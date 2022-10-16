@@ -29,6 +29,11 @@ import {
   ListBill,
   ListBillDetail,
   Account,
+  Products,
+  Nsx,
+  Ncc,
+  Emplyee,
+  Phieunhap,
 } from "../components/form-admin";
 import { Chart } from "../components/form-admin/chart";
 export const PublicRouter = [
@@ -140,6 +145,31 @@ export const PublicRouter_Admin = [
   {
     path: "/Account",
     component: Account,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Products",
+    component: Products,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Ncc",
+    component: Ncc,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Nsx",
+    component: Nsx,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Employee",
+    component: Emplyee,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Phieunhap",
+    component: Phieunhap,
     layout: _LayoutAdmin,
   },
 ];

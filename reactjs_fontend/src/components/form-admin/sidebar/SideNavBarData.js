@@ -29,6 +29,7 @@ export const SideNavBarData = [
     title: "Sản phẩm",
     path: "/products",
     icon: <FaI.FaBoxOpen />,
+    link: `/Products`,
   },
   {
     title: "Liên hệ",
@@ -37,25 +38,34 @@ export const SideNavBarData = [
     link: `/ContactAdmin`,
   },
   {
+    title: "Nhân viên",
+    path: "/employee",
+    icon: <FaI.FaUserTie />,
+    link: `/Employee`,
+  },
+  {
     title: "Tài Khoản",
     path: "/account",
     icon: <MdOutlineManageAccounts />,
-    link: `/Account`
+    link: `/Account`,
   },
   {
     title: "Nhà sản xuất",
-    path: "/producer",
+    path: "/nsx",
     icon: <BiBuildingHouse />,
+    link: `/Nsx`,
   },
   {
     title: "Nhà cung cấp",
-    path: "/supplier",
+    path: "/ncc",
     icon: <FaI.FaWarehouse />,
+    link: `/Ncc`,
   },
   {
     title: "Phiếu nhập",
-    path: "/inputForm",
+    path: "/phieunhap",
     icon: <MdOutlineInput />,
+    link: `/Phieunhap`,
   },
   {
     title: "Phiếu xuất",

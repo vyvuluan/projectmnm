@@ -2,7 +2,8 @@ import React from 'react'
 import * as B from 'react-bootstrap'
 import { BsPersonPlusFill } from 'react-icons/bs'
 import { FaUserEdit, FaSearch } from 'react-icons/fa'
-import { AiOutlineUserDelete } from 'react-icons/ai'
+import { AiOutlineUserDelete, AiOutlineEdit } from 'react-icons/ai'
+import { CgExtensionAdd } from 'react-icons/cg'
 import { BiEdit } from 'react-icons/bi'
 
 function index() {
@@ -11,7 +12,7 @@ function index() {
             <B.Container fluid>
                 <B.Row className='px-xl-5 mb-4'>
                     <B.Col lg={4}>
-                        <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ TÀI KHOẢN</h1>
+                        <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ SẢN PHẨM</h1>
                     </B.Col>
                     <B.Col lg={2}></B.Col>
                     <B.Col lg={6}>
@@ -30,8 +31,7 @@ function index() {
                             </B.FormGroup>
                             <B.FormGroup className='d-flex d-inline-block justify-content-between mt-2'>
                                 <B.FormCheck type='checkbox' className='rounded-0' label='Theo id' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo username' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo email' />
+                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo loại' />
                                 <B.FormSelect className='w-25 rounded-0 shadow-none'>
                                     <option>Administrator</option>
                                     <option>Manager</option>
@@ -47,32 +47,50 @@ function index() {
                     <B.Col lg={8}>
                         <B.Form >
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Username'></B.FormControl>
+                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Tên sản phẩm'></B.FormControl>
                             </B.FormGroup>
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Email'></B.FormControl>
+                                <B.FormSelect className='rounded-0 shadow-none mb-3 text-muted'>
+                                    <option>Loại sản phẩm</option>
+                                    <option>Laptop</option>
+                                    <option>Máy tính bàn</option>
+                                    <option>Máy tính đồng bộ</option>
+                                </B.FormSelect>
                             </B.FormGroup>
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Mật khẩu'></B.FormControl>
+                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Số lượng'></B.FormControl>
                             </B.FormGroup>
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Quyền'></B.FormControl>
+                                <B.FormControl type='file' className='rounded-0 shadow-none mb-3' placeholder='Hình'></B.FormControl>
                             </B.FormGroup>
                         </B.Form>
                     </B.Col>
                     <B.Col lg={4}>
                         <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
                             <BsPersonPlusFill className='me-2' />
-                            Thêm tài khoản
+                            Thêm sản phẩm
                         </B.Button>
                         <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
                             <FaUserEdit className='me-2' />
-                            Sửa tài khoản
+                            Sửa sản phẩm
                         </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
                             <AiOutlineUserDelete className='me-2' />
-                            Xóa tài khoản
+                            Xóa sản phẩm
                         </B.Button>
+                        <hr />
+                        <B.FormGroup>
+                            <B.FormControl type='text' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'></B.FormControl>
+                        </B.FormGroup>
+                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-50'>
+                            <CgExtensionAdd className='me-2' />
+                            Thêm loại
+                        </B.Button>
+                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-50'>
+                            <AiOutlineEdit className='me-2' />
+                            Sửa loại
+                        </B.Button>
+
                     </B.Col>
                 </B.Row>
 
@@ -84,7 +102,7 @@ function index() {
                                 <option>Sắp xếp</option>
                                 <option>Từ A-Z</option>
                                 <option>Theo ID</option>
-                                <option>Theo quyền</option>
+                                <option>Theo loại</option>
                             </B.FormSelect>
                         </B.FormGroup>
                         <B.Table className='table-borderless border border-secondary text-center mb-0'>
@@ -92,10 +110,10 @@ function index() {
                                 <tr>
                                     <th><input type='checkbox' /></th>
                                     <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Password</th>
-                                    <th>Quyền</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Loại</th>
+                                    <th>Số lượng</th>
+                                    <th>Hình</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>

@@ -2,7 +2,8 @@ import React from 'react'
 import * as B from 'react-bootstrap'
 import { BsPersonPlusFill } from 'react-icons/bs'
 import { FaUserEdit, FaSearch } from 'react-icons/fa'
-import { AiOutlineUserDelete } from 'react-icons/ai'
+import { AiOutlineUserDelete, AiOutlineEdit } from 'react-icons/ai'
+import { RiUserAddFill } from 'react-icons/ri'
 import { BiEdit } from 'react-icons/bi'
 
 function index() {
@@ -11,7 +12,7 @@ function index() {
             <B.Container fluid>
                 <B.Row className='px-xl-5 mb-4'>
                     <B.Col lg={4}>
-                        <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ TÀI KHOẢN</h1>
+                        <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ NHÂN VIÊN</h1>
                     </B.Col>
                     <B.Col lg={2}></B.Col>
                     <B.Col lg={6}>
@@ -30,9 +31,10 @@ function index() {
                             </B.FormGroup>
                             <B.FormGroup className='d-flex d-inline-block justify-content-between mt-2'>
                                 <B.FormCheck type='checkbox' className='rounded-0' label='Theo id' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo username' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo email' />
+                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo tên' />
+                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo số điện thoại' />
                                 <B.FormSelect className='w-25 rounded-0 shadow-none'>
+                                    <option>Theo quyền</option>
                                     <option>Administrator</option>
                                     <option>Manager</option>
                                     <option>User</option>
@@ -47,31 +49,57 @@ function index() {
                     <B.Col lg={8}>
                         <B.Form >
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Username'></B.FormControl>
+                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Họ và tên nhân viên'></B.FormControl>
                             </B.FormGroup>
                             <B.FormGroup>
                                 <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Email'></B.FormControl>
                             </B.FormGroup>
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Mật khẩu'></B.FormControl>
+                                <B.FormSelect className='rounded-0 shadow-none mb-3 text-muted'>
+                                    <option>Giới tính</option>
+                                    <option>Nam</option>
+                                    <option>Nữ</option>
+                                    <option>Lưỡng long nhất thể</option>
+                                </B.FormSelect>
                             </B.FormGroup>
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Quyền'></B.FormControl>
+                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Địa chỉ'></B.FormControl>
+                            </B.FormGroup>
+                            <B.FormGroup>
+                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Số điện thoại'></B.FormControl>
+                            </B.FormGroup>
+                            <B.FormGroup>
+                                <B.FormControl type='file' className='rounded-0 shadow-none mb-3'></B.FormControl>
                             </B.FormGroup>
                         </B.Form>
                     </B.Col>
                     <B.Col lg={4}>
                         <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
                             <BsPersonPlusFill className='me-2' />
-                            Thêm tài khoản
+                            Thêm nhân viên
                         </B.Button>
                         <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
                             <FaUserEdit className='me-2' />
-                            Sửa tài khoản
+                            Sửa nhân viên
                         </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
                             <AiOutlineUserDelete className='me-2' />
-                            Xóa tài khoản
+                            Xóa nhân viên
+                        </B.Button>
+                        <hr />
+
+                        <B.FormGroup className='d-flex d-inline-block justify-content-between'>
+                            <B.FormControl type='text' className='rounded-0 shadow-none mb-1 w-75' placeholder='Username'></B.FormControl>
+                            <B.FormSelect className='rounded-0 shadow-none ms-2 mb-2 text-muted w-25'>
+                                <option>Quyền</option>
+                                <option>Administrator</option>
+                                <option>Manager</option>
+                                <option>Nhân viên</option>
+                            </B.FormSelect>
+                        </B.FormGroup>
+                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-50'>
+                            <RiUserAddFill className='me-2' />
+                            Cấp tài khoản
                         </B.Button>
                     </B.Col>
                 </B.Row>
@@ -92,10 +120,12 @@ function index() {
                                 <tr>
                                     <th><input type='checkbox' /></th>
                                     <th>ID</th>
-                                    <th>Username</th>
+                                    <th>Họ và tên</th>
                                     <th>Email</th>
-                                    <th>Password</th>
-                                    <th>Quyền</th>
+                                    <th>Giới tính</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Hình</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -103,28 +133,34 @@ function index() {
                                 <tr>
                                     <td className='align-middle'><input type='checkbox' /></td>
                                     <td className='align-middle'>1</td>
-                                    <td className='align-middle'>manhchodien</td>
+                                    <td className='align-middle'>Đỗ Đình Mạnh</td>
                                     <td className='align-middle'>manhbanhgato@gmail.com</td>
-                                    <td className='align-middle'>muaroingoaihien</td>
-                                    <td className='align-middle fw-semibold text-danger'>Administrator</td>
+                                    <td className='align-middle'>Lưỡng thể</td>
+                                    <td className='align-middle'>363 Phố hàng trống</td>
+                                    <td className='align-middle'>0654676532</td>
+                                    <td className='align-middle'>Hình</td>
                                     <td className='align-middle fs-5 text-primary'><BiEdit /></td>
                                 </tr>
                                 <tr>
                                     <td className='align-middle'><input type='checkbox' /></td>
                                     <td className='align-middle'>2</td>
-                                    <td className='align-middle'>longchodai</td>
-                                    <td className='align-middle'>longmtp@gmail.com</td>
-                                    <td className='align-middle'>chiyeuminhluan</td>
-                                    <td className='align-middle fw-semibold text-success'>Manager</td>
+                                    <td className='align-middle'>Trần Hoàng Long</td>
+                                    <td className='align-middle'>longlon@gmail.com</td>
+                                    <td className='align-middle'>Nữ</td>
+                                    <td className='align-middle'>363 Phố hàng trống</td>
+                                    <td className='align-middle'>0654676532</td>
+                                    <td className='align-middle'>Hình</td>
                                     <td className='align-middle fs-5 text-primary'><BiEdit /></td>
                                 </tr>
                                 <tr>
                                     <td className='align-middle'><input type='checkbox' /></td>
                                     <td className='align-middle'>3</td>
-                                    <td className='align-middle'>nhoxluankaka</td>
-                                    <td className='align-middle'>tranhoangluan@gmail.com</td>
-                                    <td className='align-middle'>danggianlong</td>
-                                    <td className='align-middle fw-semibold'>User</td>
+                                    <td className='align-middle'>Vy Vũ Luân</td>
+                                    <td className='align-middle'>vuvu@gmail.com</td>
+                                    <td className='align-middle'>Bí mật</td>
+                                    <td className='align-middle'>363 Phố hàng trống</td>
+                                    <td className='align-middle'>0654676532</td>
+                                    <td className='align-middle'>Hình</td>
                                     <td className='align-middle fs-5 text-primary'><BiEdit /></td>
                                 </tr>
                             </tbody>
