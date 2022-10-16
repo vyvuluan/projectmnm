@@ -172,8 +172,8 @@ class ManagePhieuXuatController extends Controller
         }
         else
         {
-            $pxct = PhieuXuat::find($mapx)->pxct;
-            $data=  $pxct->where('product_id',$maspct)->first();
+            $pxcts = PhieuXuat::find($mapx)->pxct;
+            $data=  $pxcts->where('product_id',$maspct)->first();
             if($data)
             {
                 $checksp = Product::find($request->product_id);
@@ -210,8 +210,16 @@ class ManagePhieuXuatController extends Controller
                     }
                     else
                     {
-                        //$checksp->id=$maspct
-                        
+                        foreach($pxcts as $pxct)
+                        {
+                            if($pxct->product_id==$request->product_id)
+                            {
+                                return response()->json([
+                                    'status'=>402,
+                                    'message'=>'Sản phẩm đã tồn tại trong giỏ hàng',
+                                ]);
+                            }
+                        }
                         $slgio = $data->soluong;
                         $slupdate = $request->soluong;
                         $slkho = $checksp->soLuongSP;
