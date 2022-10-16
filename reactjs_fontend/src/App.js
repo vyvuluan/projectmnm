@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import { PublicRouter, PublicRouter_Admin } from "./Router";
+import TestTable from "./components/form-admin/TestTable";
 
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -27,7 +28,7 @@ function App() {
             Page = Layout;
             return <Route path={item.path} element={Page} />;
           })}
-          {/* <Route path="/SideNavBar" element={<SideNavBar />}></Route> */}
+          <Route path="/TestTable" element={<TestTable />}></Route>
         </Routes>
       </BrowserRouter>
     </>

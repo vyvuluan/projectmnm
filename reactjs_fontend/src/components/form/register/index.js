@@ -31,6 +31,7 @@ const Resgiter = () => {
       password: registerInput.pass,
       re_password: registerInput.repass,
     };
+    // console.log(data);
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("http://localhost:8000/api/register", data).then((res) => {
         if (res.data.status === 200) {
