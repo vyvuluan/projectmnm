@@ -58,26 +58,6 @@ function TestTable() {
                                 <B.FormControl type='text' name='name' onChange={handleInput} value={categoryInput.name}></B.FormControl>
                                 <span>{categoryInput.error_list.name}</span>
                             </B.FormGroup>
-                            {/* <B.FormGroup controlId='formGiaSP'>
-                                <B.FormLabel>Giá sản phẩm</B.FormLabel>
-                                <B.FormControl type='text'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup controlId='formSLSP'>
-                                <B.FormLabel>Số lượng</B.FormLabel>
-                                <B.FormControl type='text'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup controlId='formMotaSP'>
-                                <B.FormLabel>Mô tả sản phẩm</B.FormLabel>
-                                <B.FormControl as='textarea' rows={6}></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup controlId='formCTSP'>
-                                <B.FormLabel>Chi tiết sản phẩm</B.FormLabel>
-                                <B.FormControl as='textarea' rows={6}></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup controlId='formLoaiSP'>
-                                <B.FormLabel>Loại sản phẩm</B.FormLabel>
-                                <B.FormControl type='text'></B.FormControl>
-                            </B.FormGroup> */}
                             <B.Button variant='primary' className='rounded-0 mt-3' type='submit'>Thêm loại sản phẩm</B.Button>
                         </B.Form>
                     </B.Col>

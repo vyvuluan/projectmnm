@@ -5,7 +5,7 @@ import { MdPayments } from 'react-icons/md'
 import { BsPaypal } from 'react-icons/bs'
 import axios from 'axios';
 import swal from 'sweetalert'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import vnpay from '../../../img/vnpay.png'
 
 export default function Cart() {
@@ -14,6 +14,11 @@ export default function Cart() {
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
     var totalCartPrice = 0;
+
+    // if(!localStorage.getItem('auth_token')){
+    //     navaigate.push('/');
+    //     swal('Warning','Vui lòng login để mua hàng','error');
+    // }
 
     function formatMoney(money) {
         return (
@@ -91,52 +96,94 @@ export default function Cart() {
     }
 
     if (loading) {
-        return <h4>Loading Product Detail...</h4>
+        return <h4>Loading...</h4>
     }
 
     var cart_HTML = '';
     if (cart.length > 0) {
-        cart_HTML = <div className='table-responsive mb-5'>
-            <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
-                <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số Lượng</th>
-                        <th>Tổng tiền</th>
-                        <th>Loại bỏ</th>
-                    </tr>
-                </thead>
-                <tbody className='align-middle'>
-                    {cart.map((item, index) => {
-                        totalCartPrice += item.product.gia * item.soLuongSP;
-                        return (
-                            <tr key={index}>
-                                <td className='align-middle'><img src={`http://localhost:8000/uploadhinh/${item.product.hinh}`} className='me-2' style={{ width: '50px' }} />{item.product.tenSP}</td>
-                                <td className='align-middle'>{formatMoney(item.product.gia)}</td>
-                                <td className='align-middle'>
-                                    <Bt.InputGroup className='quantity mx-auto' style={{ width: '100px' }}>
-                                        <Bt.Button className='btn-sm rounded-0' variant='primary' type='button' onClick={() => handleDecrement(item.id)}>
-                                            <FaMinus />
-                                        </Bt.Button>
-                                        <Bt.InputGroup.Text className='form-control-sm text-center'>{item.soLuongSP}</Bt.InputGroup.Text>
-                                        <Bt.Button className='btn-sm rounded-0' variant='primary' type='button' onClick={() => handleIncrement(item.id)}>
-                                            <FaPlus />
-                                        </Bt.Button>
-                                    </Bt.InputGroup>
-                                </td>
-                                <td className='align-middle'>{formatMoney(item.product.gia * item.soLuongSP)}</td>
-                                <td className='align-middle'>
-                                    <Bt.Button className='btn-sm rounded-0' type='button' onClick={(e) => deleteCartItem(e, item.id)}>
-                                        <FaTimes />
+        cart_HTML =
+            <div>
+                <Bt.Row className='px-xl-5'>
+                    <Bt.Col lg={8} className='table-responsive mb-5'>
+                        <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
+                            <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Loại bỏ</th>
+                                </tr>
+                            </thead>
+                            <tbody className='align-middle'>
+                                {cart.map((item, index) => {
+                                    totalCartPrice += item.product.gia * item.soLuongSP;
+                                    return (
+                                        <tr key={index}>
+                                            <td className='align-middle'><img src={`http://localhost:8000/uploadhinh/${item.product.hinh}`} className='me-2' style={{ width: '50px' }} />{item.product.tenSP}</td>
+                                            <td className='align-middle'>{formatMoney(item.product.gia)}</td>
+                                            <td className='align-middle'>
+                                                <Bt.InputGroup className='quantity mx-auto' style={{ width: '100px' }}>
+                                                    <Bt.Button className='btn-sm rounded-0' variant='primary' type='button' onClick={() => handleDecrement(item.id)}>
+                                                        <FaMinus />
+                                                    </Bt.Button>
+                                                    <Bt.InputGroup.Text className='form-control-sm text-center'>{item.soLuongSP}</Bt.InputGroup.Text>
+                                                    <Bt.Button className='btn-sm rounded-0' variant='primary' type='button' onClick={() => handleIncrement(item.id)}>
+                                                        <FaPlus />
+                                                    </Bt.Button>
+                                                </Bt.InputGroup>
+                                            </td>
+                                            <td className='align-middle'>{formatMoney(item.product.gia * item.soLuongSP)}</td>
+                                            <td className='align-middle'>
+                                                <Bt.Button className='btn-sm rounded-0' type='button' onClick={(e) => deleteCartItem(e, item.id)}>
+                                                    <FaTimes />
+                                                </Bt.Button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </Bt.Table>
+                    </Bt.Col>
+                    <Bt.Col lg={4}>
+                        <Bt.Card className='border-secondary rounded-0' mb={5}>
+                            <Bt.Card.Header className='bg-secondary border-0 rounded-0'>
+                                <h3 className='fw-semibold m-0'>Thông tin giỏ hàng</h3>
+                            </Bt.Card.Header>
+                            <Bt.Card.Body>
+                                <div className='d-flex justify-content-between mb-3 pt-1'>
+                                    <h6 className='fw-medium'>Tạm tính</h6>
+                                    <h6 className='fw-medium'>{formatMoney(totalCartPrice)}</h6>
+                                </div>
+                                <div className='d-flex justify-content-between mb-3 pt-1'>
+                                    <h6 className='fw-medium'>Thuế</h6>
+                                    <h6 className='fw-medium'>10%</h6>
+                                </div>
+                            </Bt.Card.Body>
+                            <Bt.Card.Footer className='border-secondary bg-transparent d-grid gap-2'>
+                                <div className='d-flex justify-content-between mt-2'>
+                                    <h5 className='fw-bold'>Tổng tiền</h5>
+                                    <h5 className='fw-bold'>{formatMoney(totalCartPrice * 1.1)} VND</h5>
+                                </div>
+                                <Link to='/checkout'>
+                                    <Bt.Button className='rounded-0 mt-3 py-2 w-100' variant='primary'>
+                                        <MdPayments className='me-2 fs-4' />Thanh toán khi nhận hàng
                                     </Bt.Button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </Bt.Table>
-        </div>
+                                </Link>
+                                <hr className='text-center mb-0' />
+                                <p className='text-center my-0 fs-5 fw-semibold'>Thanh toán Online</p>
+                                <Bt.Button className='rounded-0 py-2 text-lightgray' variant='primary'>
+                                    <BsPaypal className='me-2 fs-4' />Thanh toán qua Paypal
+                                </Bt.Button>
+                                <Bt.Button className='rounded-0 py-2' variant='primary'>
+                                    <img src={vnpay} style={{ width: 'auto', height: '25px' }} />
+                                </Bt.Button>
+                            </Bt.Card.Footer>
+                        </Bt.Card>
+                    </Bt.Col>
+                </Bt.Row>
+            </div>
+
     }
     else {
         cart_HTML = <div>
@@ -161,56 +208,7 @@ export default function Cart() {
 
             <Bt.Container fluid pt={5}>
                 <Bt.Form>
-                    <Bt.Row className='px-xl-5'>
-                        {/* <div className='d-flex d-inline-block'> */}
-                        <Bt.Col lg={8}>
-                            {cart_HTML}
-                        </Bt.Col>
-                        <Bt.Col lg={4}>
-                            <Bt.Card className='border-secondary rounded-0' mb={5}>
-                                <Bt.Card.Header className='bg-secondary border-0 rounded-0'>
-                                    <h3 className='fw-semibold m-0'>Thông tin giỏ hàng</h3>
-                                </Bt.Card.Header>
-                                <Bt.Card.Body>
-                                    <div className='d-flex justify-content-between mb-3 pt-1'>
-                                        <h6 className='fw-medium'>Tạm tính</h6>
-                                        <h6 className='fw-medium'>{formatMoney(totalCartPrice)}</h6>
-                                    </div>
-                                    <div className='d-flex justify-content-between mb-3 pt-1'>
-                                        <h6 className='fw-medium'>Thuế</h6>
-                                        <h6 className='fw-medium'>10%</h6>
-                                    </div>
-                                </Bt.Card.Body>
-                                <Bt.Card.Footer className='border-secondary bg-transparent d-grid gap-2'>
-                                    <div className='d-flex justify-content-between mt-2'>
-                                        <h5 className='fw-bold'>Tổng tiền</h5>
-                                        <h5 className='fw-bold'>{formatMoney(totalCartPrice * 1.1)} VND</h5>
-                                    </div>
-                                    {/* <Bt.Row className='text-center'> */}
-                                    {/* <Bt.Col lg={12}> */}
-                                    <Bt.Button className='rounded-0 mt-3 py-2' variant='primary'>
-                                        <MdPayments className='me-2 fs-4' />Thanh toán khi nhận hàng
-                                    </Bt.Button>
-                                    {/* </Bt.Col> */}
-                                    {/* <Bt.Col lg={12}> */}
-                                    <hr className='text-center mb-0' />
-                                    <p className='text-center my-0 fs-5 fw-semibold'>Thanh toán Online</p>
-                                    <Bt.Button className='rounded-0 py-2 text-lightgray' variant='primary'>
-                                        <BsPaypal className='me-2 fs-4' />Thanh toán qua Paypal
-                                    </Bt.Button>
-                                    {/* </Bt.Col> */}
-                                    {/* <Bt.Col lg={12}> */}
-                                    <Bt.Button className='rounded-0 py-2' variant='primary'>
-                                        <img src={vnpay} style={{ width: 'auto', height: '25px' }} />
-                                    </Bt.Button>
-                                    {/* </Bt.Col> */}
-                                    {/* </Bt.Row> */}
-                                </Bt.Card.Footer>
-                            </Bt.Card>
-                        </Bt.Col>
-                        {/* </div> */}
-
-                    </Bt.Row>
+                    {cart_HTML}
                 </Bt.Form>
             </Bt.Container>
         </>

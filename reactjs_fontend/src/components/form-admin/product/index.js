@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as B from 'react-bootstrap'
+import axios from 'axios';
+import swal from 'sweetalert'
 import { BsPersonPlusFill } from 'react-icons/bs'
 import { FaUserEdit, FaSearch } from 'react-icons/fa'
 import { AiOutlineUserDelete, AiOutlineEdit } from 'react-icons/ai'
@@ -8,7 +10,43 @@ import { BiEdit } from 'react-icons/bi'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-function index() {
+function Index() {
+
+    const [categoryInput, setCategory] = useState({
+        tenLoai: '',
+        error_list: [],
+    });
+
+    const handleInput = (e) => {
+        e.persist();
+        setCategory({ ...categoryInput, [e.target.name]: e.target.value })
+    }
+
+    const submitCategory = (e) => {
+        e.preventDefault();
+
+        const data = {
+            tenLoai: categoryInput.tenLoai,
+        }
+
+        axios.post(`http://localhost:8000/api/kho/loaisp`, data).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, 'success')
+                document.getElementById('formLoaiSP').reset();
+            }
+            else if (res.data.status === 400) {
+                setCategory({ ...categoryInput, error_list: res.data.error })
+            }
+        });
+    }
+
+    var display_error = [];
+    if (categoryInput.error_list) {
+        display_error = [
+            categoryInput.error_list.tenLoai,
+        ]
+    }
+
     return (
         <>
             <B.Container fluid>
@@ -79,6 +117,7 @@ function index() {
                                 onFocus={(event, editor) => {
                                 }}
                             />
+                            <div className='mb-3'></div>
                         </B.Form>
                     </B.Col>
                     <B.Col lg={4}>
@@ -95,20 +134,24 @@ function index() {
                                 <AiOutlineUserDelete className='me-2' />
                                 Xóa sản phẩm
                             </B.Button>
+                        </B.Form>
+                        <B.Form onSubmit={submitCategory} id='formLoaiSP'>
                             <hr />
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'></B.FormControl>
+                                <B.FormControl type='text' name='tenLoai' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'
+                                    onChange={handleInput} value={categoryInput.tenLoai}></B.FormControl>
+                                <span>{categoryInput.error_list.tenLoai}</span>
+                                <div className='d-flex d-inline-block justify-content-between'>
+                                    <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 w-50 me-1'>
+                                        <CgExtensionAdd className='me-2' />
+                                        Thêm loại
+                                    </B.Button>
+                                    <B.Button variant='outline-primary' className='rounded-0 py-2 w-50 ms-1'>
+                                        <AiOutlineEdit className='me-2' />
+                                        Sửa loại
+                                    </B.Button>
+                                </div>
                             </B.FormGroup>
-                            <div className='d-flex d-inline-block justify-content-between'>
-                                <B.Button variant='outline-primary' className='rounded-0 py-2 w-50 me-1'>
-                                    <CgExtensionAdd className='me-2' />
-                                    Thêm loại
-                                </B.Button>
-                                <B.Button variant='outline-primary' className='rounded-0 py-2 w-50 ms-1'>
-                                    <AiOutlineEdit className='me-2' />
-                                    Sửa loại
-                                </B.Button>
-                            </div>
                         </B.Form>
 
                     </B.Col>
@@ -174,4 +217,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

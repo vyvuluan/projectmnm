@@ -35,7 +35,7 @@ const Login = () => {
     };
     // console.log(data);
     axios.get("/sanctum/csrf-cookie").then((response) => {
-    axios.post("/api/login", data).then((res) => {
+      axios.post("/api/login", data).then((res) => {
         if (res.data.status === 200) {
           localStorage.setItem('auth_token', res.data.token);
           localStorage.setItem('auth_name', res.data.username)
@@ -45,7 +45,7 @@ const Login = () => {
             button: "đóng",
           });
           history("/");
-        }else if (res.data.status === 401) {
+        } else if (res.data.status === 401) {
           // console.log(res.data);
           swal({
             title: res.data.error,
@@ -53,17 +53,16 @@ const Login = () => {
             button: "đóng",
           });
         }
-        else if (res.data.status == 400)
-        {
+        else if (res.data.status === 400) {
           swal({
             title: res.data.error,
             icon: "warning",
             button: "đóng",
           });
         }
+      });
     });
-  });
-}
+  }
   return (
     <>
       <div id="SignIn" className="Auth-form-container">
@@ -122,7 +121,7 @@ const Login = () => {
                 color="primary"
                 className="p-1 border m-1 btnCus shadow-sm "
 
-                //   onClick={handleGoogleLogin}
+              //   onClick={handleGoogleLogin}
               >
                 <img
                   width="20px"
