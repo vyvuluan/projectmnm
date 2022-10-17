@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate, Outlet } from 'react-router-dom';
 // import { Login, DetailProduct, CheckOrder } from "../components/form";
 import { HomePage, PageProducts, PageAdmin } from "../components";
 import _Layout from "../_Layout";
@@ -189,4 +190,9 @@ export const PublicRouter_Admin = [
           <Route path="/cart" element={<Cart />} />
           <Route path="/accountInfor" element={<AccountInfor />} />
           <Route path="/" element={<HomePage />} /> */
+}
+export const PrivateRoute = () => {
+  const auth = null; // determine if authorized, from context or however you're doing it
+
+  return auth ? <Outlet /> : <Navigate to="/" />;
 }

@@ -7,8 +7,66 @@ import {
   FaUser,
   FaShoppingBag,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
+import swal from "sweetalert";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import HomePage from "../../pages/home";
+
 export default function Header() {
+  const history = useNavigate();
+  const logoutSubmit = (e) => {
+    e.preventDefault();
+    axios.get("/sanctum/csrf-cookie").then((response) => {
+      axios.post("/api/logout").then((res) => {
+        if (res.data.status === 200) {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_name");
+          swal({
+            title: res.data.message,
+            icon: "success",
+            button: "đóng",
+          });
+          history("/");
+        }
+        // else if (res.data.status === 401) {
+        //   // console.log(res.data);
+        //   swal({
+        //     title: res.data.error,
+        //     icon: "warning",
+        //     button: "đóng",
+        //   });
+        // }
+        // else if (res.data.status == 400)
+        // {
+        //   swal({
+        //     title: res.data.error,
+        //     icon: "warning",
+        //     button: "đóng",
+        //   });
+        // }
+      });
+    });
+  };
+  let AuthButton = "";
+  if (!localStorage.getItem("auth_token")) {
+    AuthButton = (
+      <Bt.NavLink className="fs-5 fw-normal me-2">
+        <Link className="text-decoration-none" to="/login">
+          Login
+        </Link>
+      </Bt.NavLink>
+    );
+  } else {
+    AuthButton = (
+      <Bt.NavLink onClick={logoutSubmit} className="fs-5 fw-normal me-2">
+        {/* <Link className="text-decoration-none" to="/login"> */}
+        Logout
+        {/* </Link> */}
+      </Bt.NavLink>
+    );
+  }
+
   return (
     <>
       <Bt.Container fluid>
@@ -135,15 +193,21 @@ export default function Header() {
                 </Bt.Nav>
 
                 <Bt.Nav className="ms-auto py-2">
-                  <Bt.NavLink className="fs-5 fw-normal me-2">
+                  {/* <Bt.NavLink className="fs-5 fw-normal me-2">
                     <Link className="text-decoration-none" to="/login">
                       Login
                     </Link>
-                  </Bt.NavLink> 
+                  </Bt.NavLink> */}
+                  {/* <Bt.NavLink className="fs-5 fw-normal me-2"> */}
+                  {/* <Link className="text-decoration-none" to="/login"> */}
+                  {/* Logout */}
+                  {/* </Link> */}
+                  {/* </Bt.NavLink> */}
 
                   {/* <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
                     Register
                   </Bt.NavLink> */}
+                  {AuthButton}
                 </Bt.Nav>
               </Bt.Navbar.Collapse>
             </Bt.Navbar>
