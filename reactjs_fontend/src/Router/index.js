@@ -20,6 +20,7 @@ import {
   Cart,
   Contact,
   Warrantycheck,
+  Checkout,
 } from "../components/form";
 import {
   DetailCustomer,
@@ -102,6 +103,11 @@ export const PublicRouter = [
   {
     path: "/warranty",
     component: Warrantycheck,
+    layout: _Layout,
+  },
+  {
+    path: "/checkout",
+    component: Checkout,
     layout: _Layout,
   },
   // {
