@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import {
@@ -7,7 +7,7 @@ import {
   FaUser,
   FaShoppingBag,
 } from "react-icons/fa";
-import { Link, Route } from "react-router-dom";
+import { Link, NavLink, Route } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,12 @@ import HomePage from "../../pages/home";
 
 export default function Header() {
   const history = useNavigate();
+  const [nameUser, setNameUser] = useState(null);
+  useEffect(() => {
+    if (localStorage.getItem("auth_name")) {
+      setNameUser(localStorage.getItem("auth_name"));
+    }
+  }, []);
   const logoutSubmit = (e) => {
     e.preventDefault();
     axios.get("/sanctum/csrf-cookie").then((response) => {
@@ -29,26 +35,12 @@ export default function Header() {
           });
           history("/");
         }
-        // else if (res.data.status === 401) {
-        //   // console.log(res.data);
-        //   swal({
-        //     title: res.data.error,
-        //     icon: "warning",
-        //     button: "đóng",
-        //   });
-        // }
-        // else if (res.data.status == 400)
-        // {
-        //   swal({
-        //     title: res.data.error,
-        //     icon: "warning",
-        //     button: "đóng",
-        //   });
-        // }
       });
     });
   };
+
   let AuthButton = "";
+
   if (!localStorage.getItem("auth_token")) {
     AuthButton = (
       <Bt.NavLink className="fs-5 fw-normal me-2">
@@ -58,12 +50,25 @@ export default function Header() {
       </Bt.NavLink>
     );
   } else {
+    // console.log(localStorage.getItem("auth_name"));
     AuthButton = (
-      <Bt.NavLink onClick={logoutSubmit} className="fs-5 fw-normal me-2">
-        {/* <Link className="text-decoration-none" to="/login"> */}
-        Logout
-        {/* </Link> */}
-      </Bt.NavLink>
+      <>
+        <span
+          style={{
+            fontWeight: "300",
+            paddingTop: "13px",
+            fontSize: "15px",
+            marginRight: "5px",
+          }}
+        >
+          xin chào, <span className="text-danger"> {nameUser}</span>
+        </span>
+        <Bt.NavLink onClick={logoutSubmit} className="fs-5 fw-normal me-2">
+          {/* <Link className="text-decoration-none" to="/login"> */}
+          Logout
+          {/* </Link> */}
+        </Bt.NavLink>
+      </>
     );
   }
 
@@ -207,6 +212,7 @@ export default function Header() {
                   {/* <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
                     Register
                   </Bt.NavLink> */}
+                  {/* <Bt.NavLink>xin chào, user</Bt.NavLink> */}
                   {AuthButton}
                 </Bt.Nav>
               </Bt.Navbar.Collapse>
