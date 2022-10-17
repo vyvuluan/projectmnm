@@ -14,11 +14,7 @@ function Checkout() {
     const [checkoutInput, setCheckoutInput] = useState({
         fullname: '',
         phonenumber: '',
-        email: '',
         address: '',
-        state: '',
-        city: '',
-        zipcode: '',
     });
 
     const [error, setError] = useState([]);
@@ -28,10 +24,10 @@ function Checkout() {
 
 
 
-    // if(!localStorage.getItem('auth_token')){
-    //     navaigate.push('/');
-    //     swal('Warning','Vui lòng login để mua hàng','error');
-    // }
+    if (!localStorage.getItem('auth_token')) {
+        navaigate.push('/');
+        swal('Warning', 'Vui lòng login để mua hàng', 'error');
+    }
 
     function formatMoney(money) {
         return (
@@ -74,20 +70,17 @@ function Checkout() {
         e.preventDefault();
 
         const data = {
-            fullname: checkoutInput.fullname,
-            phonenumber: checkoutInput.phonenumber,
-            email: checkoutInput.email,
-            address: checkoutInput.address,
-            state: checkoutInput.state,
-            city: checkoutInput.city,
-            zipcode: checkoutInput.zipcode,
+            tenKH: checkoutInput.fullname,
+            sdt: checkoutInput.phonenumber,
+            diaChi: checkoutInput.address,
+            tongTien: totalCartPrice,
         }
 
         axios.post(`http://localhost:8000/api/dathang`, data).then(res => {
             if (res.data.status === 200) {
                 swal('Đặt hàng thành công', res.data.message, 'success');
                 setError([]);
-                navaigate.push('/thank-you');
+                // navaigate.push('/thank-you');
             }
             else if (res.data.status === 422) {
                 swal('Vui lòng điều đầy đủ vào các mục', '', 'error');
@@ -128,14 +121,14 @@ function Checkout() {
                                             <small className='text-danger'>{error.phonenumber}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    <B.Col md={6}>
+                                    {/* <B.Col md={6}>
                                         <B.FormGroup className='mb-3'>
                                             <B.FormLabel>Email</B.FormLabel>
                                             <B.FormControl type='email' name='email' onChange={handleInput} value={checkoutInput.email}
                                                 className='rounded-0 shadow-none'></B.FormControl>
                                             <small className='text-danger'>{error.email}</small>
                                         </B.FormGroup>
-                                    </B.Col>
+                                    </B.Col> */}
                                     <B.Col md={12}>
                                         <B.FormGroup className='mb-3'>
                                             <B.FormLabel>Địa chỉ</B.FormLabel>
@@ -144,7 +137,7 @@ function Checkout() {
                                             <small className='text-danger'>{error.address}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    <B.Col md={4}>
+                                    {/* <B.Col md={4}>
                                         <B.FormGroup className='mb-3'>
                                             <B.FormLabel>Quận/Huyện</B.FormLabel>
                                             <B.FormControl type='text' name='state' onChange={handleInput} value={checkoutInput.state}
@@ -166,8 +159,8 @@ function Checkout() {
                                             <B.FormControl type='text' name='zipcode' onChange={handleInput} value={checkoutInput.zipcode}
                                                 className='rounded-0 shadow-none'></B.FormControl>
                                             <small className='text-danger'>{error.zipcode}</small>
-                                        </B.FormGroup>
-                                    </B.Col>
+                                        </B.FormGroup> */}
+                                    {/* </B.Col> */}
                                 </B.Row>
                             </B.Card.Body>
                             <B.Card.Footer className='border-secondary bg-transparent text-end'>
@@ -213,7 +206,7 @@ function Checkout() {
                         </B.Table>
                     </B.Col>
                 </B.Row>
-            </div>
+            </div >
     }
     else {
         checkout_HTML = <div>

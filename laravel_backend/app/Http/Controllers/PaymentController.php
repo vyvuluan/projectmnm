@@ -22,10 +22,10 @@ class PaymentController extends Controller
      */
     public function dathang(Request $request)
     {
-        // if(auth('sanctum')->check())
-        // {
-        // $maKH= auth('sanctum')->user()->id;
-            $maKH=$request->maKH;
+        if(auth('sanctum')->check())
+        {
+        $maKH= auth('sanctum')->user()->customer->id;
+            // $maKH=$request->maKH;
             $payment = new PhieuXuat;
             $payment->customer_id=$maKH;
             $payment->status=0;
@@ -59,14 +59,14 @@ class PaymentController extends Controller
                 'message'=>'Đặt hàng thành công',
                 ]);
 
-        // }
-        // else
-        // {
-        //     return response()->json([
-        //         'status'=>401,
-        //         'message'=>'Đăng nhập để thanh toán',
-        //         ]);
-        // }
+        }
+        else
+        {
+            return response()->json([
+                'status'=>401,
+                'message'=>'Đăng nhập để thanh toán',
+                ]);
+        }
 
     }
 
