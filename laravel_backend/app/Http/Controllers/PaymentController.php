@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
+use App\Models\CtPhieuXuat;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -29,6 +30,8 @@ class PaymentController extends Controller
             $payment->customer_id=$maKH;
             $payment->status=0;
             $payment->pt_ThanhToan='COD';
+            $payment->tenKH=$request->tenKH;
+            $payment->sdt=$request->sdt;
             $payment->diaChi=$request->diaChi;
             $tongTien=0;
 

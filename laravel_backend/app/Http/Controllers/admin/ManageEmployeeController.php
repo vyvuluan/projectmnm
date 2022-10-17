@@ -17,7 +17,7 @@ class ManageEmployeeController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -27,7 +27,7 @@ class ManageEmployeeController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -45,7 +45,7 @@ class ManageEmployeeController extends Controller
             'username' =>  $emloyee,
             'message' => 'Tạo nhân viên thành công',
         ]);
-       
+
     }
     public function createUser(Request $request,$id)
     {
@@ -80,7 +80,7 @@ class ManageEmployeeController extends Controller
         {
             return response()->json([
                 'status' => 401,
-                
+
                 'error' => 'Password và nhập lại password không trùng khớp',
             ]);
         }
@@ -92,18 +92,18 @@ class ManageEmployeeController extends Controller
                 'password' => Hash::make($request->password),
                 'role_id' => $request->role_id,
             ]);
-            
+
             $emloyee = Employee::find($id);
             $emloyee->user_id = $user->id;
             $emloyee->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
                 'message' => 'Đăng ký thành công',
             ]);
         }
-        
+
     }
 
     /**

@@ -84,7 +84,8 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
                 //Api Quản lý chi tiết phiếu xuất
                 Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
                 Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
-                Route::put('updatectpx/{mapx}/{maspct}', [ManagePhieuXuatController::class,'updateCtpx']);
+                Route::put('updatectpx/{mapx}/{maspct}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
+                Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);
 
             // Api quản lý ncc , nsx
             Route::resource('ncc',ManageNccController::class);
@@ -92,7 +93,7 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
 
             //Api Quản lý sản phẩm
             Route::resource('products',ManageProductController::class);
-            Route::get('products-search', [ManageProductController::class,'search']); // Tìm Kiếm sản phẩm 
+            Route::get('products-search/{key}', [ManageProductController::class,'search']); // Tìm Kiếm sản phẩm
             //Api quản lý loại sản phẩm
             Route::resource('loaisp', ManageLoaispController::class);
                 // Chi tiết sản phẩm
@@ -117,7 +118,7 @@ Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(fun
                             // API Khách hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
-Route::get('products-search', [ProductController::class,'search']);
+Route::get('products-search/{key}', [ProductController::class,'search']);
 //Api loại sản phẩm
 Route::resource('loaisp/view', LoaispController::class)->only('index');
         // Chi tiết sản phẩm

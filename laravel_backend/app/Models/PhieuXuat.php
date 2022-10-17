@@ -13,6 +13,8 @@ class PhieuXuat extends Model
         'customer_id',
         'status',
         'pt_ThanhToan',
+        'tenKH',
+        'sdt',
         'diaChi',
         'tongTien'
 
