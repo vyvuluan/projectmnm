@@ -15,10 +15,10 @@ export default function Cart() {
     const [cart, setCart] = useState([]);
     var totalCartPrice = 0;
 
-    // if(!localStorage.getItem('auth_token')){
-    //     navaigate.push('/');
-    //     swal('Warning','Vui lòng login để mua hàng','error');
-    // }
+    if(!localStorage.getItem('auth_token')){
+        navaigate.push('/');
+        swal('Warning','Vui lòng login để mua hàng','error');
+    }
 
     function formatMoney(money) {
         return (
