@@ -37,7 +37,7 @@ class ProductController extends Controller
         $product = Product::find($product);
         return response()->json([
             'sanPham'=>$product,
-            'tenSP'=>$tenLoai,
+            'tenLoai'=>$tenLoai,
             ]);
 
     }
