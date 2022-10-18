@@ -45,7 +45,7 @@ export const PublicRouter = [
     layout: null,
   },
   {
-    path: "/DetailProduct",
+    path: "/DetailProduct/:id",
     component: DetailProduct,
     layout: _Layout,
   },
