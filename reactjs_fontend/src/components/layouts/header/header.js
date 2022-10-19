@@ -12,6 +12,7 @@ import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home";
+import { DropDownMenu } from "../../form";
 
 export default function Header() {
   const history = useNavigate();
@@ -43,7 +44,7 @@ export default function Header() {
 
   if (!localStorage.getItem("auth_token")) {
     AuthButton = (
-      <Bt.NavLink className="fs-5 fw-normal me-2">
+      <Bt.NavLink className="fs-5 fw-normal  text-end mt-2">
         <Link className="text-decoration-none" to="/login">
           Login
         </Link>
@@ -53,21 +54,21 @@ export default function Header() {
     // console.log(localStorage.getItem("auth_name"));
     AuthButton = (
       <>
-        <span
-          style={{
-            fontWeight: "300",
-            paddingTop: "13px",
-            fontSize: "15px",
-            marginRight: "5px",
-          }}
-        >
-          xin chào, <span className="text-danger"> {nameUser}</span>
-        </span>
-        <Bt.NavLink onClick={logoutSubmit} className="fs-5 fw-normal me-2">
+        <div className="row ">
+          <div className="col-sm-9 text-center m-auto badge text-wrap">
+            
+            <span className="text-danger  ">Chào, {nameUser}</span>
+          </div>
+          <div className="col-3 btn  rounded-0 border " style={{width:"51px"}}>
+            <DropDownMenu logout={logoutSubmit} />
+          </div>
+          {/* <Bt.NavLink  className="fs-5 fw-normal me-2"> */}
           {/* <Link className="text-decoration-none" to="/login"> */}
-          Logout
+          {/* Logout */}
           {/* </Link> */}
-        </Bt.NavLink>
+
+          {/* </Bt.NavLink> */}
+        </div>
       </>
     );
   }
@@ -133,16 +134,18 @@ export default function Header() {
               </Bt.Form.Group>
             </Bt.Form>
           </Bt.Col>
-          <Bt.Col lg={3} className="col-6 text-end">
-            {/* <a href={'#'} className='btn border rounded-0 me-3'>
-                            <FaUser style={{ width: 'auto', height: '25px' }} className='text-primary' />
-                        </a> */}
-            <Link to={`/Cart`} className="btn border rounded-0">
-              <FaShoppingCart
-                style={{ width: "auto", height: "25px" }}
-                className="text-primary"
-              />
-            </Link>
+          <Bt.Col lg={3} className="col-6">
+            <div className="row">
+              <div className="col-sm-9">{AuthButton}</div>
+              <div className="col-3 text-end">
+                <Link to={`/Cart`} className="btn border rounded-0">
+                  <FaShoppingCart
+                    style={{ width: "auto", height: "25px" }}
+                    className="text-primary"
+                  />
+                </Link>
+              </div>
+            </div>
           </Bt.Col>
         </Bt.Row>
         {/* TopBar-end */}
@@ -213,7 +216,7 @@ export default function Header() {
                     Register
                   </Bt.NavLink> */}
                   {/* <Bt.NavLink>xin chào, user</Bt.NavLink> */}
-                  {AuthButton}
+                  {/* {AuthButton} */}
                 </Bt.Nav>
               </Bt.Navbar.Collapse>
             </Bt.Navbar>
