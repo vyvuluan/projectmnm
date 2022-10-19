@@ -7,7 +7,7 @@ import {
   FaUser,
   FaShoppingBag,
 } from "react-icons/fa";
-import { Link, NavLink, Route } from "react-router-dom";
+import { Link, NavLink, Route, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,13 +15,20 @@ import HomePage from "../../pages/home";
 import { DropDownMenu } from "../../form";
 
 export default function Header() {
+
   const history = useNavigate();
   const [nameUser, setNameUser] = useState(null);
+  const [product, setProduct] = useState([]);
+  const [search, setSearch] = useState('');
+  const [query, setQuery] = useState('pageproducts?search=' + search);
+
+
   useEffect(() => {
     if (localStorage.getItem("auth_name")) {
       setNameUser(localStorage.getItem("auth_name"));
     }
   }, []);
+
   const logoutSubmit = (e) => {
     e.preventDefault();
     axios.get("/sanctum/csrf-cookie").then((response) => {
@@ -72,6 +79,39 @@ export default function Header() {
       </>
     );
   }
+
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   axios.get(`http://localhost:8000/api/products-search`).then(res => {
+  //     if (isMounted) {
+  //       if (res.data.status === 200) {
+  //         setCart(res.data.cart);
+  //         setLoading(false);
+  //       }
+  //       else if (res.data.status === 401) {
+  //         navaigate.push('/');
+  //         swal('Warning', res.data.message, 'error');
+  //       }
+  //     }
+  //   });
+
+  //   return () => {
+  //     isMounted = false
+  //   }
+  // })
+
+  const getValueSearch = (e) => {
+    setSearch(e.target.value);
+    setQuery('pageproducts?search=' + search);
+  }
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
 
   return (
     <>
@@ -125,10 +165,11 @@ export default function Header() {
                   <Bt.Form.Control
                     type="text"
                     placeholder="Search"
+                    onChange={getValueSearch}
                     className="rounded-0 shadow-none focus-outline-none fw-semibold"
                   ></Bt.Form.Control>
                   <Bt.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
+                    <Link to={query}><FaSearch variant="primary" style={{ cursor: 'pointer' }} /></Link>
                   </Bt.InputGroup.Text>
                 </Bt.InputGroup>
               </Bt.Form.Group>

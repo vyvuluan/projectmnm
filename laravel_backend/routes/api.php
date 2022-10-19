@@ -131,6 +131,7 @@ Route::put('cart-updatequantity/{id_cart}/{scope}',[CartController::class,'updat
 Route::delete('deletecart/{id_cart}',[CartController::class,'deletecart']);
 
 //Api Thanh Toán
+Route::post('validate-order', [PaymentController::class, 'validateOrder']);
 Route::post('dathang', [PaymentController::class,'dathang']);
 Route::post('pay', [PaymentController::class,'vnpay']);
 Route::post('momo', [PaymentController::class,'momopay']);

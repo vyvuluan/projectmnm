@@ -42,7 +42,7 @@ const Product = (props) => {
 
                           <Link
                             className="text-decoration-none"
-                            to="/DetailProduct"
+                            to={`/DetailProduct/${item.id}`}
                           >
                             <span>Xem chi tiết</span>
                           </Link>

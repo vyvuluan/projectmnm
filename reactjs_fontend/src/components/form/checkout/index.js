@@ -80,7 +80,7 @@ function Checkout() {
             if (res.data.status === 200) {
                 swal('Đặt hàng thành công', res.data.message, 'success');
                 setError([]);
-                // navaigate.push('/thank-you');
+                navaigate.push('/');
             }
             else if (res.data.status === 422) {
                 swal('Vui lòng điều đầy đủ vào các mục', '', 'error');

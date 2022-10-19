@@ -36,8 +36,9 @@ class ProductController extends Controller
         $tenLoai= $SP->loaisp->tenLoai;
         $product = Product::find($product);
         return response()->json([
+            'status'=>200,
             'sanPham'=>$product,
-            'tenSP'=>$tenLoai,
+            'tenLoai'=>$tenLoai,
             ]);
 
     }

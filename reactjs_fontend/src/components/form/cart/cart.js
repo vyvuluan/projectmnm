@@ -15,10 +15,10 @@ export default function Cart() {
     const [cart, setCart] = useState([]);
     var totalCartPrice = 0;
 
-    // if(!localStorage.getItem('auth_token')){
-    //     navaigate.push('/');
-    //     swal('Warning','Vui lòng login để mua hàng','error');
-    // }
+    if (!localStorage.getItem('auth_token')) {
+        navaigate.push('/');
+        swal('Warning', 'Vui lòng login để mua hàng', 'error');
+    }
 
     function formatMoney(money) {
         return (
@@ -156,14 +156,14 @@ export default function Cart() {
                                     <h6 className='fw-medium'>{formatMoney(totalCartPrice)}</h6>
                                 </div>
                                 <div className='d-flex justify-content-between mb-3 pt-1'>
-                                    <h6 className='fw-medium'>Thuế</h6>
-                                    <h6 className='fw-medium'>10%</h6>
+                                    <h6 className='fw-medium'>Thuế 10%</h6>
+                                    <h6 className='fw-medium'>{formatMoney(totalCartPrice * 0.1)}</h6>
                                 </div>
                             </Bt.Card.Body>
                             <Bt.Card.Footer className='border-secondary bg-transparent d-grid gap-2'>
                                 <div className='d-flex justify-content-between mt-2'>
                                     <h5 className='fw-bold'>Tổng tiền</h5>
-                                    <h5 className='fw-bold'>{formatMoney(totalCartPrice * 1.1)} VND</h5>
+                                    <h5 className='fw-bold'>{formatMoney(totalCartPrice * 1.1)}</h5>
                                 </div>
                                 <Link to='/checkout'>
                                     <Bt.Button className='rounded-0 mt-3 py-2 w-100' variant='primary'>

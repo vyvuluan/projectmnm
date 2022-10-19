@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import swal from "sweetalert";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   BsStarFill,
   BsFacebook,
@@ -15,6 +18,53 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 const DetailProduct = (props) => {
   const { item } = props;
 
+  const navaigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState([]);
+  const { id } = useParams();
+
+  function formatMoney(money) {
+    return (
+      new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+      }).format(money)
+    )
+  }
+
+  useEffect(() => {
+
+    let isMounted = true;
+
+    // const product_id = this.props.match.params.id;
+    axios.get(`http://localhost:8000/api/products/chitiet/${id}`).then(res => {
+      if (isMounted) {
+        if (res.data.status === 200) {
+          setProduct(res.data.sanPham);
+          setLoading(false);
+        }
+        else if (res.data.status === 404) {
+          navaigate.push('/pageproducts');
+          swal('Warning', res.data.message, 'error');
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false
+    };
+
+  }, [id, navaigate]);
+
+  console.log(product);
+
+  // if (loading) {
+  //   return <h4>Loading...</h4>
+  // }
+  // else {
+
+  // }
+
   return (
     <>
       <div className="container-fluid py-5">
@@ -29,7 +79,7 @@ const DetailProduct = (props) => {
                 <div className="carousel-item active">
                   <img
                     className="w-100 h-100"
-                    src="https://cdn.mediamart.vn/images/product/laptop-asus-vivobook-14-a415ea-eb1474w-den_2dc20efd.jpg"
+                    src={`http://localhost:8000/uploadhinh/${product.hinh}`}
                     alt="Image"
                   ></img>
                 </div>
@@ -73,7 +123,7 @@ const DetailProduct = (props) => {
           </div>
 
           <div className="col-lg-7 pb-5">
-            <h3 className="font-weight-semi-bold">Colorful Stylish Shirt</h3>
+            <h3 className="font-weight-semi-bold">{product.tenSP}</h3>
             <div className="d-flex mb-3">
               <div className="text-primary mr-2">
                 <small>
@@ -94,7 +144,7 @@ const DetailProduct = (props) => {
               </div>
               <small className="pt-1">(50 Reviews)</small>
             </div>
-            <h3 className="font-weight-semi-bold mb-4">$150.00</h3>
+            <h3 className="font-weight-semi-bold mb-4">{formatMoney(product.gia)}</h3>
             <p className="mb-4">
               Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat
               diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem
@@ -234,17 +284,7 @@ const DetailProduct = (props) => {
               <div className="tab-pane fade show active" id="tab-pane-1">
                 <h4 className="mb-3">Product Description</h4>
                 <p>
-                  Eos no lorem eirmod diam diam, eos elitr et gubergren diam
-                  sea. Consetetur vero aliquyam invidunt duo dolores et duo sit.
-                  Vero diam ea vero et dolore rebum, dolor rebum eirmod
-                  consetetur invidunt sed sed et, lorem duo et eos elitr,
-                  sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed
-                  tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing,
-                  eos dolores sit no ut diam consetetur duo justo est, sit
-                  sanctus diam tempor aliquyam eirmod nonumy rebum dolor
-                  accusam, ipsum kasd eos consetetur at sit rebum, diam kasd
-                  invidunt tempor lorem, ipsum lorem elitr sanctus eirmod
-                  takimata dolor ea invidunt.
+                  {product.moTa}
                 </p>
                 <p>
                   Dolore magna est eirmod sanctus dolor, amet diam et eirmod et

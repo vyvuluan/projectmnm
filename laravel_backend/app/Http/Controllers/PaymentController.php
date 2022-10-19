@@ -10,6 +10,7 @@ use App\Models\CtPhieuXuat;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Validator;
 
 use PHPUnit\Framework\Constraint\Count;
 
@@ -68,6 +69,47 @@ class PaymentController extends Controller
                 ]);
         }
 
+    }
+    public function validateOrder(Request $request)
+    {
+        if(auth('sanctum')->check())
+        {
+            $validator = Validator::make($request->all(), [
+                'tenKH'=>'required|max:191',
+                'sdt'=>'required|numeric|digits:10',
+                'diaChi'=>'required|max:191',
+        
+            ],[
+                'tenKH.required' => 'Ô email Không được bỏ trống',
+                'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+                'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
+                'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+                'diaChi.required' => 'Ô Địa chỉ không được bỏ trống',
+    
+            ]);
+
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status'=>422,
+                    'errors'=>$validator->messages(),
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Form Validated Successfully',
+                ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+                'status'=> 401,
+                'message'=> 'Login to Continue',
+            ]);
+        }
     }
 
 
