@@ -171,4 +171,16 @@ class ManageNccController extends Controller
 
         }
     }
+
+    public function searchNcc(Request $request)
+    {
+        $ncc = Ncc::where('id','like','%'.$request->key.'%')
+                    ->orWhere('tenNCC','like','%'.$request->key.'%')
+                    ->orWhere('sdt','like','%'.$request->key.'%')
+                    ->get();
+        return response()->json([
+                'status'=>200,
+                'ncc'=> $ncc,
+                ]);           
+    }
 }

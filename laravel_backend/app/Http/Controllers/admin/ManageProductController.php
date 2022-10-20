@@ -242,4 +242,15 @@ class ManageProductController extends Controller
            'message'=>'kết quả',
            ]);
     }
+    //search theo tên và mã
+    public function searchProduct(Request $request)
+    {
+        $product = Product::where('id','like','%'.$request->key.'%')
+                    ->orWhere('tenSP','like','%'.$request->key.'%')
+                    ->get();
+        return response()->json([
+                'status'=>200,
+                'product'=> $product,
+                ]);           
+    }
 }

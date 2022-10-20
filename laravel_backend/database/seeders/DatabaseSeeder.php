@@ -35,10 +35,11 @@ class DatabaseSeeder extends Seeder
             
         ]);
         User::insert([
-            ['username' => 'admin113'],
-            ['passowrd' => Hash::make('admin113')],
-            ['email' => 'admin113@gmail.com'],
-            ['role_id' => 2],
+            ['username' => 'admin113',
+            'password' => Hash::make('admin113'),
+            'email' => 'admin113@gmail.com',
+            'role_id' => 2]
+
             
         ]);
     }

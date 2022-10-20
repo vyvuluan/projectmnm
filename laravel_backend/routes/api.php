@@ -23,6 +23,7 @@ use App\Http\Controllers\admin\ManageNsxController;
 use  App\Http\Controllers\admin\ManageEmployeeController;
 use  App\Http\Controllers\admin\ManageLoaispController;
 use  App\Http\Controllers\admin\ManageCustomerController;
+use  App\Http\Controllers\admin\ManagePhieuNhapController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,8 +37,10 @@ use  App\Http\Controllers\admin\ManageCustomerController;
 
 Route::post('/login', [UserController::class,'login']);
 Route::post('/register', [UserController::class,'register']);
-
-
+//api search nhà cung cấp theo tên mã số điện thoại
+Route::get('/searchNcc', [ManageNccController::class,'searchNcc']);
+//api search sản phẩm theo tên mã 
+Route::get('/searchProduct', [ManageProductController::class,'searchProduct']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class,'logout']);
@@ -78,7 +81,11 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
 
 //thủ kho
 Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
-            //Api Quản lý  Phiếu Xuất
+    //api thêm phiếu nhập
+    Route::post('addPN', [ManagePhieuNhapController::class,'addPN']);
+    //api thêm chi tiết phiếu nhập
+    Route::post('addCtPN/{id}', [ManagePhieuNhapController::class,'addCtPN']);
+    //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
             Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
                 //Api Quản lý chi tiết phiếu xuất
