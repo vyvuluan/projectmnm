@@ -64,7 +64,7 @@ export default function Cart() {
     const handleIncrement = (id_cart) => {
         setCart(cart =>
             cart.map((item) =>
-                id_cart === item.id ? { ...item, soLuongSP: item.soLuongSP + (item.soLuongSP < 9 ? 1 : 0) } : item
+                id_cart === item.id ? { ...item, soLuongSP: item.soLuongSP + (item.soLuongSP < 10 ? 1 : 0) } : item
             )
         );
         updateCartQuantity(id_cart, 'inc')
@@ -107,23 +107,23 @@ export default function Cart() {
                     <Bt.Col lg={8} className='table-responsive mb-5'>
                         <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
                             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
-                                <tr>
+                                <tr className='text-start'>
                                     <th>Sản phẩm</th>
                                     <th>Giá</th>
                                     <th>Số Lượng</th>
                                     <th>Tổng tiền</th>
-                                    <th>Loại bỏ</th>
+                                    <th>Xóa</th>
                                 </tr>
                             </thead>
-                            <tbody className='align-middle'>
+                            <tbody className='text-start'>
                                 {cart.map((item, index) => {
                                     totalCartPrice += item.product.gia * item.soLuongSP;
                                     return (
                                         <tr key={index}>
-                                            <td className='align-middle'><img src={`http://localhost:8000/uploadhinh/${item.product.hinh}`} className='me-2' style={{ width: '50px' }} />{item.product.tenSP}</td>
-                                            <td className='align-middle'>{formatMoney(item.product.gia)}</td>
-                                            <td className='align-middle'>
-                                                <Bt.InputGroup className='quantity mx-auto' style={{ width: '100px' }}>
+                                            <td><img src={`http://localhost:8000/uploadhinh/${item.product.hinh}`} className='me-2' style={{ width: '50px' }} />{item.product.tenSP}</td>
+                                            <td>{formatMoney(item.product.gia)}</td>
+                                            <td>
+                                                <Bt.InputGroup className='quantity mx-auto'>
                                                     <Bt.Button className='btn-sm rounded-0' variant='primary' type='button' onClick={() => handleDecrement(item.id)}>
                                                         <FaMinus />
                                                     </Bt.Button>
@@ -133,8 +133,8 @@ export default function Cart() {
                                                     </Bt.Button>
                                                 </Bt.InputGroup>
                                             </td>
-                                            <td className='align-middle'>{formatMoney(item.product.gia * item.soLuongSP)}</td>
-                                            <td className='align-middle'>
+                                            <td className=''>{formatMoney(item.product.gia * item.soLuongSP)}</td>
+                                            <td>
                                                 <Bt.Button className='btn-sm rounded-0' type='button' onClick={(e) => deleteCartItem(e, item.id)}>
                                                     <FaTimes />
                                                 </Bt.Button>
