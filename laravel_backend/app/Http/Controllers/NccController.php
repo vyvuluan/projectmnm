@@ -107,6 +107,13 @@ class NccController extends Controller
             'tenNCC' =>'required|max:20',
             'diaChi'=>'required|max:100',
             'sdt'=>'required|numeric|digits:10',
+        ],[
+            'tenNCC.required' => 'Ô tên nhà cung cấp Không được bỏ trống',
+            'diaChi.required' => 'Ô địa chỉ không được bỏ trống',
+            'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
+            'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+            'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+
         ]);
         if($validator->fails())
         {

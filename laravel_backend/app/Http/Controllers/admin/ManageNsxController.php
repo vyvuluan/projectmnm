@@ -46,6 +46,10 @@ class ManageNsxController extends Controller
         $validator = Validator::make($request->all(),[
             'tenNSX' =>'required|max:10',
             'quocGia'=>'required|max:20',
+        ],[
+            'tenNSX.required' => 'Ô tên sản xuất Không được bỏ trống',
+            'quocGia.required' => 'Ô quốc gia không được bỏ trống',
+
         ]);
         if($validator->fails())
         {
@@ -109,6 +113,10 @@ class ManageNsxController extends Controller
         $validator = Validator::make($request->all(),[
             'tenNSX' =>'required|max:10',
             'quocGia'=>'required|max:20',
+        ],[
+            'tenNSX.required' => 'Ô tên sản xuất Không được bỏ trống',
+            'quocGia.required' => 'Ô quốc gia không được bỏ trống',
+
         ]);
         if($validator->fails())
         {

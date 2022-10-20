@@ -225,22 +225,23 @@ class ManageProductController extends Controller
                 ]);
         }
     }
-    public function search($key)
+    public function search(Request $request)
     {
-        $product_query =  Product::with('loaisp');
-        $product_query
-        ->where('tenSP','LIKE','%'.$key.'%')
-        ->orwhere('moTa','LIKE','%'.$key.'%')
-        ->orwhere('ctSanPham','LIKE','%'.$key.'%')
-        ->orwhereHas('loaisp',function($query) use ($key){
-           $query->where('tenLoai','LIKE','%'.$key.'%');
-           });
-           $product = $product_query->get();
+        $key = $request->key;
+         $product_query =  Product::with('loaisp');
+         $product_query
+         ->where('tenSP','LIKE','%'.$key.'%')
+         ->orwhere('moTa','LIKE','%'.$key.'%')
+         ->orwhere('ctSanPham','LIKE','%'.$key.'%')
+         ->orwhereHas('loaisp',function($query) use ($key){
+            $query->where('tenLoai','LIKE','%'.$key.'%');
+            });
+            $product = $product_query->get();
 
-       return response()->json([
-           'data'=>$product,
-           'message'=>'kết quả',
-           ]);
+        return response()->json([
+            'data'=>$product,
+            'message'=>'kết quả',
+            ]);
     }
     //search theo tên và mã
     public function searchProduct(Request $request)

@@ -228,8 +228,9 @@ class ProductController extends Controller
                 ]);
         }
     }
-    public function search($key)
+    public function search(Request $request)
     {
+        $key = $request->key;
          $product_query =  Product::with('loaisp');
          $product_query
          ->where('tenSP','LIKE','%'.$key.'%')
