@@ -7,9 +7,9 @@ import Col from 'react-bootstrap/Col';
 import { useSearchParams } from "react-router-dom";
 const PageProducts = () => {
   const [listProduct, setListProduct] = useState([]);
-  const [search, setSearch] = useSearchParams(
-    search.get('search')
-  );
+  // const [search, setSearch] = useSearchParams(
+  //   search.get('search')
+  // );
 
 
   useEffect(() => {

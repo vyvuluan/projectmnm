@@ -72,12 +72,19 @@ class ManagePhieuXuatController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'employee_id' =>'required|numeric|max:10',
-            //'status' =>'required|numeric|max:10',
-            'pt_ThanhToan' =>'required|max:10',
+            'employee_id' =>'numeric',
+            'status' =>'numeric|max:10',
+            'pt_ThanhToan' =>'required',
             'diaChi' =>'required',
             'tenKH' =>'required',
             'sdt' =>'required|numeric|digits:10',
+        ],[
+            'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
+            'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+            'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
+            'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+            'diaChi.required' => 'Ô Địa chỉ không được bỏ trống',
+            'pt_ThanhToan.required' => 'Ô Pt Thanh toán không được bỏ trống',
         ]);
         if($validator->fails())
         {
@@ -109,6 +116,13 @@ class ManagePhieuXuatController extends Controller
             'px_id'=>'required|numeric',
             'product_id'=>'required|numeric',
             'soluong' =>'required|numeric',
+        ],[
+            'product_id.required' => 'Bạn chưa chọn sản phẩm',
+            'soluong.required' => 'Ô số lượng không được bỏ trống',
+            'product_id.numeric' => 'Mã sản phẩm nhận được không đúng',
+            'soluong.numeric' => 'Ô số lượng phải có định dạng là số ',
+            'px_id.numeric' => 'Mã phiếu xuất nhận được không đúng',
+            'px_id.required' => 'Chưa chọn phiếu xuất',
         ]);
         if($validator->fails())
         {
@@ -210,13 +224,22 @@ class ManagePhieuXuatController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'employee_id' =>'required|numeric|max:10',
-            'status' =>'required|numeric|max:10',
-            'pt_ThanhToan' =>'required|max:10',
+            'employee_id' =>'numeric',
+            'customer_id' =>'numeric',
+            'status' =>'numeric',
+            'pt_ThanhToan' =>'required',
             'diaChi' =>'required',
             'tenKH' =>'required',
             'sdt' =>'required|numeric|digits:10',
             'tongTien' =>'required|numeric'
+        ],[
+            'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
+            'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+            'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
+            'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+            'diaChi.required' => 'Ô Địa chỉ không được bỏ trống',
+            'pt_ThanhToan.required' => 'Ô Pt Thanh toán không được bỏ trống',
+            'status.numeric' => 'Ô status phải có định dạng là số ',
         ]);
         if($validator->fails())
         {
@@ -231,6 +254,7 @@ class ManagePhieuXuatController extends Controller
             if($px)
             {
                 $px->employee_id= $request->employee_id;
+                $px->customer_id = $request->customer_id;
                 $px->status= $request->status;
                 $px->pt_ThanhToan= $request->pt_ThanhToan;
                 $px->diaChi= $request->diaChi;
@@ -270,6 +294,11 @@ class ManagePhieuXuatController extends Controller
         $validator = Validator::make($request->all(),[
             'product_id'=>'required|numeric',
             'soluong' =>'required|numeric',
+        ],[
+            'product_id.required' => 'Bạn chưa chọn sản phẩm',
+            'soluong.required' => 'Ô số lượng không được bỏ trống',
+            'product_id.numeric' => 'Mã sản phẩm nhận được không đúng',
+            'soluong.numeric' => 'Ô số lượng phải có định dạng là số ',
         ]);
         if($validator->fails())
         {
@@ -360,7 +389,7 @@ class ManagePhieuXuatController extends Controller
                 {
                     return response()->json([
                         'status'=>401,
-                        'message'=>' Thông tin cập nhật không chính xác',
+                        'message'=>' Sản phẩm muốn cập nhật không tồn tại',
                     ]);
                 }
 

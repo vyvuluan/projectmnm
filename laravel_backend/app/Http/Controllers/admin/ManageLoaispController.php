@@ -40,7 +40,10 @@ class ManageLoaispController extends Controller
         //     'tenLoai' =>'required|max:10'
         // ]);
         $validator = Validator::make($request->all(),[
-            'tenLoai' =>'required|max:10'
+            'tenLoai' =>'required'
+        ],[
+            'tenLoai.required' => 'Ô tên Loại Không được bỏ trống',
+            
         ]);
         if($validator->fails())
         {
@@ -101,7 +104,10 @@ class ManageLoaispController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'tenLoai' =>'required|max:10'
+            'tenLoai' =>'required'
+        ],[
+            'tenLoai.required' => 'Ô tên Loại Không được bỏ trống',
+            
         ]);
         if($validator->fails())
         {

@@ -21,6 +21,7 @@ const DetailProduct = (props) => {
   const navaigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState([]);
+  const [quantity, setQuantity] = useState(1);
   const { id } = useParams();
 
   function formatMoney(money) {
@@ -36,7 +37,6 @@ const DetailProduct = (props) => {
 
     let isMounted = true;
 
-    // const product_id = this.props.match.params.id;
     axios.get(`http://localhost:8000/api/products/chitiet/${id}`).then(res => {
       if (isMounted) {
         if (res.data.status === 200) {
@@ -56,14 +56,77 @@ const DetailProduct = (props) => {
 
   }, [id, navaigate]);
 
-  console.log(product);
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(prevCount => prevCount - 1);
+    }
+  }
+  const handleIncrement = () => {
+    if (quantity < 10) {
+      setQuantity(prevCount => prevCount + 1);
+    }
+  }
 
-  // if (loading) {
-  //   return <h4>Loading...</h4>
-  // }
-  // else {
+  const submitAddtocart = (e) => {
+    e.preventDefault();
 
-  // }
+    const data = {
+      product_id: product.id,
+      product_qty: quantity,
+    }
+
+    axios.post(`/api/addtocart`, data).then(res => {
+      if (res.data.status === 201) {
+        swal("Success", res.data.message, "success");
+      } else if (res.data.status === 409) {
+        swal("Success", res.data.message, "success");
+      } else if (res.data.status === 401) {
+        swal("Error", res.data.message, "error");
+      } else if (res.data.status === 404) {
+        swal("Warning", res.data.message, "warning");
+      }
+    });
+
+  }
+
+  if (loading) {
+    return <h4>Loading...</h4>
+  }
+  else {
+    var avail_stock = '';
+    if (product.soLuongSP > 0) {
+      avail_stock =
+        <div className="d-flex align-items-center mb-4 pt-2">
+          <div
+            className="input-group quantity me-3"
+            style={{ width: "130px" }}
+          >
+            <div className="input-group-btn">
+              <button type='button' className="btn btn-primary btn-minus rounded-0"
+                onClick={handleDecrement}>
+                <AiFillMinusCircle />
+              </button>
+            </div>
+            <input type="text" className="form-control text-center" value={quantity} />
+            <div className="input-group-btn">
+              <button type='button' className="btn btn-primary btn-plus rounded-0"
+                onClick={handleIncrement}>
+                <AiFillPlusCircle />
+              </button>
+            </div>
+          </div>
+          <button type='button' className="btn btn-primary px-3 rounded-0"
+            onClick={submitAddtocart}>
+            <AiOutlineShoppingCart /> Add To Cart
+          </button>
+        </div>
+    }
+    else {
+      avail_stock = <button className="btn btn-primary px-3 rounded-0">
+        <AiOutlineShoppingCart /> Out of stock
+      </button>
+    }
+  }
 
   return (
     <>
@@ -213,27 +276,10 @@ const DetailProduct = (props) => {
               </form>
             </div>
 
-            <div className="d-flex align-items-center mb-4 pt-2">
-              <div
-                className="input-group quantity me-3"
-                style={{ width: "130px" }}
-              >
-                <div className="input-group-btn">
-                  <button className="btn btn-primary btn-minus rounded-0">
-                    <AiFillMinusCircle />
-                  </button>
-                </div>
-                <input type="text" className="form-control text-center"></input>
-                <div className="input-group-btn">
-                  <button className="btn btn-primary btn-plus rounded-0">
-                    <AiFillPlusCircle />
-                  </button>
-                </div>
-              </div>
-              <button className="btn btn-primary px-3 rounded-0">
-                <AiOutlineShoppingCart /> Add To Cart
-              </button>
+            <div>
+              {avail_stock}
             </div>
+
             <div className="d-flex pt-2">
               <p className="text-dark font-weight-medium mb-0 mr-2">
                 Share on:

@@ -57,17 +57,56 @@ class CartController extends Controller
         //  $cart = Cart::content();
         //  return $cart;
         // Đây chỉ là bản test vì chưa có login
-            $maKH= $request->maKH;
-            $maSP = $request->maSP;
-            $soLuongSP = $request->soLuongSP;
+            // $maKH= $request->maKH;
+            // $maSP = $request->maSP;
+            // $soLuongSP = $request->soLuongSP;
+            // $spCheck = Product::where('id',$maSP)->first();
+            // if($spCheck)
+            // {
+            //         if(Cart::where('maSP',$maSP)->where('maKH',$maKH)->exists())
+            //         {
+            //             return response()->json([
+            //                 'status'=>409 ,
+            //                 'message'=>$spCheck->tenSP.' đã có ở trong giỏ hàng',
+            //                 ]);
+            //         }
+            //         else
+            //         {
+            //             $cartItem = new Cart;
+            //             $cartItem->maKH = $maKH;
+            //             $cartItem->maSP = $maSP;
+            //             $cartItem->soLuongSP=$soLuongSP;
+            //             $cartItem->save();
+            //             return response()->json([
+            //                 'status'=>201 ,
+            //                 'message'=>'Đã thêm vào giở hàng',
+            //                 ]);
+            //         }
+            // }
+            // else
+            // {
+            //     return response()->json([
+            //         'status'=>404 ,
+            //         'message'=>'Không tìm thấy sản phẩm',
+            //         ]);
+            // }
+
+
+            //Bản chính Thức
+
+        if(auth('sanctum')->check())
+        {
+            $maKH= auth('sanctum')->user()->customer->id;
+            $maSP = $request->product_id;
+            $soLuongSP = $request->product_qty;
             $spCheck = Product::where('id',$maSP)->first();
             if($spCheck)
             {
-                    if(Cart::where('maSP',$maSP)->where('maKH',$maKH)->exists())
+                    if(Cart::where('id',$maSP)->where('maKH',$maKH)->exists())
                     {
                         return response()->json([
                             'status'=>409 ,
-                            'message'=>$spCheck->tenSP.' đã có ở trong giỏ hàng',
+                            'message'=>$spCheck->tenSP.'Sản phẩm đã có ở trong giỏ hàng',
                             ]);
                     }
                     else
@@ -79,7 +118,7 @@ class CartController extends Controller
                         $cartItem->save();
                         return response()->json([
                             'status'=>201 ,
-                            'message'=>'Đã thêm vào giở hàng',
+                            'message'=>'Đã thêm vào giỏ hàng',
                             ]);
                     }
             }
@@ -90,53 +129,14 @@ class CartController extends Controller
                     'message'=>'Không tìm thấy sản phẩm',
                     ]);
             }
-
-
-            //Bản chính Thức
-
-        // if(auth('sanctum')->check())
-        // {
-        //     $maKH= auth('sanctum')->user()->id;
-        //     $maSP = $request->maSP;
-        //     $soLuongSP = $request->soLuongSP;
-        //     $spCheck = Product::where('maSP',$maSP)->first();
-        //     if($spCheck)
-        //     {
-        //             if(Cart::where('maSP',$maSP)->where('maKH',$maKH)->exist())
-        //             {
-        //                 return response()->json([
-        //                     'status'=>409 ,
-        //                     'message'=>$spCheck->tenSP.'Sản phẩm đã có ở trong giỏ hàng',
-        //                     ]);
-        //             }
-        //             else
-        //             {
-        //                 $cartItem = new Cart;
-        //                 $cartItem->maKH = $maKH;
-        //                 $cartItem->maSP = $maSP;
-        //                 $cartItem->soLuongSP=$soLuongSP;
-        //                 $cartItem->save();
-        //                 return response()->json([
-        //                     'status'=>201 ,
-        //                     'message'=>'Đã thêm vào giở hàng',
-        //                     ]);
-        //             }
-        //     }
-        //     else
-        //     {
-        //         return response()->json([
-        //             'status'=>404 ,
-        //             'message'=>'Không tìm thấy sản phẩm',
-        //             ]);
-        //     }
-        // }
-        // else
-        // {
-        //     return response()->json([
-        //         'status'=>401,
-        //         'message'=>'Đăng nhập để thêm vào giỏ hàng',
-        //         ]);
-        // }
+        }
+        else
+        {
+            return response()->json([
+                'status'=>401,
+                'message'=>'Đăng nhập để thêm vào giỏ hàng',
+                ]);
+        }
     }
     public function updatequantity($id_cart,$scope)
     {
@@ -194,29 +194,9 @@ class CartController extends Controller
     public function deletecart($id_cart)
     {
                 //Test chưa có login
-        $maKH= 1;
-        $cartItem = Cart::where('id',$id_cart)->where('maKH',$maKH)->first();
+        // $maKH= 1;
+        // $cartItem = Cart::where('id',$id_cart)->where('maKH',$maKH)->first();
 
-            if($cartItem)
-            {
-                $cartItem->delete();
-                return response()->json([
-                    'status'=>200,
-                    'message'=>'Xoá thành công',
-                    ]);
-            }
-            else
-            {
-                return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm thấy giở hàng cần xoá',
-                    ]);
-            }
-                    //Bản chính thức
-        // if(auth('sanctum')->check())
-        // {
-        //     $maKH= auth('sanctum')->user()->id;
-        //     $cartItem = Cart::where('id',$id_cart)->where('maKH',$maKH)->first();
         //     if($cartItem)
         //     {
         //         $cartItem->delete();
@@ -232,13 +212,33 @@ class CartController extends Controller
         //             'message'=>'Không tìm thấy giở hàng cần xoá',
         //             ]);
         //     }
-        // }
-        // else
-        // {
-        //     return response()->json([
-        //         'status'=>401,
-        //         'message'=>'Đăng nhập để thêm vào giỏ hàng',
-        //         ]);
-        // }
+                    //Bản chính thức
+        if(auth('sanctum')->check())
+        {
+            $maKH= auth('sanctum')->user()->customer->id;
+            $cartItem = Cart::where('id',$id_cart)->where('maKH',$maKH)->first();
+            if($cartItem)
+            {
+                $cartItem->delete();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Xoá thành công',
+                    ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Không tìm thấy giỏ hàng cần xoá',
+                    ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+                'status'=>401,
+                'message'=>'Đăng nhập để thêm vào giỏ hàng',
+                ]);
+        }
     }
 }
