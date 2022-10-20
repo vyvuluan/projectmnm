@@ -9,7 +9,7 @@ class CtPhieuNhap extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'px_id',
+        'pn_id',
         'product_id',
         'soluong',
         'gia',

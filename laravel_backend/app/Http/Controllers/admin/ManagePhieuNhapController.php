@@ -20,7 +20,7 @@ class ManagePhieuNhapController extends Controller
             $pn->ncc_id = $request->ncc_id;
             $pn->save();
             return response()->json([
-                'satus' => 200,
+                'status' => 200,
                 'message' => 'Thêm phiếu nhập thành công',
                 'pn' => $pn,
             ]);
@@ -48,10 +48,131 @@ class ManagePhieuNhapController extends Controller
             $ctpn->save();
             $product->save();
             return response()->json([
-                'satus' => 200,
+                'status' => 200,
                 'message' => 'Thêm chi tiết phiếu nhập thành công',
-                'pn' => $ctpn,
+                'ctpn' => $ctpn,
             ]);
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+    public function deleteCtPN ($pn_id, $product_id)
+    {
+        if(auth('sanctum')->check())
+        {
+            
+            $ctpn = CtPhieuNhap::where('pn_id',$pn_id)
+                            ->Where('pn_id',$product_id)->first();
+           
+            if(empty($ctpn))
+            {
+                return response()->json([
+                    'status' => 404,
+                ]);
+            }
+            else
+            {
+                if($ctpn->pn->status != 1) //chưa thanh toán
+                {
+                    $product = Product::find($product_id);
+                    $product->soLuongSP = $product->soLuongSP - $ctpn->soluong;
+                    $product->save();
+                    $ctpn= CtPhieuNhap::where('pn_id',$pn_id)
+                    ->Where('product_id',$product_id)->delete();
+                    
+                    
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Xóa chi tiết phiếu nhập thành công',
+                    ]);
+                }
+                else //đã thanh toán
+                {
+                    return response()->json([
+
+                        'message' => 'Phiếu nhập đã thanh toán không thể xóa',
+                    ]);
+                }
+            }
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+
+    public function updateCtPN (Request $request,$pn_id, $product_id)
+    {
+        if(auth('sanctum')->check())
+        {
+            
+            $pn = PhieuNhap::find($pn_id);
+           
+            if(empty($pn))
+            {
+                return response()->json([
+                    'status' => 404,
+                ]);
+            }
+            else
+            {
+                if($pn->status != 1) //chưa thanh toán
+                {
+                    
+                    $soluong = $request->soluong;
+                    $ctpn = CtPhieuNhap::where('pn_id',$pn_id)
+                    ->Where('product_id',$product_id)->first();
+                    $soluongcu = $ctpn->soluong;
+                    if($product_id == $request->product_id) //sản phẩm giống
+                    {
+                        
+                        $soluongmoi = -$soluongcu + $soluong;
+
+                        $product = Product::find($product_id);
+                        $product->soLuongSP = $product->soLuongSP + $soluongmoi;
+                        $product->save();
+
+                        
+                    }
+                    else //sản phẩm khác
+                    {
+                        $product_old = Product::find($product_id);
+                        $product_old->soLuongSP = $product_old->soLuongSP - $soluongcu;
+                        
+                        $product_new = Product::find($request->product_id);
+                        $product_new->soLuongSP = $product_new->soLuongSP + $request->soluong;
+                        $product_new->save();
+                        $product_old->save();
+
+                    }
+                    
+                    $ctpn = CtPhieuNhap::where('pn_id',$pn_id)
+                        ->Where('product_id',$product_id)
+                        ->update(['product_id' => $request->product_id,'soluong' => $request->soluong,'gia' =>  $request->gia]);
+                   
+                    
+                        
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Cập nhật chi tiết phiếu nhập thành công',
+                    ]);
+                }
+                else //đã thanh toán
+                {
+                    return response()->json([
+
+                        'message' => 'Phiếu nhập đã thanh toán không thể chỉnh sửa',
+                    ]);
+                }
+            }
         }
         else
         {

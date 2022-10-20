@@ -85,6 +85,10 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
     Route::post('addPN', [ManagePhieuNhapController::class,'addPN']);
     //api thêm chi tiết phiếu nhập
     Route::post('addCtPN/{id}', [ManagePhieuNhapController::class,'addCtPN']);
+    //api xóa chi tiết phiếu nhập
+    Route::delete('deleteCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'deleteCtPN']);
+    //api cập nhật chi tiết phiếu nhập
+    Route::put('updateCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'updateCtPN']);
     //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
             Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
