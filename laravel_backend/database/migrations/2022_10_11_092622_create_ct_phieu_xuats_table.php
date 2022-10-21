@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('gia');
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('px_id')->references('id')->on('phieu_xuats')->onDelete('cascade');
         });
     }
 

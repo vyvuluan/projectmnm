@@ -39,7 +39,7 @@ Route::post('/login', [UserController::class,'login']);
 Route::post('/register', [UserController::class,'register']);
 //api search nhà cung cấp theo tên mã số điện thoại
 Route::get('/searchNcc', [ManageNccController::class,'searchNcc']);
-//api search sản phẩm theo tên mã 
+//api search sản phẩm theo tên mã
 Route::get('/searchProduct', [ManageProductController::class,'searchProduct']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -102,7 +102,8 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
                 Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
                 Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
                 Route::put('updatectpx/{mapx}/{maspct}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
-                Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);
+                Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);          // Thêm ct phiếu xuất
+                Route::delete('deletectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'deletectpx']);  // Xoá ct phiếu xuất
 
             // Api quản lý ncc , nsx
             Route::resource('ncc',ManageNccController::class);

@@ -415,6 +415,50 @@ class ManagePhieuXuatController extends Controller
      */
     public function destroy($id)
     {
+        $px = PhieuXuat::find($id);
+        if($px->status == 1)
+        {
+            return response()->json([
+                'status'=>400,
+                'message'=>'Đơn hàng đã được thanh toán nên không thể xoá',
+                ]);
+        }
+        else
+        {
+            $pxcts = PhieuXuat::find($id)->pxct;
+            if($pxcts)
+            {
+                foreach($pxcts as $pxct)
+                {
+                    $sp= Product::find($pxct->product_id);
+                    if($sp)
+                    {
+                        $sp->soLuongSP += $pxct->soluong;
+                        $sp->save();
+                    }
+                }
+                $px->delete();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Xoá thành công',
+                    ]);
+            }
 
+        }
+    }
+    public function deletectpx($px_id , $product_id)
+    {
+        $mapx=$px_id ;$maspct = $product_id;
+        $pxcts = PhieuXuat::find($mapx)->pxct;
+            $data=  $pxcts->where('product_id',$maspct)->first();
+            $spkho = Product::find($maspct);
+            $spkho->soLuongSP += $data->soluong;
+            $spkho->save();
+            DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
+            ->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Xoá chi tiết px thành công',
+                ]);
     }
 }
