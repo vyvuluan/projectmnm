@@ -16,7 +16,7 @@ class NccController extends Controller
         $Ncc = Ncc::paginate();
         return response()->json([
             'status'=>200,
-            'Nsx'=>$Ncc,
+            'Ncc'=>$Ncc,
         ]);
     }
 

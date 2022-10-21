@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react'
 import * as Bt from 'react-bootstrap'
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa'
 import { MdPayments } from 'react-icons/md'
-import { BsPaypal } from 'react-icons/bs'
 import axios from 'axios';
 import swal from 'sweetalert'
 import { Link, useNavigate } from 'react-router-dom'
-import vnpay from '../../../img/vnpay.png'
+
 
 export default function Cart() {
 
@@ -171,17 +170,9 @@ export default function Cart() {
                                 </div>
                                 <Link to='/checkout'>
                                     <Bt.Button className='rounded-0 mt-3 py-2 w-100' variant='primary'>
-                                        <MdPayments className='me-2 fs-4' />Thanh toán khi nhận hàng
+                                        <MdPayments className='me-2 fs-4' />Tiến tới thanh toán
                                     </Bt.Button>
                                 </Link>
-                                <hr className='text-center mb-0' />
-                                <p className='text-center my-0 fs-5 fw-semibold'>Thanh toán Online</p>
-                                <Bt.Button className='rounded-0 py-2 text-lightgray' variant='primary'>
-                                    <BsPaypal className='me-2 fs-4' />Thanh toán qua Paypal
-                                </Bt.Button>
-                                <Bt.Button className='rounded-0 py-2' variant='primary'>
-                                    <img src={vnpay} style={{ width: 'auto', height: '25px' }} />
-                                </Bt.Button>
                             </Bt.Card.Footer>
                         </Bt.Card>
                     </Bt.Col>

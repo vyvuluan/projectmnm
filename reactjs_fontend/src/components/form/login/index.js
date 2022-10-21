@@ -76,20 +76,29 @@ const Login = () => {
         headers: {
           authorization: "google",
           "Content-Type": "application/json",
+          
         },
       })
       .then(function (response) {
-        // handle success
-        console.log(response);
+        window.location.replace(response.data.url);
+
+        console.log(response.data);
+       
       })
       .catch(function (error) {
         // handle error
         console.log(error);
       })
       .finally(function () {
-        // always executed
+       
       });
   };
+
+
+
+
+
+  
   const LoginFaceBookSubmit = (e) => {
     e.preventDefault();
     const axios = require("axios").default;
