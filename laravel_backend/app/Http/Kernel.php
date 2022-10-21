@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'cors',
         ],
     ];
 
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'role_nhanvien' => \App\Http\Middleware\RoleNvMiddleware::class,
         'role_thukho' => \App\Http\Middleware\RoleKhoMiddleware::class,
+        'cors' => \App\Http\Middleware\Cors::class,
     ];
 }
