@@ -288,21 +288,6 @@ function Index() {
                                     <small className="text-danger">{errorlist.nsx_id}</small>
                                 </B.FormGroup>
                             </div>
-
-                            {/* <CKEditor
-                                editor={ClassicEditor}
-                                data='<p>Mô tả sản phẩm</p>'
-                                onReady={editor => {
-                                    // You can store the "editor" and use when it is needed.
-                                }}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                }}
-                                onBlur={(event, editor) => {
-                                }}
-                                onFocus={(event, editor) => {
-                                }}
-                            /> */}
                             <div className='d-flex'>
                                 <B.FormGroup className='me-2 w-100'>
                                     <B.FormControl
@@ -328,14 +313,28 @@ function Index() {
                                 </B.FormGroup>
                                 <B.FormGroup className='w-100'>
                                     <B.FormControl
-                                        type='text'
+                                        as='textarea'
                                         name='ctSanPham'
+                                        id='ctSP'
                                         className='rounded-0 shadow-none mb-3'
                                         placeholder='Chi tiết sản phẩm'
                                         onChange={handleProductInput}
                                         value={productInput.ctSanPham}>
                                     </B.FormControl>
                                     <small className="text-danger">{errorlist.ctSanPham}</small>
+
+                                    <CKEditor
+                                        editor={ClassicEditor}
+
+                                        data='<p>Mô tả sản phẩm</p>'
+                                        onChange={(event, editor) => {
+                                            const data = editor.getData();
+                                        }}
+                                        onBlur={(event, editor) => {
+                                        }}
+                                        onFocus={(event, editor) => {
+                                        }}
+                                    />
                                 </B.FormGroup>
                             </div>
 
