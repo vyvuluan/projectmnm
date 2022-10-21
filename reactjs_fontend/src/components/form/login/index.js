@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./style.css";
 import { Button } from "react-bootstrap";
 import LoginGoogle from "./loginGoogle.js";
+import LoginFaceBook from "./loginFacebook";
 import swal from "sweetalert";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +16,6 @@ import { BsFillHouseFill } from "react-icons/bs";
 import axios from "axios";
 
 const Login = () => {
-
   const [loginInput, setLogin] = useState({
     email: "",
     password: "",
@@ -37,8 +37,8 @@ const Login = () => {
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/login", data).then((res) => {
         if (res.data.status === 200) {
-          localStorage.setItem('auth_token', res.data.token);
-          localStorage.setItem('auth_name', res.data.username)
+          localStorage.setItem("auth_token", res.data.token);
+          localStorage.setItem("auth_name", res.data.username);
           swal({
             title: "Đăng nhập thành công",
             icon: "success",
@@ -52,8 +52,8 @@ const Login = () => {
             icon: "warning",
             button: "đóng",
           });
-        }
-        else if (res.data.status === 400) {
+        } else if (res.data.status === 400) {
+          // console.log(res.data.err);
           swal({
             title: res.data.error,
             icon: "warning",
@@ -62,12 +62,55 @@ const Login = () => {
         }
       });
     });
-  }
+  };
+
+  const LoginGoogleSubmit = (e) => {
+    e.preventDefault();
+    const axios = require("axios").default;
+    // Make a request for a user with a given ID
+    axios
+      .get("api/login/google", {
+        headers: {
+          authorization: "google",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+  };
+  const LoginFaceBookSubmit = (e) => {
+    e.preventDefault();
+    const axios = require("axios").default;
+
+    // Make a request for a user with a given ID
+    axios
+      .get("api/login/facebook")
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+  };
   return (
     <>
       <div id="SignIn" className="Auth-form-container">
-        <form className="Auth-form" onSubmit={loginSubmit}>
-          <div className="Auth-form-content">
+        <div className="Auth-form">
+          <form className="Auth-form-content" onSubmit={loginSubmit}>
             <Link style={{ marginTop: "-20px", position: "absolute" }} to={`/`}>
               <BsFillHouseFill />
             </Link>
@@ -113,27 +156,12 @@ const Login = () => {
             <p className="text-center mt-2">
               Quên <Link to="/forgotpass">mật khẩu?</Link>
             </p>
-            <div className="loginOption">
-              <LoginGoogle />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className="p-1 border m-1 btnCus shadow-sm "
-
-              //   onClick={handleGoogleLogin}
-              >
-                <img
-                  width="20px"
-                  style={{ marginBottom: "3px", marginRight: "5px" }}
-                  alt="Google sign-in"
-                  src="https://img.icons8.com/fluency/48/000000/facebook-new.png"
-                />
-                Login with Facebook
-              </Button>
-            </div>
+          </form>
+          <div className="loginOption">
+            <LoginGoogle loginGG={LoginGoogleSubmit} />
+            <LoginFaceBook loginFB={LoginFaceBookSubmit} />
           </div>
-        </form>
+        </div>
       </div>
     </>
   );
