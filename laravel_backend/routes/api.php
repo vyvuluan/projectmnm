@@ -83,12 +83,18 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
 Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
     //api thêm phiếu nhập
     Route::post('addPN', [ManagePhieuNhapController::class,'addPN']);
+    //api cập nhật phiếu nhập
+    Route::put('updatePN/{pn_id}', [ManagePhieuNhapController::class,'updatePN']);
+    //api xóa chi tiết phiếu nhập
+    Route::delete('deletePN/{pn_id}', [ManagePhieuNhapController::class,'deletePN']);
     //api thêm chi tiết phiếu nhập
     Route::post('addCtPN/{id}', [ManagePhieuNhapController::class,'addCtPN']);
     //api xóa chi tiết phiếu nhập
     Route::delete('deleteCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'deleteCtPN']);
     //api cập nhật chi tiết phiếu nhập
     Route::put('updateCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'updateCtPN']);
+    //api cập nhật tổng tiền trong phiếu nhập
+    Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class,'setTongTien']);
     //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
             Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
