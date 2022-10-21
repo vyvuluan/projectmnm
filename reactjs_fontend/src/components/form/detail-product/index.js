@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import LoaderIcon from '../../Loading/index'
 import {
   BsStarFill,
   BsFacebook,
@@ -90,7 +91,9 @@ const DetailProduct = (props) => {
   }
 
   if (loading) {
-    return <h4>Loading...</h4>
+    return (
+      <LoaderIcon />
+    )
   }
   else {
     var avail_stock = '';
