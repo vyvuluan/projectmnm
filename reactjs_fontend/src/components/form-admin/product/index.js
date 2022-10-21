@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as B from 'react-bootstrap'
 import axios from 'axios';
 import swal from 'sweetalert'
@@ -12,40 +12,160 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 function Index() {
 
-    const [categoryInput, setCategory] = useState({
-        tenLoai: '',
-        error_list: [],
+    const [categorylist, setCategorylist] = useState([]);
+    const [ncclist, setNcclist] = useState([]);
+    const [nsxlist, setNsxlist] = useState([]);
+    const [productInput, setProduct] = useState({
+        loaisp_id: '',
+        tenSP: '',
+        soLuong: '',
+        gia: '',
+        ncc_id: '',
+        nsx_id: '',
+        baohanh: '',
+        moTa: '',
+        ctSanPham: '',
     });
 
-    const handleInput = (e) => {
+    const [pricture, setPicture] = useState([]);
+    const [errorlist, setError] = useState([]);
+
+    const handleProductInput = (e) => {
         e.persist();
-        setCategory({ ...categoryInput, [e.target.name]: e.target.value })
+        setProduct({ ...productInput, [e.target.name]: e.target.value });
     }
 
-    const submitCategory = (e) => {
-        e.preventDefault();
+    const handleImage = (e) => {
+        setPicture({ image: e.target.files[0] });
+    }
 
-        const data = {
-            tenLoai: categoryInput.tenLoai,
-        }
+    useEffect(() => {
+        let isMounted = true;
 
-        axios.post(`http://localhost:8000/api/kho/loaisp`, data).then(res => {
-            if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success')
-                document.getElementById('formLoaiSP').reset();
-            }
-            else if (res.data.status === 400) {
-                setCategory({ ...categoryInput, error_list: res.data.error })
+        axios.get(`http://localhost:8000/api/loaisp/view`).then(res => {
+            if (isMounted) {
+                if (res.data.status === 200) {
+                    setCategorylist(res.data.Loaisp);
+                }
             }
         });
+
+        return () => {
+            isMounted = false
+        };
+
+    }, []);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        axios.get(`http://localhost:8000/api/kho/ncc`).then(res => {
+            if (isMounted) {
+                if (res.data.status === 200) {
+                    setNcclist(res.data.Ncc.data);
+                }
+            }
+        });
+
+        return () => {
+            isMounted = false
+        };
+
+    }, []);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        axios.get(`http://localhost:8000/api/kho/nsx`).then(res => {
+            if (isMounted) {
+                if (res.data.status === 200) {
+                    setNsxlist(res.data.Nsx.data);
+                }
+            }
+        });
+
+        return () => {
+            isMounted = false
+        };
+
+    }, []);
+
+    const submitProduct = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('hinh', pricture.image);
+        formData.append('maLoai', productInput.loaisp_id);
+        formData.append('tenSP', productInput.tenSP);
+        formData.append('soLuongSP', productInput.soLuong);
+        formData.append('gia', productInput.gia);
+        formData.append('maNCC', productInput.ncc_id);
+        formData.append('maNSX', productInput.nsx_id);
+        formData.append('moTa', productInput.moTa);
+        formData.append('baoHanh', productInput.baohanh);
+        formData.append('ctSanPham', productInput.ctSanPham);
+
+
+        axios.post(`http://localhost:8000/api/kho/products`, formData).then(res => {
+            if (res.data.status === 200) {
+                swal("Thêm sản phẩm thành công", res.data.message, "success");
+                setProduct({
+                    ...productInput,
+                    loaisp_id: '',
+                    tenSP: '',
+                    soLuong: '',
+                    gia: '',
+                    ncc_id: '',
+                    nsx_id: '',
+                    baohanh: '',
+                    moTa: '',
+                    ctSanPham: '',
+                });
+                setError([]);
+            }
+            else if (res.data.status === 422) {
+                swal("Vui lòng nhập đầy đủ các mục", "", "error");
+                setError(res.data.errors);
+            }
+        });
+
     }
 
-    var display_error = [];
-    if (categoryInput.error_list) {
-        display_error = [
-            categoryInput.error_list.tenLoai,
-        ]
-    }
+
+    // const [categoryInput, setCategory] = useState({
+    //     tenLoai: '',
+    //     error_list: [],
+    // });
+
+    // const handleInput = (e) => {
+    //     e.persist();
+    //     setCategory({ ...categoryInput, [e.target.name]: e.target.value })
+    // }
+
+    // const submitCategory = (e) => {
+    //     e.preventDefault();
+
+    //     const data = {
+    //         tenLoai: categoryInput.tenLoai,
+    //     }
+
+    //     axios.post(`http://localhost:8000/api/kho/loaisp`, data).then(res => {
+    //         if (res.data.status === 200) {
+    //             swal('Success', res.data.message, 'success')
+    //             document.getElementById('formLoaiSP').reset();
+    //         }
+    //         else if (res.data.status === 400) {
+    //             setCategory({ ...categoryInput, error_list: res.data.error })
+    //         }
+    //     });
+    // }
+
+    // var display_error = [];
+    // if (categoryInput.error_list) {
+    //     display_error = [
+    //         categoryInput.error_list.tenLoai,
+    //     ]
+    // }
 
     return (
         <>
@@ -84,62 +204,153 @@ function Index() {
                 </B.Row>
 
                 <B.Row className='pe-xl-5 mb-5'>
+
                     <B.Col lg={8}>
-                        <B.Form >
+                        <B.Form onSubmit={submitProduct}>
                             <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Tên sản phẩm'></B.FormControl>
+                                <B.FormControl
+                                    type='text'
+                                    name='tenSP'
+                                    className='rounded-0 shadow-none mb-3'
+                                    placeholder='Tên sản phẩm'
+                                    onChange={handleProductInput}
+                                    value={productInput.tenSP}>
+                                </B.FormControl>
+                                <small className="text-danger">{errorlist.tenSP}</small>
                             </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormSelect className='rounded-0 shadow-none mb-3 text-muted'>
-                                    <option>Loại sản phẩm</option>
-                                    <option>Laptop</option>
-                                    <option>Máy tính bàn</option>
-                                    <option>Máy tính đồng bộ</option>
-                                </B.FormSelect>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Số lượng'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='file' className='rounded-0 shadow-none mb-3' placeholder='Hình'></B.FormControl>
-                            </B.FormGroup>
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data='<p>Mô tả sản phẩm</p>'
-                                onReady={editor => {
-                                    // You can store the "editor" and use when it is needed.
-                                }}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                }}
-                                onBlur={(event, editor) => {
-                                }}
-                                onFocus={(event, editor) => {
-                                }}
-                            />
-                            <div className='mb-3'></div>
-                        </B.Form>
-                    </B.Col>
-                    <B.Col lg={4}>
-                        <B.Form>
-                            <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+
+                            <div className='d-flex'>
+                                <B.FormGroup className='me-2 w-100'>
+                                    <B.FormSelect name='loaisp_id' onChange={handleProductInput} value={productInput.loaisp_id} className='rounded-0 shadow-none mb-3 text-muted'>
+                                        <option>Chọn loại sản phẩm</option>
+                                        {
+                                            categorylist && categorylist.map((item) => {
+                                                return (
+                                                    <option value={item.id} key={item.id}>{item.tenLoai}</option>
+                                                )
+                                            })
+                                        }
+                                    </B.FormSelect>
+                                    <small className="text-danger">{errorlist.loaisp_id}</small>
+                                </B.FormGroup>
+                                <B.FormGroup className='me-2 w-100'>
+                                    <B.FormControl
+                                        type='text'
+                                        name='soLuong'
+                                        className='rounded-0 shadow-none mb-3'
+                                        placeholder='Số lượng'
+                                        onChange={handleProductInput}
+                                        value={productInput.soLuong}>
+
+                                    </B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup className='w-100'>
+                                    <B.FormControl
+                                        type='text'
+                                        name='gia'
+                                        className='rounded-0 shadow-none mb-3'
+                                        placeholder='Giá'
+                                        onChange={handleProductInput}
+                                        value={productInput.gia}>
+                                    </B.FormControl>
+                                    <small className="text-danger">{errorlist.gia}</small>
+                                </B.FormGroup>
+                            </div>
+                            <div className='d-flex'>
+                                <B.FormGroup className='me-2 w-100'>
+                                    <B.FormControl type='file' name='image' onChange={handleImage} className='rounded-0 shadow-none mb-3'></B.FormControl>
+                                    <small className="text-danger">{errorlist.image}</small>
+                                </B.FormGroup>
+                                <B.FormGroup className='me-2 w-100'>
+                                    <B.FormSelect name='ncc_id' onChange={handleProductInput} value={productInput.ncc_id} className='rounded-0 shadow-none mb-3 text-muted'>
+                                        <option>Chọn nhà cung cấp</option>
+                                        {
+                                            ncclist && ncclist.map((item) => {
+                                                return (
+                                                    <option value={item.id} key={item.id}>{item.tenNCC}</option>
+                                                )
+                                            })
+                                        }
+                                    </B.FormSelect>
+                                    <small className="text-danger">{errorlist.ncc_id}</small>
+                                </B.FormGroup>
+                                <B.FormGroup className='w-100'>
+                                    <B.FormSelect name='nsx_id' onChange={handleProductInput} value={productInput.nsx_id} className='rounded-0 shadow-none mb-3 text-muted'>
+                                        <option>Chọn nhà sản xuất</option>
+                                        {
+                                            nsxlist && nsxlist.map((item) => {
+                                                return (
+                                                    <option value={item.id} key={item.id}>{item.tenNSX}</option>
+                                                )
+                                            })
+                                        }
+                                    </B.FormSelect>
+                                    <small className="text-danger">{errorlist.nsx_id}</small>
+                                </B.FormGroup>
+                            </div>
+                            <div className='d-flex'>
+                                <B.FormGroup className='me-2 w-100'>
+                                    <B.FormControl
+                                        type='text'
+                                        name='baohanh'
+                                        className='rounded-0 shadow-none mb-3'
+                                        placeholder='Bảo hành (tháng)'
+                                        onChange={handleProductInput}
+                                        value={productInput.baohanh}>
+                                    </B.FormControl>
+                                    <small className="text-danger">{errorlist.baohanh}</small>
+                                </B.FormGroup>
+                                <B.FormGroup className='me-2 w-100'>
+                                    <B.FormControl
+                                        type='text'
+                                        name='moTa'
+                                        className='rounded-0 shadow-none mb-3'
+                                        placeholder='Mô tả'
+                                        onChange={handleProductInput}
+                                        value={productInput.moTa}>
+                                    </B.FormControl>
+                                    <small className="text-danger">{errorlist.moTa}</small>
+                                </B.FormGroup>
+                                <B.FormGroup className='w-100'>
+                                    <B.FormControl
+                                        as='textarea'
+                                        name='ctSanPham'
+                                        id='ctSP'
+                                        className='rounded-0 shadow-none mb-3'
+                                        placeholder='Chi tiết sản phẩm'
+                                        onChange={handleProductInput}
+                                        value={productInput.ctSanPham}>
+                                    </B.FormControl>
+                                    <small className="text-danger">{errorlist.ctSanPham}</small>
+
+                                    <CKEditor
+                                        editor={ClassicEditor}
+
+                                        data='<p>Mô tả sản phẩm</p>'
+                                        onChange={(event, editor) => {
+                                            const data = editor.getData();
+                                        }}
+                                        onBlur={(event, editor) => {
+                                        }}
+                                        onFocus={(event, editor) => {
+                                        }}
+                                    />
+                                </B.FormGroup>
+                            </div>
+
+                            <B.Button type='submit' variant='outline-primary' className='rounded-0 py-2 mb-2'>
                                 <BsPersonPlusFill className='me-2' />
                                 Thêm sản phẩm
                             </B.Button>
-                            <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                                <FaUserEdit className='me-2' />
-                                Sửa sản phẩm
-                            </B.Button>
-                            <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
-                                <AiOutlineUserDelete className='me-2' />
-                                Xóa sản phẩm
-                            </B.Button>
                         </B.Form>
-                        <B.Form onSubmit={submitCategory} id='formLoaiSP'>
+                    </B.Col>
+                    <B.Col lg={4}>
+
+                        {/* <B.Form onSubmit={submitCategory} id='formLoaiSP'>
                             <hr />
                             <B.FormGroup>
-                                <B.FormControl type='text' name='tenLoai' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'
-                                    onChange={handleInput} value={categoryInput.tenLoai}></B.FormControl>
+                                <B.FormControl type='text' name='tenLoaiSP' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'
+                                    onChange={handleProductInput} value={categoryInput.tenLoaiSP}></B.FormControl>
                                 <span>{categoryInput.error_list.tenLoai}</span>
                                 <div className='d-flex d-inline-block justify-content-between'>
                                     <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 w-50 me-1'>
@@ -152,9 +363,10 @@ function Index() {
                                     </B.Button>
                                 </div>
                             </B.FormGroup>
-                        </B.Form>
+                        </B.Form> */}
 
                     </B.Col>
+
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
