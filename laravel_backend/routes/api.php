@@ -97,11 +97,11 @@ Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function (
     Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class,'setTongTien']);
     //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
-            Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
+            Route::get('editpx/{px_id}', [ManagePhieuXuatController::class,'editpx']);
                 //Api Quản lý chi tiết phiếu xuất
-                Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
-                Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
-                Route::put('updatectpx/{mapx}/{maspct}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
+                Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class,'xemctpx']);
+                Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'editctpx']);
+                Route::put('updatectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
                 Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);          // Thêm ct phiếu xuất
                 Route::delete('deletectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'deletectpx']);  // Xoá ct phiếu xuất
 
@@ -139,6 +139,7 @@ Route::resource('products/view', ProductController::class)->only('index');
 Route::get('products-search', [ProductController::class,'search']);
 //Api loại sản phẩm
 Route::resource('loaisp/view', LoaispController::class)->only('index');
+Route::get('cate/product/{id}', [LoaispController::class,'spcate']); // Lấy sản phẩm category
         // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
 

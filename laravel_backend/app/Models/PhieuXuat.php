@@ -16,7 +16,8 @@ class PhieuXuat extends Model
         'tenKH',
         'sdt',
         'diaChi',
-        'tongTien'
+        'tongTien',
+        'payment_id'
 
 
     ];
