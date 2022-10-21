@@ -24,6 +24,8 @@ use  App\Http\Controllers\admin\ManageEmployeeController;
 use  App\Http\Controllers\admin\ManageLoaispController;
 use  App\Http\Controllers\admin\ManageCustomerController;
 use  App\Http\Controllers\admin\ManagePhieuNhapController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

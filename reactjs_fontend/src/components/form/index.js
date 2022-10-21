@@ -18,6 +18,8 @@ export { default as Pagination } from "./pagination/index.js";
 export { default as Warrantycheck } from "./warranty/index.js";
 export { default as Checkout } from "./checkout/index.js";
 export { default as DropDownMenu } from "./dropdownMenu/index.js";
+export { default as ProductCate } from "./show-product-cate/index.js";
+
 
 
 
