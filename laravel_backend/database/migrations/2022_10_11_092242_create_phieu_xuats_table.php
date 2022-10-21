@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('tenKH');
             $table->integer('sdt');
             $table->string('diaChi');
+            $table->integer('payment_id')->nullable();
             $table->bigInteger('tongTien')->nullable();
             $table->timestamps();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

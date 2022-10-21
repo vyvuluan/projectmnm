@@ -11,6 +11,6 @@ class Loaisp extends Model
     use HasFactory;
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class,'maLoai','id');
     }
 }

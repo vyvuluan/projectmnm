@@ -49,6 +49,8 @@
 }
 .loginOption{
     text-align: center;
+    display: grid;
+    justify-content: space-around;
 }
 .boxShadow{
   box-shadow: 1px 2px rgb(157, 157, 157);

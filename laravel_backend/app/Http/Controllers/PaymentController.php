@@ -34,6 +34,7 @@ class PaymentController extends Controller
             $payment->tenKH=$request->tenKH;
             $payment->sdt=$request->sdt;
             $payment->diaChi=$request->diaChi;
+            $payment->payment_id=$request->payment_id;
             $tongTien=0;
 
             $cart = Cart::where('maKH',$maKH)->get();
@@ -78,14 +79,14 @@ class PaymentController extends Controller
                 'tenKH'=>'required|max:191',
                 'sdt'=>'required|numeric|digits:10',
                 'diaChi'=>'required|max:191',
-        
+
             ],[
                 'tenKH.required' => 'Ô email Không được bỏ trống',
                 'sdt.required' => 'Ô số điện thoại không được bỏ trống',
                 'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
                 'sdt.digits' => 'Ô số điện thoại phải là 10 số',
                 'diaChi.required' => 'Ô Địa chỉ không được bỏ trống',
-    
+
             ]);
 
             if($validator->fails())

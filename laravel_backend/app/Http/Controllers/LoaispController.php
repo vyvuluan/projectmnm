@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use  App\Models\Loaisp;
+use  App\Models\Product;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,6 +22,20 @@ class LoaispController extends Controller
             'status'=>200,
             'Loaisp'=>$loaisp,
         ]);
+    }
+    public function spcate($id)
+    {
+        $products = Loaisp::find($id)->products;
+
+        if($products)
+        {
+            return response()->json([
+                'status'=>200,
+                'Loaisp'=>$products,
+            ]);
+
+        }
+
     }
 
     /**

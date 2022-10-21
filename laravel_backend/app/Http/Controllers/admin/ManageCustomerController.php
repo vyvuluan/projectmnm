@@ -114,6 +114,15 @@ class ManageCustomerController extends Controller
             'diaChi'=>'required|max:60',
             'gioiTinh'=>'required|numeric',
            // 'user_id' =>'required|max:10',
+        ],[
+            'ten.required' => 'Ô họ tên Không được bỏ trống',
+            'ngaySinh.required' => 'Ô ngày sinh Không được bỏ trống',
+            'diaChi.required' => 'Ô địa chỉ Không được bỏ trống',
+            'gioiTinh.required' => 'Ô giới tính Không được bỏ trống',
+            'sdt.required' => 'Ô số điện thoại Không được bỏ trống',
+            'sdt.numeric' => 'Ô số điện thoại không đúng định dạng số',
+            'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+
         ]);
         if($validator->fails())
         {

@@ -182,4 +182,137 @@ class ManagePhieuNhapController extends Controller
             ]);
         }
     }
+
+    public function setTongTien ($pn_id)
+    {
+        if(auth('sanctum')->check())
+        {
+            
+            $pncts = PhieuNhap::find($pn_id)->pnct;
+           
+            if(empty($pncts))
+            {
+                return response()->json([
+                    'status' => 404,
+                ]);
+            }
+            else
+            {
+                $total = 0;
+                foreach($pncts as $pnct)
+                {
+                    $total += ($pnct->gia * $pnct->soluong);
+                }
+                $pn = PhieuNhap::find($pn_id);
+                $pn->tongTien = $total;
+                $pn->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'cập nhật tổng tiền thành công',
+                    'total' => $total
+                ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+
+    public function updatePN (Request $request ,$pn_id)
+    {
+        if(auth('sanctum')->check())
+        {
+            
+            $pn = PhieuNhap::find($pn_id);
+            
+            if(empty($pn))
+            {
+                return response()->json([
+                    'status' => 404,
+                ]);
+            }
+            else
+            {
+                if($pn->status == 1)
+                {
+                    return response()->json([
+                        'message' => 'Phiếu nhập đã thanh toán không thể chỉnh sửa',
+                    ]);
+                }
+                else
+                {
+                    $pn->ncc_id = $request->ncc_id;
+                    $pn->status = $request->status;
+                    $pn->employee_id = auth('sanctum')->user()->employee->id;
+                    $pn->save();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'cập nhật phiếu nhập thành công',
+                    ]);
+                }
+                
+            }
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
+
+    public function deletePN (Request $request ,$pn_id)
+    {
+        if(auth('sanctum')->check())
+        {
+            
+            $pn = PhieuNhap::find($pn_id);
+            
+            if(empty($pn))
+            {
+                return response()->json([
+                    'status' => 404,
+                ]);
+            }
+            else
+            {
+                if($pn->status == 1)
+                {
+                    return response()->json([
+                        'message' => 'Phiếu nhập đã thanh toán không thể chỉnh sửa',
+                    ]);
+                }
+                else
+                {
+                    $pncts = $pn->pnct;
+                    foreach($pncts as $pnct)
+                    {
+                        $product = Product::find($pnct->product_id);
+                        $product->soLuongSP = $product->soLuongSP - $pnct->soluong;
+                        $product->save();
+                        $ctpn_tmp= CtPhieuNhap::where('pn_id',$pn_id)
+                    ->Where('product_id',$pnct->product_id)->delete();
+                    }
+                    $pn->delete();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'xóa phiếu nhập thành công',
+                    ]);
+                }
+                
+            }
+        }
+        else
+        {
+            return response()->json([
+
+                'message' => 'Chưa đăng nhập',
+            ]);
+        }
+    }
 }

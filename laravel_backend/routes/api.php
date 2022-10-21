@@ -39,7 +39,7 @@ Route::post('/login', [UserController::class,'login']);
 Route::post('/register', [UserController::class,'register']);
 //api search nhà cung cấp theo tên mã số điện thoại
 Route::get('/searchNcc', [ManageNccController::class,'searchNcc']);
-//api search sản phẩm theo tên mã 
+//api search sản phẩm theo tên mã
 Route::get('/searchProduct', [ManageProductController::class,'searchProduct']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -83,20 +83,27 @@ Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
 Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
     //api thêm phiếu nhập
     Route::post('addPN', [ManagePhieuNhapController::class,'addPN']);
+    //api cập nhật phiếu nhập
+    Route::put('updatePN/{pn_id}', [ManagePhieuNhapController::class,'updatePN']);
+    //api xóa chi tiết phiếu nhập
+    Route::delete('deletePN/{pn_id}', [ManagePhieuNhapController::class,'deletePN']);
     //api thêm chi tiết phiếu nhập
     Route::post('addCtPN/{id}', [ManagePhieuNhapController::class,'addCtPN']);
     //api xóa chi tiết phiếu nhập
     Route::delete('deleteCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'deleteCtPN']);
     //api cập nhật chi tiết phiếu nhập
     Route::put('updateCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'updateCtPN']);
+    //api cập nhật tổng tiền trong phiếu nhập
+    Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class,'setTongTien']);
     //Api Quản lý  Phiếu Xuất
             Route::resource('px', ManagePhieuXuatController::class);
-            Route::get('editpx/{id}', [ManagePhieuXuatController::class,'editpx']);
+            Route::get('editpx/{px_id}', [ManagePhieuXuatController::class,'editpx']);
                 //Api Quản lý chi tiết phiếu xuất
-                Route::get('ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
-                Route::get('editctpx/{id_px}/{id_product}', [ManagePhieuXuatController::class,'editctpx']);
-                Route::put('updatectpx/{mapx}/{maspct}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
-                Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);
+                Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class,'xemctpx']);
+                Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'editctpx']);
+                Route::put('updatectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
+                Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);          // Thêm ct phiếu xuất
+                Route::delete('deletectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'deletectpx']);  // Xoá ct phiếu xuất
 
             // Api quản lý ncc , nsx
             Route::resource('ncc',ManageNccController::class);
@@ -132,6 +139,7 @@ Route::resource('products/view', ProductController::class)->only('index');
 Route::get('products-search', [ProductController::class,'search']);
 //Api loại sản phẩm
 Route::resource('loaisp/view', LoaispController::class)->only('index');
+Route::get('cate/product/{id}', [LoaispController::class,'spcate']); // Lấy sản phẩm category
         // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
 
