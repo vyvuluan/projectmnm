@@ -96,7 +96,11 @@ export default function Cart() {
     }
 
     if (loading) {
-        return <h4>Loading...</h4>
+        return <div class="d-flex justify-content-center text-primary">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
     }
 
     var cart_HTML = '';

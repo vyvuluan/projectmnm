@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import LoginGoogle from "./loginGoogle.js";
 import LoginFaceBook from "./loginFacebook";
 import swal from "sweetalert";
-
+import { ButtonLoading } from "../loading";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useEffect } from "react";
@@ -16,6 +16,8 @@ import { BsFillHouseFill } from "react-icons/bs";
 import axios from "axios";
 
 const Login = () => {
+  // const [loading, setLoading] = useState(true);
+
   const [loginInput, setLogin] = useState({
     email: "",
     password: "",
@@ -37,6 +39,7 @@ const Login = () => {
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/login", data).then((res) => {
         if (res.data.status === 200) {
+          
           localStorage.setItem("auth_token", res.data.token);
           localStorage.setItem("auth_name", res.data.username);
           swal({
@@ -106,6 +109,7 @@ const Login = () => {
         // always executed
       });
   };
+
   return (
     <>
       <div id="SignIn" className="Auth-form-container">

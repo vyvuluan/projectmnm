@@ -21,6 +21,7 @@ const Product = (props) => {
                         className="img-fluid w-100"
                         src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                         alt="img product"
+                        loading="lazy"
                       ></img>
                     </div>
                     <div className="text-center border-end border-start p-0 pt-4 pb-3 ">
