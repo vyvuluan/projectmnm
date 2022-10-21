@@ -30,7 +30,7 @@ class PaymentController extends Controller
             $payment = new PhieuXuat;
             $payment->customer_id=$maKH;
             $payment->status=0;
-            $payment->pt_ThanhToan='COD';
+            $payment->pt_ThanhToan=$request->payment_mode;
             $payment->tenKH=$request->tenKH;
             $payment->sdt=$request->sdt;
             $payment->diaChi=$request->diaChi;

@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import swal from 'sweetalert'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdPayments } from 'react-icons/md'
-import { BsFillBagCheckFill } from 'react-icons/bs'
+import { BsFillBagCheckFill, BsPaypal } from 'react-icons/bs'
 import { BiEdit } from 'react-icons/bi'
+import vnpay from '../../../img/vnpay.png'
 import * as B from 'react-bootstrap'
 
 function Checkout() {
 
-    const navaigate = useNavigate();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [checkoutInput, setCheckoutInput] = useState({
         fullname: '',
         phonenumber: '',
         address: '',
     });
-
     const [error, setError] = useState([]);
-
     const [cart, setCart] = useState([]);
+    const [show, setShow] = useState(false);
     var totalCartPrice = 0;
 
-
+    const handleClose = () => setShow(false);
 
     if (!localStorage.getItem('auth_token')) {
-        navaigate.push('/');
+        navigate('/');
         swal('Warning', 'Vui lòng login để mua hàng', 'error');
     }
 
@@ -49,7 +50,7 @@ function Checkout() {
                     setLoading(false);
                 }
                 else if (res.data.status === 401) {
-                    navaigate.push('/');
+                    navigate('/');
                     swal('Warning', res.data.message, 'error');
                 }
             }
@@ -59,34 +60,96 @@ function Checkout() {
             isMounted = false
         }
 
-    }, [navaigate]);
+    }, [navigate]);
 
     const handleInput = (e) => {
         e.persist();
         setCheckoutInput({ ...checkoutInput, [e.target.name]: e.target.value });
     }
 
-    const submitOrder = (e) => {
+    var orderinfo_data = {
+        tenKH: checkoutInput.fullname,
+        sdt: checkoutInput.phonenumber,
+        diaChi: checkoutInput.address,
+        payment_mode: 'PayPal',
+        payment_id: '',
+    }
+
+
+    const PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: totalCartPrice,
+                    },
+                },
+            ],
+        });
+    };
+
+    const onApprove = (data, actions) => {
+        return actions.order.capture().then(function (details) {
+            orderinfo_data.payment_id = details.id;
+
+            axios.post(`/api/dathang`, orderinfo_data).then(res => {
+                if (res.data.status === 200) {
+                    swal("Đặt hàng thành công", res.data.message, "success");
+                    setError([]);
+                    navigate('/');
+                }
+                else if (res.data.status === 422) {
+                    swal("Hãy nhập đầy đủ các mục", "", "error");
+                    setError(res.data.errors);
+                }
+            });
+        });
+    };
+
+
+    const submitOrder = (e, payment_mode) => {
         e.preventDefault();
 
-        const data = {
+        var data = {
             tenKH: checkoutInput.fullname,
             sdt: checkoutInput.phonenumber,
             diaChi: checkoutInput.address,
-            tongTien: totalCartPrice,
+            payment_mode: payment_mode,
+            payment_id: '',
         }
 
-        axios.post(`http://localhost:8000/api/dathang`, data).then(res => {
-            if (res.data.status === 200) {
-                swal('Đặt hàng thành công', res.data.message, 'success');
-                setError([]);
-                navaigate.push('/');
-            }
-            else if (res.data.status === 422) {
-                swal('Vui lòng điều đầy đủ vào các mục', '', 'error');
-                setError(res.data.errors);
-            }
-        });
+        switch (payment_mode) {
+            case 'cod':
+                axios.post(`http://localhost:8000/api/dathang`, data).then(res => {
+                    if (res.data.status === 200) {
+                        swal('Đặt hàng thành công', res.data.message, 'success');
+                        setError([]);
+                        navigate('/');
+                    }
+                    else if (res.data.status === 422) {
+                        swal('Vui lòng điều đầy đủ vào các mục', '', 'error');
+                        setError(res.data.errors);
+                    }
+                }); break;
+
+            case 'payonline':
+                axios.post(`/api/validate-order`, data).then(res => {
+                    if (res.data.status === 200) {
+                        setError([]);
+                        setShow(true);
+                    }
+                    else if (res.data.status === 422) {
+                        swal("Vui lòng điều đầy đủ vào các mục", "", "error");
+                        setError(res.data.errors);
+                    }
+                });
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     if (loading) {
@@ -105,7 +168,7 @@ function Checkout() {
                             </B.Card.Header>
                             <B.Card.Body>
                                 <B.Row>
-                                    <B.Col md={12}>
+                                    <B.Col md={6}>
                                         <B.FormGroup className='mb-3'>
                                             <B.FormLabel>Họ và tên</B.FormLabel>
                                             <B.FormControl type='text' name='fullname' onChange={handleInput} value={checkoutInput.fullname}
@@ -121,14 +184,6 @@ function Checkout() {
                                             <small className='text-danger'>{error.phonenumber}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    {/* <B.Col md={6}>
-                                        <B.FormGroup className='mb-3'>
-                                            <B.FormLabel>Email</B.FormLabel>
-                                            <B.FormControl type='email' name='email' onChange={handleInput} value={checkoutInput.email}
-                                                className='rounded-0 shadow-none'></B.FormControl>
-                                            <small className='text-danger'>{error.email}</small>
-                                        </B.FormGroup>
-                                    </B.Col> */}
                                     <B.Col md={12}>
                                         <B.FormGroup className='mb-3'>
                                             <B.FormLabel>Địa chỉ</B.FormLabel>
@@ -137,37 +192,19 @@ function Checkout() {
                                             <small className='text-danger'>{error.address}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    {/* <B.Col md={4}>
-                                        <B.FormGroup className='mb-3'>
-                                            <B.FormLabel>Quận/Huyện</B.FormLabel>
-                                            <B.FormControl type='text' name='state' onChange={handleInput} value={checkoutInput.state}
-                                                className='rounded-0 shadow-none'></B.FormControl>
-                                            <small className='text-danger'>{error.state}</small>
-                                        </B.FormGroup>
-                                    </B.Col>
-                                    <B.Col md={4}>
-                                        <B.FormGroup className='mb-3'>
-                                            <B.FormLabel>Thành phố</B.FormLabel>
-                                            <B.FormControl type='text' name='city' onChange={handleInput} value={checkoutInput.city}
-                                                className='rounded-0 shadow-none'></B.FormControl>
-                                            <small className='text-danger'>{error.city}</small>
-                                        </B.FormGroup>
-                                    </B.Col>
-                                    <B.Col md={4}>
-                                        <B.FormGroup className='mb-3'>
-                                            <B.FormLabel>Zip code</B.FormLabel>
-                                            <B.FormControl type='text' name='zipcode' onChange={handleInput} value={checkoutInput.zipcode}
-                                                className='rounded-0 shadow-none'></B.FormControl>
-                                            <small className='text-danger'>{error.zipcode}</small>
-                                        </B.FormGroup> */}
-                                    {/* </B.Col> */}
                                 </B.Row>
                             </B.Card.Body>
                             <B.Card.Footer className='border-secondary bg-transparent text-end'>
-                                <B.Button className='rounded-0 my-3 py-2 fw-semibold' variant='primary'
-                                    onClick={submitOrder}>
-                                    <BsFillBagCheckFill className='me-2 fs-4' />Đặt hàng
-                                </B.Button>
+                                <B.FormGroup>
+                                    <B.Button className='rounded-0 my-3 me-2 py-2' variant='primary'
+                                        onClick={(e) => submitOrder(e, 'cod')}>
+                                        <BsFillBagCheckFill className='me-2 fs-4' />Thanh toán COD
+                                    </B.Button>
+                                    <B.Button className='rounded-0 py-2 me-2 text-lightgray' variant='primary'
+                                        onClick={(e) => submitOrder(e, 'payonline')}>
+                                        <BsPaypal className='me-2 fs-4' />Thanh toán qua Paypal
+                                    </B.Button>
+                                </B.FormGroup>
                             </B.Card.Footer>
                         </B.Card>
                     </B.Col>
@@ -218,6 +255,18 @@ function Checkout() {
 
     return (
         <>
+            <B.Modal show={show} onHide={handleClose}>
+                <B.ModalHeader closeButton>
+                    <B.ModalTitle>Thanh toán qua PayPal</B.ModalTitle>
+                </B.ModalHeader>
+                <B.ModalBody>
+                    <PayPalButton
+                        createOrder={(data, actions) => createOrder(data, actions)}
+                        onApprove={(data, actions) => onApprove(data, actions)}
+                    />
+                </B.ModalBody>
+            </B.Modal>
+
             <B.Container fluid className='bg-secondary mb-5'>
                 <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
                     <h1 className='fw-semibold text-uppercase mb-3'>Thanh toán</h1>

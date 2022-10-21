@@ -63,10 +63,10 @@ export default function Header() {
       <>
         <div className="row ">
           <div className="col-sm-9 text-center m-auto badge text-wrap">
-            
+
             <span className="text-danger  ">Chào, {nameUser}</span>
           </div>
-          <div className="col-3 btn  rounded-0 border " style={{width:"51px"}}>
+          <div className="col-3 btn  rounded-0 border " style={{ width: "51px" }}>
             <DropDownMenu logout={logoutSubmit} />
           </div>
           {/* <Bt.NavLink  className="fs-5 fw-normal me-2"> */}
@@ -149,14 +149,14 @@ export default function Header() {
         </Bt.Row>
         <Bt.Row className="align-items-center py-3 px-xl-5">
           <Bt.Col lg={3} className="d-none d-lg-block">
-            <a href={"#"} className="text-decoration-none">
+            <Link to={'/'} className="text-decoration-none">
               <h1 className="text-dark m-0 display-5 fw-semibold">
                 <span className="font-weight-bold border px-3 me-1 text-primary">
                   L3M
                 </span>
                 Shop
               </h1>
-            </a>
+            </Link>
           </Bt.Col>
           <Bt.Col lg={6} className="col-6 text-start">
             <Bt.Form>
