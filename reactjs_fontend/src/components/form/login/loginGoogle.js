@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 const LoginGoogle = (props) => {
   
   // const [data, setData] = useState({});
-  console.log(props.l);
+  // console.log(props.l);
     
   return (
     <>

@@ -7,6 +7,7 @@ import {
   SectionTitle,
   Product,
 } from "../../form/index.js";
+import swal from "sweetalert";
 const axios = require("axios").default;
 
 // Make a request for a user with a given ID
@@ -23,6 +24,11 @@ const HomePage = () => {
     if(paramToken.get('token') && paramEmail.get('email')){
         localStorage.setItem('auth_token', paramToken.get('token'))
         localStorage.setItem('auth_name',paramEmail.get('email'))
+        swal({
+          title: "Đăng nhập thành công",
+          icon: "success",
+          button: "đóng",
+        });
         history('/')
     }
     //clear function
