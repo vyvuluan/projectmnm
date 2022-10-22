@@ -175,7 +175,10 @@ class UserController extends Controller
             return $validated;
         }
 
-        return Socialite::driver($provider)->stateless()->redirect();
+        return response()->json([
+            'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
+        ]);
+        //return Socialite::driver($provider)->stateless()->redirect();
     }
 
     /**
@@ -219,7 +222,7 @@ class UserController extends Controller
 
         return response()->json([
         'status' => 200,
-        'message' => 'Đăng xuất thành công',
+        'message' => 'Đăng nhập thành công',
         'userCreated' =>$userCreated ,
         'Access-Token' => $token]);
     }

@@ -41,7 +41,7 @@ export default function Header() {
             icon: "success",
             button: "đóng",
           });
-          history("/");
+          history("/");   
         }
       });
     });
@@ -237,6 +237,11 @@ export default function Header() {
                   <Bt.NavLink className="fs-5 fw-normal me-2">
                     <Link className="text-decoration-none" to="/contact">
                       Liên hệ
+                    </Link>
+                  </Bt.NavLink>
+                  <Bt.NavLink className="fs-5 fw-normal me-2">
+                    <Link className="text-decoration-none" to="/pageproducts">
+                      Sản phẩm
                     </Link>
                   </Bt.NavLink>
                 </Bt.Nav>
