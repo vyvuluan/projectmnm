@@ -325,14 +325,9 @@ function Index() {
 
                                     <CKEditor
                                         editor={ClassicEditor}
-
                                         data='<p>Mô tả sản phẩm</p>'
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
-                                        }}
-                                        onBlur={(event, editor) => {
-                                        }}
-                                        onFocus={(event, editor) => {
                                         }}
                                     />
                                 </B.FormGroup>

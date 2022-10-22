@@ -5,6 +5,7 @@ import { MdPayments } from 'react-icons/md'
 import axios from 'axios';
 import swal from 'sweetalert'
 import { Link, useNavigate } from 'react-router-dom'
+import LoaderIcon from '../../Loading/index'
 
 
 export default function Cart() {
@@ -12,6 +13,7 @@ export default function Cart() {
     const navaigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
+
     var totalCartPrice = 0;
 
     if (!localStorage.getItem('auth_token')) {
@@ -95,11 +97,22 @@ export default function Cart() {
     }
 
     if (loading) {
-        return <div class="d-flex justify-content-center text-primary">
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
-      </div>
+        return (
+            <div>
+                <Bt.Container fluid className='bg-secondary mb-5'>
+                    <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
+                        <h1 className='fw-semibold text-uppercase mb-3'>Giỏ hàng</h1>
+                        <div className='d-inline-flex'>
+                            <p className='m-0'><Link to={'/'} className='text-decoration-none' variant='primary'>Home</Link></p>
+                            <p className='m-0 px-2'>-</p>
+                            <p className='m-0 text-muted'>Giỏ hàng</p>
+                        </div>
+                    </div>
+                </Bt.Container>
+                <LoaderIcon />
+            </div>
+
+        )
     }
 
     var cart_HTML = '';
@@ -194,7 +207,7 @@ export default function Cart() {
                 <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
                     <h1 className='fw-semibold text-uppercase mb-3'>Giỏ hàng</h1>
                     <div className='d-inline-flex'>
-                        <p className='m-0'><a href='' className='text-decoration-none' variant='primary'>Home</a></p>
+                        <p className='m-0'><Link to={'/'} className='text-decoration-none' variant='primary'>Home</Link></p>
                         <p className='m-0 px-2'>-</p>
                         <p className='m-0 text-muted'>Giỏ hàng</p>
                     </div>
