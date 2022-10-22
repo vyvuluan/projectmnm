@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import { useSearchParams } from "react-router-dom";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
-
+  
   const [listProduct, setListProduct] = useState([]);
   // const [search, setSearch] = useSearchParams(
   //   search.get('search')

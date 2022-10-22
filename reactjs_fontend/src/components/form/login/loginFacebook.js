@@ -3,11 +3,12 @@ import { Button } from "react-bootstrap";
 const LoginFaceBook = (props) => {
   return (
     <>
-      <Button
-        type="submit"
+      <a
+        type="button"
         variant="contained"
         color="primary"
-        className="p-1 border m-1 btnCus shadow-sm "
+        className="p-1 border m-1 btnCus shadow-sm rounded"
+        style={{ textDecoration: "none", textAlign: "center" }}
         onClick={props.loginFB}
       >
         <img
@@ -17,7 +18,7 @@ const LoginFaceBook = (props) => {
           src="https://img.icons8.com/fluency/48/000000/facebook-new.png"
         />
         Login with Facebook
-      </Button>
+      </a>
     </>
   );
 };

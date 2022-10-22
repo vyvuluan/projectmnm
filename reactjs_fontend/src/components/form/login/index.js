@@ -17,10 +17,36 @@ import axios from "axios";
 
 const Login = () => {
   // const [loading, setLoading] = useState(true);
-  // const [loginGoogle, setLoginGoogle] = useState({});
-  const responseGoogle = (response) => {
-    console.log(response);
-  };
+  const [loginGoogle, setLoginGoogle] = useState();
+  // const responseGoogle = (response) => {
+  //   console.log(response);
+  //   const axios = require("axios").default;
+  //   // Make a request for a user with a given ID
+  //   axios
+  //     .get("api/login/google", {
+  //       headers: {
+  //         authorization: "google",
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       if (response.status === 200) {
+  //         // setLoginGoogle(window.location.replace(response.data.url))
+
+  //         // console.log(response.data.url);
+
+  //         setLoginGoogle(response.data.url);
+
+  //         // window.location.replace(response.da  ta.url);
+  //         console.log(loginGoogle);
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       console.log(error);
+  //     })
+  //     .finally(function () {});
+  // };
   const [loginInput, setLogin] = useState({
     email: "",
     password: "",
@@ -69,8 +95,7 @@ const Login = () => {
     });
   };
 
-  const LoginGoogleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
     const axios = require("axios").default;
     // Make a request for a user with a given ID
     axios
@@ -84,11 +109,10 @@ const Login = () => {
         if (response.status === 200) {
           // setLoginGoogle(window.location.replace(response.data.url))
 
-          console.log(response.data.url);
-
-          // setLoginGoogle(response.data.url);
+          // console.log(response.data.url)
+          setLoginGoogle(response.data.url);
           // window.location.replace(response.da  ta.url);
-          // console.log(loginGoogle);
+          console.log(loginGoogle);
         }
       })
       .catch(function (error) {
@@ -96,7 +120,7 @@ const Login = () => {
         console.log(error);
       })
       .finally(function () {});
-  };
+  }, []);
 
   const LoginFaceBookSubmit = (e) => {
     e.preventDefault();
@@ -170,9 +194,9 @@ const Login = () => {
             </p>
           </form>
           <div className="loginOption">
-            <LoginGoogle loginGG={LoginGoogleSubmit}/>
+            <LoginGoogle loginGG={loginGoogle} />
             {/* <a href="https://accounts.google.com/o/oauth2/auth?client_id=461024670660-er4iameomdo83t18khucms5bstnno4it.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Flogin%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code">
-              login đ
+              login
             </a> */}
             {/* <GoogleLogin
               clientId="1082529749855-m2jvr7o57bsit6a8colcbsv0ro324ac6.apps.googleusercontent.com"

@@ -3,16 +3,17 @@ import { Button } from "react-bootstrap";
 const LoginGoogle = (props) => {
   
   // const [data, setData] = useState({});
-  // console.log(data);
+  console.log(props.l);
     
   return (
     <>
-      <Button
-        type="submit"
+      <a
+        type="button"
         variant="contained"
         color="primary"
-        onClick={props.loginGG}
-        className="p-1 border m-1 btnCus shadow-sm "
+        href={props.loginGG}
+        className="p-1 border m-1 btnCus shadow-sm rounded"
+        style={{textDecoration:"none", textAlign:"center"}}
       >
         <img
           width="20px"
@@ -21,7 +22,7 @@ const LoginGoogle = (props) => {
           src="https://img.icons8.com/color/48/000000/google-logo.png"
         />
         Login with Google
-      </Button>
+      </a>
     </>
   );
 };
