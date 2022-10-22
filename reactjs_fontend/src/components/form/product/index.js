@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { AiFillEye } from "react-icons/ai";
 import { BsFillCartFill } from "react-icons/bs";
-import { Link,useSearchParams,useParams } from "react-router-dom";
+import { Link, useSearchParams, useParams } from "react-router-dom";
 import Pagination from "../pagination";
 import axios from "axios";
 
 const Product = (props) => {
   const { item } = props;
-  const id = useParams();
+  // const id = useParams();
 
   // const handleFindId = (id) => {
   //   // console.log(axios.get('/api/loaisp/view').then((res) => res.data.Loaisp));
@@ -21,7 +21,6 @@ const Product = (props) => {
       <div className="container-fluid pt-5">
         <div className="row px-xl-4 pb-3">
           {item.map((item, index) => {
-            
             for (let i = 0; i <= index; i++) {
               return (
                 <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
