@@ -6,9 +6,9 @@ import { Button } from "react-bootstrap";
 import LoginGoogle from "./loginGoogle.js";
 import LoginFaceBook from "./loginFacebook";
 import swal from "sweetalert";
-
+import { ButtonLoading } from "../loading";
 import "react-toastify/dist/ReactToastify.css";
-
+import { GoogleLogin } from "react-google-login";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
@@ -16,6 +16,11 @@ import { BsFillHouseFill } from "react-icons/bs";
 import axios from "axios";
 
 const Login = () => {
+  // const [loading, setLoading] = useState(true);
+  // const [loginGoogle, setLoginGoogle] = useState({});
+  const responseGoogle = (response) => {
+    console.log(response);
+  };
   const [loginInput, setLogin] = useState({
     email: "",
     password: "",
@@ -73,36 +78,33 @@ const Login = () => {
         headers: {
           authorization: "google",
           "Content-Type": "application/json",
-          
         },
       })
       .then(function (response) {
-        window.location.replace(response.data.url);
+        if (response.status === 200) {
+          // setLoginGoogle(window.location.replace(response.data.url))
 
-        console.log(response.data);
-       
+          console.log(response.data.url);
+
+          // setLoginGoogle(response.data.url);
+          // window.location.replace(response.da  ta.url);
+          // console.log(loginGoogle);
+        }
       })
       .catch(function (error) {
         // handle error
         console.log(error);
       })
-      .finally(function () {
-       
-      });
+      .finally(function () {});
   };
 
-
-
-
-
-  
   const LoginFaceBookSubmit = (e) => {
     e.preventDefault();
-    const axios = require("axios").default;
+    // const axios = require("axios").default;
 
     // Make a request for a user with a given ID
     axios
-      .get("api/login/facebook")
+      .get()
       .then(function (response) {
         // handle success
         console.log(response);
@@ -115,6 +117,7 @@ const Login = () => {
         // always executed
       });
   };
+
   return (
     <>
       <div id="SignIn" className="Auth-form-container">
@@ -167,7 +170,17 @@ const Login = () => {
             </p>
           </form>
           <div className="loginOption">
-            <LoginGoogle loginGG={LoginGoogleSubmit} />
+            <LoginGoogle loginGG={LoginGoogleSubmit}/>
+            {/* <a href="https://accounts.google.com/o/oauth2/auth?client_id=461024670660-er4iameomdo83t18khucms5bstnno4it.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Flogin%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code">
+              login đ
+            </a> */}
+            {/* <GoogleLogin
+              clientId="1082529749855-m2jvr7o57bsit6a8colcbsv0ro324ac6.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            /> */}
             <LoginFaceBook loginFB={LoginFaceBookSubmit} />
           </div>
         </div>

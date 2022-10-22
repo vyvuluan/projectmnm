@@ -32,7 +32,7 @@
   z-index: 2;
   position: absolute;
   top: 50px;
-  right: 7px;
+  right: 0;
   background-color: rgb(255, 255, 255);
   border-radius: var(--border-radius);
   padding: 10px 20px;

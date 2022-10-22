@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import "./style.css";
 const DropDownMenu = (props) => {
+
   const [open, setOpen] = useState(false);
     // console.log(props.logout);
   let menuRef = useRef();
@@ -44,7 +45,8 @@ const DropDownMenu = (props) => {
 
         <div className={`dropdown-menu1 ${open ? "active" : "inactive"}`}>
           <ul className="ul">
-            <DropdownItem img={user} text={"My Profile"} />
+            <DropdownItem img={user} text={"My Profile"}   />
+          {/* logout1={test}  */}
             <DropdownItem img={edit} text={"Edit Profile"} />
             <DropdownItem img={inbox} text={"Inbox"} />
             <DropdownItem img={settings} text={"Settings"} />

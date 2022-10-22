@@ -22,6 +22,7 @@ import {
   Contact,
   Warrantycheck,
   Checkout,
+  
 } from "../components/form";
 import {
   DetailCustomer,
@@ -49,6 +50,7 @@ export const PublicRouter = [
     component: DetailProduct,
     layout: _Layout,
   },
+
   {
     path: "/CheckOrder",
     component: CheckOrder,

@@ -1,13 +1,73 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
+import axios from "axios";
+import { Loading } from "../loading";
+import { Link } from "react-router-dom";
+import Product from "../product";
 const Category = () => {
+  const [loading, setLoading] = useState(true);
+  const [getID, setGetID] = useState();
+  const [listCategory, setListCategory] = useState([]);
+  const [linkCate, setLinkcate] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    axios
+      .get("/api/loaisp/view")
+      .then(function (response) {
+        // console.log(response.data.Loaisp);
+        if (response.data.status === 200) {
+          setListCategory(response.data.Loaisp);
+          setLoading(false);
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+    //clear function
+    return () => controller.abort();
+  }, []);
+
+
+
+  if (loading) {
+    return <Loading />;
+  } else {
+    var category_Html = "";
+    if (listCategory.length > 0) {
+      category_Html = (
+        <>
+          {listCategory.map((item) => {
+            return (
+              
+              <Link to={'/pageproducts?category=' + item.id}>
+              <a
+                key={item.id}
+                className="nav-item nav-link"
+                // onClick={HandleClickCategory}
+              >
+                {item.tenLoai}
+              </a>
+              </Link>
+              
+            );
+          })}
+        </>
+      );
+    } else {
+      <span>Không có category</span>;
+    }
+  }
+
   return (
     <>
       <div className="col-sm-2 d-none d-lg-block">
         <a
-          className="btn shadow-none d-flex align-items-center bg-primary text-white"
-          data-toggle="collapse"
-          // href="#navbar-vertical"
+          className="btn d-flex align-items-center bg-primary text-white"
           style={{ height: "48px", paddingLeft: "10px" }}
         >
           <h5 className="m-0 font-size-30">Categories</h5>
@@ -24,33 +84,7 @@ const Category = () => {
               paddingRight: "10px",
             }}
           >
-            <a href="" className="nav-item nav-link border-bottom">
-              Shirts
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Jeans
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Swimwear
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Sleepwear
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Sportswear
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Jumpsuits
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Blazers
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Jackets
-            </a>
-            <a href="" className="nav-item nav-link border-bottom">
-              Shoes
-            </a>
+            {category_Html}
           </div>
         </nav>
       </div>

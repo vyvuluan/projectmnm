@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { MdPayments } from 'react-icons/md'
 import { BsFillBagCheckFill, BsPaypal } from 'react-icons/bs'
 import { BiEdit } from 'react-icons/bi'
-import vnpay from '../../../img/vnpay.png'
+import LoaderIcon from '../../Loading/index'
 import * as B from 'react-bootstrap'
 
 function Checkout() {
@@ -153,7 +153,25 @@ function Checkout() {
     }
 
     if (loading) {
-        return <h4>Loading...</h4>
+        return (
+            <div>
+                <B.Container fluid className='bg-secondary mb-5'>
+                    <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
+                        <h1 className='fw-semibold text-uppercase mb-3'>Thanh toán</h1>
+                        <div className='d-inline-flex'>
+                            <p className='m-0'><Link to={'/'} className='text-decoration-none' variant='primary'>Home</Link></p>
+                            <p className='m-0 px-2'>-</p>
+                            <p className='m-0'><Link to={'/cart'} className='text-decoration-none' variant='primary'>Giỏ hàng</Link></p>
+                            <p className='m-0 px-2'>-</p>
+                            <p className='m-0 text-muted'>Thanh toán</p>
+                        </div>
+                    </div>
+                </B.Container>
+
+                <LoaderIcon />
+            </div>
+
+        )
     }
 
     var checkout_HTML = '';
@@ -271,9 +289,9 @@ function Checkout() {
                 <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
                     <h1 className='fw-semibold text-uppercase mb-3'>Thanh toán</h1>
                     <div className='d-inline-flex'>
-                        <p className='m-0'><a href='' className='text-decoration-none' variant='primary'>Home</a></p>
+                        <p className='m-0'><Link to={'/'} className='text-decoration-none' variant='primary'>Home</Link></p>
                         <p className='m-0 px-2'>-</p>
-                        <p className='m-0'><a href='' className='text-decoration-none' variant='primary'>Giỏ hàng</a></p>
+                        <p className='m-0'><Link to={'/cart'} className='text-decoration-none' variant='primary'>Giỏ hàng</Link></p>
                         <p className='m-0 px-2'>-</p>
                         <p className='m-0 text-muted'>Thanh toán</p>
                     </div>
