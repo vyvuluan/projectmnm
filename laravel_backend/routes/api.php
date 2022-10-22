@@ -37,126 +37,128 @@ use  App\Http\Controllers\admin\ManagePhieuNhapController;
 |
 */
 
-Route::post('/login', [UserController::class,'login']);
-Route::post('/register', [UserController::class,'register']);
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/register', [UserController::class, 'register']);
 //api search nhà cung cấp theo tên mã số điện thoại
-Route::get('/searchNcc', [ManageNccController::class,'searchNcc']);
+Route::get('/searchNcc', [ManageNccController::class, 'searchNcc']);
 //api search sản phẩm theo tên mã
-Route::get('/searchProduct', [ManageProductController::class,'searchProduct']);
+Route::get('/searchProduct', [ManageProductController::class, 'searchProduct']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [UserController::class,'logout']);
-    Route::post('/contact', [ContactContrller::class,'store']);
+    Route::post('/logout', [UserController::class, 'logout']);
+    Route::post('/contact', [ContactContrller::class, 'store']);
 });
 
-Route::get('/login/{provider}', [UserController::class,'redirectToProvider']);
-Route::get('/login/{provider}/callback', [UserController::class,'handleProviderCallback']);
-Route::post('reset-password', [PasswordResetController::class,'sendMail']);
-Route::put('reset-password/{token}',[PasswordResetController::class,'reset']);
+Route::get('/login/{provider}', [UserController::class, 'redirectToProvider']);
+Route::get('/login/{provider}/callback', [UserController::class, 'handleProviderCallback']);
+Route::post('reset-password', [PasswordResetController::class, 'sendMail']);
+Route::put('reset-password/{token}', [PasswordResetController::class, 'reset']);
 //api của trang chủ
-Route::get('/home', [HomeController::class,'home']);
+Route::get('/home', [HomeController::class, 'home']);
 //api thông tin tài khoản
-Route::get('/detailUser', [UserController::class,'detailUser']);
-Route::put('/detailUser', [UserController::class,'updateUser']);
-Route::put('/changePass', [UserController::class,'changePass']);
+Route::get('/detailUser', [UserController::class, 'detailUser']);
+Route::put('/detailUser', [UserController::class, 'updateUser']);
+Route::put('/changePass', [UserController::class, 'changePass']);
 //api tình trạng đơn hàng
-Route::get('/getStatusDH/{id}', [PaymentController::class,'getStatus']);
+Route::get('/getStatusDH/{id}', [PaymentController::class, 'getStatus']);
 //api check bảo hành
-Route::get('/checkBaoHanh/{id}', [BaoHanhController::class,'checkBaoHanh']);
+Route::get('/checkBaoHanh/{id}', [BaoHanhController::class, 'checkBaoHanh']);
 //login ở admin
-Route::post('/loginAdmin', [ManageUserController::class,'login']);
+Route::post('/loginAdmin', [ManageUserController::class, 'login']);
 //admin
-Route::middleware('auth:sanctum','role')->prefix('admin')->group(function () {
+Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     Route::get('noti', function () {
         return 'tui là admin';
     });
     //get all user
-    Route::get('manageUser',[ ManageUserController::class,'index']);
+    Route::get('manageUser', [ManageUserController::class, 'index']);
 
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên
-    Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class,'createUser']);
-
+    Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class, 'createUser']);
 });
 
 
 
 //thủ kho
-Route::middleware('auth:sanctum','role_thukho')->prefix('kho')->group(function () {
+Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function () {
     //api thêm phiếu nhập
-    Route::post('addPN', [ManagePhieuNhapController::class,'addPN']);
+    Route::post('addPN', [ManagePhieuNhapController::class, 'addPN']);
     //api cập nhật phiếu nhập
-    Route::put('updatePN/{pn_id}', [ManagePhieuNhapController::class,'updatePN']);
+    Route::put('updatePN/{pn_id}', [ManagePhieuNhapController::class, 'updatePN']);
     //api xóa chi tiết phiếu nhập
-    Route::delete('deletePN/{pn_id}', [ManagePhieuNhapController::class,'deletePN']);
+    Route::delete('deletePN/{pn_id}', [ManagePhieuNhapController::class, 'deletePN']);
     //api thêm chi tiết phiếu nhập
-    Route::post('addCtPN/{id}', [ManagePhieuNhapController::class,'addCtPN']);
+    Route::post('addCtPN/{id}', [ManagePhieuNhapController::class, 'addCtPN']);
     //api xóa chi tiết phiếu nhập
-    Route::delete('deleteCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'deleteCtPN']);
+    Route::delete('deleteCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class, 'deleteCtPN']);
     //api cập nhật chi tiết phiếu nhập
-    Route::put('updateCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class,'updateCtPN']);
+    Route::put('updateCtPN/{pn_id}/{product_id}', [ManagePhieuNhapController::class, 'updateCtPN']);
     //api cập nhật tổng tiền trong phiếu nhập
-    Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class,'setTongTien']);
+    Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class, 'setTongTien']);
+    //api hiển thị all phiếu nhập
+    Route::get('getAllPN', [ManagePhieuNhapController::class, 'getAllPN']);
+    //api hiển thị chi tiết phiếu nhập và phiếu nhập
+    Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
+
     //Api Quản lý  Phiếu Xuất
-            Route::resource('px', ManagePhieuXuatController::class);
-            Route::get('editpx/{px_id}', [ManagePhieuXuatController::class,'editpx']);
-                //Api Quản lý chi tiết phiếu xuất
-                Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class,'xemctpx']);
-                Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'editctpx']);
-                Route::put('updatectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'updatectpx']);  // update ct phiếu xuất
-                Route::post('addctpx', [ManagePhieuXuatController::class,'addctpx']);          // Thêm ct phiếu xuất
-                Route::delete('deletectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class,'deletectpx']);  // Xoá ct phiếu xuất
+    Route::resource('px', ManagePhieuXuatController::class);
+    Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
+    //Api Quản lý chi tiết phiếu xuất
+    Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class, 'xemctpx']);
+    Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'editctpx']);
+    Route::put('updatectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'updatectpx']);  // update ct phiếu xuất
+    Route::post('addctpx', [ManagePhieuXuatController::class, 'addctpx']);          // Thêm ct phiếu xuất
+    Route::delete('deletectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'deletectpx']);  // Xoá ct phiếu xuất
 
-            // Api quản lý ncc , nsx
-            Route::resource('ncc',ManageNccController::class);
-            Route::resource('nsx',ManageNsxController::class);
+    // Api quản lý ncc , nsx
+    Route::resource('ncc', ManageNccController::class);
+    Route::resource('nsx', ManageNsxController::class);
 
-            //Api Quản lý sản phẩm
-            Route::resource('products',ManageProductController::class);
-            Route::get('products-search', [ManageProductController::class,'search']); // Tìm Kiếm sản phẩm
-            //Api quản lý loại sản phẩm
-            Route::resource('loaisp', ManageLoaispController::class);
-                // Chi tiết sản phẩm
-                Route::get('products/chitiet/{id}', [ManageProductController::class,'ctsp']);
-
+    //Api Quản lý sản phẩm
+    Route::resource('products', ManageProductController::class);
+    Route::get('products-search', [ManageProductController::class, 'search']); // Tìm Kiếm sản phẩm
+    //Api quản lý loại sản phẩm
+    Route::resource('loaisp', ManageLoaispController::class);
+    // Chi tiết sản phẩm
+    Route::get('products/chitiet/{id}', [ManageProductController::class, 'ctsp']);
 });
 
 //nhân viên
-Route::middleware('auth:sanctum','role_nhanvien')->prefix('nhanvien')->group(function () {
+Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(function () {
 
-            //Api Quản lý  Phiếu Xuất
-            Route::resource('px', ManagePhieuXuatController::class);
-            Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class,'xemctpx']);
+    //Api Quản lý  Phiếu Xuất
+    Route::resource('px', ManagePhieuXuatController::class);
+    Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class, 'xemctpx']);
 
-            //Api Quản lý khách hàng
-            Route::resource('customer', ManageCustomerController::class);
-
+    //Api Quản lý khách hàng
+    Route::resource('customer', ManageCustomerController::class);
 });
 
 
-                            // API Long
-                            // API Khách hàng
+// API Long
+// API Khách hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
-Route::get('products-search', [ProductController::class,'search']);
+Route::get('products-search', [ProductController::class, 'search']);
 //Api loại sản phẩm
 Route::resource('loaisp/view', LoaispController::class)->only('index');
-Route::get('cate/product/{id}', [LoaispController::class,'spcate']); // Lấy sản phẩm category
-        // Chi tiết sản phẩm
-        Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
+Route::get('cate/product/{id}', [LoaispController::class, 'spcate']); // Lấy sản phẩm category
+// Chi tiết sản phẩm
+Route::get('products/chitiet/{id}', [ProductController::class, 'ctsp']);
 
 //Api giỏ hàng
-Route::post('addtocart', [CartController::class,'addtocart']);
-Route::get('cart', [CartController::class,'viewcart']);
-Route::put('cart-updatequantity/{id_cart}/{scope}',[CartController::class,'updatequantity']);
-Route::delete('deletecart/{id_cart}',[CartController::class,'deletecart']);
+Route::post('addtocart', [CartController::class, 'addtocart']);
+Route::get('cart', [CartController::class, 'viewcart']);
+Route::put('cart-updatequantity/{id_cart}/{scope}', [CartController::class, 'updatequantity']);
+Route::delete('deletecart/{id_cart}', [CartController::class, 'deletecart']);
 
 //Api Thanh Toán
 Route::post('validate-order', [PaymentController::class, 'validateOrder']);
-Route::post('dathang', [PaymentController::class,'dathang']);
-Route::post('pay', [PaymentController::class,'vnpay']);
-Route::post('momo', [PaymentController::class,'momopay']);
-Route::get('saveorder',[PaymentController::class,'saveorder']); // api này front end không dùng
+Route::post('dathang', [PaymentController::class, 'dathang']);
+Route::post('pay', [PaymentController::class, 'vnpay']);
+Route::post('momo', [PaymentController::class, 'momopay']);
+Route::get('saveorder', [PaymentController::class, 'saveorder']); // api này front end không dùng
 
 
 
