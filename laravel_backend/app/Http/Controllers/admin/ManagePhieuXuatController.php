@@ -146,7 +146,7 @@ class ManagePhieuXuatController extends Controller
                     }
                     $checksp->soLuongSP -= $request->soluong;
                     $checksp->save();
-                    $checkpx->tongTien += $checksp->gia;
+                    $checkpx->tongTien += ($checksp->gia) * $request->soluong;
                     $checkpx->save();
                     DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
                                 values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
@@ -276,7 +276,8 @@ class ManagePhieuXuatController extends Controller
                 'error' => $validator->messages(),
             ]);
         } else {
-            $pxcts = PhieuXuat::find($mapx)->pxct;
+            $px = PhieuXuat::find($mapx);
+            $pxcts = $px->pxct;
             $data =  $pxcts->where('product_id', $maspct)->first();
             if ($data) {
                 $checksp = Product::find($request->product_id);
@@ -291,6 +292,8 @@ class ManagePhieuXuatController extends Controller
                             $data->product_id = $checksp->id;
                             $data->soluong = $slupdate;
                             $data->gia = $checksp->gia;
+                            $px->tongTien += ($slupdate * $checksp->gia) - ($slgio * $checksp->gia);
+                            $px->save();
                             $checksp->soLuongSP = ($slgio - $slupdate) + $slkho;
                             $checksp->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
@@ -324,6 +327,8 @@ class ManagePhieuXuatController extends Controller
                             $spgio->save();
                             $checksp->soLuongSP -= $slupdate;
                             $checksp->save();
+                            $px->tongTien += ($slupdate * $checksp->gia) - ($slgio * $checksp->gia);
+                            $px->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
                                 ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
                             return response()->json([
@@ -389,10 +394,13 @@ class ManagePhieuXuatController extends Controller
     {
         $mapx = $px_id;
         $maspct = $product_id;
-        $pxcts = PhieuXuat::find($mapx)->pxct;
+        $px = PhieuXuat::find($mapx);
+        $pxcts = $px->pxct;
         $data =  $pxcts->where('product_id', $maspct)->first();
         $spkho = Product::find($maspct);
         $spkho->soLuongSP += $data->soluong;
+        $px->tongTien -= $data->soluong * $spkho->gia;
+        $px->save();
         $spkho->save();
         DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
             ->delete();
