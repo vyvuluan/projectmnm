@@ -39,6 +39,7 @@ import {
   Phieunhap,
 } from "../components/form-admin";
 import { Chart } from "../components/form-admin/chart";
+import LoginAdmin from "../components/form-admin/loginAdmin";
 export const PublicRouter = [
   {
     path: "/Login",
@@ -113,11 +114,11 @@ export const PublicRouter = [
     component: Checkout,
     layout: _Layout,
   },
-  // {
-  //   path: "/PageAdmin",
-  //   component: PageAdmin,
-  //   layout: null,
-  // },
+  {
+    path: "/LoginAdmin",
+    component: LoginAdmin,
+    layout: null,
+  },
 ];
 //chưa xử lý
 export const PublicRouter_Admin = [
@@ -126,6 +127,7 @@ export const PublicRouter_Admin = [
     component: DashBoard,
     layout: _LayoutAdmin,
   },
+  
   {
     path: "/Bill",
     component: Bill,

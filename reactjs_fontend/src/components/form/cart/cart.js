@@ -17,7 +17,7 @@ export default function Cart() {
   var totalCartPrice = 0;
 
   if (!localStorage.getItem("auth_token")) {
-    navaigate.push("/");
+    navaigate("/");
     swal("Warning", "Vui lòng login để mua hàng", "error");
   }
 
@@ -37,7 +37,7 @@ export default function Cart() {
           setCart(res.data.cart);
           setLoading(false);
         } else if (res.data.status === 401) {
-          navaigate.push("/");
+          navaigate("/");
           swal("Warning", res.data.message, "error");
         }
       }
@@ -261,6 +261,7 @@ export default function Cart() {
             />
           </div>
           <h4>Giỏ hàng trống</h4>
+          
         </div>
       </div>
     );

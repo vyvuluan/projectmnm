@@ -1,6 +1,12 @@
 import React from "react";
 
-const Pagination = () => {
+const Pagination = (props) => {
+  const { totalPage, handlePerPage, currentPage } = props;
+  console.log(currentPage);
+  const perPage = (e) => {
+    // console.log(e.target.innerText);
+    handlePerPage(e.target.innerText);
+  };
   return (
     <div className="position-relative mt-4">
       <nav
@@ -8,27 +14,25 @@ const Pagination = () => {
         className="position-absolute top-50 start-50 translate-middle"
       >
         <ul className="pagination ">
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Previous">
+          <li className="page-item" {...currentPage==1 ? {style:{display:"none"}}: null}>
+            <a className="page-link" href="#" aria-label="Previous" >
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <li className="page-item">
+          {totalPage.map((page, index) => (
+            <li
+            key={index}
+            value={page}
+            className="page-item"
+            onClick={perPage}
+          >
             <a className="page-link" href="#">
-              1
+              {page}
             </a>
           </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              2
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              3
-            </a>
-          </li>
-          <li className="page-item">
+          ))}
+
+          <li className="page-item" {...currentPage===totalPage.length? {style:{display:"none"}}: null}>
             <a className="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
@@ -38,4 +42,4 @@ const Pagination = () => {
     </div>
   );
 };
-export default Pagination
+export default Pagination;
