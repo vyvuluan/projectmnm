@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams,useNavigate } from "react-router-dom";
 
 import {
   Slideshow,
@@ -6,12 +7,35 @@ import {
   SectionTitle,
   Product,
 } from "../../form/index.js";
+import swal from "sweetalert";
 const axios = require("axios").default;
 
 // Make a request for a user with a given ID
 
 const HomePage = () => {
+  const [paramToken,setParamToken] = useSearchParams()
+  const [paramEmail,setParamEmail] = useSearchParams()
+  const history = useNavigate();
+
   const [listProduct, setListProduct] = useState([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    if(paramToken.get('token') && paramEmail.get('email')){
+        localStorage.setItem('auth_token', paramToken.get('token'))
+        localStorage.setItem('auth_name',paramEmail.get('email'))
+        swal({
+          title: "Đăng nhập thành công",
+          icon: "success",
+          button: "đóng",
+        });
+        history('/')
+    }
+    //clear function
+    return () => controller.abort();
+  }, []);
+
+
   useEffect(() => {
     const controller = new AbortController();
     axios

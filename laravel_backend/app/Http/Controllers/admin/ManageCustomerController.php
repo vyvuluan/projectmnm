@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Request;
 use App\Models\Customer;
 use Validator;
+
 class ManageCustomerController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -18,8 +19,8 @@ class ManageCustomerController extends Controller
     {
         $Customer = Customer::all();
         return response()->json([
-            'status'=>200,
-            'Loaisp'=>$Customer,
+            'status' => 200,
+            'Loaisp' => $Customer,
         ]);
     }
 
@@ -89,11 +90,10 @@ class ManageCustomerController extends Controller
     public function edit($id)
     {
         $Customer = Customer::find($id);
-        if($Customer)
-        {
+        if ($Customer) {
             return response()->json([
-                'status'=>200,
-                'data'=>$Customer,
+                'status' => 200,
+                'data' => $Customer,
             ]);
         }
     }
@@ -107,14 +107,14 @@ class ManageCustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'ten' =>'required|max:20',
-            'ngaySinh' =>'required|max:30',
-            'sdt'=>'required|numeric|digits:10',
-            'diaChi'=>'required|max:60',
-            'gioiTinh'=>'required|numeric',
-           // 'user_id' =>'required|max:10',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'ten' => 'required|max:20',
+            'ngaySinh' => 'required|max:30',
+            'sdt' => 'required|numeric|digits:10',
+            'diaChi' => 'required|max:60',
+            'gioiTinh' => 'required|numeric',
+            // 'user_id' =>'required|max:10',
+        ], [
             'ten.required' => 'Ô họ tên Không được bỏ trống',
             'ngaySinh.required' => 'Ô ngày sinh Không được bỏ trống',
             'diaChi.required' => 'Ô địa chỉ Không được bỏ trống',
@@ -124,37 +124,30 @@ class ManageCustomerController extends Controller
             'sdt.digits' => 'Ô số điện thoại phải là 10 số',
 
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
-            $Customer = Customer::where('user_id',$id)->first();
-            if($Customer)
-            {
-            $Customer->ten = $request->ten;
-            $Customer->ngaySinh = $request->ngaySinh;
-            $Customer->sdt = $request->sdt;
-            $Customer->diaChi = $request->diaChi;
-            $Customer->gioiTinh = $request->gioiTinh;
-            //$Customer->user_id = $request->user_id;
-            $Customer->save();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Cập nhật thông tin khách hàng thành công',
-            ]);
-            }
-            else
-            {
+        } else {
+            $Customer = Customer::where('user_id', $id)->first();
+            if ($Customer) {
+                $Customer->ten = $request->ten;
+                $Customer->ngaySinh = $request->ngaySinh;
+                $Customer->sdt = $request->sdt;
+                $Customer->diaChi = $request->diaChi;
+                $Customer->gioiTinh = $request->gioiTinh;
+                //$Customer->user_id = $request->user_id;
+                $Customer->save();
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm thấy thông tin khách hàng',
+                    'status' => 200,
+                    'message' => 'Cập nhật thông tin khách hàng thành công',
                 ]);
-
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Không tìm thấy thông tin khách hàng',
+                ]);
             }
         }
     }
@@ -171,7 +164,7 @@ class ManageCustomerController extends Controller
         $user = User::where('id', $Customer->user_id)->delete();
         return response()->json([
             'status' => 200,
-             'user' => $user,
+            'user' => $user,
             'message' => 'xóa thành công',
         ]);
     }

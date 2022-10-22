@@ -4,6 +4,7 @@ import axios from "axios";
 import { Loading } from "../loading";
 import { Link } from "react-router-dom";
 import Product from "../product";
+import LoadingPage from "../../Loading";
 const Category = () => {
   const [loading, setLoading] = useState(true);
   const [getID, setGetID] = useState();
@@ -32,10 +33,8 @@ const Category = () => {
     return () => controller.abort();
   }, []);
 
-
-
   if (loading) {
-    return <Loading />;
+    return <LoadingPage />;
   } else {
     var category_Html = "";
     if (listCategory.length > 0) {
@@ -43,17 +42,21 @@ const Category = () => {
         <>
           {listCategory.map((item) => {
             return (
-              
-              <Link to={'/pageproducts?category=' + item.id}>
-              <a
+              <Link
+                style={{
+                  textDecoration: "none",
+                  borderBottom: "1px solid #cecece",
+                }}
                 key={item.id}
-                className="nav-item nav-link"
-                // onClick={HandleClickCategory}
+                to={"/pageproducts?category=" + item.id}
               >
-                {item.tenLoai}
-              </a>
+                <a
+                  className="nav-item nav-link"
+                  // onClick={HandleClickCategory}
+                >
+                  {item.tenLoai}
+                </a>
               </Link>
-              
             );
           })}
         </>

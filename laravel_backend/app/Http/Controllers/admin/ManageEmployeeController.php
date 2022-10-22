@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+
 class ManageEmployeeController extends Controller
 {
     /**
@@ -17,7 +18,6 @@ class ManageEmployeeController extends Controller
      */
     public function index()
     {
-
     }
 
     /**
@@ -27,7 +27,6 @@ class ManageEmployeeController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -45,16 +44,15 @@ class ManageEmployeeController extends Controller
             'username' =>  $emloyee,
             'message' => 'Tạo nhân viên thành công',
         ]);
-
     }
-    public function createUser(Request $request,$id)
+    public function createUser(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'username' => 'required|max:255|unique:users',
             'password' => 'required|max:255',
             're_password' => 'required|max:255',
-        ],[
+        ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
             'email.unique' => 'Địa chỉ email đã tồn tại',
@@ -69,23 +67,19 @@ class ManageEmployeeController extends Controller
             're_password.required' => 'Ô re_password không được bỏ trống',
             're_password.max' => 'Ô re_password tối đa 255 ký tự',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
         }
-        if($request->re_password != $request->password)
-        {
+        if ($request->re_password != $request->password) {
             return response()->json([
                 'status' => 401,
 
                 'error' => 'Password và nhập lại password không trùng khớp',
             ]);
-        }
-        else
-        {
+        } else {
             $user = User::create([
                 'username' => $request->username,
                 'email' => $request->email,
@@ -103,7 +97,6 @@ class ManageEmployeeController extends Controller
                 'message' => 'Đăng ký thành công',
             ]);
         }
-
     }
 
     /**
@@ -164,7 +157,7 @@ class ManageEmployeeController extends Controller
         $user = User::where('id', $emloyee->user_id)->delete();
         return response()->json([
             'status' => 200,
-             'user' => $user,
+            'user' => $user,
             'message' => 'xóa thành công',
         ]);
     }

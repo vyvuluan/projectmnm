@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as Loader from "react-spinners";
 
-function Index() {
+function LoadingPage() {
     const [color, setColor] = useState('#d19c97');
     const [loading, setLoading] = useState(true);
 
@@ -19,4 +19,4 @@ function Index() {
     )
 }
 
-export default Index
+export default LoadingPage

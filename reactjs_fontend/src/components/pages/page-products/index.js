@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import { useSearchParams } from "react-router-dom";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
-
+  
   const [listProduct, setListProduct] = useState([]);
   // const [search, setSearch] = useSearchParams(
   //   search.get('search')
@@ -21,8 +21,11 @@ const PageProducts = () => {
       .get(`/api/cate/product/${[...searchParam][0][1]}`)
       .then(function (response) {
         // handle success
-        console.log(response.data.Loaisp);
+        // console.log([...searchParam][0][1]);
+        
         setListProduct(response.data.Loaisp)
+        console.log(response.data.Loaisp.length);
+        // if(response.data.Loaisp.length)
         setLoading(false)
       })
       .catch(function (error) {

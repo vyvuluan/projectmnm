@@ -10,7 +10,7 @@ use App\Http\Resources\NccResource;
 
 class ManageNccController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -19,8 +19,8 @@ class ManageNccController extends Controller
     {
         $Ncc = Ncc::paginate();
         return response()->json([
-            'status'=>200,
-            'Ncc'=>$Ncc,
+            'status' => 200,
+            'Ncc' => $Ncc,
         ]);
     }
 
@@ -42,11 +42,11 @@ class ManageNccController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'tenNCC' =>'required|max:20',
-            'diaChi'=>'required|max:100',
-            'sdt'=>'required|numeric|digits:10',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'tenNCC' => 'required|max:20',
+            'diaChi' => 'required|max:100',
+            'sdt' => 'required|numeric|digits:10',
+        ], [
             'tenNCC.required' => 'Ô tên nhà cung cấp Không được bỏ trống',
             'diaChi.required' => 'Ô địa chỉ không được bỏ trống',
             'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
@@ -54,23 +54,20 @@ class ManageNccController extends Controller
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
 
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $Ncc = new Ncc();
             $Ncc->tenNCC = $request->tenNCC;
             $Ncc->diaChi = $request->diaChi;
             $Ncc->sdt = $request->sdt;
             $Ncc->save();
             return response()->json([
-                'status'=>200,
-                'message'=>'Thêm Ncc thành công',
+                'status' => 200,
+                'message' => 'Thêm Ncc thành công',
             ]);
         }
     }
@@ -81,7 +78,7 @@ class ManageNccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Ncc $Ncc)
+    public function show(Ncc $Ncc)
     {
 
         return new NccResource($Ncc);
@@ -96,11 +93,10 @@ class ManageNccController extends Controller
     public function edit($id)
     {
         $Ncc = Ncc::find($id);
-        if($Ncc)
-        {
+        if ($Ncc) {
             return response()->json([
-                'status'=>200,
-                'loaisp'=>$Ncc,
+                'status' => 200,
+                'loaisp' => $Ncc,
             ]);
         }
     }
@@ -112,13 +108,13 @@ class ManageNccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'tenNCC' =>'required|max:20',
-            'diaChi'=>'required|max:100',
-            'sdt'=>'required|numeric|digits:10',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'tenNCC' => 'required|max:20',
+            'diaChi' => 'required|max:100',
+            'sdt' => 'required|numeric|digits:10',
+        ], [
             'tenNCC.required' => 'Ô tên nhà cung cấp Không được bỏ trống',
             'diaChi.required' => 'Ô địa chỉ không được bỏ trống',
             'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
@@ -126,34 +122,27 @@ class ManageNccController extends Controller
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
 
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $Ncc = Ncc::find($id);
-            if($Ncc)
-            {
+            if ($Ncc) {
                 $Ncc->tenNCC = $request->tenNCC;
                 $Ncc->diaChi = $request->diaChi;
                 $Ncc->sdt = $request->sdt;
                 $Ncc->save();
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Cập nhật thành công ',
+                    'status' => 200,
+                    'message' => 'Cập nhật thành công ',
                 ]);
-            }
-            else
-            {
+            } else {
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm Ncc cần tìm',
+                    'status' => 404,
+                    'message' => 'Không tìm Ncc cần tìm',
                 ]);
-
             }
         }
     }
@@ -168,33 +157,29 @@ class ManageNccController extends Controller
     {
 
         $Ncc = Ncc::find($id);
-        if($Ncc)
-        {
+        if ($Ncc) {
             $Ncc->delete();
             return response()->json([
-                'status'=>200,
-                'message'=>'Xoá thành công',
-                ]);
-        }
-        else
-        {
+                'status' => 200,
+                'message' => 'Xoá thành công',
+            ]);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'Không tìm thấy ncc cần xoá',
-                ]);
-
+                'status' => 404,
+                'message' => 'Không tìm thấy ncc cần xoá',
+            ]);
         }
     }
 
     public function searchNcc(Request $request)
     {
-        $ncc = Ncc::where('id','like','%'.$request->key.'%')
-                    ->orWhere('tenNCC','like','%'.$request->key.'%')
-                    ->orWhere('sdt','like','%'.$request->key.'%')
-                    ->get();
+        $ncc = Ncc::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('tenNCC', 'like', '%' . $request->key . '%')
+            ->orWhere('sdt', 'like', '%' . $request->key . '%')
+            ->get();
         return response()->json([
-                'status'=>200,
-                'ncc'=> $ncc,
-                ]);           
+            'status' => 200,
+            'ncc' => $ncc,
+        ]);
     }
 }
