@@ -19,8 +19,8 @@ class ManageNsxController extends Controller
     {
         $Nsx = Nsx::paginate();
         return response()->json([
-            'status'=>200,
-            'Nsx'=>$Nsx,
+            'status' => 200,
+            'Nsx' => $Nsx,
         ]);
     }
 
@@ -43,30 +43,27 @@ class ManageNsxController extends Controller
     public function store(Request $request)
     {
 
-        $validator = Validator::make($request->all(),[
-            'tenNSX' =>'required|max:10',
-            'quocGia'=>'required|max:20',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'tenNSX' => 'required|max:10',
+            'quocGia' => 'required|max:20',
+        ], [
             'tenNSX.required' => 'Ô tên sản xuất Không được bỏ trống',
             'quocGia.required' => 'Ô quốc gia không được bỏ trống',
 
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $Nsx = new Nsx();
             $Nsx->tenNSX = $request->tenNSX;
             $Nsx->quocGia = $request->quocGia;
             $Nsx->save();
             return response()->json([
-                'status'=>200,
-                'message'=>'Thêm Nsx thành công',
+                'status' => 200,
+                'message' => 'Thêm Nsx thành công',
             ]);
         }
     }
@@ -77,7 +74,7 @@ class ManageNsxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Nsx $Nsx)
+    public function show(Nsx $Nsx)
     {
 
         return new NsxResource($Nsx);
@@ -92,11 +89,10 @@ class ManageNsxController extends Controller
     public function edit($id)
     {
         $Nsx = Nsx::find($id);
-        if($Nsx)
-        {
+        if ($Nsx) {
             return response()->json([
-                'status'=>200,
-                'loaisp'=>$Nsx,
+                'status' => 200,
+                'loaisp' => $Nsx,
             ]);
         }
     }
@@ -110,41 +106,34 @@ class ManageNsxController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'tenNSX' =>'required|max:10',
-            'quocGia'=>'required|max:20',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'tenNSX' => 'required|max:10',
+            'quocGia' => 'required|max:20',
+        ], [
             'tenNSX.required' => 'Ô tên sản xuất Không được bỏ trống',
             'quocGia.required' => 'Ô quốc gia không được bỏ trống',
 
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $Nsx = Nsx::find($id);
-            if($Nsx)
-            {
+            if ($Nsx) {
                 $Nsx->tenNSX = $request->tenNSX;
                 $Nsx->quocGia = $request->quocGia;
                 $Nsx->save();
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Cập nhật thành công ',
+                    'status' => 200,
+                    'message' => 'Cập nhật thành công ',
                 ]);
-            }
-            else
-            {
+            } else {
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm thấy loại sản phẩm',
+                    'status' => 404,
+                    'message' => 'Không tìm thấy loại sản phẩm',
                 ]);
-
             }
         }
     }
@@ -155,24 +144,20 @@ class ManageNsxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
         $Nsx = Nsx::find($id);
-        if($Nsx)
-        {
+        if ($Nsx) {
             $Nsx->delete();
             return response()->json([
-                'status'=>200,
-                'message'=>'Xoá thành công',
-                ]);
-        }
-        else
-        {
+                'status' => 200,
+                'message' => 'Xoá thành công',
+            ]);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'Không tìm thấy nsx cần xoá',
-                ]);
-
+                'status' => 404,
+                'message' => 'Không tìm thấy nsx cần xoá',
+            ]);
         }
     }
 }

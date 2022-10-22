@@ -18,7 +18,7 @@ class PhieuNhap extends Model
     ];
     public function pnct()
     {
-        return $this->hasMany(CtPhieuNhap::class,'pn_id','id');
+        return $this->hasMany(CtPhieuNhap::class, 'pn_id', 'id');
     }
     public function ncc()
     {
