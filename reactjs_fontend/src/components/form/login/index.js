@@ -18,35 +18,7 @@ import axios from "axios";
 const Login = () => {
   // const [loading, setLoading] = useState(true);
   const [loginGoogle, setLoginGoogle] = useState();
-  // const responseGoogle = (response) => {
-  //   console.log(response);
-  //   const axios = require("axios").default;
-  //   // Make a request for a user with a given ID
-  //   axios
-  //     .get("api/login/google", {
-  //       headers: {
-  //         authorization: "google",
-  //         "Content-Type": "application/json",
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       if (response.status === 200) {
-  //         // setLoginGoogle(window.location.replace(response.data.url))
 
-  //         // console.log(response.data.url);
-
-  //         setLoginGoogle(response.data.url);
-
-  //         // window.location.replace(response.da  ta.url);
-  //         console.log(loginGoogle);
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       // handle error
-  //       console.log(error);
-  //     })
-  //     .finally(function () {});
-  // };
   const [loginInput, setLogin] = useState({
     email: "",
     password: "",
