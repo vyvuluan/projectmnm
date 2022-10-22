@@ -8,6 +8,7 @@ use App\Models\PhieuXuat;
 use App\Models\Product;
 use Validator;
 use Illuminate\Support\Facades\DB;
+
 class ManagePhieuXuatController extends Controller
 {
     /**
@@ -17,38 +18,36 @@ class ManagePhieuXuatController extends Controller
      */
     public function index()
     {
-        $px = PhieuXuat::orderBy('id','asc')->paginate(10);
+        $px = PhieuXuat::orderBy('id', 'asc')->paginate(10);
         return response()->json([
-            'data'=>$px,
+            'data' => $px,
         ]);
     }
     public function xemctpx($id)
     {
-        $ctpx=PhieuXuat::find($id)->pxct;
+        $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
-            'data'=>$ctpx,
+            'data' => $ctpx,
         ]);
     }
     public function editpx($id)
     {
         $px = PhieuXuat::find($id);
-        if($px)
-        {
+        if ($px) {
             return response()->json([
-                'status'=>200,
-                'loaisp'=>$px,
+                'status' => 200,
+                'loaisp' => $px,
             ]);
         }
     }
-    public function editctpx($mapx,$masp)
+    public function editctpx($mapx, $masp)
     {
         $pxct = PhieuXuat::find($mapx)->pxct;
-        $data=  $pxct->where('product_id',$masp);
-        if($data)
-        {
+        $data =  $pxct->where('product_id', $masp);
+        if ($data) {
             return response()->json([
-                'status'=>200,
-                'loaisp'=>$data,
+                'status' => 200,
+                'loaisp' => $data,
             ]);
         }
     }
@@ -71,14 +70,14 @@ class ManagePhieuXuatController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'employee_id' =>'numeric',
-            'status' =>'numeric|max:10',
-            'pt_ThanhToan' =>'required',
-            'diaChi' =>'required',
-            'tenKH' =>'required',
-            'sdt' =>'required|numeric|digits:10',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'numeric',
+            'status' => 'numeric|max:10',
+            'pt_ThanhToan' => 'required',
+            'diaChi' => 'required',
+            'tenKH' => 'required',
+            'sdt' => 'required|numeric|digits:10',
+        ], [
             'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
             'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
@@ -86,15 +85,12 @@ class ManagePhieuXuatController extends Controller
             'diaChi.required' => 'Ô Địa chỉ không được bỏ trống',
             'pt_ThanhToan.required' => 'Ô Pt Thanh toán không được bỏ trống',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $px = new PhieuXuat();
             $px->employee_id = $request->tenLoai;
             $px->status = 0;
@@ -104,19 +100,18 @@ class ManagePhieuXuatController extends Controller
             $px->sdt = $request->sdt;
             $px->save();
             return response()->json([
-                'status'=>200,
-                'message'=>'Tạo phiếu xuất thành công',
+                'status' => 200,
+                'message' => 'Tạo phiếu xuất thành công',
             ]);
         }
-
     }
     public function addctpx(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'px_id'=>'required|numeric',
-            'product_id'=>'required|numeric',
-            'soluong' =>'required|numeric',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'px_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+            'soluong' => 'required|numeric',
+        ], [
             'product_id.required' => 'Bạn chưa chọn sản phẩm',
             'soluong.required' => 'Ô số lượng không được bỏ trống',
             'product_id.numeric' => 'Mã sản phẩm nhận được không đúng',
@@ -124,72 +119,57 @@ class ManagePhieuXuatController extends Controller
             'px_id.numeric' => 'Mã phiếu xuất nhận được không đúng',
             'px_id.required' => 'Chưa chọn phiếu xuất',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $checkpx = PhieuXuat::find($request->px_id);
-            if($checkpx)
-            {
+            if ($checkpx) {
                 $checksp = Product::find($request->product_id);
-                if($checksp)
-                {
-                    if($request->soluong>$checksp->soLuongSP)
-                    {
+                if ($checksp) {
+                    if ($request->soluong > $checksp->soLuongSP) {
                         return response()->json([
-                            'status'=>402,
-                            'message'=>'Kho không đủ hàng !',
+                            'status' => 402,
+                            'message' => 'Kho không đủ hàng !',
                         ]);
                     }
                     $pxcts = PhieuXuat::find($request->px_id)->pxct;
-                    foreach($pxcts as $pxct)
-                    {
-                        if($pxct->product_id==$request->product_id)
-                        {
+                    foreach ($pxcts as $pxct) {
+                        if ($pxct->product_id == $request->product_id) {
                             return response()->json([
-                                'status'=>403,
-                                'message'=>'Sản phẩm đã tồn tại trong phiếu xuất',
+                                'status' => 403,
+                                'message' => 'Sản phẩm đã tồn tại trong phiếu xuất',
                             ]);
                         }
                     }
-                    $checksp->soLuongSP -=$request->soluong;
+                    $checksp->soLuongSP -= $request->soluong;
                     $checksp->save();
-                    $checkpx->tongTien +=$checksp->gia;
+                    $checkpx->tongTien += $checksp->gia;
                     $checkpx->save();
                     DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
-                                values ('.$request->px_id.','.$request->product_id.','.$request->soluong.','.$checksp->gia.')');
+                                values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
 
 
 
                     return response()->json([
-                        'status'=>200,
-                        'message'=>'thêm chi tiết thành công',
+                        'status' => 200,
+                        'message' => 'thêm chi tiết thành công',
                     ]);
-                }
-                else
-                {
+                } else {
                     return response()->json([
-                        'status'=>402,
-                        'message'=>'không tìm thấy sản phẩm',
+                        'status' => 402,
+                        'message' => 'không tìm thấy sản phẩm',
                     ]);
-
                 }
-            }
-            else
-            {
+            } else {
                 return response()->json([
-                    'status'=>401,
-                    'message'=>'Không tìm thấy phiếu xuất',
+                    'status' => 401,
+                    'message' => 'Không tìm thấy phiếu xuất',
                 ]);
-
             }
         }
-
     }
 
     /**
@@ -223,16 +203,16 @@ class ManagePhieuXuatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'employee_id' =>'numeric',
-            'customer_id' =>'numeric',
-            'status' =>'numeric',
-            'pt_ThanhToan' =>'required',
-            'diaChi' =>'required',
-            'tenKH' =>'required',
-            'sdt' =>'required|numeric|digits:10',
-            'tongTien' =>'required|numeric'
-        ],[
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'numeric',
+            'customer_id' => 'numeric',
+            'status' => 'numeric',
+            'pt_ThanhToan' => 'required',
+            'diaChi' => 'required',
+            'tenKH' => 'required',
+            'sdt' => 'required|numeric|digits:10',
+            'tongTien' => 'required|numeric'
+        ], [
             'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
             'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
@@ -241,167 +221,133 @@ class ManagePhieuXuatController extends Controller
             'pt_ThanhToan.required' => 'Ô Pt Thanh toán không được bỏ trống',
             'status.numeric' => 'Ô status phải có định dạng là số ',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $px = PhieuXuat::find($id);
-            if($px)
-            {
-                $px->employee_id= $request->employee_id;
+            if ($px) {
+                $px->employee_id = $request->employee_id;
                 $px->customer_id = $request->customer_id;
-                $px->status= $request->status;
-                $px->pt_ThanhToan= $request->pt_ThanhToan;
-                $px->diaChi= $request->diaChi;
-                $px->tenKH= $request->tenKH;
-                $px->sdt= $request->sdt;
-                $px->tongTien= $request->tongTien;
+                $px->status = $request->status;
+                $px->pt_ThanhToan = $request->pt_ThanhToan;
+                $px->diaChi = $request->diaChi;
+                $px->tenKH = $request->tenKH;
+                $px->sdt = $request->sdt;
+                $px->tongTien = $request->tongTien;
                 $px->save();
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Cập nhật phiếu thành công ',
+                    'status' => 200,
+                    'message' => 'Cập nhật phiếu thành công ',
                 ]);
-            }
-            else
-            {
+            } else {
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm thấy phiếu xuất',
+                    'status' => 404,
+                    'message' => 'Không tìm thấy phiếu xuất',
                 ]);
-
             }
         }
     }
-    public function checksl($slgio,$slupdate,$slkho)
+    public function checksl($slgio, $slupdate, $slkho)
     {
         $temp = $slgio - $slupdate;
-        if ($temp+$slkho>0)
-        {
+        if ($temp + $slkho > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
-    public function updatectpx(Request $request,$mapx,$maspct)
+    public function updatectpx(Request $request, $mapx, $maspct)
     {
-        $validator = Validator::make($request->all(),[
-            'product_id'=>'required|numeric',
-            'soluong' =>'required|numeric',
-        ],[
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required|numeric',
+            'soluong' => 'required|numeric',
+        ], [
             'product_id.required' => 'Bạn chưa chọn sản phẩm',
             'soluong.required' => 'Ô số lượng không được bỏ trống',
             'product_id.numeric' => 'Mã sản phẩm nhận được không đúng',
             'soluong.numeric' => 'Ô số lượng phải có định dạng là số ',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $pxcts = PhieuXuat::find($mapx)->pxct;
-            $data=  $pxcts->where('product_id',$maspct)->first();
-            if($data)
-            {
+            $data =  $pxcts->where('product_id', $maspct)->first();
+            if ($data) {
                 $checksp = Product::find($request->product_id);
-                if($checksp)
-                {
-                    if($checksp->id==$maspct)
-                    {
+                if ($checksp) {
+                    if ($checksp->id == $maspct) {
 
                         $slgio = $data->soluong;
                         $slupdate = $request->soluong;
                         $slkho = $checksp->soLuongSP;
-                        if($this->checksl($slgio,$slupdate,$slkho))
-                        {
+                        if ($this->checksl($slgio, $slupdate, $slkho)) {
                             //$data->px_id=$mapx;
                             $data->product_id = $checksp->id;
                             $data->soluong = $slupdate;
                             $data->gia = $checksp->gia;
-                            $checksp->soLuongSP = ($slgio - $slupdate)+$slkho;
+                            $checksp->soLuongSP = ($slgio - $slupdate) + $slkho;
                             $checksp->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
-                            ->update(['product_id' => $checksp->id,'soluong' => $slupdate,'gia' =>  $checksp->gia]);
+                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
                             return response()->json([
-                                'status'=>200,
-                                'message'=>'Cập nhật Chi tiết phiếu Xuất thành công ',
+                                'status' => 200,
+                                'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',
+                            ]);
+                        } else {
+                            return response()->json([
+                                'status' => 402,
+                                'message' => 'Kho không còn đủ hàng',
                             ]);
                         }
-                        else
-                        {
-                            return response()->json([
-                                'status'=>402,
-                                'message'=>'Kho không còn đủ hàng',
-                            ]);
-                        }
-                    }
-                    else
-                    {
-                        foreach($pxcts as $pxct)
-                        {
-                            if($pxct->product_id==$request->product_id)
-                            {
+                    } else {
+                        foreach ($pxcts as $pxct) {
+                            if ($pxct->product_id == $request->product_id) {
                                 return response()->json([
-                                    'status'=>403,
-                                    'message'=>'Sản phẩm đã tồn tại trong giỏ hàng',
+                                    'status' => 403,
+                                    'message' => 'Sản phẩm đã tồn tại trong giỏ hàng',
                                 ]);
                             }
                         }
                         $slgio = $data->soluong;
                         $slupdate = $request->soluong;
                         $slkho = $checksp->soLuongSP;
-                        if($slkho>$slupdate)
-                        {
+                        if ($slkho > $slupdate) {
                             // $data->product_id = $checksp->product_id;
                             $spgio = Product::find($maspct);
                             $spgio->soLuongSP += $slgio;
                             $spgio->save();
-                            $checksp->soLuongSP -= $slupdate ;
+                            $checksp->soLuongSP -= $slupdate;
                             $checksp->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
-                            ->update(['product_id' => $checksp->id,'soluong' => $slupdate,'gia' =>  $checksp->gia]);
+                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
                             return response()->json([
-                                'status'=>200,
-                                'message'=>'Cập nhật Chi tiết phiếu Xuất thành công ',
+                                'status' => 200,
+                                'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',
+                            ]);
+                        } else {
+                            return response()->json([
+                                'status' => 402,
+                                'message' => 'Kho không còn đủ hàng',
                             ]);
                         }
-                        else
-                        {
-                            return response()->json([
-                                'status'=>402,
-                                'message'=>'Kho không còn đủ hàng',
-                            ]);
-                        }
-
                     }
-                }
-                else
-                {
+                } else {
                     return response()->json([
-                        'status'=>401,
-                        'message'=>' Sản phẩm muốn cập nhật không tồn tại',
+                        'status' => 401,
+                        'message' => ' Sản phẩm muốn cập nhật không tồn tại',
                     ]);
                 }
-
-
-            }
-            else
-            {
+            } else {
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm thấy Chi tiết phiếu xuất',
+                    'status' => 404,
+                    'message' => 'Không tìm thấy Chi tiết phiếu xuất',
                 ]);
-
             }
         }
     }
@@ -416,49 +362,43 @@ class ManagePhieuXuatController extends Controller
     public function destroy($id)
     {
         $px = PhieuXuat::find($id);
-        if($px->status == 1)
-        {
+        if ($px->status == 1) {
             return response()->json([
-                'status'=>400,
-                'message'=>'Đơn hàng đã được thanh toán nên không thể xoá',
-                ]);
-        }
-        else
-        {
+                'status' => 400,
+                'message' => 'Đơn hàng đã được thanh toán nên không thể xoá',
+            ]);
+        } else {
             $pxcts = PhieuXuat::find($id)->pxct;
-            if($pxcts)
-            {
-                foreach($pxcts as $pxct)
-                {
-                    $sp= Product::find($pxct->product_id);
-                    if($sp)
-                    {
+            if ($pxcts) {
+                foreach ($pxcts as $pxct) {
+                    $sp = Product::find($pxct->product_id);
+                    if ($sp) {
                         $sp->soLuongSP += $pxct->soluong;
                         $sp->save();
                     }
                 }
                 $px->delete();
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Xoá thành công',
-                    ]);
+                    'status' => 200,
+                    'message' => 'Xoá thành công',
+                ]);
             }
-
         }
     }
-    public function deletectpx($px_id , $product_id)
+    public function deletectpx($px_id, $product_id)
     {
-        $mapx=$px_id ;$maspct = $product_id;
+        $mapx = $px_id;
+        $maspct = $product_id;
         $pxcts = PhieuXuat::find($mapx)->pxct;
-            $data=  $pxcts->where('product_id',$maspct)->first();
-            $spkho = Product::find($maspct);
-            $spkho->soLuongSP += $data->soluong;
-            $spkho->save();
-            DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
+        $data =  $pxcts->where('product_id', $maspct)->first();
+        $spkho = Product::find($maspct);
+        $spkho->soLuongSP += $data->soluong;
+        $spkho->save();
+        DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
             ->delete();
-            return response()->json([
-                'status'=>200,
-                'message'=>'Xoá chi tiết px thành công',
-                ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Xoá chi tiết px thành công',
+        ]);
     }
 }
