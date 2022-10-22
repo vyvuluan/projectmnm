@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 const LoginGoogle = (props) => {
+  
+  // const [data, setData] = useState({});
+  // console.log(data);
+    
   return (
     <>
       <Button

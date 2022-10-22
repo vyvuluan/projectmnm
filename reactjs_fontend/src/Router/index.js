@@ -22,7 +22,7 @@ import {
   Contact,
   Warrantycheck,
   Checkout,
-  ProductCate
+  
 } from "../components/form";
 import {
   DetailCustomer,
@@ -50,11 +50,7 @@ export const PublicRouter = [
     component: DetailProduct,
     layout: _Layout,
   },
-  {
-    path: "/productCate",
-    component: ProductCate,
-    layout: _Layout,
-  },
+
   {
     path: "/CheckOrder",
     component: CheckOrder,

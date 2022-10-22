@@ -4,11 +4,12 @@ import axios from "axios";
 import { Loading } from "../loading";
 import { Link } from "react-router-dom";
 import Product from "../product";
-import ProductCate from "../show-product-cate";
 const Category = () => {
   const [loading, setLoading] = useState(true);
   const [getID, setGetID] = useState();
   const [listCategory, setListCategory] = useState([]);
+  const [linkCate, setLinkcate] = useState("");
+
   useEffect(() => {
     const controller = new AbortController();
     axios
@@ -31,34 +32,7 @@ const Category = () => {
     return () => controller.abort();
   }, []);
 
-  const HandleClickCategory = (e) => {
-    setGetID(e)
-    
-      const controller = new AbortController();
-      axios
-        .get(`/api/cate/product/${getID}`)
-        .then(function (response) {
-          console.log(response.data.Loaisp);
-          if (response.data.status === 200) {
-              return <>
-              <Link to='/productCate'>
-                <ProductCate Sanpham = {response.data.Loaisp} />
-              </Link>
-              </>
-          }
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        })
-        .finally(function () {
-          // always executed
-        });
-      //clear function
-      return () => controller.abort();
 
-    
-  };
 
   if (loading) {
     return <Loading />;
@@ -70,13 +44,15 @@ const Category = () => {
           {listCategory.map((item) => {
             return (
               
-              <button
+              <Link to={'/pageproducts?category=' + item.id}>
+              <a
                 key={item.id}
                 className="nav-item nav-link"
-                onClick={() => HandleClickCategory(item.id)}
+                // onClick={HandleClickCategory}
               >
                 {item.tenLoai}
-              </button>
+              </a>
+              </Link>
               
             );
           })}

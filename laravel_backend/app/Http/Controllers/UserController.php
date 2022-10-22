@@ -222,7 +222,7 @@ class UserController extends Controller
 
         return response()->json([
         'status' => 200,
-        'message' => 'Đăng nhập thành công',
+        'message' => 'Đăng nhập thành công',    
         'userCreated' =>$userCreated ,
         'Access-Token' => $token]);
     }

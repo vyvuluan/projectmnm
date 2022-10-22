@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import { PublicRouter, PublicRouter_Admin, PrivateRoute } from "./Router";
-
+import {ProductCate} from './components/form/index.js'
 // import TestTable from "./components/form-admin/TestTable";
 // import { DropDownMenu } from "./components/form";
 // import HomePage from "./components/pages/home/index.js"
@@ -39,7 +39,7 @@ function App() {
             Page = Layout;
             return <Route path={item.path} element={Page} />;
           })}
-          {/* <Route path="/TestTable" element={<DropDownMenu />}></Route> */}
+          {/* <Route path="/ProductCate" element={<ProductCate/>}></Route> */}
         </Routes>
       </BrowserRouter>
     </>

@@ -12,16 +12,18 @@ const PageProducts = () => {
   // const [search, setSearch] = useSearchParams(
   //   search.get('search')
   // );
-
+  const [searchParam,setSearchParam] = useSearchParams();
   useEffect(() => {
     const controller = new AbortController();
-    axios
-      .get("http://localhost:8000/api/products/view")
+
+    if(searchParam.get("category")){
+      axios
+      .get(`/api/cate/product/${[...searchParam][0][1]}`)
       .then(function (response) {
         // handle success
-        // console.log(response.data.data[0].hinh);
-        setListProduct(response.data.data);
-        setLoading(false);
+        console.log(response.data.Loaisp);
+        setListProduct(response.data.Loaisp)
+        setLoading(false)
       })
       .catch(function (error) {
         // handle error
@@ -32,6 +34,28 @@ const PageProducts = () => {
       });
     //clear function
     return () => controller.abort();
+    }
+    else {
+      const controller = new AbortController();
+        axios
+          .get("http://localhost:8000/api/products/view")
+          .then(function (response) {
+            // handle success
+            // console.log(response.data.data[0].hinh);
+            setListProduct(response.data.data);
+            setLoading(false);
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
+          .finally(function () {
+            // always executed
+          });
+        //clear function
+        return () => controller.abort();
+    }
+    
   }, []);
   if (loading) {
     return (

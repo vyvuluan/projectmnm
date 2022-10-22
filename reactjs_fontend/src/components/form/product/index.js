@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AiFillEye } from "react-icons/ai";
 import { BsFillCartFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link,useSearchParams,useParams } from "react-router-dom";
 import Pagination from "../pagination";
+import axios from "axios";
+
 const Product = (props) => {
   const { item } = props;
+  const id = useParams();
+
+  // const handleFindId = (id) => {
+  //   // console.log(axios.get('/api/loaisp/view').then((res) => res.data.Loaisp));
+  //   const arrayID = axios.get('/api/loaisp/view').then((res) => res.data.Loaisp)
+  //   arrayID.find(e=>e.id == id)
+  //   // console.log(typeof array D);
+  // }
 
   return (
     <>
       <div className="container-fluid pt-5">
         <div className="row px-xl-4 pb-3">
           {item.map((item, index) => {
-            // console.log(item.hinh);
+            
             for (let i = 0; i <= index; i++) {
               return (
                 <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -21,7 +31,6 @@ const Product = (props) => {
                         className="img-fluid w-100"
                         src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                         alt="img product"
-                        loading="lazy"
                       ></img>
                     </div>
                     <div className="text-center border-end border-start p-0 pt-4 pb-3 ">
