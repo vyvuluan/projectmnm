@@ -24,7 +24,7 @@ use  App\Http\Controllers\admin\ManageEmployeeController;
 use  App\Http\Controllers\admin\ManageLoaispController;
 use  App\Http\Controllers\admin\ManageCustomerController;
 use  App\Http\Controllers\admin\ManagePhieuNhapController;
-
+use  App\Http\Controllers\admin\ManageBaoCaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +76,9 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên
     Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class, 'createUser']);
+
+    //api báo cáo thống kê
+    Route::get('baocao', [ManageBaoCaoController::class, 'thongKeDoanhThuThang']);
 });
 
 

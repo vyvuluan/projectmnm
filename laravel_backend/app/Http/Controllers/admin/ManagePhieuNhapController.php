@@ -39,8 +39,14 @@ class ManagePhieuNhapController extends Controller
             $ctpn->soluong = $request->soluong;
             $ctpn->gia = $request->gia;
 
+            $pn = PhieuNhap::find($ctpn->pn_id);
+            $pn->tongTien += ($request->gia * $request->soluong);
+
             $product = Product::find($ctpn->product_id);
             $product->soLuongSP = $product->soLuongSP +  $ctpn->soluong;
+
+
+            $pn->save();
             $ctpn->save();
             $product->save();
             return response()->json([
@@ -60,17 +66,24 @@ class ManagePhieuNhapController extends Controller
         if (auth('sanctum')->check()) {
 
             $ctpn = CtPhieuNhap::where('pn_id', $pn_id)
-                ->Where('pn_id', $product_id)->first();
+                ->Where('product_id', $product_id)->first();
 
             if (empty($ctpn)) {
                 return response()->json([
                     'status' => 404,
                 ]);
             } else {
+                $soluongcu = $ctpn->soluong;
+                $giacu = $ctpn->gia;
                 if ($ctpn->pn->status != 1) //chưa thanh toán
                 {
                     $product = Product::find($product_id);
                     $product->soLuongSP = $product->soLuongSP - $ctpn->soluong;
+
+                    $pn = PhieuNhap::find($ctpn->pn_id);
+                    $pn->tongTien = $pn->tongTien - ($soluongcu * $giacu);
+                    $pn->save();
+
                     $product->save();
                     $ctpn = CtPhieuNhap::where('pn_id', $pn_id)
                         ->Where('product_id', $product_id)->delete();
@@ -114,6 +127,7 @@ class ManagePhieuNhapController extends Controller
                     $ctpn = CtPhieuNhap::where('pn_id', $pn_id)
                         ->Where('product_id', $product_id)->first();
                     $soluongcu = $ctpn->soluong;
+                    $giacu = $ctpn->gia;
                     if ($product_id == $request->product_id) //sản phẩm giống
                     {
 
@@ -121,6 +135,8 @@ class ManagePhieuNhapController extends Controller
 
                         $product = Product::find($product_id);
                         $product->soLuongSP = $product->soLuongSP + $soluongmoi;
+                        $pn->tongTien = $pn->tongTien - ($soluongcu * $giacu) + ($soluong * $request->gia);
+                        $pn->save();
                         $product->save();
                     } else //sản phẩm khác
                     {
@@ -129,6 +145,10 @@ class ManagePhieuNhapController extends Controller
 
                         $product_new = Product::find($request->product_id);
                         $product_new->soLuongSP = $product_new->soLuongSP + $request->soluong;
+
+                        $pn->tongTien = $pn->tongTien - ($soluongcu * $giacu) + ($soluong * $request->gia);
+                        $pn->save();
+
                         $product_new->save();
                         $product_old->save();
                     }
