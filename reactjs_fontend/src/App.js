@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import { PublicRouter, PublicRouter_Admin, PrivateRoute } from "./Router";
 import { ProductCate } from "./components/form/index.js";
-import AdminPrivateRoute from "./Router/AdminPrivateRoute";
-import { NotFoundPage } from "./components";
+import PrivateRoutes from "./Router/AdminPrivateRoute";
+import { EmptyCart, NotFoundPage } from "./components";
 // import TestTable from "./components/form-admin/TestTable";
 // import { DropDownMenu } from "./components/form";
 // import HomePage from "./components/pages/home/index.js"
@@ -34,15 +34,17 @@ function App() {
             }
             return <Route path={item.path} element={Page} />;
           })}
-
+          
           {PublicRouter_Admin.map((item) => {
             let Page = <item.component />;
             const Layout = <item.layout children={Page} />;
             Page = Layout;
-            return <Route path={item.path} element={Page} />;
+            return <Route element={<PrivateRoutes />}><Route path={item.path} element={Page} /></Route>;
           })}
+          
           <Route path="*" element={<NotFoundPage />} />
-          {/* <AdminPrivateRoute path="/admin" name="admin" /> */}
+          {/* <Route path="/test" element={<EmptyCart />} /> */}
+          
         </Routes>
       </BrowserRouter>
     </>

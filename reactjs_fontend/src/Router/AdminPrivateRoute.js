@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, redirect } from "react-router-dom";
 
-const AdminPrivateRoute = ({ ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={({ props, location }) =>
-        localStorage.getItem("auth_token") ? redirect("/PageAdmin") : redirect("/login")
-      }
-    />
-  );
-};
-export default AdminPrivateRoute;
+import { Navigate, Outlet } from 'react-router-dom'
+
+const PrivateRoutes = () => {
+
+  return localStorage.getItem("auth_name") ? <Outlet /> : <Navigate to='/login' />
+  
+}
+export default PrivateRoutes

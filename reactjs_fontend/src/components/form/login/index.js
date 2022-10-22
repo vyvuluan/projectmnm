@@ -84,7 +84,7 @@ const Login = () => {
           // console.log(response.data.url)
           setLoginGoogle(response.data.url);
           // window.location.replace(response.da  ta.url);
-          console.log(loginGoogle);
+          // console.log(loginGoogle);
         }
       })
       .catch(function (error) {

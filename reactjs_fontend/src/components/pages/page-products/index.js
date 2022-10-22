@@ -7,11 +7,15 @@ import Col from "react-bootstrap/Col";
 import { useSearchParams } from "react-router-dom";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
+  const [firstPage,setFirstPage] = useState();
+  const [lastPage,setLastPage] = useState();
   
   const [listProduct, setListProduct] = useState([]);
   // const [search, setSearch] = useSearchParams(
   //   search.get('search')
   // );
+
+
   const [searchParam,setSearchParam] = useSearchParams();
   useEffect(() => {
     const controller = new AbortController();
@@ -85,9 +89,7 @@ const PageProducts = () => {
     <>
       <Container fluid>
         <Row>
-          <Col xs={2}>
-            <Filter />
-          </Col>
+          
           <Col>
             <SectionTitle title="Sản phẩm" />
             {product_HTML}

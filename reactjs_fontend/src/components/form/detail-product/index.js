@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import LoaderIcon from '../../Loading/index'
+import LoaderIcon from "../../layouts/Loading/index";
 import {
   BsStarFill,
   BsFacebook,
@@ -26,47 +26,44 @@ const DetailProduct = (props) => {
   const { id } = useParams();
 
   function formatMoney(money) {
-    return (
-      new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-      }).format(money)
-    )
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
   }
 
   useEffect(() => {
-
     let isMounted = true;
 
-    axios.get(`http://localhost:8000/api/products/chitiet/${id}`).then(res => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setProduct(res.data.sanPham);
-          setLoading(false);
+    axios
+      .get(`http://localhost:8000/api/products/chitiet/${id}`)
+      .then((res) => {
+        if (isMounted) {
+          if (res.data.status === 200) {
+            setProduct(res.data.sanPham);
+            setLoading(false);
+          } else if (res.data.status === 404) {
+            navaigate.push("/pageproducts");
+            swal("Warning", res.data.message, "error");
+          }
         }
-        else if (res.data.status === 404) {
-          navaigate.push('/pageproducts');
-          swal('Warning', res.data.message, 'error');
-        }
-      }
-    });
+      });
 
     return () => {
-      isMounted = false
+      isMounted = false;
     };
-
   }, [id, navaigate]);
 
   const handleDecrement = () => {
     if (quantity > 1) {
-      setQuantity(prevCount => prevCount - 1);
+      setQuantity((prevCount) => prevCount - 1);
     }
-  }
+  };
   const handleIncrement = () => {
     if (quantity < 10) {
-      setQuantity(prevCount => prevCount + 1);
+      setQuantity((prevCount) => prevCount + 1);
     }
-  }
+  };
 
   const submitAddtocart = (e) => {
     e.preventDefault();
@@ -74,9 +71,9 @@ const DetailProduct = (props) => {
     const data = {
       product_id: product.id,
       product_qty: quantity,
-    }
+    };
 
-    axios.post(`/api/addtocart`, data).then(res => {
+    axios.post(`/api/addtocart`, data).then((res) => {
       if (res.data.status === 201) {
         swal("Success", res.data.message, "success");
       } else if (res.data.status === 409) {
@@ -87,47 +84,55 @@ const DetailProduct = (props) => {
         swal("Warning", res.data.message, "warning");
       }
     });
-
-  }
+  };
 
   if (loading) {
-    return (
-      <LoaderIcon />
-    )
-  }
-  else {
-    var avail_stock = '';
+    return <LoaderIcon />;
+  } else {
+    var avail_stock = "";
     if (product.soLuongSP > 0) {
-      avail_stock =
+      avail_stock = (
         <div className="d-flex align-items-center mb-4 pt-2">
-          <div
-            className="input-group quantity me-3"
-            style={{ width: "130px" }}
-          >
+          <div className="input-group quantity me-3" style={{ width: "130px" }}>
             <div className="input-group-btn">
-              <button type='button' className="btn btn-primary btn-minus rounded-0"
-                onClick={handleDecrement}>
+              <button
+                type="button"
+                className="btn btn-primary btn-minus rounded-0"
+                onClick={handleDecrement}
+              >
                 <AiFillMinusCircle />
               </button>
             </div>
-            <input type="text" className="form-control text-center" value={quantity} />
+            <input
+              type="text"
+              className="form-control text-center"
+              value={quantity}
+            />
             <div className="input-group-btn">
-              <button type='button' className="btn btn-primary btn-plus rounded-0"
-                onClick={handleIncrement}>
+              <button
+                type="button"
+                className="btn btn-primary btn-plus rounded-0"
+                onClick={handleIncrement}
+              >
                 <AiFillPlusCircle />
               </button>
             </div>
           </div>
-          <button type='button' className="btn btn-primary px-3 rounded-0"
-            onClick={submitAddtocart}>
+          <button
+            type="button"
+            className="btn btn-primary px-3 rounded-0"
+            onClick={submitAddtocart}
+          >
             <AiOutlineShoppingCart /> Add To Cart
           </button>
         </div>
-    }
-    else {
-      avail_stock = <button className="btn btn-primary px-3 rounded-0">
-        <AiOutlineShoppingCart /> Out of stock
-      </button>
+      );
+    } else {
+      avail_stock = (
+        <button className="btn btn-primary px-3 rounded-0">
+          <AiOutlineShoppingCart /> Out of stock
+        </button>
+      );
     }
   }
 
@@ -210,7 +215,9 @@ const DetailProduct = (props) => {
               </div>
               <small className="pt-1">(50 Reviews)</small>
             </div>
-            <h3 className="font-weight-semi-bold mb-4">{formatMoney(product.gia)}</h3>
+            <h3 className="font-weight-semi-bold mb-4">
+              {formatMoney(product.gia)}
+            </h3>
             <p className="mb-4">
               Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat
               diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem
@@ -279,9 +286,7 @@ const DetailProduct = (props) => {
               </form>
             </div>
 
-            <div>
-              {avail_stock}
-            </div>
+            <div>{avail_stock}</div>
 
             <div className="d-flex pt-2">
               <p className="text-dark font-weight-medium mb-0 mr-2">
@@ -332,9 +337,7 @@ const DetailProduct = (props) => {
             <div className="tab-content">
               <div className="tab-pane fade show active" id="tab-pane-1">
                 <h4 className="mb-3">Product Description</h4>
-                <p>
-                  {product.moTa}
-                </p>
+                <p>{product.moTa}</p>
                 <p>
                   Dolore magna est eirmod sanctus dolor, amet diam et eirmod et
                   ipsum. Amet dolore tempor consetetur sed lorem dolor sit lorem

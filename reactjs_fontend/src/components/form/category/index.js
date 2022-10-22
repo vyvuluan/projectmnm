@@ -4,7 +4,7 @@ import axios from "axios";
 import { Loading } from "../loading";
 import { Link } from "react-router-dom";
 import Product from "../product";
-import LoadingPage from "../../Loading";
+import LoadingPage from "../../layouts/Loading";
 const Category = () => {
   const [loading, setLoading] = useState(true);
   const [getID, setGetID] = useState();
