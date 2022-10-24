@@ -7,10 +7,14 @@ import { BiEdit } from 'react-icons/bi'
 import axios from 'axios'
 import swal from 'sweetalert'
 import LoaderIcon from "../../layouts/Loading/index";
+import NccEdit from './nccEdit'
 
-function Index() {
+const Index = ({ NCC }) => {
 
     const [ncclist, setNcclist] = useState([]);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     // Thêm NCC (start)
     const [nccInput, setNcc] = useState({
@@ -71,6 +75,9 @@ function Index() {
 
     return (
         <>
+
+
+
             <B.Container fluid>
                 <B.Row className='pe-xl-5 mb-4'>
                     <B.Col lg={5}>
@@ -152,21 +159,32 @@ function Index() {
                             </thead>
                             <tbody className='align-middle'>
                                 {
-                                    ncclist.map((item) => {
+                                    ncclist.map((NCC) => {
                                         return (
-                                            <tr>
-                                                <td key={item.id} className='align-middle'><input type='checkbox' /></td>
-                                                <td className='align-middle'>{item.id}</td>
-                                                <td className='align-middle'>{item.tenNCC}</td>
-                                                <td className='align-middle'>{item.sdt}</td>
-                                                <td className='align-middle'>{item.diaChi}</td>
-                                                <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                            </tr>
+                                            <>
+                                                <tr>
+                                                    <td key={NCC.id} className='align-middle'><input type='checkbox' /></td>
+                                                    <td className='align-middle'>{NCC.id}</td>
+                                                    <td className='align-middle'>{NCC.tenNCC}</td>
+                                                    <td className='align-middle'>{NCC.sdt}</td>
+                                                    <td className='align-middle'>{NCC.diaChi}</td>
+                                                    <td className='align-middle fs-5 text-primary'><BiEdit onClick={handleShow} /></td>
+                                                </tr>
+                                            </>
                                         )
                                     })
                                 }
                             </tbody>
                         </B.Table>
+
+                        <B.Modal show={show} onHide={handleClose}>
+                            <B.ModalHeader closeButton>
+                                <B.ModalTitle>Sửa thông tin Nhà Cung Cấp</B.ModalTitle>
+                            </B.ModalHeader>
+                            <B.ModalBody>
+                                <NccEdit ncc={NCC} />
+                            </B.ModalBody>
+                        </B.Modal>
                     </B.Col>
                 </B.Row>
             </B.Container>

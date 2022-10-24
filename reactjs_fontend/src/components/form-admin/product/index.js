@@ -467,7 +467,7 @@ function Index() {
                         <td className="align-middle">{item.soLuongSP}</td>
                         <td className="align-middle">
                           <img
-                            src={`http://localhost:8000/${item.hinh}`}
+                            src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                             width="50px"
                           />
                         </td>
