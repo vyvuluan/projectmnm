@@ -94,9 +94,16 @@ class CartController extends Controller
             $soLuongSP = $request->product_qty;
             $spCheck = Product::where('id', $maSP)->first();
             if ($spCheck) {
-                $cartItem = Cart::where('id', $maSP)->where('maKH', $maKH)->exists();
+                $cartItem = Cart::where('maSP', $maSP)->where('maKH', $maKH)->first();
+                //$cartItem = Cart::where('id', $id_cart)->where('maKH', $maKH)->first();
                 if ($cartItem) {
-                    $cartItem->soLuongSP += 1;
+
+                    $cartItem->soLuongSP += $soLuongSP;
+                    $cartItem->save();
+                    return response()->json([
+                        'status' => 201,
+                        'message' => 'Đã thêm vào giỏ hàng',
+                    ]);
                     // return response()->json([
                     //     'status'=>409 ,
                     //     'message'=>$spCheck->tenSP.'Sản phẩm đã có ở trong giỏ hàng',
