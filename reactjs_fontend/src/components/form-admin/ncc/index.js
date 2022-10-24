@@ -1,11 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as B from 'react-bootstrap'
 import { BsPersonPlusFill } from 'react-icons/bs'
 import { FaUserEdit, FaSearch } from 'react-icons/fa'
 import { AiOutlineUserDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
+import axios from 'axios'
+import swal from 'sweetalert'
+import LoaderIcon from "../../layouts/Loading/index";
 
-function index() {
+function Index() {
+
+    const [ncclist, setNcclist] = useState([]);
+
+    // Thêm NCC (start)
+    const [nccInput, setNcc] = useState({
+        tenNCC: '',
+        sdt: '',
+        diachi: '',
+    });
+    const [errorlist, setError] = useState([]);
+
+    const handleNccInput = (e) => {
+        e.persist();
+        setNcc({ ...nccInput, [e.target.name]: e.target.value });
+    }
+
+    const submitNcc = (e) => {
+        e.preventDefault();
+
+        const data = {
+            tenNCC: nccInput.tenNCC,
+            sdt: nccInput.sdt,
+            diaChi: nccInput.diachi,
+        }
+
+        axios.post(`http://localhost:8000/api/kho/ncc`, data).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, 'success')
+                setNcc({
+                    tenNCC: '',
+                    sdt: '',
+                    diachi: '',
+                });
+                setError([]);
+            }
+            else if (res.data.status === 400) {
+                swal('Error', res.data.message, 'error');
+                setError(res.data.errors);
+            }
+        })
+    }
+    // Thêm NCC (end)
+
+    useEffect(() => {
+        let isMounted = true;
+
+        axios.get(`http://localhost:8000/api/kho/ncc`).then(res => {
+            if (isMounted) {
+                if (res.data.status === 200) {
+                    setNcclist(res.data.Ncc.data);
+                }
+            }
+        });
+
+        return () => {
+            isMounted = false
+        };
+
+    }, [ncclist]);
+
     return (
         <>
             <B.Container fluid>
@@ -37,33 +100,33 @@ function index() {
                 </B.Row>
 
                 <B.Row className='pe-xl-5 mb-5'>
-                    <B.Col lg={8}>
-                        <B.Form >
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Tên nhà cung cấp'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Email'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Số điện thoại'></B.FormControl>
-                            </B.FormGroup>
-                        </B.Form>
-                    </B.Col>
-                    <B.Col lg={4}>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <BsPersonPlusFill className='me-2' />
-                            Thêm nhà cung cấp
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <FaUserEdit className='me-2' />
-                            Sửa nhà cung cấp
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <AiOutlineUserDelete className='me-2' />
-                            Xóa nhà cung cấp
-                        </B.Button>
-                    </B.Col>
+                    <B.Form onSubmit={submitNcc} id='formAddNCC'>
+                        <B.Row>
+                            <B.Col lg={8}>
+                                <B.FormGroup>
+                                    <B.FormControl type='text' name='tenNCC' className='rounded-0 shadow-none mb-3' placeholder='Tên nhà cung cấp'
+                                        onChange={handleNccInput} value={nccInput.tenNCC}></B.FormControl>
+                                    <h6 className='text-danger'>{errorlist.tenNCC}</h6>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormControl type='text' name='sdt' className='rounded-0 shadow-none mb-3' placeholder='Số điện thoại'
+                                        onChange={handleNccInput} value={nccInput.sdt}></B.FormControl>
+                                    <h6 className='text-danger'>{errorlist.sdt}</h6>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormControl as='textarea' rows={4} name='diachi' className='rounded-0 shadow-none mb-3' placeholder='Địa chỉ'
+                                        onChange={handleNccInput} value={nccInput.diachi}></B.FormControl>
+                                    <h6 className='text-danger'>{errorlist.diachi}</h6>
+                                </B.FormGroup>
+                            </B.Col>
+                            <B.Col lg={4}>
+                                <B.Button type='submit' variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+                                    <BsPersonPlusFill className='me-2' />
+                                    Thêm nhà cung cấp
+                                </B.Button>
+                            </B.Col>
+                        </B.Row>
+                    </B.Form>
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
@@ -82,36 +145,26 @@ function index() {
                                     <th><input type='checkbox' /></th>
                                     <th>ID</th>
                                     <th>Tên nhà cung cấp</th>
-                                    <th>Email</th>
                                     <th>Số điện thoại</th>
+                                    <th>Địa chỉ</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody className='align-middle'>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>1</td>
-                                    <td className='align-middle'>Tin học ngôi sao</td>
-                                    <td className='align-middle'>starcomp@gmail.com</td>
-                                    <td className='align-middle'>0123987654</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>2</td>
-                                    <td className='align-middle'>GearVN</td>
-                                    <td className='align-middle'>gearvn@gmail.com</td>
-                                    <td className='align-middle'>0123987654</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>3</td>
-                                    <td className='align-middle'>Phong Vũ</td>
-                                    <td className='align-middle'>pv@gmail.com</td>
-                                    <td className='align-middle'>0123987654</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
+                                {
+                                    ncclist.map((item) => {
+                                        return (
+                                            <tr>
+                                                <td key={item.id} className='align-middle'><input type='checkbox' /></td>
+                                                <td className='align-middle'>{item.id}</td>
+                                                <td className='align-middle'>{item.tenNCC}</td>
+                                                <td className='align-middle'>{item.sdt}</td>
+                                                <td className='align-middle'>{item.diaChi}</td>
+                                                <td className='align-middle fs-5 text-primary'><BiEdit /></td>
+                                            </tr>
+                                        )
+                                    })
+                                }
                             </tbody>
                         </B.Table>
                     </B.Col>
@@ -121,4 +174,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

@@ -9,9 +9,12 @@ import { CgExtensionAdd } from 'react-icons/cg'
 import { BiEdit } from 'react-icons/bi'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import LoaderIcon from "../../layouts/Loading/index";
+import { Link } from 'react-router-dom';
 
 function Index() {
 
+    const [loading, setLoading] = useState(true);
     const [categorylist, setCategorylist] = useState([]);
     const [ncclist, setNcclist] = useState([]);
     const [nsxlist, setNsxlist] = useState([]);
@@ -30,6 +33,9 @@ function Index() {
     const [pricture, setPicture] = useState([]);
     const [errorlist, setError] = useState([]);
 
+    const [viewProd, setViewProd] = useState([]);
+
+    // Thêm sản phẩm (start)
     const handleProductInput = (e) => {
         e.persist();
         setProduct({ ...productInput, [e.target.name]: e.target.value });
@@ -128,9 +134,35 @@ function Index() {
                 setError(res.data.errors);
             }
         });
-
     }
+    // Thêm sản phẩm (end)
+    useEffect(() => {
+        let isMounted = true;
 
+        axios.get(`http://localhost:8000/api/products/view`).then(res => {
+            if (isMounted) {
+                if (res.data.status === 200) {
+                    setViewProd(res.data.data);
+                }
+            }
+        });
+
+        return () => {
+            isMounted = false
+        };
+
+    }, []);
+
+
+
+    // var display_Productdata = "";
+    // if (loading) {
+    //     return <LoaderIcon />
+
+    // }
+    // else {
+    //     display_Productdata = 
+    // }
 
     // const [categoryInput, setCategory] = useState({
     //     tenLoai: '',
@@ -323,13 +355,13 @@ function Index() {
                                     </B.FormControl>
                                     <small className="text-danger">{errorlist.ctSanPham}</small>
 
-                                    <CKEditor
+                                    {/* <CKEditor
                                         editor={ClassicEditor}
                                         data='<p>Mô tả sản phẩm</p>'
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
                                         }}
-                                    />
+                                    /> */}
                                 </B.FormGroup>
                             </div>
 
@@ -382,39 +414,31 @@ function Index() {
                                     <th>ID</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Loại</th>
+                                    <th>Giá</th>
                                     <th>Số lượng</th>
                                     <th>Hình</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody className='align-middle'>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>1</td>
-                                    <td className='align-middle'>manhchodien</td>
-                                    <td className='align-middle'>manhbanhgato@gmail.com</td>
-                                    <td className='align-middle'>muaroingoaihien</td>
-                                    <td className='align-middle fw-semibold text-danger'>Administrator</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>2</td>
-                                    <td className='align-middle'>longchodai</td>
-                                    <td className='align-middle'>longmtp@gmail.com</td>
-                                    <td className='align-middle'>chiyeuminhluan</td>
-                                    <td className='align-middle fw-semibold text-success'>Manager</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>3</td>
-                                    <td className='align-middle'>nhoxluankaka</td>
-                                    <td className='align-middle'>tranhoangluan@gmail.com</td>
-                                    <td className='align-middle'>danggianlong</td>
-                                    <td className='align-middle fw-semibold'>User</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
+                                {
+                                    viewProd.map((item) => {
+                                        return (
+                                            <tr>
+                                                <td key={item.id} className='align-middle'><input type='checkbox' /></td>
+                                                <td className='align-middle'>{item.id}</td>
+                                                <td className='align-middle'>{item.tenSP}</td>
+                                                <td className='align-middle'>{item.Loaisp.tenLoai}</td>
+                                                <td className='align-middle'>{item.gia}</td>
+                                                <td className='align-middle'>{item.soLuongSP}</td>
+                                                <td className='align-middle'><img src={`http://localhost:8000/${item.hinh}`} width="50px" /></td>
+                                                <td className='align-middle fs-5 text-primary'>
+                                                    <Link to={'/'}><BiEdit /></Link>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
                             </tbody>
                         </B.Table>
                     </B.Col>
