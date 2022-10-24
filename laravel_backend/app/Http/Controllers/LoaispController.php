@@ -19,23 +19,21 @@ class LoaispController extends Controller
     {
         $loaisp = Loaisp::all();
         return response()->json([
-            'status'=>200,
-            'Loaisp'=>$loaisp,
+            'status' => 200,
+            'Loaisp' => $loaisp,
         ]);
     }
     public function spcate($id)
     {
-        $products = Loaisp::find($id)->products;
-
-        if($products)
-        {
+        $loaisp = Loaisp::where('id', $id)->first();
+        //$products = Loaisp::find($id)->products->paginate(8);
+        if ($loaisp) {
+            $products = Product::where('maLoai', $loaisp->id)->paginate(10);
             return response()->json([
-                'status'=>200,
-                'Loaisp'=>$products,
+                'status' => 200,
+                'Loaisp' => $products,
             ]);
-
         }
-
     }
 
     /**
@@ -59,27 +57,23 @@ class LoaispController extends Controller
         // $this->validate($request, [
         //     'tenLoai' =>'required|max:10'
         // ]);
-        $validator = Validator::make($request->all(),[
-            'tenLoai' =>'required|max:10'
+        $validator = Validator::make($request->all(), [
+            'tenLoai' => 'required|max:10'
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $Loaisp = new Loaisp;
             $Loaisp->tenLoai = $request->tenLoai;
             $Loaisp->save();
             return response()->json([
-                'status'=>200,
-                'message'=>'Thêm loại sản phẩm thành công',
+                'status' => 200,
+                'message' => 'Thêm loại sản phẩm thành công',
             ]);
         }
-
     }
 
     /**
@@ -102,11 +96,10 @@ class LoaispController extends Controller
     public function edit($id)
     {
         $Loaisp = Loaisp::find($id);
-        if($Loaisp)
-        {
+        if ($Loaisp) {
             return response()->json([
-                'status'=>200,
-                'loaisp'=>$Loaisp,
+                'status' => 200,
+                'loaisp' => $Loaisp,
             ]);
         }
     }
@@ -120,35 +113,28 @@ class LoaispController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'tenLoai' =>'required|max:10'
+        $validator = Validator::make($request->all(), [
+            'tenLoai' => 'required|max:10'
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $Loaisp = Loaisp::find($id);
-            if($Loaisp)
-            {
+            if ($Loaisp) {
                 $Loaisp->tenLoai = $request->tenLoai;
                 $Loaisp->save();
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Cập nhật thành công ',
+                    'status' => 200,
+                    'message' => 'Cập nhật thành công ',
                 ]);
-            }
-            else
-            {
+            } else {
                 return response()->json([
-                    'status'=>404,
-                    'message'=>'Không tìm thấy loại sản phẩm',
+                    'status' => 404,
+                    'message' => 'Không tìm thấy loại sản phẩm',
                 ]);
-
             }
         }
     }
@@ -162,22 +148,17 @@ class LoaispController extends Controller
     public function destroy($id)
     {
         $Loaisp = Loaisp::find($id);
-        if($Loaisp)
-        {
+        if ($Loaisp) {
             $Loaisp->delete();
             return response()->json([
-                'status'=>200,
-                'message'=>'Xoá thành công',
-                ]);
-        }
-        else
-        {
+                'status' => 200,
+                'message' => 'Xoá thành công',
+            ]);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'Không tìm thấy Loại sản phẩm cần xoá',
-                ]);
-
+                'status' => 404,
+                'message' => 'Không tìm thấy Loại sản phẩm cần xoá',
+            ]);
         }
-
     }
 }
