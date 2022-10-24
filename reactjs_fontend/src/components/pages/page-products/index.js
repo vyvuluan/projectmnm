@@ -65,7 +65,6 @@ const PageProducts = () => {
           setPerPage(response.data.per_page);
           setListProduct(response.data.data);
           setCurrentPage(response.data.current_page)
-
           setLoading(false);
         })
         .catch(function (error) {
