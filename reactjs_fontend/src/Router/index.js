@@ -22,7 +22,7 @@ import {
   Contact,
   Warrantycheck,
   Checkout,
-  
+
 } from "../components/form";
 import {
   DetailCustomer,
@@ -127,7 +127,7 @@ export const PublicRouter_Admin = [
     component: DashBoard,
     layout: _LayoutAdmin,
   },
-  
+
   {
     path: "/Bill",
     component: Bill,

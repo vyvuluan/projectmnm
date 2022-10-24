@@ -102,11 +102,11 @@ class CartController extends Controller
             $spCheck = Product::where('id',$maSP)->first();
             if($spCheck)
             {
-                    if(Cart::where('id',$maSP)->where('maKH',$maKH)->exists())
+                    if(Cart::where('maSP',$maSP)->where('maKH',$maKH)->exists())
                     {
                         return response()->json([
                             'status'=>409 ,
-                            'message'=>$spCheck->tenSP.'Sản phẩm đã có ở trong giỏ hàng',
+                            'message'=>' Sản phẩm đã có ở trong giỏ hàng',
                             ]);
                     }
                     else

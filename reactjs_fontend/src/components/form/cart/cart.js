@@ -46,16 +46,16 @@ export default function Cart() {
     return () => {
       isMounted = false;
     };
-  }, [navaigate]);
+  }, [cart, navaigate]);
 
   const handleDecrement = (id_cart) => {
     setCart((cart) =>
       cart.map((item) =>
         id_cart === item.id
           ? {
-              ...item,
-              soLuongSP: item.soLuongSP - (item.soLuongSP > 1 ? 1 : 0),
-            }
+            ...item,
+            soLuongSP: item.soLuongSP - (item.soLuongSP > 1 ? 1 : 0),
+          }
           : item
       )
     );
@@ -67,9 +67,9 @@ export default function Cart() {
       cart.map((item) =>
         id_cart === item.id
           ? {
-              ...item,
-              soLuongSP: item.soLuongSP + (item.soLuongSP < 10 ? 1 : 0),
-            }
+            ...item,
+            soLuongSP: item.soLuongSP + (item.soLuongSP < 10 ? 1 : 0),
+          }
           : item
       )
     );
@@ -81,7 +81,6 @@ export default function Cart() {
       .put(`http://localhost:8000/api/cart-updatequantity/${id_cart}/${scope}`)
       .then((res) => {
         if (res.data.status === 200) {
-          // swal('Success', res.data.message, 'success');
         }
       });
   }
@@ -261,7 +260,7 @@ export default function Cart() {
             />
           </div>
           <h4>Giỏ hàng trống</h4>
-          
+
         </div>
       </div>
     );
