@@ -9,12 +9,17 @@ import swal from 'sweetalert'
 import LoaderIcon from "../../layouts/Loading/index";
 import NccEdit from './nccEdit'
 
-const Index = ({ NCC }) => {
+const Index = () => {
 
     const [ncclist, setNcclist] = useState([]);
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [NCCData, setNCCData] = useState();
+    const handleClose = () => setShow(prev => !prev);
+    const handleShow = (NCC) => {
+        console.log(NCC);
+        setShow(true);
+        setNCCData(NCC);
+    }
 
     // Thêm NCC (start)
     const [nccInput, setNcc] = useState({
@@ -76,7 +81,17 @@ const Index = ({ NCC }) => {
     return (
         <>
 
-
+            <B.Modal show={show} onHide={handleClose}>
+                <B.ModalHeader closeButton className='bg-secondary'>
+                    <B.ModalTitle>Sửa thông tin Nhà Cung Cấp</B.ModalTitle>
+                </B.ModalHeader>
+                <B.ModalBody>
+                    <NccEdit ncc={NCCData} showModal={handleClose} />
+                </B.ModalBody>
+                <B.ModalFooter className='bg-secondary'>
+                    <B.Button variant='outline-primary' className='mt-2 rounded-0' onClick={handleClose}>Hủy bỏ</B.Button>
+                </B.ModalFooter>
+            </B.Modal>
 
             <B.Container fluid>
                 <B.Row className='pe-xl-5 mb-4'>
@@ -146,7 +161,7 @@ const Index = ({ NCC }) => {
                                 <option>Theo ID</option>
                             </B.FormSelect>
                         </B.FormGroup>
-                        <B.Table className='table-borderless border border-secondary text-center mb-0'>
+                        <B.Table className='table-borderless border border-secondary mb-0'>
                             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                 <tr>
                                     <th><input type='checkbox' /></th>
@@ -154,37 +169,31 @@ const Index = ({ NCC }) => {
                                     <th>Tên nhà cung cấp</th>
                                     <th>Số điện thoại</th>
                                     <th>Địa chỉ</th>
-                                    <th>Thao tác</th>
+                                    <th className='text-center'>Thao tác</th>
                                 </tr>
                             </thead>
-                            <tbody className='align-middle'>
+                            <tbody>
                                 {
                                     ncclist.map((NCC) => {
                                         return (
                                             <>
                                                 <tr>
-                                                    <td key={NCC.id} className='align-middle'><input type='checkbox' /></td>
-                                                    <td className='align-middle'>{NCC.id}</td>
-                                                    <td className='align-middle'>{NCC.tenNCC}</td>
-                                                    <td className='align-middle'>{NCC.sdt}</td>
-                                                    <td className='align-middle'>{NCC.diaChi}</td>
-                                                    <td className='align-middle fs-5 text-primary'><BiEdit onClick={handleShow} /></td>
+                                                    <td key={NCC.id}><input type='checkbox' /></td>
+                                                    <td>{NCC.id}</td>
+                                                    <td>{NCC.tenNCC}</td>
+                                                    <td>{NCC.sdt}</td>
+                                                    <td>{NCC.diaChi}</td>
+                                                    <td className='text-center fs-5 text-primary'><BiEdit onClick={() => handleShow(NCC)} /></td>
                                                 </tr>
                                             </>
                                         )
                                     })
                                 }
                             </tbody>
+
                         </B.Table>
 
-                        <B.Modal show={show} onHide={handleClose}>
-                            <B.ModalHeader closeButton>
-                                <B.ModalTitle>Sửa thông tin Nhà Cung Cấp</B.ModalTitle>
-                            </B.ModalHeader>
-                            <B.ModalBody>
-                                <NccEdit ncc={NCC} />
-                            </B.ModalBody>
-                        </B.Modal>
+
                     </B.Col>
                 </B.Row>
             </B.Container>
