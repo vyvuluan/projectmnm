@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Comment;
 use Validator;
 use App\Models\loaisp;
 //use App\Http\Resources\ProductResource;
@@ -40,6 +41,48 @@ class ProductController extends Controller
             'sanPham' => $product,
             'tenLoai' => $tenLoai,
         ]);
+    }
+    public function allcomment($product_id)
+    {
+        $comment = Product::find($product_id)->comments;
+        return response()->json([
+            'status' => 200,
+            'comment' => $comment,
+        ]);
+    }
+    public function addcomment(Request $request)
+    {
+
+        if (auth('sanctum')->check()) {
+
+
+            $maKH = auth('sanctum')->user()->customer->id;
+            $spcheck = Product::find($request->product_id);
+            //return  $request->product_id;
+            if ($spcheck) {
+                // DB::insert('insert into comments (product_id,customer_id,comment)
+                // values (' .  $product_id . ',' . $maKH . ',' .   $comment  . ')');
+                $comment = new Comment();
+                $comment->product_id =  $request->product_id;
+                $comment->customer_id = $maKH;
+                $comment->comment =  $request->comment;
+                $comment->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Đăng commnet thành công',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Sản phẩm không tồn tại',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Đăng nhập để đăng bình luận',
+            ]);
+        }
     }
 
     /**
