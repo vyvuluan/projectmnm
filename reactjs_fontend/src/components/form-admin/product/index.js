@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as B from "react-bootstrap";
 import axios from "axios";
 import swal from "sweetalert";
@@ -7,10 +7,10 @@ import { FaUserEdit, FaSearch } from "react-icons/fa";
 import { AiOutlineUserDelete, AiOutlineEdit } from "react-icons/ai";
 import { CgExtensionAdd } from "react-icons/cg";
 import { BiEdit } from "react-icons/bi";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
+import './style.css'
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -31,18 +31,22 @@ function Index() {
 
   const [pricture, setPicture] = useState([]);
   const [errorlist, setError] = useState([]);
-
   const [viewProd, setViewProd] = useState([]);
+  const [textEditor, setTextEditor] = useState('');
+  const editorRef = useRef(null);
 
   // Thêm sản phẩm (start)
   const handleProductInput = (e) => {
-    e.persist();
     setProduct({ ...productInput, [e.target.name]: e.target.value });
   };
 
   const handleImage = (e) => {
     setPicture({ image: e.target.files[0] });
   };
+
+  const handleTextEditorInput = (value) => {
+    setTextEditor({ ctSanPham: value });
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -63,10 +67,10 @@ function Index() {
   useEffect(() => {
     let isMounted = true;
 
-    axios.get(`http://localhost:8000/api/kho/ncc`).then((res) => {
+    axios.get(`http://localhost:8000/api/kho/nccall`).then((res) => {
       if (isMounted) {
         if (res.data.status === 200) {
-          setNcclist(res.data.Ncc.data);
+          setNcclist(res.data.Ncc);
         }
       }
     });
@@ -79,10 +83,10 @@ function Index() {
   useEffect(() => {
     let isMounted = true;
 
-    axios.get(`http://localhost:8000/api/kho/nsx`).then((res) => {
+    axios.get(`http://localhost:8000/api/kho/nsxall`).then((res) => {
       if (isMounted) {
         if (res.data.status === 200) {
-          setNsxlist(res.data.Nsx.data);
+          setNsxlist(res.data.Nsx);
         }
       }
     });
@@ -105,8 +109,8 @@ function Index() {
     formData.append("maNSX", productInput.nsx_id);
     formData.append("moTa", productInput.moTa);
     formData.append("baoHanh", productInput.baohanh);
-    formData.append("ctSanPham", productInput.ctSanPham);
-
+    formData.append("ctSanPham", textEditor.ctSanPham);
+    // console.log(formData);
     axios
       .post(`http://localhost:8000/api/kho/products`, formData)
       .then((res) => {
@@ -147,6 +151,8 @@ function Index() {
       isMounted = false;
     };
   }, []);
+
+
 
   // var display_Productdata = "";
   // if (loading) {
@@ -366,27 +372,68 @@ function Index() {
                   ></B.FormControl>
                   <small className="text-danger">{errorlist.moTa}</small>
                 </B.FormGroup>
-                <B.FormGroup className="w-100">
-                  <B.FormControl
-                    as="textarea"
-                    name="ctSanPham"
-                    id="ctSP"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Chi tiết sản phẩm"
-                    onChange={handleProductInput}
-                    value={productInput.ctSanPham}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.ctSanPham}</small>
-
-                  {/* <CKEditor
-                                        editor={ClassicEditor}
-                                        data='<p>Mô tả sản phẩm</p>'
-                                        onChange={(event, editor) => {
-                                            const data = editor.getData();
-                                        }}
-                                    /> */}
-                </B.FormGroup>
               </div>
+              <Editor
+                apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                onEditorChange={handleTextEditorInput}
+                onInit={(evt, editor) => {
+                  editorRef.current = editor
+                }}
+                init={{
+                  height: 800,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
+                    "media",
+                    "image",
+                    "editimage"
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter media image editimage " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  file_picker_callback: function (cb, value, meta) {
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "file");
+                    input.setAttribute("accept", "image/*");
+                    input.onchange = function () {
+                      var file = this.files[0];
+
+                      var reader = new FileReader();
+                      reader.onload = function () {
+                        var id = "blobid" + new Date().getTime();
+                        var blobCache = editorRef.current.editorUpload.blobCache;
+                        var base64 = reader.result.split(",")[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+                        cb(blobInfo.blobUri(), { title: file.name });
+                      };
+                      reader.readAsDataURL(file);
+                    };
+                    input.click();
+                  },
+                }}
+              />
 
               <B.Button
                 type="submit"

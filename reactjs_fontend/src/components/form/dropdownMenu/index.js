@@ -7,11 +7,12 @@ import help from "../../../img/question.png";
 import logout from "../../../img/log-out.png";
 import React, { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
+import { Link } from 'react-router-dom'
 import "./style.css";
 const DropDownMenu = (props) => {
 
   const [open, setOpen] = useState(false);
-    // console.log(props.logout);
+  // console.log(props.logout);
   let menuRef = useRef();
 
   useEffect(() => {
@@ -45,13 +46,13 @@ const DropDownMenu = (props) => {
 
         <div className={`dropdown-menu1 ${open ? "active" : "inactive"}`}>
           <ul className="ul">
-            <DropdownItem img={user} text={"My Profile"}   />
-          {/* logout1={test}  */}
+            <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem img={user} text={"My Profile"} /></Link>
+            {/* logout1={test}  */}
             <DropdownItem img={edit} text={"Edit Profile"} />
             <DropdownItem img={inbox} text={"Inbox"} />
             <DropdownItem img={settings} text={"Settings"} />
             <DropdownItem img={help} text={"Helps"} />
-            <DropdownItem img={logout} text={"Logout"} logout1= {props.logout} />
+            <DropdownItem img={logout} text={"Logout"} logout1={props.logout} />
           </ul>
         </div>
       </div>
@@ -60,7 +61,7 @@ const DropDownMenu = (props) => {
 };
 
 function DropdownItem(props) {
-    // console.log(props.logout1);
+  // console.log(props.logout1);
   return (
     <li className="dropdownItem1" onClick={props.logout1}>
       <img className="anhItem" src={props.img}></img>

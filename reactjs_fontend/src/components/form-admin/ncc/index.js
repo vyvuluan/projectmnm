@@ -8,8 +8,10 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import LoaderIcon from "../../layouts/Loading/index";
 import NccEdit from './nccEdit'
+import Pagination from '../../form/pagination/index'
 
 const Index = () => {
+
 
     const [ncclist, setNcclist] = useState([]);
     const [show, setShow] = useState(false);
@@ -19,6 +21,21 @@ const Index = () => {
         console.log(NCC);
         setShow(true);
         setNCCData(NCC);
+    }
+
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [perPage, setPerPage] = useState();
+    const [currentPage, setCurrentPage] = useState();
+    const handlePerPage = (page) => {
+        console.log(page);
+        setPage(page);
+    };
+
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+        pageNumbers.push(i);
     }
 
     // Thêm NCC (start)
@@ -63,20 +80,26 @@ const Index = () => {
 
     useEffect(() => {
         let isMounted = true;
+        const controller = new AbortController();
 
-        axios.get(`http://localhost:8000/api/kho/ncc`).then(res => {
+        axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`).then(res => {
             if (isMounted) {
                 if (res.data.status === 200) {
                     setNcclist(res.data.Ncc.data);
+                    setTotalPage(res.data.Ncc.total);
+                    setPerPage(res.data.Ncc.per_page);
+                    setCurrentPage(res.data.Ncc.current_page)
                 }
             }
         });
 
         return () => {
+            controller.abort();
+
             isMounted = false
         };
 
-    }, [ncclist]);
+    }, [ncclist, page]);
 
     return (
         <>
@@ -183,19 +206,17 @@ const Index = () => {
                                                     <td>{NCC.tenNCC}</td>
                                                     <td>{NCC.sdt}</td>
                                                     <td>{NCC.diaChi}</td>
-                                                    <td className='text-center fs-5 text-primary'><BiEdit onClick={() => handleShow(NCC)} /></td>
+                                                    <td className='text-center fs-5 text-primary'><BiEdit onClick={() => handleShow(NCC)} />Sửa</td>
                                                 </tr>
                                             </>
                                         )
                                     })
                                 }
                             </tbody>
-
                         </B.Table>
-
-
                     </B.Col>
                 </B.Row>
+                <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
             </B.Container>
         </>
     )

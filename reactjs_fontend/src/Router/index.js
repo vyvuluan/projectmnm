@@ -22,6 +22,7 @@ import {
   Contact,
   Warrantycheck,
   Checkout,
+  Accountinfo,
 
 } from "../components/form";
 import {
@@ -118,6 +119,11 @@ export const PublicRouter = [
     path: "/LoginAdmin",
     component: LoginAdmin,
     layout: null,
+  },
+  {
+    path: "/Accountinfo",
+    component: Accountinfo,
+    layout: _Layout,
   },
 ];
 //chưa xử lý

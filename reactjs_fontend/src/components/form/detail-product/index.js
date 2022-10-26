@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import LoaderIcon from "../../layouts/Loading/index";
 import {
   BsStarFill,
@@ -336,8 +338,7 @@ const DetailProduct = (props) => {
             </div>
             <div className="tab-content">
               <div className="tab-pane fade show active" id="tab-pane-1">
-                <h4 className="mb-3">Product Description</h4>
-                <p>{product.moTa}</p>
+                <div dangerouslySetInnerHTML={{ __html: product.ctSanPham }} />
                 <p>
                   Dolore magna est eirmod sanctus dolor, amet diam et eirmod et
                   ipsum. Amet dolore tempor consetetur sed lorem dolor sit lorem
