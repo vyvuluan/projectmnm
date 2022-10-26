@@ -25,7 +25,8 @@ class RoleKhoMiddleware
             else
             {
                 return response()->json([
-                    'message' => 'bạn không có quyền truy cập',403
+                    'message' => 'bạn không có quyền truy cập',
+                    'status' => 403,
                 ]);
             }
         }
