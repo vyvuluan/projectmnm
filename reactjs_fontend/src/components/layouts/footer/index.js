@@ -7,6 +7,7 @@ const Footers = () => {
     
   return (
     <Footer
+    className="border-top shadow-sm"
       theme={'light'}
       maxColumnsPerRow={4}
       columns={[

@@ -11,9 +11,14 @@ import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import './style.css'
+import Pagination from "../../form/pagination";
 
 function Index() {
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [perPage, setPerPage] = useState();
+  const [currentPage, setCurrentPage] = useState();
   const [categorylist, setCategorylist] = useState([]);
   const [ncclist, setNcclist] = useState([]);
   const [nsxlist, setNsxlist] = useState([]);
@@ -35,6 +40,16 @@ function Index() {
   const [textEditor, setTextEditor] = useState('');
   const editorRef = useRef(null);
 
+
+  const handlePerPage = (page) => {
+    console.log(page);
+    setPage(page);
+  };
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+    pageNumbers.push(i);
+  }
   // Thêm sản phẩm (start)
   const handleProductInput = (e) => {
     setProduct({ ...productInput, [e.target.name]: e.target.value });
@@ -139,10 +154,14 @@ function Index() {
   useEffect(() => {
     let isMounted = true;
 
-    axios.get(`http://localhost:8000/api/products/view`).then((res) => {
+    axios.get(`/api/products/view?page=${page}`).then((res) => {
       if (isMounted) {
         if (res.status === 200) {
           setViewProd(res.data.data);
+          setTotalPage(res.data.total);
+          setPerPage(res.data.per_page);
+          // setListProduct(response.data.Loaisp.data);
+          setCurrentPage(res.data.current_page);
         }
       }
     });
@@ -150,7 +169,10 @@ function Index() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [page]);
+
+  //pagination
+
 
 
 
@@ -528,8 +550,18 @@ function Index() {
                   );
                 })}
               </tbody>
+
+
             </B.Table>
           </B.Col>
+
+          <Pagination
+
+            currentPage={currentPage}
+            totalPage={pageNumbers}
+            handlePerPage={handlePerPage}
+          />
+
         </B.Row>
       </B.Container>
     </>

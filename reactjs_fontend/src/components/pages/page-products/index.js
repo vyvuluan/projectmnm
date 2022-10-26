@@ -19,7 +19,7 @@ const PageProducts = () => {
   //   search.get('search')
   // );
   const handlePerPage = (page) => {
-    console.log(page);
+    // console.log(page);
     setPage(page);
   };
 
@@ -38,9 +38,15 @@ const PageProducts = () => {
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
         .then(function (response) {
           // handle success
-          // console.log([...searchParam][0][1]);
+          // console.log(response.data.Loaisp);
+          // console.log("hello"+[...searchParam][0][1]);
 
-          setListProduct(response.data.Loaisp);
+          // setListProduct(response.data.Loaisp);
+
+          setTotalPage(response.data.Loaisp.total);
+          setPerPage(response.data.Loaisp.per_page);
+          setListProduct(response.data.Loaisp.data);
+          setCurrentPage(response.data.Loaisp.current_page)
           // console.log(response.data.Loaisp.length);
           // if(response.data.Loaisp.length)
           setLoading(false);
