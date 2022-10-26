@@ -11,9 +11,14 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
+import Pagination from "../../form/pagination";
 
 function Index() {
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [perPage, setPerPage] = useState();
+  const [currentPage, setCurrentPage] = useState();
   const [categorylist, setCategorylist] = useState([]);
   const [ncclist, setNcclist] = useState([]);
   const [nsxlist, setNsxlist] = useState([]);
@@ -34,6 +39,16 @@ function Index() {
 
   const [viewProd, setViewProd] = useState([]);
 
+
+  const handlePerPage = (page) => {
+    console.log(page);
+    setPage(page);
+  };
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+    pageNumbers.push(i);
+  }
   // Thêm sản phẩm (start)
   const handleProductInput = (e) => {
     e.persist();
@@ -135,10 +150,14 @@ function Index() {
   useEffect(() => {
     let isMounted = true;
 
-    axios.get(`http://localhost:8000/api/products/view`).then((res) => {
+    axios.get(`/api/products/view?page=${page}`).then((res) => {
       if (isMounted) {
         if (res.status === 200) {
           setViewProd(res.data.data);
+          setTotalPage(res.data.total);
+          setPerPage(res.data.per_page);
+          // setListProduct(response.data.Loaisp.data);
+          setCurrentPage(res.data.current_page);
         }
       }
     });
@@ -146,7 +165,10 @@ function Index() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [page]);
+
+  //pagination
+
 
   // var display_Productdata = "";
   // if (loading) {
@@ -467,7 +489,7 @@ function Index() {
                         <td className="align-middle">{item.soLuongSP}</td>
                         <td className="align-middle">
                           <img
-                            src={`http://localhost:8000/${item.hinh}`}
+                            src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                             width="50px"
                           />
                         </td>
@@ -481,8 +503,18 @@ function Index() {
                   );
                 })}
               </tbody>
+             
+             
             </B.Table>
           </B.Col>
+             
+              <Pagination
+                
+                currentPage={currentPage}
+                totalPage={pageNumbers}
+                handlePerPage={handlePerPage}
+              />
+              
         </B.Row>
       </B.Container>
     </>
