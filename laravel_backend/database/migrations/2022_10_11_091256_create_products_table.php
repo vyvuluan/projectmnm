@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('tenSP');
             $table->integer('gia');
             $table->integer('soLuongSP');
-            $table->text('moTa');
+            $table->longText('moTa');
             $table->string('ctSanPham');
             $table->string('hinh');
             $table->bigInteger('maLoai')->unsigned();
