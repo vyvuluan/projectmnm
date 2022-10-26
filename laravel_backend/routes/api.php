@@ -148,6 +148,9 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
 Route::get('products-search', [ProductController::class, 'search']);
+Route::get('allcomment/{product_id}', [ProductController::class, 'allcomment']);
+Route::post('addcomment', [ProductController::class, 'addcomment']);
+
 //Api loại sản phẩm
 Route::resource('loaisp/view', LoaispController::class)->only('index');
 Route::get('cate/product/{id}', [LoaispController::class, 'spcate']); // Lấy sản phẩm category
