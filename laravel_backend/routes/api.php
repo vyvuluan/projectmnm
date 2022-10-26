@@ -53,7 +53,7 @@ Route::get('/login/{provider}', [UserController::class, 'redirectToProvider']);
 Route::get('/login/{provider}/callback', [UserController::class, 'handleProviderCallback']);
 Route::post('reset-password', [PasswordResetController::class, 'sendMail']);
 Route::put('reset-password/{token}', [PasswordResetController::class, 'reset']);
-//api của trang chủ
+//api của trang chủ (sản phẩm bán chạy, sản phẩm mới)
 Route::get('/home', [HomeController::class, 'home']);
 //api thông tin tài khoản
 Route::get('/detailUser', [UserController::class, 'detailUser']);
@@ -103,7 +103,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('getAllPN', [ManagePhieuNhapController::class, 'getAllPN']);
     //api hiển thị chi tiết phiếu nhập và phiếu nhập
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
-
+    //api sản phẩm sắp hết hàng < 10 số lượng
+    Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);
     //Api Quản lý  Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);

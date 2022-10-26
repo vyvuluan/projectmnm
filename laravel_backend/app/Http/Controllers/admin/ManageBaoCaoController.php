@@ -83,4 +83,12 @@ class ManageBaoCaoController extends Controller
             'chitieu' => $chitieu,
         ]);
     }
+    public function spGanHet()
+    {
+        $product = Product::where('soLuongSP','<',10)->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
+    }
 }
