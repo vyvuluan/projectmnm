@@ -57,13 +57,13 @@ class ProductController extends Controller
 
 
             $maKH = auth('sanctum')->user()->customer->id;
-            $spcheck = Product::find($request->masp);
+            $spcheck = Product::find($request->product_id);
             //return  $request->product_id;
             if ($spcheck) {
                 // DB::insert('insert into comments (product_id,customer_id,comment)
                 // values (' .  $product_id . ',' . $maKH . ',' .   $comment  . ')');
                 $comment = new Comment();
-                $comment->product_id =  $request->masp;
+                $comment->product_id =  $request->product_id;
                 $comment->customer_id = $maKH;
                 $comment->comment =  $request->comment;
                 $comment->save();

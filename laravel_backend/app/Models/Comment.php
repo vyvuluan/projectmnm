@@ -13,7 +13,6 @@ class Comment extends Model
         'customer_id',
         'comment',
     ];
-    public $timestamps = false;
     public function product()
     {
         return $this->belongsTo(Product::class);
