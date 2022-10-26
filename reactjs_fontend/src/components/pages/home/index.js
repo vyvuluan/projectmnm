@@ -17,7 +17,9 @@ const HomePage = () => {
   const [paramEmail,setParamEmail] = useSearchParams()
   const history = useNavigate();
 
-  const [listProduct, setListProduct] = useState([]);
+  const [listProductNew, setListProductNew] = useState([]);
+  const [listProductBestSell, setListProductBestSell] = useState([]);
+
 
   useEffect(() => {
     const controller = new AbortController();
@@ -39,11 +41,12 @@ const HomePage = () => {
   useEffect(() => {
     const controller = new AbortController();
     axios
-      .get("http://localhost:8000/api/products/view")
+      .get("/api/home")
       .then(function (response) {
         // handle success
-        // console.log(response.data.data[0].hinh);
-        setListProduct(response.data.data);
+        // console.log(response.data.product_new);
+        setListProductNew(response.data.product_new);
+        setListProductBestSell(response.data.product_bestseller)
       })
       .catch(function (error) {
         // handle error
@@ -61,9 +64,15 @@ const HomePage = () => {
       <Slideshow />
       <SectionTitle title="Service" />
       <Features />
-      <SectionTitle title="Sản phẩm bán chạy nhất" />
-      {listProduct ? (
-        <Product item={listProduct} />
+      <SectionTitle title="Sản phẩm mới" />
+      {listProductNew ? (
+        <Product item={listProductNew} />
+      ) : (
+        <div className="text-center">không có sản phẩm</div>
+      )}
+      <SectionTitle title="Sản phẩm bán chạy" />
+      {listProductBestSell ? (
+        <Product item={listProductBestSell} />
       ) : (
         <div className="text-center">không có sản phẩm</div>
       )}
