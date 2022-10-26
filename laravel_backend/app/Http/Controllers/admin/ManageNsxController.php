@@ -23,6 +23,14 @@ class ManageNsxController extends Controller
             'Nsx' => $Nsx,
         ]);
     }
+    public function nsxall()
+    {
+        $Nsx = Nsx::all();
+        return response()->json([
+            'status' => 200,
+            'Nsx' => $Nsx,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

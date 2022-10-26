@@ -117,6 +117,9 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     // Api quản lý ncc , nsx
     Route::resource('ncc', ManageNccController::class);
     Route::resource('nsx', ManageNsxController::class);
+    Route::get('nsxall', [ManageNsxController::class, 'nsxall']);
+    Route::get('nccall', [ManageNccController::class, 'nccall']);
+
 
     //Api Quản lý sản phẩm
     Route::resource('products', ManageProductController::class);

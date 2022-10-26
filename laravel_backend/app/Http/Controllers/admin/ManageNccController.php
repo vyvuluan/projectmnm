@@ -23,6 +23,15 @@ class ManageNccController extends Controller
             'Ncc' => $Ncc,
         ]);
     }
+    public function nccall()
+    {
+        $Ncc = Ncc::all();
+        return response()->json([
+            'status' => 200,
+            'Ncc' => $Ncc,
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
