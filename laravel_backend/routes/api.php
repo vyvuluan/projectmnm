@@ -148,6 +148,9 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
 
     //Api Quản lý khách hàng
     Route::resource('customer', ManageCustomerController::class);
+
+    //api thống kê doanh thu và số lượng của nhân viên
+    Route::get('doanhThuNhanVien', [ManageBaoCaoController::class, 'doanhThuNhanVien']);
 });
 
 
