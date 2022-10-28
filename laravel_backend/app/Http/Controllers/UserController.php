@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Employee;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -307,7 +309,9 @@ class UserController extends Controller
             $customer = Customer::find(auth('sanctum')->user()->customer->id);
 
             $customer->ten = $request->ten;
-            $customer->ngaySinh = date('Y-m-d', strtotime($request->ngaySinh));
+            $customer->ngaySinh = Carbon::createFromFormat('d/m/Y', $request->ngaySinh)->format('Y-m-d');
+            // date('Y-m-d', strtotime($request->ngaySinh));
+        
 
             $customer->diaChi = $request->diaChi;
 

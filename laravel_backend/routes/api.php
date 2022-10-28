@@ -105,6 +105,14 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
     //api sản phẩm sắp hết hàng < 10 số lượng
     Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);
+
+    //api lịch sử nhập hàng theo thời gian
+    Route::get('lichSuNhapHang', [ManageBaoCaoController::class, 'lichSuNhapHang']);
+
+    //api thống kê doanh thu và số lượng
+    Route::get('thongKeChiTieuSoLuong', [ManageBaoCaoController::class, 'thongKeChiTieuSoLuong']);
+
+
     //Api Quản lý  Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
