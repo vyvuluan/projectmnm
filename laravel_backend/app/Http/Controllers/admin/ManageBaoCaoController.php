@@ -165,4 +165,57 @@ class ManageBaoCaoController extends Controller
             'total_pn' => $total_sl,
         ]);
     }
+    public function doanhThuNhanVien()
+    {
+        $timeNow = Carbon::now();
+        $arrayTime = array();
+        $total_sl = array();
+        $total_pn = array();
+        for ($i = 1; $i <= 12; $i++) {
+            if ($i == 1) {
+                $arrayTime[$i] = $timeNow->toDateString();
+
+                $monthYear = explode('-', $arrayTime[$i]);
+                $stringMY = $monthYear[1] . '-' . $monthYear[0];
+                $from = date($monthYear[0] . '-' . $monthYear[1] . '-01');
+                $dayInMonth = Carbon::parse($from)->daysInMonth;
+                $to = date($monthYear[0] . '-' . $monthYear[1] . '-' . $dayInMonth);
+
+                $total_sl[$stringMY] =  CtPhieuXuat::selectRaw('sum(soluong) as soluong')
+                    ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
+                    ->whereBetween('phieu_xuats.created_at', [$from, $to])
+                    ->where('employee_id', auth()->user()->employee->id)
+                    ->first();
+
+                $total_pn[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
+                    ->whereBetween('created_at', [$from, $to])
+                    ->where('employee_id', auth()->user()->employee->id)
+                    ->first();
+            } else {
+                $timeNow = $timeNow->subMonth();
+                $arrayTime[$i] = $timeNow->toDateString();
+
+                $monthYear = explode('-', $arrayTime[$i]);
+                $stringMY = $monthYear[1] . '-' . $monthYear[0];
+                $from = date($monthYear[0] . '-' . $monthYear[1] . '-01');
+                $dayInMonth = Carbon::parse($from)->daysInMonth;
+                $to = date($monthYear[0] . '-' . $monthYear[1] . '-' . $dayInMonth);
+
+                $total_sl[$stringMY] =  CtPhieuXuat::selectRaw('sum(soluong) as soluong')
+                    ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
+                    ->whereBetween('phieu_xuats.created_at', [$from, $to])
+                    ->where('employee_id', auth()->user()->employee->id)
+                    ->first();
+                $total_pn[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
+                    ->whereBetween('created_at', [$from, $to])
+                    ->where('employee_id', auth()->user()->employee->id)
+                    ->first();
+            }
+        }
+        return response()->json([
+            'status' => 200,
+            'total_sl' => $total_pn,
+            'total_pn' => $total_sl,
+        ]);
+    }
 }
