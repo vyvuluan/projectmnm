@@ -103,6 +103,17 @@ class ManageBaoCaoController extends Controller
             'pn' => $pn,
         ]);
     }
+    public function lichSuXuatHang(Request $request)
+    {
+        $from = Carbon::createFromFormat('d/m/Y', $request->dateFrom)->format('Y-m-d');
+        $to = Carbon::createFromFormat('d/m/Y', $request->dateTo)->format('Y-m-d');
+        $px =  PhieuXuat::whereBetween('created_at', [$from, $to])
+            ->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pn' => $px,
+        ]);
+    }
 
     public function thongKeChiTieuSoLuong()
     {
