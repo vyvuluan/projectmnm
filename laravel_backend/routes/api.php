@@ -70,9 +70,16 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     Route::get('noti', function () {
         return 'tui là admin';
     });
-    //get all user
+    //get  user có quyền là 2,3,4
     Route::get('manageUser', [ManageUserController::class, 'index']);
+    //api thông tin tài khoản theo user id
+    Route::get('manageUser/{user_id}', [ManageUserController::class, 'edit']);
+    //api sửa tài khoản
+    Route::put('manageUser/{user_id}', [ManageUserController::class, 'update']);
+    //api xóa tài khoản
+    Route::delete('manageUser/{user_id}', [ManageUserController::class, 'destroy']);
 
+    //api quản lý nhân viên
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên
     Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class, 'createUser']);
@@ -101,7 +108,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class, 'setTongTien']);
     //api hiển thị all phiếu nhập
     Route::get('getAllPN', [ManagePhieuNhapController::class, 'getAllPN']);
-    //api hiển thị chi tiết phiếu nhập và phiếu nhập
+    //api hiển thị chi tiết phiếu nhập và phiếu nhập theo id phiếu nhập
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
     //api sản phẩm sắp hết hàng < 10 số lượng
     Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);
@@ -148,6 +155,15 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
 
     //Api Quản lý khách hàng
     Route::resource('customer', ManageCustomerController::class);
+
+    //get  user có quyền là 1
+    Route::get('manageUser', [ManageUserController::class, 'index2']);
+    //api thông tin tài khoản theo user id
+    Route::get('manageUser/{user_id}', [ManageUserController::class, 'edit']);
+    //api sửa tài khoản
+    Route::put('manageUser/{user_id}', [ManageUserController::class, 'update']);
+    //api xóa tài khoản
+    Route::delete('manageUser/{user_id}', [ManageUserController::class, 'destroy_user_customer']);
 
     //api thống kê doanh thu và số lượng của nhân viên
     Route::get('doanhThuNhanVien', [ManageBaoCaoController::class, 'doanhThuNhanVien']);
