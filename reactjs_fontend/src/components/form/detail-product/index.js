@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import LoaderIcon from "../../layouts/Loading/index";
 import {
   BsStarFill,
