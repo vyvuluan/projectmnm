@@ -10,7 +10,6 @@ import { BiEdit } from "react-icons/bi";
 import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
-import './style.css'
 import Pagination from "../../form/pagination";
 
 function Index() {
