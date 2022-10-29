@@ -34,6 +34,7 @@ export default function Header() {
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/logout").then((res) => {
         if (res.data.status === 200) {
+          // console.log(res);
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_name");
           swal({

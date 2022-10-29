@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
-import {BsFillCalendarWeekFill,BsFillChatSquareQuoteFill} from "react-icons/bs"
-import {BiDollar,BiTask} from "react-icons/bi"
-const Widget = () => {
+import {
+  BsFillCalendarWeekFill,
+  BsFillChatSquareQuoteFill,
+} from "react-icons/bs";
+import { BiDollar, BiTask } from "react-icons/bi";
+const Widget = (props) => {
+  const {data} = props
+  // console.log(data);
+  const [doanhthu, setDoanhThu] = useState();
+  const [chiTieu, setChiTieu] = useState(1);
+
+
+  useEffect(()=>{
+    // console.log(data.doanhthu.tongTien);
+    setDoanhThu(data?.doanhthu?.tongTien);
+    setChiTieu(data?.chitieu?.tongTien)
+
+  },[])
+  
+  console.log(doanhthu);
+  console.log(chiTieu)
+  
   return (
     <>
       <div className="row">
@@ -13,15 +32,18 @@ const Widget = () => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs pl-3 font-weight-bold text-primary text-uppercase mb-1">
-                    Earnings (Monthly)
+                    Chi tiêu
                   </div>
                   <div className="h5 pl-3 mb-0 font-weight-bold text-gray-800">
-                    $40,000
+                    {chiTieu}
                   </div>
                 </div>
                 <div className="col-auto">
                   {/* <i className="fas fa-calendar fa-2x text-gray-300"></i> */}
-                  <BsFillCalendarWeekFill className="text-gray-300 pr-2" size={40}/>
+                  <BsFillCalendarWeekFill
+                    className="text-gray-300 pr-2"
+                    size={40}
+                  />
                 </div>
               </div>
             </div>
@@ -35,16 +57,16 @@ const Widget = () => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs pl-3 font-weight-bold text-success text-uppercase mb-1">
-                    Earnings (Annual)
+                    Doanh thu
                   </div>
                   <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
-                    $215,000
+
+                    {doanhthu}
                   </div>
                 </div>
                 <div className="col-auto">
                   <i className="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                  <BiDollar className="text-gray-300 pr-2" size={40}/>
-
+                  <BiDollar className="text-gray-300 pr-2" size={40} />
                 </div>
               </div>
             </div>
@@ -71,7 +93,7 @@ const Widget = () => {
                         <div
                           className="progress-bar bg-info"
                           role="progressbar"
-                          style={{width: "50%"}}
+                          style={{ width: "50%" }}
                           aria-valuenow="50"
                           aria-valuemin="0"
                           aria-valuemax="100"
@@ -82,8 +104,7 @@ const Widget = () => {
                 </div>
                 <div className="col-auto">
                   {/* <i className="fas fa-clipboard-list fa-2x text-gray-300"></i> */}
-                  <BiTask className="text-gray-300 pr-2" size={40}/>
-
+                  <BiTask className="text-gray-300 pr-2" size={40} />
                 </div>
               </div>
             </div>
@@ -99,12 +120,16 @@ const Widget = () => {
                   <div className="text-xs pl-3 font-weight-bold text-warning text-uppercase mb-1">
                     Pending Requests
                   </div>
-                  <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">18</div>
+                  <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
+                    18
+                  </div>
                 </div>
                 <div className="col-auto">
                   {/* <i className="fas fa-comments fa-2x text-gray-300"></i> */}
-                  <BsFillChatSquareQuoteFill className="text-gray-300 pr-2" size={40}/>
-
+                  <BsFillChatSquareQuoteFill
+                    className="text-gray-300 pr-2"
+                    size={40}
+                  />
                 </div>
               </div>
             </div>

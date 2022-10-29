@@ -14,6 +14,8 @@ export { default as Products } from "./product/index.js";
 export { default as Ncc } from "./ncc/index.js";
 export { default as Nsx } from "./nsx/index.js";
 export { default as Phieunhap } from "./phieunhap/index.js";
+export { default as DropdownMenuAdmin } from "./dropdownMenuAdmin/index.js";
+
 
 
 
