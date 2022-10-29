@@ -6,7 +6,7 @@ import {
 } from "react-icons/bs";
 import { BiDollar, BiTask } from "react-icons/bi";
 const Widget = (props) => {
-  const {data} = props
+  const {dataWidget} = props
   // console.log(data);
   const [doanhthu, setDoanhThu] = useState();
   const [chiTieu, setChiTieu] = useState(1);
@@ -14,13 +14,13 @@ const Widget = (props) => {
 
   useEffect(()=>{
     // console.log(data.doanhthu.tongTien);
-    setDoanhThu(data?.doanhthu?.tongTien);
-    setChiTieu(data?.chitieu?.tongTien)
+    setDoanhThu(dataWidget?.doanhthu?.tongTien);
+    setChiTieu(dataWidget?.chitieu?.tongTien)
 
   },[])
   
-  console.log(doanhthu);
-  console.log(chiTieu)
+  // console.log(doanhthu);
+  // console.log(chiTieu)
   
   return (
     <>

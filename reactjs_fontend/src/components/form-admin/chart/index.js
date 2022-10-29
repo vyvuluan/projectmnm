@@ -34,6 +34,9 @@ export const options = {
   },
 };
 
+
+
+
 const labels = [
   "Tháng 1",
   "Tháng 2",
@@ -54,17 +57,20 @@ export const data = {
   datasets: [
     {
       label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: labels?.map(() => faker.datatype.number({ min: 0, max: 1000 })),
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
       label: "Dataset 2",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: labels?.map(() => faker.datatype.number({ min: 0, max: 1000 })),
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
   ],
 };
 
-export const Chart = () => {
+const Chart = (props) => {
+  
+  // console.log(props.data1);
   return <Bar className="card shadow mb-4 h-100" options={options} data={data} />;
 };
+export default Chart

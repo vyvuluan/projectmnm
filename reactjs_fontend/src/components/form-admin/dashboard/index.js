@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Widget from "../widget";
-import { Chart } from "../chart";
+import Chart from '../chart'
 import { CircelChart } from "../circelChart";
 import axios from "axios";
 const DashBoard = () => {
@@ -28,10 +28,10 @@ const DashBoard = () => {
 
   return (
     <>
-      <Widget data={data} />
+      <Widget dataWidget={data} />
       <div className="row">
         <div className="col-xl-8 col-lg-7">
-          <Chart data={data} />
+          <Chart data1={data} />
         </div>
         <div className="col-xl-4 col-lg-5">
           <CircelChart data={data} />
