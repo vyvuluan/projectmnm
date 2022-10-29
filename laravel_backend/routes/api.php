@@ -115,6 +115,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
 
     //api lịch sử nhập hàng theo thời gian
     Route::get('lichSuNhapHang', [ManageBaoCaoController::class, 'lichSuNhapHang']);
+    //api lịch sử xuất hàng theo thời gian
+    Route::get('lichSuXuatHang', [ManageBaoCaoController::class, 'lichSuXuatHang']);
 
     //api thống kê doanh thu và số lượng
     Route::get('thongKeChiTieuSoLuong', [ManageBaoCaoController::class, 'thongKeChiTieuSoLuong']);

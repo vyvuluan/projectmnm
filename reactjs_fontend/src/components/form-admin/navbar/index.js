@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.css';
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./style.css";
 import { FaBars, FaSearch, FaBell, FaEnvelope, FaUser } from "react-icons/fa";
 import SearchAdmin from "../search-admin";
 import ContactAdmin from "../contact-admin";
+import DropDownMenuAdmin from "../dropdownMenuAdmin";
+import swal from "sweetalert";
+import axios from "axios";
+
 const NavBarAdmin = () => {
   const [nameUserAdmin, setNameUserAdmin] = useState();
+  const history = useNavigate();
+
+  const logoutSubmit = (e) => {
+    e.preventDefault();
+    axios.get("/sanctum/csrf-cookie").then((response) => {
+      axios.post("/api/logout").then((res) => {
+        if (res.data.status === 200) {
+          // console.log(res);
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_name");
+          swal({
+            title: res.data.message,
+            icon: "success",
+            button: "đóng",
+          });
+          history("/loginAdmin");
+        }
+      });
+    });
+  };
 
   useEffect(() => {
     if (localStorage.getItem("auth_name")) {
@@ -75,15 +100,15 @@ const NavBarAdmin = () => {
           <div className="topbar-divider d-none d-sm-block"></div>
 
           {/* <!-- Nav Item - User Information --> */}
-          <li className="nav-item no-arrow" >
-            
-            <a className="nav-link"  id="userDropdown" >
+          <li className="nav-item no-arrow">
+            <a className="nav-link" id="userDropdown">
               <span className="mr-2 d-none d-lg-inline text-gray-600 small">
                 {nameUserAdmin}
               </span>
-              <FaUser />
+
+              <DropDownMenuAdmin logout={logoutSubmit} />
             </a>
-            
+
             {/* <!-- Dropdown - User Information --> */}
             <div
               className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
