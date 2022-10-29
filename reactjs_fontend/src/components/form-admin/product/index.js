@@ -11,6 +11,7 @@ import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import Pagination from "../../form/pagination";
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ function Index() {
   const [currentPage, setCurrentPage] = useState();
   const [categorylist, setCategorylist] = useState([]);
   const [ncclist, setNcclist] = useState([]);
+  const [nccData, setNccData] = useState();
   const [nsxlist, setNsxlist] = useState([]);
   const [productInput, setProduct] = useState({
     loaisp_id: "",
@@ -33,12 +35,22 @@ function Index() {
     ctSanPham: "",
   });
 
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
+
   const [pricture, setPicture] = useState([]);
   const [errorlist, setError] = useState([]);
   const [viewProd, setViewProd] = useState([]);
-  const [textEditor, setTextEditor] = useState('');
+  const [mota, setMota] = useState('');
+  const [ctsp, setCtsp] = useState('');
   const editorRef = useRef(null);
+  // const [searchResults, setSearchResults] = useState([]);
 
+  const [tabkey, setTabkey] = useState(1)
 
   const handlePerPage = (page) => {
     console.log(page);
@@ -58,9 +70,25 @@ function Index() {
     setPicture({ image: e.target.files[0] });
   };
 
-  const handleTextEditorInput = (value) => {
-    setTextEditor({ ctSanPham: value });
+  const handleCTSPInput = (value) => {
+    setCtsp({ ctSanPham: value });
+  };
+
+  const handleMotaInput = (value) => {
+    setMota({ moTa: value });
   }
+
+  const handleOnSearch = (key) => {
+    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then(res => {
+      if (res.data.status === 200) {
+        setNcclist(res.data.ncc)
+      }
+    })
+  };
+
+  const handleOnSelect = (value) => {
+    setNccData(value.id)
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -69,22 +97,6 @@ function Index() {
       if (isMounted) {
         if (res.data.status === 200) {
           setCategorylist(res.data.Loaisp);
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    axios.get(`http://localhost:8000/api/kho/nccall`).then((res) => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setNcclist(res.data.Ncc);
         }
       }
     });
@@ -119,11 +131,11 @@ function Index() {
     formData.append("tenSP", productInput.tenSP);
     formData.append("soLuongSP", productInput.soLuong);
     formData.append("gia", productInput.gia);
-    formData.append("maNCC", productInput.ncc_id);
+    formData.append("maNCC", nccData);
     formData.append("maNSX", productInput.nsx_id);
-    formData.append("moTa", productInput.moTa);
+    formData.append("moTa", mota.moTa);
     formData.append("baoHanh", productInput.baohanh);
-    formData.append("ctSanPham", textEditor.ctSanPham);
+    formData.append("ctSanPham", ctsp.ctSanPham);
     // console.log(formData);
     axios
       .post(`http://localhost:8000/api/kho/products`, formData)
@@ -142,6 +154,8 @@ function Index() {
             moTa: "",
             ctSanPham: "",
           });
+          setCtsp('');
+          setMota('');
           setError([]);
         } else if (res.data.status === 422) {
           swal("Vui lòng nhập đầy đủ các mục", "", "error");
@@ -222,7 +236,7 @@ function Index() {
   return (
     <>
       <B.Container fluid>
-        <B.Row className="pe-xl-5 mb-4">
+        <B.Row className="mb-4">
           <B.Col lg={4}>
             <h1 className="fw-bold text-primary mb-4 text-capitalize">
               QUẢN LÝ SẢN PHẨM
@@ -264,8 +278,10 @@ function Index() {
           </B.Col>
         </B.Row>
 
-        <B.Row className="pe-xl-5 mb-5">
-          <B.Col lg={8}>
+
+        <B.Tabs activeKey={tabkey}
+          onSelect={(k) => setTabkey(k)}>
+          <B.Tab eventKey={1} title="Thêm sản phẩm" className=" border border-top-0 py-3 px-3">
             <B.Form onSubmit={submitProduct}>
               <B.FormGroup>
                 <B.FormControl
@@ -301,7 +317,7 @@ function Index() {
                 </B.FormGroup>
                 <B.FormGroup className="me-2 w-100">
                   <B.FormControl
-                    type="text"
+                    type="number"
                     name="soLuong"
                     className="rounded-0 shadow-none mb-3"
                     placeholder="Số lượng"
@@ -324,32 +340,41 @@ function Index() {
               <div className="d-flex">
                 <B.FormGroup className="me-2 w-100">
                   <B.FormControl
-                    type="file"
-                    name="image"
-                    onChange={handleImage}
+                    type="text"
+                    name="baohanh"
                     className="rounded-0 shadow-none mb-3"
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.image}</small>
-                </B.FormGroup>
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormSelect
-                    name="ncc_id"
+                    placeholder="Bảo hành (tháng)"
                     onChange={handleProductInput}
-                    value={productInput.ncc_id}
-                    className="rounded-0 shadow-none mb-3 text-muted"
-                  >
-                    <option>Chọn nhà cung cấp</option>
-                    {ncclist &&
-                      ncclist.map((item) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            {item.tenNCC}
-                          </option>
-                        );
-                      })}
-                  </B.FormSelect>
-                  <small className="text-danger">{errorlist.ncc_id}</small>
+                    value={productInput.baohanh}
+                  ></B.FormControl>
+                  <small className="text-danger">{errorlist.baohanh}</small>
                 </B.FormGroup>
+                <div className="w-100 me-2">
+                  <ReactSearchAutocomplete
+                    items={ncclist}
+                    onSearch={handleOnSearch}
+                    onSelect={handleOnSelect}
+                    fuseOptions={{ keys: ["id", "tenNCC"] }}
+                    resultStringKeyName="tenNCC"
+                    showIcon={false}
+                    styling={{
+                      height: "36px",
+                      border: "1px solid lightgray",
+                      borderRadius: "0",
+                      backgroundColor: "white",
+                      boxShadow: "none",
+                      hoverBackgroundColor: "#d19c97",
+                      color: "black",
+                      fontSize: "15px",
+                      // fontFamily: "Courier",
+                      iconColor: "black",
+                      lineColor: "#d19c97",
+                      // placeholderColor: "black",
+                      clearIconMargin: "3px 8px 0 0",
+                    }}
+                  />
+                </div>
+
                 <B.FormGroup className="w-100">
                   <B.FormSelect
                     name="nsx_id"
@@ -370,91 +395,15 @@ function Index() {
                   <small className="text-danger">{errorlist.nsx_id}</small>
                 </B.FormGroup>
               </div>
-              <div className="d-flex">
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormControl
-                    type="text"
-                    name="baohanh"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Bảo hành (tháng)"
-                    onChange={handleProductInput}
-                    value={productInput.baohanh}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.baohanh}</small>
-                </B.FormGroup>
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormControl
-                    type="text"
-                    name="moTa"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Mô tả"
-                    onChange={handleProductInput}
-                    value={productInput.moTa}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.moTa}</small>
-                </B.FormGroup>
-              </div>
-              <Editor
-                apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
-                onEditorChange={handleTextEditorInput}
-                onInit={(evt, editor) => {
-                  editorRef.current = editor
-                }}
-                init={{
-                  height: 800,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "code",
-                    "help",
-                    "wordcount",
-                    "media",
-                    "image",
-                    "editimage"
-                  ],
-                  toolbar:
-                    "undo redo | blocks | " +
-                    "bold italic forecolor | alignleft aligncenter media image editimage " +
-                    "alignright alignjustify | bullist numlist outdent indent | " +
-                    "removeformat | help",
-                  content_style:
-                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                  file_picker_callback: function (cb, value, meta) {
-                    var input = document.createElement("input");
-                    input.setAttribute("type", "file");
-                    input.setAttribute("accept", "image/*");
-                    input.onchange = function () {
-                      var file = this.files[0];
-
-                      var reader = new FileReader();
-                      reader.onload = function () {
-                        var id = "blobid" + new Date().getTime();
-                        var blobCache = editorRef.current.editorUpload.blobCache;
-                        var base64 = reader.result.split(",")[1];
-                        var blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-                        cb(blobInfo.blobUri(), { title: file.name });
-                      };
-                      reader.readAsDataURL(file);
-                    };
-                    input.click();
-                  },
-                }}
-              />
+              <B.FormGroup className="me-2 w-100">
+                <B.FormControl
+                  type="file"
+                  name="image"
+                  onChange={handleImage}
+                  className="rounded-0 shadow-none mb-3"
+                ></B.FormControl>
+                <small className="text-danger">{errorlist.image}</small>
+              </B.FormGroup>
 
               <B.Button
                 type="submit"
@@ -465,9 +414,187 @@ function Index() {
                 Thêm sản phẩm
               </B.Button>
             </B.Form>
-          </B.Col>
-          <B.Col lg={4}>
-            {/* <B.Form onSubmit={submitCategory} id='formLoaiSP'>
+          </B.Tab>
+
+          <B.Tab eventKey={2} title="Thêm chi tiết/mô tả" className=" border border-top-0 py-3 px-3">
+            <B.Row>
+              <B.Col lg={4}>
+                <label className='ms-1 fs-5 fw-semibold text-uppercase text-primary'>Chi tiết sản phẩm</label>
+                <Editor
+                  apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                  onEditorChange={handleCTSPInput}
+                  onInit={(evt, editor) => {
+                    editorRef.current = editor
+                  }}
+                  init={{
+                    height: 500,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "insertdatetime",
+                      "table",
+                      "wordcount",
+                      "fullscreen"
+                    ],
+                    toolbar:
+                      "undo redo | blocks | " +
+                      "bold italic forecolor | alignleft aligncenter" +
+                      "alignright alignjustify | bullist numlist outdent indent | " +
+                      "removeformat",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                />
+              </B.Col>
+              <B.Col lg={8}>
+                <label className='ms-1 fs-5 fw-semibold text-uppercase text-primary'>Mô tả sản phẩm</label>
+                <Editor
+                  apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                  onEditorChange={handleMotaInput}
+                  onInit={(evt, editor) => {
+                    editorRef.current = editor
+                  }}
+                  init={{
+                    height: 500,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "code",
+                      "help",
+                      "wordcount",
+                      "media",
+                      "image",
+                      "editimage"
+                    ],
+                    toolbar:
+                      "undo redo | blocks | " +
+                      "bold italic forecolor | alignleft aligncenter media image editimage " +
+                      "alignright alignjustify | bullist numlist outdent indent | " +
+                      "removeformat | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                    file_picker_callback: function (cb, value, meta) {
+                      var input = document.createElement("input");
+                      input.setAttribute("type", "file");
+                      input.setAttribute("accept", "image/*");
+                      input.onchange = function () {
+                        var file = this.files[0];
+
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                          var id = "blobid" + new Date().getTime();
+                          var blobCache = editorRef.current.editorUpload.blobCache;
+                          var base64 = reader.result.split(",")[1];
+                          var blobInfo = blobCache.create(id, file, base64);
+                          blobCache.add(blobInfo);
+                          cb(blobInfo.blobUri(), { title: file.name });
+                        };
+                        reader.readAsDataURL(file);
+                      };
+                      input.click();
+                    },
+                  }}
+                />
+              </B.Col>
+            </B.Row>
+          </B.Tab>
+
+          <B.Tab eventKey={3} title="Xem sản phẩm" className=" border border-top-0 py-3 px-3">
+            <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
+              <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+                <B.FormSelect
+                  className="rounded-0 shadow-none"
+                  style={{ width: "200px" }}
+                >
+                  <option>Sắp xếp</option>
+                  <option>Từ A-Z</option>
+                  <option>Theo ID</option>
+                  <option>Theo loại</option>
+                </B.FormSelect>
+              </B.FormGroup>
+              <B.Table className="table-borderless border border-secondary text-center mb-0">
+                <thead
+                  className="text-dark"
+                  style={{ backgroundColor: "#edf1ff" }}
+                >
+                  <tr>
+                    <th>
+                      <input type="checkbox" />
+                    </th>
+                    <th>ID</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Loại</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Hình</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody className="align-middle">
+                  {viewProd.map((item) => {
+                    return (
+                      <>
+                        <tr>
+                          <td key={item.id} className="align-middle">
+                            <input type="checkbox" />
+                          </td>
+                          <td className="align-middle">{item.id}</td>
+                          <td className="align-middle">{item.tenSP}</td>
+                          <td className="align-middle">{item.maLoai}</td>
+                          <td className="align-middle">{formatMoney(item.gia)}</td>
+                          <td className="align-middle">{item.soLuongSP}</td>
+                          <td className="align-middle">
+                            <img
+                              src={`http://localhost:8000/uploadhinh/${item.hinh}`}
+                              width="50px"
+                            />
+                          </td>
+                          <td className="align-middle fs-5 text-primary">
+                            <Link to={"/"}>
+                              <BiEdit />
+                            </Link>
+                          </td>
+                        </tr>
+                      </>
+                    );
+                  })}
+                </tbody>
+
+
+              </B.Table>
+            </B.Col>
+
+            <Pagination
+
+              currentPage={currentPage}
+              totalPage={pageNumbers}
+              handlePerPage={handlePerPage}
+            />
+          </B.Tab>
+        </B.Tabs>
+
+        {/* <B.Form onSubmit={submitCategory} id='formLoaiSP'>
                             <hr />
                             <B.FormGroup>
                                 <B.FormControl type='text' name='tenLoaiSP' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'
@@ -485,83 +612,7 @@ function Index() {
                                 </div>
                             </B.FormGroup>
                         </B.Form> */}
-          </B.Col>
-        </B.Row>
 
-        {/* table hien thi tai khoan */}
-        <B.Row className="pe-xl-5">
-          <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
-              <B.FormSelect
-                className="rounded-0 shadow-none"
-                style={{ width: "200px" }}
-              >
-                <option>Sắp xếp</option>
-                <option>Từ A-Z</option>
-                <option>Theo ID</option>
-                <option>Theo loại</option>
-              </B.FormSelect>
-            </B.FormGroup>
-            <B.Table className="table-borderless border border-secondary text-center mb-0">
-              <thead
-                className="text-dark"
-                style={{ backgroundColor: "#edf1ff" }}
-              >
-                <tr>
-                  <th>
-                    <input type="checkbox" />
-                  </th>
-                  <th>ID</th>
-                  <th>Tên sản phẩm</th>
-                  <th>Loại</th>
-                  <th>Giá</th>
-                  <th>Số lượng</th>
-                  <th>Hình</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="align-middle">
-                {viewProd.map((item) => {
-                  return (
-                    <>
-                      <tr>
-                        <td key={item.id} className="align-middle">
-                          <input type="checkbox" />
-                        </td>
-                        <td className="align-middle">{item.id}</td>
-                        <td className="align-middle">{item.tenSP}</td>
-                        <td className="align-middle">{item.maLoai}</td>
-                        <td className="align-middle">{item.gia}</td>
-                        <td className="align-middle">{item.soLuongSP}</td>
-                        <td className="align-middle">
-                          <img
-                            src={`http://localhost:8000/uploadhinh/${item.hinh}`}
-                            width="50px"
-                          />
-                        </td>
-                        <td className="align-middle fs-5 text-primary">
-                          <Link to={"/"}>
-                            <BiEdit />
-                          </Link>
-                        </td>
-                      </tr>
-                    </>
-                  );
-                })}
-              </tbody>
-
-
-            </B.Table>
-          </B.Col>
-
-          <Pagination
-
-            currentPage={currentPage}
-            totalPage={pageNumbers}
-            handlePerPage={handlePerPage}
-          />
-
-        </B.Row>
       </B.Container>
     </>
   );
