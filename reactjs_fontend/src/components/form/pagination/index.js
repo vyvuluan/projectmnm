@@ -8,7 +8,7 @@ const Pagination = (props) => {
     handlePerPage(e.target.innerText);
   };
   return (
-    <div className="position-relative mt-2">
+    <div className="position-relative mt-2 " style={{ marginBottom: "30px" }}>
       <nav
         aria-label="Page navigation example "
         className="position-absolute top-50 start-50 translate-middle"

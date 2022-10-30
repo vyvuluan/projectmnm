@@ -4,7 +4,7 @@ import { BsFillCartFill } from "react-icons/bs";
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Pagination from "../pagination";
 import axios from "axios";
-
+import "./styles.css";
 const Product = (props) => {
   const { item } = props;
   // const id = useParams();
@@ -41,23 +41,22 @@ const Product = (props) => {
                         </h6>
                       </div>
                     </div>
-                    <div className="card-footer d-flex justify-content-between bg-light border">
-                      <div className="text-center">
-                        <a
-                          href=""
-                          className="text-decoration-none text-dark p-1"
-                        >
-                          <AiFillEye className="me-1 mb-1"></AiFillEye>
+                    <div className="card-footer d-flex text-center bg-light border">
+                      <div className="m-auto">
+                        {/* <AiFillEye className="me-1 mb-1"></AiFillEye> */}
 
-                          <Link
-                            className="text-decoration-none"
-                            to={`/DetailProduct/${item.id}`}
-                          >
-                            <span>Xem chi tiết</span>
-                          </Link>
-                        </a>
+                        <Link
+                          className="text-decoration-none"
+                          to={`/DetailProduct/${item.id}`}
+                        >
+                          <button className="btn1 btn21 btn-sep1 icon-cart rounded">
+                            <div className="text2">Mua ngay</div>
+                          </button>
+
+                          {/* <span>Xem chi tiết</span> */}
+                        </Link>
                       </div>
-                      <div className="text-center">
+                      {/* <div className="text-center">
                         <a
                           href=""
                           className="text-decoration-none text-dark p-1"
@@ -69,7 +68,7 @@ const Product = (props) => {
                             </Link>
                           </span>
                         </a>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
