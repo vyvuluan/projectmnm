@@ -15,8 +15,6 @@ const AccountInfo = () => {
   const [showPass, setShowPass] = useState(false);
   const [bird, setBird] = useState();
   const [accountData, setAccountData] = useState();
-
-
   //show đổi tài khoản
   const handleClose = () => setShow((prev) => !prev);
 
@@ -42,7 +40,11 @@ const AccountInfo = () => {
 
     });
   }, []);
+  
+  var Male = "nam";
+  var Female = "nữ";
 
+  
   return (
     <>
       <Bt.Modal show={show} onHide={handleClose}>
@@ -115,7 +117,7 @@ const AccountInfo = () => {
             <h4 className="text-dark fw-semibold mb-3">Ngày Sinh</h4>
             <h6 className="text-muted mb-3">{bird}</h6>
             <h4 className="text-dark fw-semibold mb-3">Giới tính</h4>
-            <h6 className="text-muted mb-3">{sex}</h6>
+            <h6 className="text-muted mb-3">{sex == 0 ? Male : Female}</h6>
             <h4 className="text-dark fw-semibold mb-3">Địa chỉ</h4>
             <h6 className="text-muted mb-3">{address}</h6>
             <h4 className="text-dark fw-semibold mb-3">Số điện thoại</h4>

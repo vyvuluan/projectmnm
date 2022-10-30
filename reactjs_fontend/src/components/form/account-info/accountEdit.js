@@ -1,23 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import  {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import * as Bt from "react-bootstrap";
 import swal from "sweetalert";
-import DatePicker from 'react-date-picker';
+import DatePicker from "react-date-picker";
 const AccountEdit = ({ accountData, showModal }) => {
   //   console.log(accountData);
-  const history = useNavigate()
-//   const [value, onChange] = useState(new Date());
+  const history = useNavigate();
+  //   const [value, onChange] = useState(new Date());
   const [ten, setTen] = useState(accountData?.username);
   const [gioiTinh, setGioiTinh] = useState(accountData?.customer?.gioiTinh);
   const [diaChi, setDiachi] = useState(accountData?.customer?.diaChi);
   const [sdt, setSdt] = useState(accountData?.customer?.sdt);
   const [ngaySinh, setNgaySinh] = useState(accountData?.customer?.ngaySinh);
-
-  const [gender, setGender] = React.useState('1');
+  const [errorSdt, setErrorSdt] = useState();
+  const [errorBird, setErrorBird] = useState();
+  console.log(accountData?.customer?.gioiTinh);
+  const [gender, setGender] = useState(accountData?.customer?.gioiTinh);
   const handleChange = (event) => {
-    setGender(event.target.value)
-  }
+    setGender(event.target.value);
+  };
 
   const handleUpdate = (e) => {
     // console.log("adsada");
@@ -28,22 +30,31 @@ const AccountEdit = ({ accountData, showModal }) => {
       ngaySinh: ngaySinh,
       diaChi: diaChi,
       sdt: sdt,
-      gioiTinh: 1,
+      gioiTinh: gioiTinh,
     };
     // console.log(e.target.value);
     // console.log(ngaySinh);
-    axios.put(`api/detailUser`, data).then((res) => {
+    axios
+      .put(`api/detailUser`, data)
+      .then((res) => {
         console.log(res);
-      if (res.data.status === 200) {
-        swal("Success", res.data.message, "success");
-        window.location.reload(false);
-      } else if (res.data.status === 404) {
-        swal("Error", res.data.message, "error");
-      }
-    }) .catch(function (error) {
-        // handle error
-        console.log(error);
+        if (res.data.status === 200) {
+          swal("Success", res.data.message, "success");
+          window.location.reload(false);
+        } else if (res.data.status === 404) {
+          swal("Error", res.data.message, "error");
+        } else if (res.data.status === 400) {
+          setErrorSdt(res.data.message.sdt);
+          // console.log(res.data.message.sdt);
+        }
       })
+      .catch(function (error) {
+        // handle error
+        // console.log(error);
+        if (error) {
+          setErrorBird("Định dạng ngày sinh d/m/y ex: 1/1/2001");
+        }
+      });
   };
 
   return (
@@ -66,17 +77,20 @@ const AccountEdit = ({ accountData, showModal }) => {
           <Bt.FormControl
             type="text"
             name="ngaySinh"
-            placeholder="Ngày sinh"
+            placeholder="ngày sinh"
             className="rounded-0"
             value={ngaySinh}
-            onChange={(e) => { console.log(e.target.value); return setNgaySinh(e.target.value)}}
+            onChange={(e) => setNgaySinh(e.target.value)}
           ></Bt.FormControl>
+          <span className="text-danger">{errorBird}</span>
         </Bt.FormGroup>
         <Bt.FormGroup
           className="mb-3"
           controlId="formSexual"
-
-            onChange={(e)=> {console.log(e.target.value); return (setGioiTinh(e.target.value))}}
+          onChange={(e) => {
+            // console.log(e.target.value);
+            return setGioiTinh(e.target.value);
+          }}
         >
           <Bt.FormLabel className="fw-semibold fs-4">Giới tính</Bt.FormLabel>
           <br></br>
@@ -84,9 +98,8 @@ const AccountEdit = ({ accountData, showModal }) => {
             <Bt.FormCheck.Input
               type="radio"
               id="flexRadio1"
-              value="1"
-              name = "nam"
-              checked={gender === "1"}
+              value="0"
+              checked={gender == "0"}
               onChange={handleChange}
             ></Bt.FormCheck.Input>
             <Bt.FormCheck.Label htmlFor="flexRadio1">Nam</Bt.FormCheck.Label>
@@ -95,9 +108,8 @@ const AccountEdit = ({ accountData, showModal }) => {
             <Bt.FormCheck.Input
               type="radio"
               id="flexRadio2"
-              value="2"
-              name ="nu"
-              checked={gender === "2"}
+              value="1"
+              checked={gender == "1"}
               onChange={handleChange}
             ></Bt.FormCheck.Input>
             <Bt.FormCheck.Label htmlFor="flexRadio2">Nữ</Bt.FormCheck.Label>
@@ -126,12 +138,13 @@ const AccountEdit = ({ accountData, showModal }) => {
             value={sdt}
             onChange={(e) => setSdt(e.target.value)}
           ></Bt.FormControl>
+          <span className="text-danger">{errorSdt}</span>
         </Bt.FormGroup>
         <Bt.Button
           variant="primary"
           type="submit"
           className="rounded-0 py-2 mt-3"
-          onClick={showModal}
+          // onClick={showModal}
         >
           Lưu thay đổi
         </Bt.Button>
