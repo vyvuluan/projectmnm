@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
 import swal from "sweetalert";
 
-const ChangePassAccount = () => {
+const ChangePassAccount = ({ showModal }) => {
   const [passOld, setPassOld] = useState();
   const [rePass, setRePass] = useState();
   const [comfirmPass, setComfirmPass] = useState();
@@ -75,7 +75,7 @@ const ChangePassAccount = () => {
           type="submit"
           variant="primary"
           className="rounded-0 py-2 mt-3"
-          // onClick={showModal}
+          // onClick={()=> handleShow()}
         >
           Lưu thay đổi
         </Bt.Button>
