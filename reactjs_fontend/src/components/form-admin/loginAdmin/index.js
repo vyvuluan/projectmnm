@@ -56,9 +56,9 @@ const LoginAdmin = () => {
             });
             history("/PageAdmin");
           } else if (res.data.status === 401) {
-            console.log(res.data);
+            // console.log(res.data);
             swal({
-              title: res.data.error,
+              title: res.data.message,
               icon: "warning",
               button: "đóng",
             });
