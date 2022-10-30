@@ -290,7 +290,7 @@ class UserController extends Controller
             'diaChi.max' => 'Ô địa chỉ tối đa 255 ký tự',
 
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
-            'sdt.max' => 'Ô số điện thoại tối đa 11 ký tự',
+            'sdt.max' => 'Ô số điện thoại tối đa 10 số',
             'sdt.numeric' => 'Ô số điện thoại phải là số',
 
             'gioiTinh.required' => 'Ô giới tính không được bỏ trống',
@@ -311,7 +311,7 @@ class UserController extends Controller
             $customer->ten = $request->ten;
             $customer->ngaySinh = Carbon::createFromFormat('d/m/Y', $request->ngaySinh)->format('Y-m-d');
             // date('Y-m-d', strtotime($request->ngaySinh));
-        
+
 
             $customer->diaChi = $request->diaChi;
 
@@ -345,9 +345,13 @@ class UserController extends Controller
 
         // ]);
         $validator = Validator::make($request->all(), [
+            'password_old' => 'required|max:255',
             'password' => 'required|max:255',
             're_password' => 'required|max:255',
         ], [
+            'password_old.required' => 'Ô password Không được bỏ trống',
+            'password_old.max' => 'Ô password tối đa 255 ký tự',
+
             'password.required' => 'Ô password Không được bỏ trống',
             'password.max' => 'Ô password tối đa 255 ký tự',
 
@@ -364,20 +368,29 @@ class UserController extends Controller
         if (auth('sanctum')->check()) {
             $password = $request->password;
             $re_password = $request->re_password;
-            if ($password != $re_password) {
+            $password_old = $request->password_old;
+            $user = User::find(auth('sanctum')->user()->id);
+            if (!Hash::check($request->password_old, $user->password)) {
                 return response()->json([
                     'status' => 401,
-                    'message' => 'password và nhập lại password không trùng khớp',
+                    'message' => 'password cũ không chính xác',
                 ]);
             } else {
-                $user = User::find(auth('sanctum')->user()->id);
+                if ($password != $re_password) {
+                    return response()->json([
+                        'status' => 401,
+                        'message' => 'password và nhập lại password không trùng khớp',
+                    ]);
+                } else {
+                    $user = User::find(auth('sanctum')->user()->id);
 
-                $user->password = Hash::make($password);
-                $user->save();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'update thành công',
-                ]);
+                    $user->password = Hash::make($password);
+                    $user->save();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'update thành công',
+                    ]);
+                }
             }
         } else {
             return response()->json([
