@@ -14,4 +14,8 @@ class CtPhieuXuat extends Model
         'soluong',
         'gia',
     ];
+    public function px()
+    {
+        return $this->belongsTo(PhieuXuat::class);
+    }
 }

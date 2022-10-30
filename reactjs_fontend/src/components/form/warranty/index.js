@@ -33,7 +33,7 @@ export default function Warrantycheck() {
 
                     <Bt.Row className='px-xl-5'>
                         <Bt.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
-                            <Bt.Table className='table-bordered text-center mb-0'>
+                            <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
                                 <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                     <tr>
                                         <th>Mã Sản phẩm</th>

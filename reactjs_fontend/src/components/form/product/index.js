@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AiFillEye } from "react-icons/ai";
 import { BsFillCartFill } from "react-icons/bs";
+import { Link, useSearchParams, useParams } from "react-router-dom";
 import Pagination from "../pagination";
+import axios from "axios";
+
 const Product = (props) => {
-  const {item} = props;
-  
+  const { item } = props;
+  // const id = useParams();
+
+  // const handleFindId = (id) => {
+  //   // console.log(axios.get('/api/loaisp/view').then((res) => res.data.Loaisp));
+  //   const arrayID = axios.get('/api/loaisp/view').then((res) => res.data.Loaisp)
+  //   arrayID.find(e=>e.id == id)
+  //   // console.log(typeof array D);
+  // }
+
   return (
     <>
       <div className="container-fluid pt-5">
-        <div className="row px-xl-5 pb-3">
+        <div className="row px-xl-4 pb-3">
           {item.map((item, index) => {
-            //console.log(index);
             for (let i = 0; i <= index; i++) {
               return (
                 <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -18,7 +28,7 @@ const Product = (props) => {
                     <div className="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                       <img
                         className="img-fluid w-100"
-                        src={item.hinh}
+                        src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                         alt="img product"
                       ></img>
                     </div>
@@ -38,7 +48,13 @@ const Product = (props) => {
                           className="text-decoration-none text-dark p-1"
                         >
                           <AiFillEye className="me-1 mb-1"></AiFillEye>
-                          <span>Xem chi tiết</span>
+
+                          <Link
+                            className="text-decoration-none"
+                            to={`/DetailProduct/${item.id}`}
+                          >
+                            <span>Xem chi tiết</span>
+                          </Link>
                         </a>
                       </div>
                       <div className="text-center">
@@ -47,7 +63,11 @@ const Product = (props) => {
                           className="text-decoration-none text-dark p-1"
                         >
                           <BsFillCartFill className="me-1 mb-1"></BsFillCartFill>
-                          <span>Thêm vào giỏ</span>
+                          <span>
+                            <Link className="text-decoration-none">
+                              Thêm vào giỏ
+                            </Link>
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -56,8 +76,6 @@ const Product = (props) => {
               );
             }
           })}
-          
-         
         </div>
       </div>
     </>

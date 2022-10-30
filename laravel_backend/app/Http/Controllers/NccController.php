@@ -5,19 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ncc;
+use Validator;
 use App\Http\Resources\NccResource;
 
 class NccController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Backup không còn xài nữa
     public function index()
     {
-        //return Ncc::all();
-        return NccResource::collection(Ncc::paginate(10));
+        $Ncc = Ncc::paginate();
+        return response()->json([
+            'status'=>200,
+            'Ncc'=>$Ncc,
+        ]);
     }
 
     /**
@@ -38,13 +38,30 @@ class NccController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'TenSP' => 'required',
-        //     'Gia' => 'required',
-        //     'Mota' => 'required',
-        // ]);
-        $Ncc = Ncc::create($request->all());
-        return new NccResource($Ncc);
+        $validator = Validator::make($request->all(),[
+            'tenNCC' =>'required|max:20',
+            'diaChi'=>'required|max:100',
+            'sdt'=>'required|numeric|digits:10',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $Ncc = new Ncc();
+            $Ncc->tenNCC = $request->tenNCC;
+            $Ncc->diaChi = $request->diaChi;
+            $Ncc->sdt = $request->sdt;
+            $Ncc->save();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Thêm Ncc thành công',
+            ]);
+        }
     }
 
     /**
@@ -67,7 +84,14 @@ class NccController extends Controller
      */
     public function edit($id)
     {
-        //
+        $Ncc = Ncc::find($id);
+        if($Ncc)
+        {
+            return response()->json([
+                'status'=>200,
+                'loaisp'=>$Ncc,
+            ]);
+        }
     }
 
     /**
@@ -77,10 +101,50 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Ncc $Ncc)
+    public function update(Request $request,$id)
     {
-        $Ncc->update($request->all());
-        return new NccResource($Ncc);
+        $validator = Validator::make($request->all(),[
+            'tenNCC' =>'required|max:20',
+            'diaChi'=>'required|max:100',
+            'sdt'=>'required|numeric|digits:10',
+        ],[
+            'tenNCC.required' => 'Ô tên nhà cung cấp Không được bỏ trống',
+            'diaChi.required' => 'Ô địa chỉ không được bỏ trống',
+            'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
+            'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+            'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $Ncc = Ncc::find($id);
+            if($Ncc)
+            {
+                $Ncc->tenNCC = $request->tenNCC;
+                $Ncc->diaChi = $request->diaChi;
+                $Ncc->sdt = $request->sdt;
+                $Ncc->save();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Cập nhật thành công ',
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Không tìm Ncc cần tìm',
+                ]);
+
+            }
+        }
     }
 
     /**
@@ -89,9 +153,25 @@ class NccController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ncc $Ncc)
+    public function destroy($id)
     {
 
-        $Ncc->delete();
+        $Ncc = Ncc::find($id);
+        if($Ncc)
+        {
+            $Ncc->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Xoá thành công',
+                ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'Không tìm thấy ncc cần xoá',
+                ]);
+
+        }
     }
 }

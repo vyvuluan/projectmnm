@@ -2,23 +2,43 @@
   "name": "projectmnm",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^35.2.1",
+    "@ckeditor/ckeditor5-react": "^5.0.2",
+    "@faker-js/faker": "^7.6.0",
+    "@reduxjs/toolkit": "^1.8.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@tinymce/tinymce-react": "^4.2.0",
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
+    "chart.js": "^3.9.1",
+    "faker": "^6.6.6",
+    "namor": "^2.0.4",
     "node-sass": "^7.0.3",
     "rc-footer": "^0.6.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-icons": "^1.9.1",
+    "react-chartjs-2": "^4.3.1",
+    "react-date-picker": "^9.0.0",
     "react-dom": "^18.2.0",
     "react-google-login": "^5.2.2",
     "react-icons": "^4.4.0",
+    "react-quill": "^2.0.0",
+    "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
+    "react-search-autocomplete": "^8.0.0",
+    "react-spinners": "^0.13.6",
+    "react-table": "^7.8.0",
+    "react-toastify": "^9.0.8",
     "reactjs-popup": "^2.0.5",
+    "redux": "^4.2.0",
+    "sweetalert": "^2.1.2",
+    "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -46,6 +66,7 @@
     ]
   },
   "devDependencies": {
+    "faker": "^5.5.3",
     "react-scripts": "^5.0.1"
   }
 }

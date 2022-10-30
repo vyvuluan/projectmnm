@@ -19,11 +19,18 @@ class Product extends Model
         'gia',
         'baohanh',
         'ctSanPham',
-        'moTa'];
-        public function loaisp()
-        {
-            return $this->belongsTo(loaisp::class,'maLoai','id');
-        }
-
+        'moTa'
+    ];
+    public function loaisp()
+    {
+        return $this->belongsTo(loaisp::class, 'maLoai', 'id');
+    }
+    public function pnct()
+    {
+        return $this->belongsTo(CtPhieuNhap::class, 'product_id', 'id');
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'product_id', 'id');
+    }
 }
-

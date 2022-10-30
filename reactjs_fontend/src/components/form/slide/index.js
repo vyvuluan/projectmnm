@@ -52,7 +52,7 @@ const Slideshows = () => {
           {/* -------------------------------------------------------------------------  */}
           <Category></Category>
           {/* ----------------------------------------------------------------- */}
-          <div id="header-carousel" className="carousel slide col">
+          <div className="carousel slide col header-carousel">
             <div className="carousel-inner">
               <div
                 className="carousel-item active"
@@ -75,7 +75,9 @@ const Slideshows = () => {
                   </>
                 ))}
               </div>
-              <div className=" carousel-caption d-flex flex-column align-items-center justify-content-center">
+              
+              <div style={{zIndex:"10"}} className=" carousel-caption d-flex flex-column align-items-center justify-content-center">
+                
                 <div
                   className="p-3"
                   style={{
@@ -88,11 +90,11 @@ const Slideshows = () => {
                   <h3 className="display-4 text-white font-weight-semi-bold mb-4">
                     Fashionable Dress
                   </h3>
-                  <a href="" className="btn btn-light py-2 px-3">
-                    Shop Now
-                  </a>
+                  
                 </div>
+                
               </div>
+            
             </div>
 
             <a

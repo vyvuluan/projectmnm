@@ -5,21 +5,20 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Nsx;
+use Validator;
 use App\Http\Resources\NsxResource;
 use Illuminate\Support\Facades\DB;
 
 class NsxController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     //Backup không còn xài nữa
     public function index()
     {
-
-        return Nsx::all();
-        // return NsxResource::collection(Nsx::paginate());
+        $Nsx = Nsx::paginate();
+        return response()->json([
+            'status'=>200,
+            'Nsx'=>$Nsx,
+        ]);
     }
 
     /**
@@ -40,13 +39,29 @@ class NsxController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'TenSP' => 'required',
-        //     'Gia' => 'required',
-        //     'Mota' => 'required',
-        // ]);
-        $Nsx = Nsx::create($request->all());
-        return new NsxResource($Nsx);
+
+        $validator = Validator::make($request->all(),[
+            'tenNSX' =>'required|max:10',
+            'quocGia'=>'required|max:20',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $Nsx = new Nsx();
+            $Nsx->tenNSX = $request->tenNSX;
+            $Nsx->quocGia = $request->quocGia;
+            $Nsx->save();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Thêm Nsx thành công',
+            ]);
+        }
     }
 
     /**
@@ -69,7 +84,14 @@ class NsxController extends Controller
      */
     public function edit($id)
     {
-        //
+        $Nsx = Nsx::find($id);
+        if($Nsx)
+        {
+            return response()->json([
+                'status'=>200,
+                'loaisp'=>$Nsx,
+            ]);
+        }
     }
 
     /**
@@ -79,16 +101,41 @@ class NsxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Nsx $Nsx)
+    public function update(Request $request, $id)
     {
-        $Nsx->update($request->all());
-        return new NsxResource($Nsx);
+        $validator = Validator::make($request->all(),[
+            'tenNSX' =>'required|max:10',
+            'quocGia'=>'required|max:20',
+        ]);
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
+        else
+        {
+            $Nsx = Nsx::find($id);
+            if($Nsx)
+            {
+                $Nsx->tenNSX = $request->tenNSX;
+                $Nsx->quocGia = $request->quocGia;
+                $Nsx->save();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Cập nhật thành công ',
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'Không tìm thấy loại sản phẩm',
+                ]);
 
-        // $data = $request->all();
-        // $Nsx = Nsx::find($id);
-        // $Nsx ->tenNSX = $data['tenNSX'];
-        // $Nsx ->quocGia = $data['quocGia'];
-        // $Nsx ->save();
+            }
+        }
     }
 
     /**
@@ -97,11 +144,24 @@ class NsxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Nsx $Nsx)
+    public function destroy( $id)
     {
-        $Nsx->delete();
-        return response()->json([
-            'message' => 'expense deleted'
-        ]);
+        $Nsx = Nsx::find($id);
+        if($Nsx)
+        {
+            $Nsx->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Xoá thành công',
+                ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'Không tìm thấy nsx cần xoá',
+                ]);
+
+        }
     }
 }

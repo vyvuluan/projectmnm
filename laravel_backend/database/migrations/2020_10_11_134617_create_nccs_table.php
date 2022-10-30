@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('nsxes', function (Blueprint $table) {
+        Schema::create('nccs', function (Blueprint $table) {
             $table->id();
             // $table->bigInteger('maNSX');
             $table->string('tenNCC');
             $table->string('diaChi');
             $table->string('sdt');
+          
             $table->timestamps();
-
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nsxes');
+        Schema::dropIfExists('nccs');
     }
 };

@@ -14,5 +14,18 @@ class Employee extends Model
         'diaChi',
         'gioiTinh',
         'user_id',
+        'cv_id',
     ];
+    public function cv()
+    {
+        return $this->belongsTo(ChucVu::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function pns()
+    {
+        return $this->hasMany(PhieuNhap::class,'empoyee_id','id');
+    }
 }

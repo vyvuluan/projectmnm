@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import {
@@ -7,8 +7,113 @@ import {
   FaUser,
   FaShoppingBag,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, NavLink, Route, useLocation } from "react-router-dom";
+import swal from "sweetalert";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import HomePage from "../../pages/home";
+import { DropDownMenu } from "../../form";
+
 export default function Header() {
+
+  const history = useNavigate();
+  const [nameUser, setNameUser] = useState(null);
+  const [product, setProduct] = useState([]);
+  const [search, setSearch] = useState('');
+  const [query, setQuery] = useState('pageproducts?search=' + search);
+
+
+  useEffect(() => {
+    if (localStorage.getItem("auth_name")) {
+      setNameUser(localStorage.getItem("auth_name"));
+    }
+  }, []);
+
+  const logoutSubmit = (e) => {
+    e.preventDefault();
+    axios.get("/sanctum/csrf-cookie").then((response) => {
+      axios.post("/api/logout").then((res) => {
+        if (res.data.status === 200) {
+          // console.log(res);
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_name");
+          swal({
+            title: res.data.message,
+            icon: "success",
+            button: "đóng",
+          });
+          history("/");   
+        }
+      });
+    });
+  };
+
+  let AuthButton = "";
+
+  if (!localStorage.getItem("auth_token")) {
+    AuthButton = (
+      <Bt.NavLink className="fs-5 fw-normal  text-end mt-2">
+        <Link className="text-decoration-none" to="/login">
+          Login
+        </Link>
+      </Bt.NavLink>
+    );
+  } else {
+    // console.log(localStorage.getItem("auth_name"));
+    AuthButton = (
+      <>
+        <div className="row ">
+          <div className="col-sm-9 text-center m-auto badge text-wrap">
+
+            <span className="text-danger  ">Chào, {nameUser}</span>
+          </div>
+          <div className="col-3 btn  rounded-0 border " style={{ width: "51px" }}>
+            <DropDownMenu logout={logoutSubmit} />
+          </div>
+          {/* <Bt.NavLink  className="fs-5 fw-normal me-2"> */}
+          {/* <Link className="text-decoration-none" to="/login"> */}
+          {/* Logout */}
+          {/* </Link> */}
+
+          {/* </Bt.NavLink> */}
+        </div>
+      </>
+    );
+  }
+
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   axios.get(`http://localhost:8000/api/products-search`).then(res => {
+  //     if (isMounted) {
+  //       if (res.data.status === 200) {
+  //         setCart(res.data.cart);
+  //         setLoading(false);
+  //       }
+  //       else if (res.data.status === 401) {
+  //         navaigate.push('/');
+  //         swal('Warning', res.data.message, 'error');
+  //       }
+  //     }
+  //   });
+
+  //   return () => {
+  //     isMounted = false
+  //   }
+  // })
+
+  const getValueSearch = (e) => {
+    setSearch(e.target.value);
+    setQuery('pageproducts?search=' + search);
+  }
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
+
   return (
     <>
       <Bt.Container fluid>
@@ -45,14 +150,14 @@ export default function Header() {
         </Bt.Row>
         <Bt.Row className="align-items-center py-3 px-xl-5">
           <Bt.Col lg={3} className="d-none d-lg-block">
-            <a href={"#"} className="text-decoration-none">
+            <Link to={'/'} className="text-decoration-none">
               <h1 className="text-dark m-0 display-5 fw-semibold">
                 <span className="font-weight-bold border px-3 me-1 text-primary">
                   L3M
                 </span>
                 Shop
               </h1>
-            </a>
+            </Link>
           </Bt.Col>
           <Bt.Col lg={6} className="col-6 text-start">
             <Bt.Form>
@@ -61,25 +166,28 @@ export default function Header() {
                   <Bt.Form.Control
                     type="text"
                     placeholder="Search"
+                    onChange={getValueSearch}
                     className="rounded-0 shadow-none focus-outline-none fw-semibold"
                   ></Bt.Form.Control>
                   <Bt.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
+                    <Link to={query}><FaSearch variant="primary" style={{ cursor: 'pointer' }} /></Link>
                   </Bt.InputGroup.Text>
                 </Bt.InputGroup>
               </Bt.Form.Group>
             </Bt.Form>
           </Bt.Col>
-          <Bt.Col lg={3} className="col-6 text-end">
-            {/* <a href={'#'} className='btn border rounded-0 me-3'>
-                            <FaUser style={{ width: 'auto', height: '25px' }} className='text-primary' />
-                        </a> */}
-            <Link to={`/Cart`} className="btn border rounded-0">
-              <FaShoppingCart
-                style={{ width: "auto", height: "25px" }}
-                className="text-primary"
-              />
-            </Link>
+          <Bt.Col lg={3} className="col-6">
+            <div className="row">
+              <div className="col-sm-9">{AuthButton}</div>
+              <div className="col-3 text-end">
+                <Link to={`/Cart`} className="btn border rounded-0">
+                  <FaShoppingCart
+                    style={{ width: "auto", height: "25px" }}
+                    className="text-primary"
+                  />
+                </Link>
+              </div>
+            </div>
           </Bt.Col>
         </Bt.Row>
         {/* TopBar-end */}
@@ -132,21 +240,30 @@ export default function Header() {
                       Liên hệ
                     </Link>
                   </Bt.NavLink>
-                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
-                    Về chúng tôi
+                  <Bt.NavLink className="fs-5 fw-normal me-2">
+                    <Link className="text-decoration-none" to="/pageproducts">
+                      Sản phẩm
+                    </Link>
                   </Bt.NavLink>
                 </Bt.Nav>
 
                 <Bt.Nav className="ms-auto py-2">
-                  <Bt.NavLink className="fs-5 fw-normal me-2">
+                  {/* <Bt.NavLink className="fs-5 fw-normal me-2">
                     <Link className="text-decoration-none" to="/login">
                       Login
                     </Link>
-                  </Bt.NavLink>
+                  </Bt.NavLink> */}
+                  {/* <Bt.NavLink className="fs-5 fw-normal me-2"> */}
+                  {/* <Link className="text-decoration-none" to="/login"> */}
+                  {/* Logout */}
+                  {/* </Link> */}
+                  {/* </Bt.NavLink> */}
 
                   {/* <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
                     Register
                   </Bt.NavLink> */}
+                  {/* <Bt.NavLink>xin chào, user</Bt.NavLink> */}
+                  {/* {AuthButton} */}
                 </Bt.Nav>
               </Bt.Navbar.Collapse>
             </Bt.Navbar>

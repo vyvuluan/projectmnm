@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
+use App\Models\CtPhieuXuat;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Validator;
 
 use PHPUnit\Framework\Constraint\Count;
 
@@ -21,46 +23,82 @@ class PaymentController extends Controller
      */
     public function dathang(Request $request)
     {
-        // if(auth('sanctum')->check())
-        // {
-        // $maKH= auth('sanctum')->user()->id;
-            $maKH=$request->maKH;
+        if (auth('sanctum')->check()) {
+            $maKH = auth('sanctum')->user()->customer->id;
+            // $maKH=$request->maKH;
             $payment = new PhieuXuat;
-            $payment->customer_id=$maKH;
-            $payment->status=0;
-            $payment->pt_ThanhToan='COD';
-            $payment->save();
+            $payment->customer_id = $maKH;
+            $payment->status = 0;
+            $payment->pt_ThanhToan = $request->payment_mode;
+            $payment->tenKH = $request->tenKH;
+            $payment->sdt = $request->sdt;
+            $payment->diaChi = $request->diaChi;
+            $payment->payment_id = $request->payment_id;
+            $tongTien = 0;
 
-            $cart = Cart::where('maKH',$maKH)->get();
-            $pxChiTiet =[];
-            foreach ($cart as $item)
-            {
-                $pxChiTiet[]=[
+            $cart = Cart::where('maKH', $maKH)->get();
+            $pxChiTiet = [];
+            foreach ($cart as $item) {
+                $pxChiTiet[] = [
 
-                    'product_id'=>$item->maSP,
-                    'soluong'=>$item->soLuongSP,
-                    'gia'=>$item->product->gia,
+                    'product_id' => $item->maSP,
+                    'soluong' => $item->soLuongSP,
+                    'gia' => $item->product->gia,
                 ];
                 $item->product->update([
-                    'soLuongSP'=>$item->product->soLuongSP - $item->soLuongSP
+                    'soLuongSP' => $item->product->soLuongSP - $item->soLuongSP
                 ]);
+                $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
+            $payment->tongTien = $tongTien;
+            $payment->save();
             $payment->pxct()->createMany($pxChiTiet);
             Cart::destroy($cart);
             return response()->json([
-                'status'=>200 ,
-                'message'=>'Đặt hàng thành công',
+                'status' => 200,
+                'message' => 'Đặt hàng thành công',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Đăng nhập để thanh toán',
+            ]);
+        }
+    }
+    public function validateOrder(Request $request)
+    {
+        if (auth('sanctum')->check()) {
+            $validator = Validator::make($request->all(), [
+                'tenKH' => 'required|max:191',
+                'sdt' => 'required|numeric|digits:10',
+                'diaChi' => 'required|max:191',
+
+            ], [
+                'tenKH.required' => 'Ô email Không được bỏ trống',
+                'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+                'sdt.numeric' => 'Ô số điện thoại phải có định dạng là số ',
+                'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+                'diaChi.required' => 'Ô Địa chỉ không được bỏ trống',
+
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 422,
+                    'errors' => $validator->messages(),
                 ]);
-
-        // }
-        // else
-        // {
-        //     return response()->json([
-        //         'status'=>401,
-        //         'message'=>'Đăng nhập để thanh toán',
-        //         ]);
-        // }
-
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Form Validated Successfully',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Login to Continue',
+            ]);
+        }
     }
 
 
@@ -107,7 +145,7 @@ class PaymentController extends Controller
         $amount = "10000";
         $orderId = time() . "";
         $redirectUrl = "http://localhost:8000/";
-        $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+        $ipnUrl = "http://localhost:8000/api/dathang";
         $extraData = "";
 
 
@@ -145,8 +183,46 @@ class PaymentController extends Controller
         // header('Location: ' . $jsonResult['payUrl']);
 
     }
-    public function vnpay()
+    public function vnpay(Request $request)
     {
+        if (auth('sanctum')->check()) {
+            $maKH = auth('sanctum')->user()->customer->id;
+            // $maKH=$request->maKH;
+            $payment = new PhieuXuat;
+            $payment->customer_id = $maKH;
+            $payment->status = 0;
+            $payment->pt_ThanhToan = $request->payment_mode;
+            $payment->tenKH = $request->tenKH;
+            $payment->sdt = $request->sdt;
+            $payment->diaChi = $request->diaChi;
+            $payment->payment_id = $request->payment_id;
+            $tongTien = 0;
+
+            $cart = Cart::where('maKH', $maKH)->get();
+            $pxChiTiet = [];
+            foreach ($cart as $item) {
+                $pxChiTiet[] = [
+
+                    'product_id' => $item->maSP,
+                    'soluong' => $item->soLuongSP,
+                    'gia' => $item->product->gia,
+                ];
+                $item->product->update([
+                    'soLuongSP' => $item->product->soLuongSP - $item->soLuongSP
+                ]);
+                $tongTien += ($item->soLuongSP) * ($item->product->gia);
+            }
+            $payment->tongTien = $tongTien;
+            $payment->save();
+            $payment->pxct()->createMany($pxChiTiet);
+            Cart::destroy($cart);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Đăng nhập để thanh toán',
+            ]);
+        }
+
         $code = rand(00, 9999);
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         /*
@@ -267,94 +343,74 @@ class PaymentController extends Controller
 
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
-              // if(auth('sanctum')->check())
-                // {
-                    // $maKH= auth('sanctum')->user()->id;
-                    $maKH=1;
-                    $payment = new PhieuXuat;
-                    $payment->customer_id=$maKH;
-                    $payment->status=0;
-                    $payment->pt_ThanhToan='VNPAY';
-                    $payment->save();
 
-                    $cart = Cart::where('maKH',$maKH)->get();
-                    $pxChiTiet =[];
-                    foreach ($cart as $item)
-                    {
-                        $pxChiTiet[]=[
-
-                            'product_id'=>$item->maSP,
-                            'soluong'=>$item->soLuongSP,
-                            'gia'=>$item->product->gia,
-                        ];
-                        $item->product->update([
-                            'soLuongSP'=>$item->product->soLuongSP - $item->soLuongSP
-                        ]);
-                    }
-                    $payment->pxct()->createMany($pxChiTiet);
-                    Cart::destroy($cart);
-                    return response()->json([
-                        'status'=>200 ,
-                        'message'=>'Đặt hàng thành công',
-                        ]);
-
-                    return Redirect::to('http://localhost:3000?Status=0&orderId='.$orderId.'&Amount='.$vnp_Amount);
-    // }
-    // else
-    // {
-    //     return response()->json([
-    //         'status'=>401,
-    //         'message'=>'Đăng nhập để thanh toán',
-    //         ]);
-    // }
-
-
-
-
-            //return redirect('localhost:3000')->with('message', $datapay);
-            //return response($get);
-
-            // if(empty($get))
-            // {
-            //     $ngayMua=getdate();
-            //     $datapay = [
-            //         'status' => 'Hoàn Thành',
-            //         'customer_id' => '113',
-            //         'employee_id' => '',
-
-            //     ];
-            //     PhieuXuat::insert($datapay);
-            // }
-            // else
-            // {
-            //             foreach( $get as $key => $value )
-            //             {
-
-            //                 $arr[]= get_object_vars($value);
-            //                 $return = $arr[$key];
-            //                 $id = $return['OrderId'];
-            //                 if( $id == $orderId)
-            //                 {
-            //                     $orderId++;
-
-            //                 }
-            //             }
-
-            //                 $datapay = [
-            //                     'id'=> $orderId,
-            //                     'status' => 'Hoàn Thành',
-            //                     'customer_id' => '113',
-            //                     'employee_id' => '',
-            //                 ];
-            //                 PhieuXuat::insert($datapay);
-            //                 //return response($orderId);
-
-
-
-            // }
+            return Redirect::to('http://localhost:3000?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
         }
+        // }
+        // else
+        // {
+        //     return response()->json([
+        //         'status'=>401,
+        //         'message'=>'Đăng nhập để thanh toán',
+        //         ]);
+        // }
+
+
+
+
+        //return redirect('localhost:3000')->with('message', $datapay);
+        //return response($get);
+
+        // if(empty($get))
+        // {
+        //     $ngayMua=getdate();
+        //     $datapay = [
+        //         'status' => 'Hoàn Thành',
+        //         'customer_id' => '113',
+        //         'employee_id' => '',
+
+        //     ];
+        //     PhieuXuat::insert($datapay);
+        // }
+        // else
+        // {
+        //             foreach( $get as $key => $value )
+        //             {
+
+        //                 $arr[]= get_object_vars($value);
+        //                 $return = $arr[$key];
+        //                 $id = $return['OrderId'];
+        //                 if( $id == $orderId)
+        //                 {
+        //                     $orderId++;
+
+        //                 }
+        //             }
+
+        //                 $datapay = [
+        //                     'id'=> $orderId,
+        //                     'status' => 'Hoàn Thành',
+        //                     'customer_id' => '113',
+        //                     'employee_id' => '',
+        //                 ];
+        //                 PhieuXuat::insert($datapay);
+        //                 //return response($orderId);
+
+
+
+        // }
+
     }
 
+    public function getStatus($id)
+    {
+        $px = PhieuXuat::find($id);
+        return response()->json([
+            'id' => $px->id,
+            'tinhTrang' => $px->status,
+            'donHang' => $px,
+        ]);
+    }
 
 
 

@@ -3,9 +3,9 @@ import "./style.css";
 const Filter = () => {
   return (
     <>
-      <div className="col-lg-3 col-md-12">
+      
         <div className="border-bottom mb-4 pb-4">
-          <h5 className="font-weight-semi-bold mb-4">Filter by price</h5>
+          <h5 className="pl-3">Filter by price</h5>
           <form>
             <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
               <input
@@ -88,7 +88,7 @@ const Filter = () => {
             </div>
           </form>
         </div>
-      </div>
+      
     </>
   );
 };

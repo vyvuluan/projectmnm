@@ -9,4 +9,8 @@ class Ncc extends Model
 {
     use HasFactory;
     protected $fillable = ['tenNCC', 'diaChi', 'sdt'];
+    public function ncc()
+    {
+        return $this->hasMany(PhieuNhap::class,'ncc_id','id');
+    }
 }

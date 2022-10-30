@@ -14,11 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('ct_phieu_xuats', function (Blueprint $table) {
-            $table->bigInteger('px_id');
-            $table->bigInteger('product_id');
+            $table->bigInteger('px_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
             $table->integer('soluong');
             $table->integer('gia');
             $table->timestamps();
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('px_id')->references('id')->on('phieu_xuats')->onDelete('cascade');
         });
     }
 

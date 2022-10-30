@@ -11,13 +11,27 @@ class ContactContrller extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
+        // $request->validate([
+        //     'message' => 'required|max:255',
+        // ],[
+        //     'message.required' => 'Ô message không được bỏ trông',
+        //     'message.max' => 'Ô message tối đa 255 ký tự',
+        // ]);
+
+        $validator = Validator::make($request->all(),[
             'message' => 'required|max:255',
         ],[
             'message.required' => 'Ô message không được bỏ trông',
             'message.max' => 'Ô message tối đa 255 ký tự',
         ]);
 
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'error'=>$validator->messages(),
+            ]);
+        }
         if(auth('sanctum')->check())
         {
             $contact = new Contact();
@@ -26,7 +40,7 @@ class ContactContrller extends Controller
             $contact->save();
 
             return response()->json([
-
+                'status' => 200,
                 'message' => 'Thành công',
                 'contact' => $contact->message,
             ]);

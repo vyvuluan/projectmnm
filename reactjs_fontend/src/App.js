@@ -1,15 +1,32 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SideNavBar from "./components/form-admin/sidebar/SideNavBar.js";
-import { PublicRouter } from "./Router";
-import { NavbarAdmin } from "./components/form-admin/index.js";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import axios from "axios";
+import { PublicRouter, PublicRouter_Admin, PrivateRoute } from "./Router";
+import { ProductCate } from "./components/form/index.js";
+import PrivateRoutes from "./Router/AdminPrivateRoute";
+import { EmptyCart, NotFoundPage } from "./components";
+// import TestTable from "./components/form-admin/TestTable";
+// import { DropDownMenu } from "./components/form";
+// import HomePage from "./components/pages/home/index.js"
+axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.post["Accept"] = "application/json";
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common["Authorization"] =
+  "Bearer " + localStorage.getItem("auth_token");
+
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("auth_token");
+  config.headers.Authorization = token ? `Bearer ${token}` : "";
+  return config;
+});
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          {PublicRouter.map((item, index) => {
+          {PublicRouter.map((item) => {
             let Page = <item.component />;
             if (item.layout !== null) {
               const Layout = <item.layout children={Page} />;
@@ -17,7 +34,17 @@ function App() {
             }
             return <Route path={item.path} element={Page} />;
           })}
-          <Route path="/navbaradmin" element={<NavbarAdmin />}></Route>
+          
+          {PublicRouter_Admin.map((item) => {
+            let Page = <item.component />;
+            const Layout = <item.layout children={Page} />;
+            Page = Layout;
+            return <Route element={<PrivateRoutes />}><Route path={item.path} element={Page} /></Route>;
+          })}
+          
+          <Route path="*" element={<NotFoundPage />} />
+          {/* <Route path="/test" element={<EmptyCart />} /> */}
+          
         </Routes>
       </BrowserRouter>
     </>

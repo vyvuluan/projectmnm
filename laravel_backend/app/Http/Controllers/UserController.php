@@ -4,41 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\Employee;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|max:255|email',
+            'password' => 'required|max:255',
+        ], [
+            //'email.required' => 'Ô email Không được bỏ trống',
+            'email.max' => 'Ô email tối đa 255 ký tự',
+            'email.email' => 'Ô email không đúng định dạng',
+            'required' => 'ô :attribute không được bỏ trống',
+            //'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->messages(),
+            ]);
+        }
+
+        // $request->validate([
+        //     'email' => 'required|max:255',
+        //     'password' => 'required|max:255',
+        // ],[
+        //     'email.required' => 'Ô email Không được bỏ trống',
+        //     'email.max' => 'Ô email tối đa 255 ký tự',
+
+        //     'password.required' => 'Ô password không được bỏ trống',
+        //     'password.max' => 'Ô password tối đa 255 ký tự',
+
+
+
+        // ]);
         $user = User::where('email', $request->email)->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password) ) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
 
 
             return response()->json([
                 'status' => 401,
-                'message' => 'error',
+                'error' => 'Không đúng tài khoản hoặc mật khẩu',
             ]);
-        }
-        else
-        {
-            if($user->role_id == 2) //admin
-            {
-                $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+        } else {
+            if ($user->role_id == 1) {
+                $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
             }
-            else
-            {
-                $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
-            }
-            // $token= $user->createToken($user->email.'_Token')->plainTextToken;
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
                 'token' => $token,
-                'message' => 'login successfully',
+                'message' => 'Đăng nhập thành công',
             ]);
         }
     }
@@ -50,48 +78,87 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        if(empty($request->role_id))
-        {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-        }
-        else
-        {
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role_id' => $request->role_id,
+        // $request->validate([
+        //     'email' => 'required|email|unique:users',
+        //     'username' => 'required|max:255|unique:users',
+        //     'password' => 'required|max:255',
+        //     're_password' => 'required|max:255',
+        // ],[
+        //     'email.required' => 'Ô email Không được bỏ trống',
+        //     'email.email' => 'Địa chỉ email không hợp lệ',
+        //     'email.unique' => 'Địa chỉ email đã tồn tại',
+
+        //     'username.required' => 'Ô username không được bỏ trống',
+        //     'username.max' => 'Ô username tối đa 255 ký tự',
+        //     'username.unique' => 'username đã tồn tại',
+
+        //     'password.required' => 'Ô password không được bỏ trống',
+        //     'password.max' => 'Ô password tối đa 255 ký tự',
+
+        //     're_password.required' => 'Ô re_password không được bỏ trống',
+        //     're_password.max' => 'Ô re_password tối đa 255 ký tự',
+
+
+
+        // ]);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users',
+            'username' => 'required|max:255|unique:users',
+            'password' => 'required|max:255',
+            're_password' => 'required|max:255',
+        ], [
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.email' => 'Địa chỉ email không hợp lệ',
+            'email.unique' => 'Địa chỉ email đã tồn tại',
+
+            'username.required' => 'Ô username không được bỏ trống',
+            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.unique' => 'username đã tồn tại',
+
+            'password.required' => 'Ô password không được bỏ trống',
+            'password.max' => 'Ô password tối đa 255 ký tự',
+
+            're_password.required' => 'Ô re_password không được bỏ trống',
+            're_password.max' => 'Ô re_password tối đa 255 ký tự',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
         }
 
-        if($user->role_id == 2) //admin
-        {
-            $token= $user->createToken($user->email.'_AdminToken',['server:admin'])->plainTextToken;
+        if ($request->re_password != $request->password) {
+            return response()->json([
+                'status' => 401,
+                'error' => 'Password và nhập lại password không trùng khớp',
+            ]);
+        } else {
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+
+            $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+            $customer = new Customer();
+            $customer->user_id = $user->id;
+            $customer->save();
+            return response()->json([
+                'status' => 200,
+                'username' => $user->username,
+                'token' => $token,
+                'message' => 'Đăng ký thành công',
+            ]);
         }
-        else
-        {
-            $token= $user->createToken($user->email.'_Token',[''])->plainTextToken;
-        }
-        $customer = new Customer();
-        $customer->user_id = $user->id;
-        $customer->save();
-        return response()->json([
-            'status' => 200,
-            'username' => $user->username,
-            'token' => $token,
-            'message' => 'registered successfully',
-        ]);
     }
     public function logout()
     {
         auth()->user()->tokens()->delete();
         return response()->json([
             'status' => 200,
-            'message' => 'logout successfully',
+            'message' => 'Đăng xuất thành công',
         ]);
     }
 
@@ -104,7 +171,10 @@ class UserController extends Controller
             return $validated;
         }
 
-        return Socialite::driver($provider)->stateless()->redirect();
+        return response()->json([
+            'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
+        ]);
+        //return Socialite::driver($provider)->stateless()->redirect();
     }
 
     /**
@@ -144,13 +214,14 @@ class UserController extends Controller
                 'avatar' => $user->getAvatar()
             ]
         );
-        $token = $userCreated->createToken($user->getEmail() .'_Token')->plainTextToken;
+        $token = $userCreated->createToken($user->getEmail() . '_Token')->plainTextToken;
 
-        return response()->json([
-        'status' => 200,
-        'message' => 'logout successfully',
-        'userCreated' =>$userCreated ,
-        'Access-Token' => $token]);
+        return Redirect::to('http://localhost:3000?token=' . $token . '&email=' . $user->email);
+        // return response()->json([
+        // 'status' => 200,
+        // 'message' => 'Đăng nhập thành công',
+        // 'userCreated' =>$userCreated ,
+        // 'Access-Token' => $token]);
     }
 
     /**
@@ -165,15 +236,12 @@ class UserController extends Controller
     }
     public function detailUser()
     {
-        if(auth('sanctum')->check())
-        {
+        if (auth('sanctum')->check()) {
             return response()->json([
                 'data_user' => auth('sanctum')->user(),
                 'data_customer' => auth('sanctum')->user()->customer,
             ]);
-        }
-        else
-        {
+        } else {
             return response()->json([
 
                 'message' => 'Chưa đăng nhập',
@@ -182,14 +250,38 @@ class UserController extends Controller
     }
     public function updateUser(Request $request)
     {
-        $request->validate([
+        // $request->validate([
+        //     'ten' => 'required|max:255',
+        //     'ngaySinh' => 'required',
+        //     'diaChi' => 'required|max:255',
+        //     'sdt' => 'required|max:1000000000|numeric',
+        //     'gioiTinh' => 'required|max:1|numeric',
+
+        // ],[
+        //     'ten.required' => 'Ô Tên Không được bỏ trống',
+        //     'ten.max' => 'Ô Tên tối đa 255 ký tự',
+        //     'ngaySinh.required' => 'Ô ngày sinh không được bỏ trống',
+        //     //'ngaySinh.strtotime' => 'Ô ngày sinh không đúng định dạng',
+        //     'diaChi.required' => 'Ô địa chỉ không được bỏ trống',
+        //     'diaChi.max' => 'Ô địa chỉ tối đa 255 ký tự',
+
+        //     'sdt.required' => 'Ô số điện thoại không được bỏ trống',
+        //     'sdt.max' => 'Ô số điện thoại tối đa 11 ký tự',
+        //     'sdt.numeric' => 'Ô số điện thoại phải là số',
+
+        //     'gioiTinh.required' => 'Ô giới tính không được bỏ trống',
+        //     'gioiTinh.max' => 'Ô giới tính tối đa 1 ký tự',
+        //     'gioiTinh.numeric' => 'Ô giới tính phải là số',
+
+        // ]);
+
+        $validator = Validator::make($request->all(), [
             'ten' => 'required|max:255',
             'ngaySinh' => 'required',
             'diaChi' => 'required|max:255',
             'sdt' => 'required|max:1000000000|numeric',
             'gioiTinh' => 'required|max:1|numeric',
-
-        ],[
+        ], [
             'ten.required' => 'Ô Tên Không được bỏ trống',
             'ten.max' => 'Ô Tên tối đa 255 ký tự',
             'ngaySinh.required' => 'Ô ngày sinh không được bỏ trống',
@@ -198,20 +290,28 @@ class UserController extends Controller
             'diaChi.max' => 'Ô địa chỉ tối đa 255 ký tự',
 
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
-            'sdt.max' => 'Ô số điện thoại tối đa 11 ký tự',
+            'sdt.max' => 'Ô số điện thoại tối đa 10 số',
             'sdt.numeric' => 'Ô số điện thoại phải là số',
 
             'gioiTinh.required' => 'Ô giới tính không được bỏ trống',
             'gioiTinh.max' => 'Ô giới tính tối đa 1 ký tự',
             'gioiTinh.numeric' => 'Ô giới tính phải là số',
-            
         ]);
-        if(auth('sanctum')->check())
-        {
-            $customer = Customer::find(auth('sanctum')->user()->id);
-            
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => $validator->messages(),
+            ]);
+        }
+
+        if (auth('sanctum')->check()) {
+
+            $customer = Customer::find(auth('sanctum')->user()->customer->id);
+
             $customer->ten = $request->ten;
-            $customer->ngaySinh = date('Y-m-d', strtotime($request->ngaySinh));
+            $customer->ngaySinh = Carbon::createFromFormat('d/m/Y', $request->ngaySinh)->format('Y-m-d');
+            // date('Y-m-d', strtotime($request->ngaySinh));
+
 
             $customer->diaChi = $request->diaChi;
 
@@ -219,11 +319,10 @@ class UserController extends Controller
             $customer->gioiTinh = $request->gioiTinh;
             $customer->save();
             return response()->json([
+                'status' => 200,
                 'message' => 'update thành công',
             ]);
-        }
-        else
-        {
+        } else {
             return response()->json([
 
                 'message' => 'Chưa đăng nhập',
@@ -232,48 +331,72 @@ class UserController extends Controller
     }
     public function changePass(Request $request)
     {
-        $request->validate([
+        // $request->validate([
+        //     'password' => 'required|max:255',
+        //     're_password' => 'required|max:255',
+        // ],[
+        //     'password.required' => 'Ô password Không được bỏ trống',
+        //     'password.max' => 'Ô password tối đa 255 ký tự',
+
+        //     're_password.required' => 'Ô re-password không được bỏ trống',
+        //     're_password.max' => 'Ô re-password tối đa 255 ký tự',
+
+
+
+        // ]);
+        $validator = Validator::make($request->all(), [
+            'password_old' => 'required|max:255',
             'password' => 'required|max:255',
             're_password' => 'required|max:255',
-        ],[
+        ], [
+            'password_old.required' => 'Ô password Không được bỏ trống',
+            'password_old.max' => 'Ô password tối đa 255 ký tự',
+
             'password.required' => 'Ô password Không được bỏ trống',
             'password.max' => 'Ô password tối đa 255 ký tự',
-            
-            're_password.required' => 'Ô re-password không được bỏ trống',
-            're_password.max' => 'Ô re-password tối đa 255 ký tự',
 
-            
-            
+            're_password.required' => 'Ô re_password không được bỏ trống',
+            're_password.max' => 'Ô re_password tối đa 255 ký tự',
         ]);
-        if(auth('sanctum')->check())
-        {
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => $validator->messages(),
+            ]);
+        }
+
+        if (auth('sanctum')->check()) {
             $password = $request->password;
             $re_password = $request->re_password;
-            if($password != $re_password)
-            {
+            $password_old = $request->password_old;
+            $user = User::find(auth('sanctum')->user()->id);
+            if (!Hash::check($request->password_old, $user->password)) {
                 return response()->json([
-                    'message' => 'password và nhập lại password không trùng khớp',
+                    'status' => 401,
+                    'message' => 'password cũ không chính xác',
                 ]);
+            } else {
+                if ($password != $re_password) {
+                    return response()->json([
+                        'status' => 401,
+                        'message' => 'password và nhập lại password không trùng khớp',
+                    ]);
+                } else {
+                    $user = User::find(auth('sanctum')->user()->id);
+
+                    $user->password = Hash::make($password);
+                    $user->save();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'update thành công',
+                    ]);
+                }
             }
-            else
-            {
-                $user = User::find(auth('sanctum')->user()->id);
-            
-                $user->password = Hash::make($password);
-                $user->save();
-                return response()->json([
-                    'message' => 'update thành công',
-                ]);
-            }
-           
-        }
-        else
-        {
+        } else {
             return response()->json([
 
                 'message' => 'Chưa đăng nhập',
             ]);
         }
     }
-
 }

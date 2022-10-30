@@ -15,11 +15,18 @@ return new class extends Migration
     {
         Schema::create('phieu_xuats', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('employee_id')->nullable();
-            $table->bigInteger('customer_id');
+            $table->bigInteger('employee_id')->nullable()->unsigned();
+            $table->bigInteger('customer_id')->nullable()->unsigned();
             $table->integer('status');
             $table->string('pt_ThanhToan');
+            $table->string('tenKH');
+            $table->integer('sdt');
+            $table->string('diaChi');
+            $table->string('payment_id')->nullable();
+            $table->bigInteger('tongTien')->nullable();
             $table->timestamps();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

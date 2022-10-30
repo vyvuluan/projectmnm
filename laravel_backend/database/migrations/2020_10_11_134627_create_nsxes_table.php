@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('nccs', function (Blueprint $table) {
+        Schema::create('nsxes', function (Blueprint $table) {
             $table->id();
             // $table->bigInteger('maNSX');
             $table->string('tenNSX');
             $table->string('quocGia');
             $table->timestamps();
+
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nccs');
+        Schema::dropIfExists('nsxes');
     }
 };
