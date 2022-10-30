@@ -206,7 +206,7 @@ class PaymentController extends Controller
             );
 
             $result = $this->execPostRequest($endpoint, json_encode($data));
-            //var_dump($result);
+            var_dump($result);
             $jsonResult = json_decode($result, true);  // decode json
             return redirect()->to($jsonResult['payUrl']);
         } else {
@@ -383,7 +383,7 @@ class PaymentController extends Controller
 
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
-
+            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '3']);
             return Redirect::to('http://localhost:3000?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
         }
         // }
