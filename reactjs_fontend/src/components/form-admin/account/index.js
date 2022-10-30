@@ -5,38 +5,51 @@ import { FaUserEdit, FaSearch } from "react-icons/fa";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
 const Account = () => {
+  const cookies = new Cookies();
   const [user, setUser] = useState([]);
   const [addAccount, setAddAccount] = useState({
     username: "",
-    email:"",
+    email: "",
     password: "",
-    role_id:"",
+    role_id: "",
   });
   const handleInput = (e) => {
     e.persist();
     setAddAccount({ ...addAccount, [e.target.name]: e.target.value });
   };
 
-  
-//   hiển thị ds user
+  //   hiển thị ds user
+
   useEffect(() => {
     // const controller = new AbortController();
-
-    axios
-      .get("/api/admin/manageUser")
-      .then((res) => {
-        // console.log(res.data.users.data);
-        setUser(res.data.users.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-    // return () => controller.abort();
+    if (cookies.get("role_id") == 2) {
+      axios
+        .get("/api/admin/manageUser")
+        .then((res) => {
+          // console.log(res.data.users.data);
+          setUser(res.data.users.data);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+      // return () => controller.abort();
+    } else {
+      axios
+        .get("/api/nhanvien/manageUser")
+        .then((res) => {
+          // console.log(res.data.users.data);
+          setUser(res.data.users.data);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    }
   }, []);
-
   var htmlRole;
   return (
     <>
@@ -87,10 +100,10 @@ const Account = () => {
             </B.Form>
           </B.Col>
         </B.Row>
-        
+
         <B.Row className="pe-xl-5 mb-5">
           <B.Col lg={8}>
-            <B.Form >
+            <B.Form>
               <B.FormGroup>
                 <B.FormControl
                   type="text"
@@ -122,7 +135,6 @@ const Account = () => {
             </B.Form>
           </B.Col>
           <B.Col lg={4}>
-           
             <B.Button
               variant="outline-primary"
               className="rounded-0 py-2 mb-2 w-100"

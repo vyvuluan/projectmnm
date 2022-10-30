@@ -29,7 +29,7 @@
 }
 
 .dropdown-menu1 {
-  z-index: 2;
+  z-index: 10;
   position: absolute;
   top: 50px;
   right: 0;
@@ -59,6 +59,7 @@
   visibility: visible;
   transform: translateY(0);
   transition: var(--speed) ease;
+  z-index: 10;
 }
 
 .dropdown-menu1.inactive {

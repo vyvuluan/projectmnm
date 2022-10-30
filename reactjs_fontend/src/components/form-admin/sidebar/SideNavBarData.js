@@ -15,7 +15,7 @@ import { BiBuildingHouse } from "react-icons/bi";
 //sp 3
 //lien he 4
 // nhan vien 2
-//tai khoản 2
+//tai khoản 2,4
 // ncc nsx 3
 //pn px 3
 
@@ -63,7 +63,7 @@ export const SideNavBarData = [
     path: "/account",
     icon: <MdOutlineManageAccounts />,
     link: `/Account`,
-    id_role:[2]
+    id_role:[2,4]
   },
   {
     title: "Nhà sản xuất",
