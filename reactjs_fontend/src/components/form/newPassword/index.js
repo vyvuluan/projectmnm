@@ -1,10 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams,useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 const NewPass = () => {
+  const [searchParam, setSearchParam] = useSearchParams();
+  const token = searchParam.get("token");
+  const history = useNavigate()
+  // console.log(searchParam.get("token"));
+  const [resetPass, setResetPass] = useState({
+    password: "",
+  });
+
+  const handleInput = (e) => {
+    e.persist();
+    setResetPass({ ...resetPass, [e.target.name]: e.target.value });
+    console.log(e.target.value);
+  };
+  const SubmitNewPass = (e) => {
+    e.preventDefault();
+    // console.log(data);
+
+    axios
+      .put(`/api/reset-password/${token}`)
+      .then((res) => {
+        // console.log(res);
+        if (res.status === 200) {
+          console.log(res);
+          swal({
+            title: "Thay đổi thành công",
+            icon: "success",
+            button: "đóng",
+          });
+        }
+        history("/login")
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
   return (
     <>
       <div className="Auth-form-container">
-        <form className="Auth-form">
+        <form className="Auth-form" onSubmit={SubmitNewPass}>
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Lấy lại password</h3>
 
@@ -12,8 +50,12 @@ const NewPass = () => {
               <label>Mật khẩu mới</label>
               <input
                 type="password"
+                name="password"
                 className="form-control mt-1 shadow-sm"
                 placeholder="password"
+                onChange={handleInput}
+                value={resetPass.password}
+                required
               />
             </div>
 
