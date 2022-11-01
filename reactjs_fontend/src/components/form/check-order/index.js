@@ -3,6 +3,7 @@ import "./style.css";
 import OrderDetail from "../order-detail";  
 import { Link } from "react-router-dom";
 const CheckOrder = () => {
+  
   return (
     <>
       <div className="container padding-bottom-3x mb-5 mt-5">
@@ -33,7 +34,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-cart"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Đơn hàng đã xác nhận</h4>
+                  <h4 className="step-title">Đơn hàng chờ xác nhận</h4>
                 </div>
                 <div className="step completed">
                   <div className="step-icon-wrap">
@@ -41,7 +42,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-config"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Quy trình đặt hàng</h4>
+                  <h4 className="step-title">Đơn hàng đã xác nhận</h4>
                 </div>
                 <div className="step completed">
                   <div className="step-icon-wrap">
@@ -49,7 +50,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-medal"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Kiểm tra chất lượng</h4>
+                  <h4 className="step-title">Đang được vận chuyển</h4>
                 </div>
                 <div className="step">
                   <div className="step-icon-wrap">
@@ -57,7 +58,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-car"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Sản phẩm được gửi đi</h4>
+                  <h4 className="step-title">Đã thanh toán</h4>
                 </div>
                 <div className="step">
                   <div className="step-icon-wrap">

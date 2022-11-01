@@ -23,6 +23,7 @@ import {
   Warrantycheck,
   Checkout,
   Accountinfo,
+  NewPass,
 
 } from "../components/form";
 import {
@@ -46,6 +47,11 @@ export const PublicRouter = [
   {
     path: "/Login",
     component: Login,
+    layout: null,
+  },
+  {
+    path: "/newPass",
+    component: NewPass,
     layout: null,
   },
   {
