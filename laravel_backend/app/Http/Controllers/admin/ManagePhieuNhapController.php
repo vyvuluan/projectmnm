@@ -7,7 +7,7 @@ use App\Models\CtPhieuNhap;
 use Illuminate\Http\Request;
 use App\Models\PhieuNhap;
 use App\Models\Product;
-
+use Illuminate\Support\Facades\Validator;
 class ManagePhieuNhapController extends Controller
 {
     public function addPN(Request $request)
@@ -15,7 +15,6 @@ class ManagePhieuNhapController extends Controller
         if (auth('sanctum')->check()) {
             $pn = new PhieuNhap();
             $pn->employee_id = auth('sanctum')->user()->employee->id;
-            $pn->status = $request->status;
             $pn->ncc_id = $request->ncc_id;
             $pn->save();
             return response()->json([
@@ -32,6 +31,24 @@ class ManagePhieuNhapController extends Controller
     }
     public function addCtPN(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'soluong' => 'required|numeric',
+            'gia' => 'required|numeric',
+        ], [
+
+            'soluong.required' => 'Ô số lượng không được bỏ trống',
+            'soluong.numeric' => 'Ô số lượng phải là số',
+
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => $validator->messages(),
+            ]);
+        }
+
         if (auth('sanctum')->check()) {
             $ctpn = new CtPhieuNhap();
             $ctpn->product_id = $request->product_id;
@@ -111,6 +128,23 @@ class ManagePhieuNhapController extends Controller
 
     public function updateCtPN(Request $request, $pn_id, $product_id)
     {
+        $validator = Validator::make($request->all(), [
+            'soluong' => 'required|numeric',
+            'gia' => 'required|numeric',
+        ], [
+
+            'soluong.required' => 'Ô số lượng không được bỏ trống',
+            'soluong.numeric' => 'Ô số lượng phải là số',
+
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => $validator->messages(),
+            ]);
+        }
         if (auth('sanctum')->check()) {
 
             $pn = PhieuNhap::find($pn_id);
