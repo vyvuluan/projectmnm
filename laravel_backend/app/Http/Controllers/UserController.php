@@ -316,7 +316,7 @@ class UserController extends Controller
             $customer = Customer::find(auth('sanctum')->user()->customer->id);
 
             $customer->ten = $request->ten;
-            $customer->ngaySinh = Carbon::createFromFormat('d/m/Y', $request->ngaySinh)->format('Y-m-d');
+            $customer->ngaySinh = Carbon::createFromFormat('Y-m-d', $request->ngaySinh)->format('Y-m-d');
             // date('Y-m-d', strtotime($request->ngaySinh));
 
 
