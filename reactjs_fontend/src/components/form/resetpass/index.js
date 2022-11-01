@@ -11,7 +11,7 @@ const ForgotPass =() =>{
   const handleInput = (e) => {
     e.persist();
     setResetEmail({ ...resetEmail, [e.target.name]: e.target.value });
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const resetPassSubmit = (e) => {
@@ -22,7 +22,7 @@ const ForgotPass =() =>{
     // console.log(data);
     
       axios.post("/api/reset-password", data).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {
           // console.log(res);
           swal({

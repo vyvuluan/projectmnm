@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useSearchParams,useNavigate } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 const NewPass = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const token = searchParam.get("token");
-  const history = useNavigate()
+  const history = useNavigate();
   // console.log(searchParam.get("token"));
   const [resetPass, setResetPass] = useState({
     password: "",
@@ -14,7 +14,7 @@ const NewPass = () => {
   const handleInput = (e) => {
     e.persist();
     setResetPass({ ...resetPass, [e.target.name]: e.target.value });
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   const SubmitNewPass = (e) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ const NewPass = () => {
             button: "đóng",
           });
         }
-        history("/login")
+        history("/login");
       })
       .catch(function (error) {
         // handle error
