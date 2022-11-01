@@ -88,14 +88,15 @@ const Ncc = () => {
           setCurrentPage(res.data.Ncc.current_page);
         }
       }
+      return () => {
+        controller.abort();
+
+        isMounted = false;
+      };
     });
 
-    return () => {
-      controller.abort();
+  }, [page]);
 
-      isMounted = false;
-    };
-  }, [ncclist, page]);
 
   return (
     <>

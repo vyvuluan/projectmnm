@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import Pagination from "../../form/pagination";
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import EditProd from './EditProd'
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -23,6 +24,13 @@ function Index() {
   const [ncclist, setNcclist] = useState([]);
   const [nccData, setNccData] = useState();
   const [nsxlist, setNsxlist] = useState([]);
+  const [pricture, setPicture] = useState([]);
+  const [errorlist, setError] = useState([]);
+  const [viewProd, setViewProd] = useState([]);
+  const [mota, setMota] = useState('');
+  const [ctsp, setCtsp] = useState('');
+  const [tabkey, setTabkey] = useState(1)
+  const editorRef = useRef(null);
   const [productInput, setProduct] = useState({
     loaisp_id: "",
     tenSP: "",
@@ -35,6 +43,14 @@ function Index() {
     ctSanPham: "",
   });
 
+  const [show, setShow] = useState(false);
+  const [prodData, setProdData] = useState();
+  const handleClose = () => setShow(prev => !prev);
+  const handleShow = (prod) => {
+    setShow(true);
+    setProdData(prod);
+  }
+
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -42,20 +58,11 @@ function Index() {
     }).format(money);
   }
 
-  const [pricture, setPicture] = useState([]);
-  const [errorlist, setError] = useState([]);
-  const [viewProd, setViewProd] = useState([]);
-  const [mota, setMota] = useState('');
-  const [ctsp, setCtsp] = useState('');
-  const editorRef = useRef(null);
-  // const [searchResults, setSearchResults] = useState([]);
-
-  const [tabkey, setTabkey] = useState(1)
-
   const handlePerPage = (page) => {
     console.log(page);
     setPage(page);
   };
+
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
@@ -235,6 +242,18 @@ function Index() {
 
   return (
     <>
+      <B.Modal size='xl' show={show} onHide={handleClose}>
+        <B.ModalHeader closeButton className='bg-secondary'>
+          <B.ModalTitle>Sửa sản phẩm</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <EditProd product={prodData} showModal={handleClose} />
+        </B.ModalBody>
+        <B.ModalFooter className='bg-secondary'>
+          <B.Button variant='outline-primary' className='mt-2 rounded-0' onClick={handleClose}>Hủy bỏ</B.Button>
+        </B.ModalFooter>
+      </B.Modal>
+
       <B.Container fluid>
         <B.Row className="mb-4">
           <B.Col lg={4}>
@@ -567,13 +586,11 @@ function Index() {
                           <td className="align-middle">
                             <img
                               src={`http://localhost:8000/uploadhinh/${item.hinh}`}
-                              width="50px"
+                              width="50px" alt={item.tenSP}
                             />
                           </td>
                           <td className="align-middle fs-5 text-primary">
-                            <Link to={"/"}>
-                              <BiEdit />
-                            </Link>
+                            <BiEdit onClick={() => handleShow(item)} />
                           </td>
                         </tr>
                       </>
