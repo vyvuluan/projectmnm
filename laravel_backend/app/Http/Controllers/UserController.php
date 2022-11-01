@@ -215,6 +215,13 @@ class UserController extends Controller
             ]
         );
         $token = $userCreated->createToken($user->getEmail() . '_Token')->plainTextToken;
+        $check = Customer::where('user_id', $userCreated->id)->first();
+        if (empty($check)) {
+            $customer = new Customer();
+            $customer->user_id = $userCreated->id;
+            $customer->save();
+        }
+
 
         return Redirect::to('http://localhost:3000?token=' . $token . '&email=' . $user->email);
         // return response()->json([
