@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import OrderDetail from "../order-detail";
+import OrderDetail from "../order-detail";  
 import { Link } from "react-router-dom";
 const CheckOrder = () => {
   return (
@@ -72,14 +72,14 @@ const CheckOrder = () => {
           </div>
           <div className="d-flex flex-wrap flex-md-nowrap justify-content-center justify-content-sm-between align-items-center">
             <div className="custom-control custom-checkbox mr-3">
-              <input
+              {/* <input
                 className="custom-control-input"
                 type="checkbox"
                 id="notify_me"
               />
               <label className="custom-control-label" htmlFor="notify_me">
                 Thông báo cho tôi khi đơn hàng được giao
-              </label>
+              </label> */}
             </div>
             <div className="text-left text-sm-right">
               <Link className="btn btn-outline-primary btn-rounded btn-sm " to={`/OrderDetail`}>

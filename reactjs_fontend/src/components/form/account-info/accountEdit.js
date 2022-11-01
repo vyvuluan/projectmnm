@@ -15,7 +15,7 @@ const AccountEdit = ({ accountData, showModal }) => {
   const [ngaySinh, setNgaySinh] = useState(accountData?.customer?.ngaySinh);
   const [errorSdt, setErrorSdt] = useState();
   const [errorBird, setErrorBird] = useState();
-  console.log(accountData?.customer?.gioiTinh);
+  // console.log(accountData?.customer?.gioiTinh);
   const [gender, setGender] = useState(accountData?.customer?.gioiTinh);
   const handleChange = (event) => {
     setGender(event.target.value);

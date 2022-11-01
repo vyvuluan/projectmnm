@@ -5,7 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 const PrivateRoutes = () => {
 
-  return localStorage.getItem("auth_name") ? <Outlet /> : <Navigate to='/login' />
+  return localStorage.getItem("auth_name") ? <Outlet /> : <Navigate to='/loginAdmin' />
   
 }
 export default PrivateRoutes
