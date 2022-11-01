@@ -40,8 +40,8 @@ class ResetPasswordRequest extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('reset-password/?token=' . $this->token);
-        
+        $url = url('http://localhost:3000/newPass?token=' . $this->token);
+
         return (new MailMessage)
             ->line('Bạn nhận được email này vì chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.')
             ->action('Reset Password', url($url))
