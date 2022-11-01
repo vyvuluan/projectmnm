@@ -232,7 +232,9 @@ const Employees = () => {
 
                       <td className="align-middle fs-5 text-primary  ">
                         <BiEdit />
-                        {item.user_id == null ? <BsPersonPlus className="ms-4" /> : null}
+                        {item.user_id == null ? (
+                          <BsPersonPlus className="ms-4" />
+                        ) : null}
                       </td>
                     </tr>
                   );
