@@ -13,6 +13,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import Pagination from "../../form/pagination";
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import EditProd from './EditProd'
+import './style.css'
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -25,6 +26,7 @@ function Index() {
   const [nccData, setNccData] = useState();
   const [nsxlist, setNsxlist] = useState([]);
   const [pricture, setPicture] = useState([]);
+  const [previewIMG, setPreviewIMG] = useState();
   const [errorlist, setError] = useState([]);
   const [viewProd, setViewProd] = useState([]);
   const [mota, setMota] = useState('');
@@ -73,8 +75,20 @@ function Index() {
     setProduct({ ...productInput, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    return () => {
+      previewIMG && URL.revokeObjectURL(previewIMG.preview);
+    }
+  }, [previewIMG])
+
   const handleImage = (e) => {
     setPicture({ image: e.target.files[0] });
+
+    const file = e.target.files[0];
+
+    file.preview = URL.createObjectURL(file)
+
+    setPreviewIMG(file);
   };
 
   const handleCTSPInput = (value) => {
@@ -302,136 +316,147 @@ function Index() {
           onSelect={(k) => setTabkey(k)}>
           <B.Tab eventKey={1} title="Thêm sản phẩm" className=" border border-top-0 py-3 px-3">
             <B.Form onSubmit={submitProduct}>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  name="tenSP"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Tên sản phẩm"
-                  onChange={handleProductInput}
-                  value={productInput.tenSP}
-                ></B.FormControl>
-                <small className="text-danger">{errorlist.tenSP}</small>
-              </B.FormGroup>
+              <B.Row>
+                <B.Col lg={3}>
+                  <div className="prev-container mb-4">
+                    {previewIMG && (
+                      <img src={previewIMG.preview} alt=''></img>
+                    )}
+                  </div>
+                  <B.FormGroup className="">
+                    <B.FormControl
+                      type="file"
+                      name="image"
+                      onChange={handleImage}
+                      className="rounded-0 shadow-none mb-3"
+                    ></B.FormControl>
+                    <small className="text-danger">{errorlist.image}</small>
+                  </B.FormGroup>
+                </B.Col>
+                <B.Col lg={9}>
+                  <B.FormGroup>
+                    <B.FormControl
+                      type="text"
+                      name="tenSP"
+                      className="rounded-0 shadow-none mb-3"
+                      placeholder="Tên sản phẩm"
+                      onChange={handleProductInput}
+                      value={productInput.tenSP}
+                    ></B.FormControl>
+                    <small className="text-danger">{errorlist.tenSP}</small>
+                  </B.FormGroup>
 
-              <div className="d-flex">
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormSelect
-                    name="loaisp_id"
-                    onChange={handleProductInput}
-                    value={productInput.loaisp_id}
-                    className="rounded-0 shadow-none mb-3 text-muted"
+                  <div className="d-flex">
+                    <B.FormGroup className="me-2 w-100">
+                      <B.FormSelect
+                        name="loaisp_id"
+                        onChange={handleProductInput}
+                        value={productInput.loaisp_id}
+                        className="rounded-0 shadow-none mb-3 text-muted"
+                      >
+                        <option>Chọn loại sản phẩm</option>
+                        {categorylist &&
+                          categorylist.map((item) => {
+                            return (
+                              <option value={item.id} key={item.id}>
+                                {item.tenLoai}
+                              </option>
+                            );
+                          })}
+                      </B.FormSelect>
+                      <small className="text-danger">{errorlist.loaisp_id}</small>
+                    </B.FormGroup>
+                    <B.FormGroup className="me-2 w-100">
+                      <B.FormControl
+                        type="number"
+                        name="soLuong"
+                        className="rounded-0 shadow-none mb-3"
+                        placeholder="Số lượng"
+                        onChange={handleProductInput}
+                        value={productInput.soLuong}
+                      ></B.FormControl>
+                    </B.FormGroup>
+                    <B.FormGroup className="w-100">
+                      <B.FormControl
+                        type="text"
+                        name="gia"
+                        className="rounded-0 shadow-none mb-3"
+                        placeholder="Giá"
+                        onChange={handleProductInput}
+                        value={productInput.gia}
+                      ></B.FormControl>
+                      <small className="text-danger">{errorlist.gia}</small>
+                    </B.FormGroup>
+                  </div>
+                  <div className="d-flex">
+                    <B.FormGroup className="me-2 w-100">
+                      <B.FormControl
+                        type="text"
+                        name="baohanh"
+                        className="rounded-0 shadow-none mb-3"
+                        placeholder="Bảo hành (tháng)"
+                        onChange={handleProductInput}
+                        value={productInput.baohanh}
+                      ></B.FormControl>
+                      <small className="text-danger">{errorlist.baohanh}</small>
+                    </B.FormGroup>
+                    <div className="w-100 me-2">
+                      <ReactSearchAutocomplete
+                        items={ncclist}
+                        onSearch={handleOnSearch}
+                        onSelect={handleOnSelect}
+                        fuseOptions={{ keys: ["id", "tenNCC"] }}
+                        resultStringKeyName="tenNCC"
+                        showIcon={false}
+                        styling={{
+                          height: "36px",
+                          border: "1px solid lightgray",
+                          borderRadius: "0",
+                          backgroundColor: "white",
+                          boxShadow: "none",
+                          hoverBackgroundColor: "#d19c97",
+                          color: "black",
+                          fontSize: "15px",
+                          // fontFamily: "Courier",
+                          iconColor: "black",
+                          lineColor: "#d19c97",
+                          // placeholderColor: "black",
+                          clearIconMargin: "3px 8px 0 0",
+                        }}
+                      />
+                    </div>
+
+                    <B.FormGroup className="w-100">
+                      <B.FormSelect
+                        name="nsx_id"
+                        onChange={handleProductInput}
+                        value={productInput.nsx_id}
+                        className="rounded-0 shadow-none mb-3 text-muted"
+                      >
+                        <option>Chọn nhà sản xuất</option>
+                        {nsxlist &&
+                          nsxlist.map((item) => {
+                            return (
+                              <option value={item.id} key={item.id}>
+                                {item.tenNSX}
+                              </option>
+                            );
+                          })}
+                      </B.FormSelect>
+                      <small className="text-danger">{errorlist.nsx_id}</small>
+                    </B.FormGroup>
+                  </div>
+
+                  <B.Button
+                    type="submit"
+                    variant="outline-primary"
+                    className="rounded-0 py-2 mb-2"
                   >
-                    <option>Chọn loại sản phẩm</option>
-                    {categorylist &&
-                      categorylist.map((item) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            {item.tenLoai}
-                          </option>
-                        );
-                      })}
-                  </B.FormSelect>
-                  <small className="text-danger">{errorlist.loaisp_id}</small>
-                </B.FormGroup>
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormControl
-                    type="number"
-                    name="soLuong"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Số lượng"
-                    onChange={handleProductInput}
-                    value={productInput.soLuong}
-                  ></B.FormControl>
-                </B.FormGroup>
-                <B.FormGroup className="w-100">
-                  <B.FormControl
-                    type="text"
-                    name="gia"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Giá"
-                    onChange={handleProductInput}
-                    value={productInput.gia}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.gia}</small>
-                </B.FormGroup>
-              </div>
-              <div className="d-flex">
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormControl
-                    type="text"
-                    name="baohanh"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Bảo hành (tháng)"
-                    onChange={handleProductInput}
-                    value={productInput.baohanh}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.baohanh}</small>
-                </B.FormGroup>
-                <div className="w-100 me-2">
-                  <ReactSearchAutocomplete
-                    items={ncclist}
-                    onSearch={handleOnSearch}
-                    onSelect={handleOnSelect}
-                    fuseOptions={{ keys: ["id", "tenNCC"] }}
-                    resultStringKeyName="tenNCC"
-                    showIcon={false}
-                    styling={{
-                      height: "36px",
-                      border: "1px solid lightgray",
-                      borderRadius: "0",
-                      backgroundColor: "white",
-                      boxShadow: "none",
-                      hoverBackgroundColor: "#d19c97",
-                      color: "black",
-                      fontSize: "15px",
-                      // fontFamily: "Courier",
-                      iconColor: "black",
-                      lineColor: "#d19c97",
-                      // placeholderColor: "black",
-                      clearIconMargin: "3px 8px 0 0",
-                    }}
-                  />
-                </div>
-
-                <B.FormGroup className="w-100">
-                  <B.FormSelect
-                    name="nsx_id"
-                    onChange={handleProductInput}
-                    value={productInput.nsx_id}
-                    className="rounded-0 shadow-none mb-3 text-muted"
-                  >
-                    <option>Chọn nhà sản xuất</option>
-                    {nsxlist &&
-                      nsxlist.map((item) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            {item.tenNSX}
-                          </option>
-                        );
-                      })}
-                  </B.FormSelect>
-                  <small className="text-danger">{errorlist.nsx_id}</small>
-                </B.FormGroup>
-              </div>
-              <B.FormGroup className="me-2 w-100">
-                <B.FormControl
-                  type="file"
-                  name="image"
-                  onChange={handleImage}
-                  className="rounded-0 shadow-none mb-3"
-                ></B.FormControl>
-                <small className="text-danger">{errorlist.image}</small>
-              </B.FormGroup>
-
-              <B.Button
-                type="submit"
-                variant="outline-primary"
-                className="rounded-0 py-2 mb-2"
-              >
-                <BsPersonPlusFill className="me-2" />
-                Thêm sản phẩm
-              </B.Button>
+                    <BsPersonPlusFill className="me-2" />
+                    Thêm sản phẩm
+                  </B.Button>
+                </B.Col>
+              </B.Row>
             </B.Form>
           </B.Tab>
 
