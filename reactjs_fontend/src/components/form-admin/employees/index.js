@@ -10,6 +10,13 @@ import { BsPersonPlus } from "react-icons/bs";
 import axios from "axios";
 const Employees = () => {
   const [user, setUser] = useState([]);
+  const [showPass, setShowPass] = useState(false);
+
+  const handleClosePass = () => setShowPass((prev) => !prev);
+
+  const handleShowChangePass = () => {
+    setShowPass(true);
+  };
   useEffect(() => {
     // const controller = new AbortController();
 
@@ -25,11 +32,7 @@ const Employees = () => {
       });
     // return () => controller.abort();
   }, []);
-  var addUser = (
-    <>
-      
-    </>
-  )
+
   return (
     <>
       <B.Container fluid>
@@ -210,10 +213,9 @@ const Employees = () => {
               </thead>
               <tbody className="align-middle">
                 {user.map((item, index) => {
-                  console.log(item);
-                  if(user_id == null){
-
-                  }
+                  // console.log(item);
+                  // if (user_id == null) {
+                  // }
                   return (
                     <tr>
                       <td className="align-middle">
@@ -222,16 +224,15 @@ const Employees = () => {
                       <td className="align-middle">{item.id}</td>
                       <td className="align-middle">{item.ten}</td>
                       {/* <td className="align-middle">{item.email}</td> */}
-                      <td className="align-middle">{item.gioiTinh == 1 ? "Nam" : "Nữ"}</td>
+                      <td className="align-middle">
+                        {item.gioiTinh == 1 ? "Nam" : "Nữ"}
+                      </td>
                       <td className="align-middle">{item.diaChi}</td>
                       <td className="align-middle">{item.sdt}</td>
 
-                      <td className="align-middle fs-5 text-primary " >
-                        <div><BiEdit/></div>
-                        
-                        
-                        <div><BsPersonPlus/></div>
-
+                      <td className="align-middle fs-5 text-primary  ">
+                        <BiEdit />
+                        {item.user_id == null ? <BsPersonPlus className="ms-4" /> : null}
                       </td>
                     </tr>
                   );

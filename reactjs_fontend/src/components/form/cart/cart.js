@@ -160,7 +160,7 @@ export default function Cart() {
                       <td>
                         <img
                           src={`http://localhost:8000/uploadhinh/${item.product.hinh}`}
-                          className="me-2"
+                          className="me-2" alt={item.product.tenSP}
                           style={{ width: "50px" }}
                         />
                         {item.product.tenSP}
