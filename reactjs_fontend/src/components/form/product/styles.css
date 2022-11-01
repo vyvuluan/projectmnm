@@ -30,7 +30,7 @@
 
 .btn1:before {
   font-family: "FontAwesome";
-  speak: none;
+  /* speak: none; */
   /* font-style: normal; */
   /* font-weight: normal; */
   font-variant: normal;
@@ -54,7 +54,7 @@
 
 /* Button 2 */
 .btn21 {
-  height: 50px; 
+  height: 50px;
   width: 250px;
   /* height: 50px; */
   background: #d19c97;
@@ -81,7 +81,7 @@
 }
 
 .text2 {
-    position: absolute;
+  position: absolute;
   left: 60%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -91,5 +91,4 @@
 
 .icon-cart:before {
   content: "🛒";
-  
 }
