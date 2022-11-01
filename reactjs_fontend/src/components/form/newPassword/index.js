@@ -6,20 +6,15 @@ const NewPass = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const token = searchParam.get("token");
   const history = useNavigate();
-  // console.log(searchParam.get("token"));
   const [resetPass, setResetPass] = useState({
     password: "",
   });
-
   const handleInput = (e) => {
     e.persist();
     setResetPass({ ...resetPass, [e.target.name]: e.target.value });
-    // console.log(e.target.value);
   };
   const SubmitNewPass = (e) => {
     e.preventDefault();
-    // console.log(data);
-
     axios
       .put(`/api/reset-password/${token}`)
       .then((res) => {

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import * as B from "react-bootstrap";
+import axios from "axios";
+
 import { BsPersonPlusFill } from "react-icons/bs";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
 import { AiOutlineUserDelete, AiOutlineEdit } from "react-icons/ai";
 import { CgExtensionAdd } from "react-icons/cg";
 import { BiEdit } from "react-icons/bi";
-
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import AddPhieuNhap from "./addPhieunhap";
 /*
     xóa tìm kiếm
     chia thành tab giống sản phẩm (1 thêm 2 xem)
@@ -30,14 +33,54 @@ import { BiEdit } from "react-icons/bi";
 
 */
 const PhieuNhap = () => {
+  const [ncclist, setNcclist] = useState([]);
+  const [nccData, setNccData] = useState();
+  const handleClose = () => setShow((prev) => !prev);
+  const [show, setShow] = useState(false);
+
+  const handleShow = () => {
+    setShow(true);
+  };
+
   const [tabkey, setTabKey] = useState(1);
-    var today = new Date();
-  var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
-  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var dateTime = date+' '+time;
-//   console.log(typeof(newDate) );
+  var today = new Date();
+  var date =
+    today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+  var time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date + " " + time;
+  //   console.log(typeof(newDate) );
+  const handleOnSearch = (key) => {
+    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
+      if (res.data.status === 200) {
+        setNcclist(res.data.ncc);
+      }
+    });
+  };
+
+  const handleOnSelect = (value) => {
+    setNccData(value.id);
+  };
+
   return (
     <>
+      <B.Modal show={show} onHide={handleClose}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <AddPhieuNhap showModal={handleClose} />
+        </B.ModalBody>
+        <B.ModalFooter className="bg-secondary">
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleClose}
+          >
+            Hủy bỏ
+          </B.Button>
+        </B.ModalFooter>
+      </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
           <B.Col lg={8}>
@@ -81,13 +124,37 @@ const PhieuNhap = () => {
                   <B.Col>
                     <B.Form>
                       <B.FormGroup className="d-flex d-inline-block justify-content-between">
-                        <B.FormSelect className="rounded-0 shadow-none me-1 mb-3 text-muted w-100">
-                          <option>Nhà cung cấp</option>
-                          <option>A</option>
-                          <option>B</option>
-                          <option>C</option>
-                        </B.FormSelect>
-                        <B.Button className="rounded-0 shadow-none me-1 mb-3 text-muted ">
+                        <div className="w-100 me-2">
+                          <ReactSearchAutocomplete
+                            placeholder="nhà cung cấp"
+                            items={ncclist}
+                            onSearch={handleOnSearch}
+                            onSelect={handleOnSelect}
+                            fuseOptions={{ keys: ["id", "tenNCC"] }}
+                            resultStringKeyName="tenNCC"
+                            showIcon={false}
+                            styling={{
+                              height: "36px",
+                              border: "1px solid lightgray",
+                              borderRadius: "0",
+                              backgroundColor: "white",
+                              boxShadow: "none",
+                              hoverBackgroundColor: "#d19c97",
+                              color: "black",
+                              fontSize: "15px",
+                              // fontFamily: "Courier",
+                              iconColor: "black",
+                              lineColor: "#d19c97",
+                              // placeholderColor: "black",
+                              clearIconMargin: "3px 8px 0 0",
+                            }}
+                          />
+                        </div>
+
+                        <B.Button
+                          onClick={() => handleShow()}
+                          className="rounded-0 shadow-none me-1 mb-3 text-muted "
+                        >
                           Thêm
                         </B.Button>
                       </B.FormGroup>
@@ -95,24 +162,24 @@ const PhieuNhap = () => {
                   </B.Col>
                   <B.Col>
                     <B.FormGroup>
-                    <B.FormControl
+                      <B.FormControl
                         type="text"
                         className="rounded-0 shadow-none mb-3"
                         placeholder={dateTime}
                         disabled
-                    ></B.FormControl>
+                      ></B.FormControl>
                     </B.FormGroup>
-
                   </B.Col>
                   <B.Col>
-
-                <B.Button variant="outline-primary" className="rounded-0  mb-2">
-                  <BsPersonPlusFill className="me-2" />
-                  Thêm phiếu nhập
-                </B.Button>
+                    <B.Button
+                      variant="outline-primary"
+                      className="rounded-0  mb-2"
+                    >
+                      <BsPersonPlusFill className="me-2" />
+                      Thêm phiếu nhập
+                    </B.Button>
                   </B.Col>
                 </B.Row>
-
 
                 <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2"></B.FormGroup>
                 <B.Table className="table-borderless border border-secondary text-center mb-0">
