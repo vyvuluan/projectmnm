@@ -1,13 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as B from 'react-bootstrap'
 import { BsPersonPlusFill } from 'react-icons/bs'
 import { FaUserEdit, FaSearch } from 'react-icons/fa'
 import { AiOutlineUserDelete, AiOutlineEdit } from 'react-icons/ai'
 import { RiUserAddFill } from 'react-icons/ri'
 import { BiEdit } from 'react-icons/bi'
+import axios from 'axios'
+import swal from 'sweetalert'
 
-function index() {
+function Index() {
+    const [employinput, setEmployinput] = useState({
+        tennv: '',
+        gioitinh: '',
+        sdt: '',
+        diachi: '',
+        cv_id: '',
+    })
+
+    const handleEmployInput = (e) => {
+        setEmployinput({ ...employinput, [e.target.name]: e.target.value })
+    }
+
+    const handleEmploySubmit = (e) => {
+        e.preventDefault();
+
+        const data = {
+            ten: employinput.tennv,
+            gioiTinh: employinput.gioitinh,
+            sdt: employinput.sdt,
+            diaChi: employinput.diachi,
+            cv_id: employinput.cv_id
+        }
+
+        axios.post(`api/admin/manageEmployee`, data).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, 'success')
+            }
+        })
+    }
     return (
+
+
         <>
             <B.Container fluid>
                 <B.Row className='pe-xl-5 mb-4'>
@@ -46,62 +79,61 @@ function index() {
                 </B.Row>
 
                 <B.Row className='pe-xl-5 mb-5'>
-                    <B.Col lg={8}>
-                        <B.Form >
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Họ và tên nhân viên'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Email'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormSelect className='rounded-0 shadow-none mb-3 text-muted'>
-                                    <option>Giới tính</option>
-                                    <option>Nam</option>
-                                    <option>Nữ</option>
-                                    <option>Lưỡng long nhất thể</option>
-                                </B.FormSelect>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Địa chỉ'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='text' className='rounded-0 shadow-none mb-3' placeholder='Số điện thoại'></B.FormControl>
-                            </B.FormGroup>
-                            <B.FormGroup>
-                                <B.FormControl type='file' className='rounded-0 shadow-none mb-3'></B.FormControl>
-                            </B.FormGroup>
-                        </B.Form>
-                    </B.Col>
-                    <B.Col lg={4}>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <BsPersonPlusFill className='me-2' />
-                            Thêm nhân viên
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                            <FaUserEdit className='me-2' />
-                            Sửa nhân viên
-                        </B.Button>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
-                            <AiOutlineUserDelete className='me-2' />
-                            Xóa nhân viên
-                        </B.Button>
-                        <hr />
+                    <B.Form onSubmit={handleEmploySubmit}>
+                        <B.Row>
+                            <B.Col lg={8}>
 
-                        <B.FormGroup className='d-flex d-inline-block justify-content-between'>
-                            <B.FormControl type='text' className='rounded-0 shadow-none mb-1 w-75' placeholder='Username'></B.FormControl>
-                            <B.FormSelect className='rounded-0 shadow-none ms-2 mb-2 text-muted w-25'>
-                                <option>Quyền</option>
-                                <option>Administrator</option>
-                                <option>Manager</option>
-                                <option>Nhân viên</option>
-                            </B.FormSelect>
-                        </B.FormGroup>
-                        <B.Button variant='outline-primary' className='rounded-0 py-2 w-100'>
-                            <RiUserAddFill className='me-2' />
-                            Cấp tài khoản
-                        </B.Button>
-                    </B.Col>
+                                <B.FormGroup>
+                                    <B.FormControl type='text' name='tennv' onChange={handleEmployInput} value={employinput.tennv} className='rounded-0 shadow-none mb-3' placeholder='Họ và tên nhân viên'></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormSelect name='gioitinh' onChange={handleEmployInput} value={employinput.gioitinh} className='rounded-0 shadow-none mb-3 text-muted'>
+                                        <option>Giới tính</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                    </B.FormSelect>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormControl type='text' name='sdt' onChange={handleEmployInput} value={employinput.sdt} className='rounded-0 shadow-none mb-3' placeholder='Số điện thoại'></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormControl as='textarea' rows={3} name='diachi' onChange={handleEmployInput} value={employinput.diachi} className='rounded-0 shadow-none mb-3' placeholder='Địa chỉ'></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormControl type='text' name='cv_id' onChange={handleEmployInput} value={employinput.cv_id} className='rounded-0 shadow-none mb-3' placeholder='CV_id'></B.FormControl>
+                                </B.FormGroup>
+                            </B.Col>
+                            <B.Col lg={4}>
+                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100'>
+                                    <BsPersonPlusFill className='me-2' />
+                                    Thêm nhân viên
+                                </B.Button>
+                                {/* <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
+                                    <FaUserEdit className='me-2' />
+                                    Sửa nhân viên
+                                </B.Button>
+                                <B.Button variant='outline-primary' className='rounded-0 py-2 mb-1 w-100'>
+                                    <AiOutlineUserDelete className='me-2' />
+                                    Xóa nhân viên
+                                </B.Button> */}
+                                <hr />
+
+                                <B.FormGroup className='d-flex d-inline-block justify-content-between'>
+                                    <B.FormControl type='text' className='rounded-0 shadow-none mb-1 w-75' placeholder='Username'></B.FormControl>
+                                    <B.FormSelect className='rounded-0 shadow-none ms-2 mb-2 text-muted w-25'>
+                                        <option>Quyền</option>
+                                        <option>Administrator</option>
+                                        <option>Manager</option>
+                                        <option>Nhân viên</option>
+                                    </B.FormSelect>
+                                </B.FormGroup>
+                                <B.Button variant='outline-primary' className='rounded-0 py-2 w-100'>
+                                    <RiUserAddFill className='me-2' />
+                                    Cấp tài khoản
+                                </B.Button>
+                            </B.Col>
+                        </B.Row>
+                    </B.Form>
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
@@ -172,4 +204,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

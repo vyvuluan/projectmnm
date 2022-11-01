@@ -27,6 +27,7 @@ class ManagePhieuXuatController extends Controller
     {
         $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
+            'status' => 200,
             'data' => $ctpx,
         ]);
     }

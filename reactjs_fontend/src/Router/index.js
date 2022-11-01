@@ -38,6 +38,7 @@ import {
   Ncc,
   Emplyee,
   Phieunhap,
+  PhieuXuat,
 } from "../components/form-admin";
 import { Chart } from "../components/form-admin/chart";
 import LoginAdmin from "../components/form-admin/loginAdmin";
@@ -187,6 +188,11 @@ export const PublicRouter_Admin = [
   {
     path: "/Phieunhap",
     component: Phieunhap,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Phieuxuat",
+    component: PhieuXuat,
     layout: _LayoutAdmin,
   },
 ];

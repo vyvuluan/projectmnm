@@ -99,7 +99,7 @@ const Index = () => {
             isMounted = false
         };
 
-    }, [ncclist, page]);
+    }, [page]);
 
     return (
         <>
