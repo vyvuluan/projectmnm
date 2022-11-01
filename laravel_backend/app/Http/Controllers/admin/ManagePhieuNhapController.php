@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PhieuNhap;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+
 class ManagePhieuNhapController extends Controller
 {
     public function addPN(Request $request)
@@ -50,14 +51,24 @@ class ManagePhieuNhapController extends Controller
         }
 
         if (auth('sanctum')->check()) {
+            $ctpn_check = CtPhieuNhap::where('product_id', $request->product_id)->first();
+            if (!empty($ctpn_check)) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Đã có product_id bạn đã vừa nhập trong phiếu nhập vui lòng kiểm tra lại',
+                ]);
+            }
             $ctpn = new CtPhieuNhap();
             $ctpn->product_id = $request->product_id;
             $ctpn->pn_id = $id;
             $ctpn->soluong = $request->soluong;
             $ctpn->gia = $request->gia;
 
+
+
             $pn = PhieuNhap::find($ctpn->pn_id);
             $pn->tongTien += ($request->gia * $request->soluong);
+
 
             $product = Product::find($ctpn->product_id);
             $product->soLuongSP = $product->soLuongSP +  $ctpn->soluong;
