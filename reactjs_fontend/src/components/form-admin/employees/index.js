@@ -38,14 +38,15 @@ function Index() {
             }
         })
     }
+
     return (
-
-
         <>
             <B.Container fluid>
-                <B.Row className='pe-xl-5 mb-4'>
+                <B.Row className="pe-xl-5 mb-4">
                     <B.Col lg={4}>
-                        <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ NHÂN VIÊN</h1>
+                        <h1 className="fw-bold text-primary mb-4 text-capitalize">
+                            QUẢN LÝ NHÂN VIÊN
+                        </h1>
                     </B.Col>
                     <B.Col lg={2}></B.Col>
                     <B.Col lg={6}>
@@ -62,20 +63,31 @@ function Index() {
                                     </B.InputGroup.Text>
                                 </B.InputGroup>
                             </B.FormGroup>
-                            <B.FormGroup className='d-flex d-inline-block justify-content-between mt-2'>
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo id' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo tên' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo số điện thoại' />
-                                <B.FormSelect className='w-25 rounded-0 shadow-none'>
+                            <B.FormGroup className="d-flex d-inline-block justify-content-between mt-2">
+                                <B.FormCheck
+                                    type="checkbox"
+                                    className="rounded-0"
+                                    label="Theo id"
+                                />
+                                <B.FormCheck
+                                    type="checkbox"
+                                    className="rounded-0"
+                                    label="Theo tên"
+                                />
+                                <B.FormCheck
+                                    type="checkbox"
+                                    className="rounded-0"
+                                    label="Theo số điện thoại"
+                                />
+                                <B.FormSelect className="w-25 rounded-0 shadow-none">
                                     <option>Theo quyền</option>
                                     <option>Administrator</option>
-                                    <option>Manager</option>
-                                    <option>User</option>
+                                    <option>Thủ kho</option>
+                                    <option>Nhân viên</option>
                                 </B.FormSelect>
                             </B.FormGroup>
                         </B.Form>
                     </B.Col>
-
                 </B.Row>
 
                 <B.Row className='pe-xl-5 mb-5'>
@@ -137,71 +149,66 @@ function Index() {
                 </B.Row>
 
                 {/* table hien thi tai khoan */}
-                <B.Row className='pe-xl-5'>
-                    <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
-                        <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
-                            <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>
-                                <option>Sắp xếp</option>
-                                <option>Từ A-Z</option>
-                                <option>Theo ID</option>
-                                <option>Theo quyền</option>
-                            </B.FormSelect>
-                        </B.FormGroup>
-                        <B.Table className='table-borderless border border-secondary text-center mb-0'>
-                            <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
-                                <tr>
-                                    <th><input type='checkbox' /></th>
-                                    <th>ID</th>
-                                    <th>Họ và tên</th>
-                                    <th>Email</th>
-                                    <th>Giới tính</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Hình</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody className='align-middle'>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>1</td>
-                                    <td className='align-middle'>Đỗ Đình Mạnh</td>
-                                    <td className='align-middle'>manhbanhgato@gmail.com</td>
-                                    <td className='align-middle'>Lưỡng thể</td>
-                                    <td className='align-middle'>363 Phố hàng trống</td>
-                                    <td className='align-middle'>0654676532</td>
-                                    <td className='align-middle'>Hình</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>2</td>
-                                    <td className='align-middle'>Trần Hoàng Long</td>
-                                    <td className='align-middle'>longlon@gmail.com</td>
-                                    <td className='align-middle'>Nữ</td>
-                                    <td className='align-middle'>363 Phố hàng trống</td>
-                                    <td className='align-middle'>0654676532</td>
-                                    <td className='align-middle'>Hình</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                                <tr>
-                                    <td className='align-middle'><input type='checkbox' /></td>
-                                    <td className='align-middle'>3</td>
-                                    <td className='align-middle'>Vy Vũ Luân</td>
-                                    <td className='align-middle'>vuvu@gmail.com</td>
-                                    <td className='align-middle'>Bí mật</td>
-                                    <td className='align-middle'>363 Phố hàng trống</td>
-                                    <td className='align-middle'>0654676532</td>
-                                    <td className='align-middle'>Hình</td>
-                                    <td className='align-middle fs-5 text-primary'><BiEdit /></td>
-                                </tr>
-                            </tbody>
-                        </B.Table>
-                    </B.Col>
-                </B.Row>
+                {/* <B.Row className="pe-xl-5">
+          <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
+            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+              <B.FormSelect
+                className="rounded-0 shadow-none"
+                style={{ width: "200px" }}
+              >
+                <option>Sắp xếp</option>
+                <option>Từ A-Z</option>
+                <option>Theo ID</option>
+                <option>Theo quyền</option>
+              </B.FormSelect>
+            </B.FormGroup>
+            <B.Table className="table-borderless border border-secondary text-center mb-0">
+              <thead
+                className="text-dark"
+                style={{ backgroundColor: "#edf1ff" }}
+              >
+                <tr>
+                  <th>
+                    <input type="checkbox" />
+                  </th>
+                  <th>ID</th>
+                  <th>Họ và tên</th>
+                  <th>Email</th>
+                  <th>Giới tính</th>
+                  <th>Địa chỉ</th>
+                  <th>Số điện thoại</th>
+                  <th>Hình</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody className="align-middle">
+                {user.map((item, index) => {
+                  console.log(item);
+                  return (
+                    <tr>
+                      <td className="align-middle">
+                        <input type="checkbox" />
+                      </td>
+                      <td className="align-middle">{item.id}</td>
+                      <td className="align-middle">{item.username}</td>
+                      <td className="align-middle">{item.email}</td>
+                      <td className="align-middle">Lưỡng thể</td>
+                      <td className="align-middle">363 Phố hàng trống</td>
+                      <td className="align-middle">0654676532</td>
+                      <td className="align-middle">Hình</td>
+                      <td className="align-middle fs-5 text-primary">
+                        <BiEdit />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </B.Table>
+          </B.Col>
+        </B.Row> */}
             </B.Container>
         </>
-    )
-}
+    );
+};
 
-export default Index
+export default Index;

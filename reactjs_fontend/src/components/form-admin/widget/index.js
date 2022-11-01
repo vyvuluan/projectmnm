@@ -5,23 +5,31 @@ import {
   BsFillChatSquareQuoteFill,
 } from "react-icons/bs";
 import { BiDollar, BiTask } from "react-icons/bi";
-const Widget = (props) => {
-  const {data} = props
-  // console.log(data);
+const Widget = ({ dataWidget }) => {
+  // const { dataWidget } = props;
+  // console.log(dataWidget);
+
   const [doanhthu, setDoanhThu] = useState();
-  const [chiTieu, setChiTieu] = useState(1);
+  const [chiTieu, setChiTieu] = useState();
+  const [terms, setTerms] = useState(true);
+  if (chiTieu == null) {
+    setChiTieu(0);
+  }
+  if (doanhthu == null) {
+    setDoanhThu(0);
+  }
 
+  useEffect(() => {
+    if (dataWidget && terms) {
+      setTerms(false)
+      setDoanhThu(dataWidget?.doanhthu?.tongTien);
+      setChiTieu(dataWidget?.chitieu?.tongTien);
+    }
+    // console.log(dataWidget?.doanhthu?.tongTien);
+  });
+  // console.log(doanhthu);
+  // console.log(chiTieu)
 
-  useEffect(()=>{
-    // console.log(data.doanhthu.tongTien);
-    setDoanhThu(data?.doanhthu?.tongTien);
-    setChiTieu(data?.chitieu?.tongTien)
-
-  },[])
-  
-  console.log(doanhthu);
-  console.log(chiTieu)
-  
   return (
     <>
       <div className="row">
@@ -60,7 +68,6 @@ const Widget = (props) => {
                     Doanh thu
                   </div>
                   <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
-
                     {doanhthu}
                   </div>
                 </div>

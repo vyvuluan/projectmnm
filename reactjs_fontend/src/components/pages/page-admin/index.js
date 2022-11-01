@@ -1,19 +1,10 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import * as B from "react-bootstrap";
 
-import {
-  NavbarAdmin,
-  ContactAdmin,
-  SideBar,
-  SearchAdmin,
-  DashBoard,
-  Customer,
-  DetailCustomer,
-  Bill,
-  ListBill,
-  ListBillDetail,
-} from "../../form-admin";
+import { NavbarAdmin, SideBar, DashBoard } from "../../form-admin";
 const PageAdmin = () => {
+ 
   return (
     <>
       <NavbarAdmin />

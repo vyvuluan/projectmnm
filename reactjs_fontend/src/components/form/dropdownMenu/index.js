@@ -48,7 +48,7 @@ const DropDownMenu = (props) => {
           <ul className="ul">
             <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem img={user} text={"My Profile"} /></Link>
             {/* logout1={test}  */}
-            <DropdownItem img={edit} text={"Edit Profile"} />
+            <Link to={'/CheckOrder'} className='text-decoration-none'><DropdownItem img={edit} text={"Check Order"} /></Link>
             <DropdownItem img={inbox} text={"Inbox"} />
             <DropdownItem img={settings} text={"Settings"} />
             <DropdownItem img={help} text={"Helps"} />
