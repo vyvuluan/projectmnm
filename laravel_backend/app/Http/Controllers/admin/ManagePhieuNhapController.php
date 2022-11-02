@@ -51,7 +51,9 @@ class ManagePhieuNhapController extends Controller
         }
 
         if (auth('sanctum')->check()) {
-            $ctpn_check = CtPhieuNhap::where('product_id', $request->product_id)->first();
+            $ctpn_check = CtPhieuNhap::where('product_id', $request->product_id)
+            ->where('pn_id', $id)
+            ->first();
             if (!empty($ctpn_check)) {
                 return response()->json([
                     'status' => 400,
