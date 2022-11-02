@@ -15,7 +15,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import EditProd from './EditProd'
 import './style.css'
 
-function Index() {
+function Index(props) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
@@ -203,7 +203,7 @@ function Index() {
     return () => {
       isMounted = false;
     };
-  }, [page]);
+  }, [page, props.id]);
 
   //pagination
 
