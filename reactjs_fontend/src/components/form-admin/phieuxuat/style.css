@@ -1,0 +1,12 @@
+.results-wrapper {
+    margin: 1rem 1rem 1rem 0;
+    padding: 0.5rem;
+}
+
+.result-span {
+    text-align: left;
+    padding: 0.5rem 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

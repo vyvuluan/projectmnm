@@ -8,6 +8,7 @@ import { FcPrint } from 'react-icons/fc'
 import { BiEdit } from 'react-icons/bi'
 import { TbTrashX } from 'react-icons/tb'
 import swal from 'sweetalert';
+import './style.css'
 
 const checkStatus = [
     { id: 0, name: 'Chờ xác nhận' },
@@ -65,25 +66,26 @@ function Index() {
     const handleSubmitPx = (e) => {
         e.preventDefault();
 
-        const data = {
-            tenKH: pxinput.tenKH,
-            sdt: pxinput.sdtKH,
-            diaChi: pxinput.diachiKH,
-            pt_ThanhToan: 'Tại quầy',
-        }
+        setShowCtpx(!showCtpx);
+        // const data = {
+        //     tenKH: pxinput.tenKH,
+        //     sdt: pxinput.sdtKH,
+        //     diaChi: pxinput.diachiKH,
+        //     pt_ThanhToan: 'Tại quầy',
+        // }
 
-        axios.post(`/api/kho/px`, data).then(res => {
-            if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success')
-                setShowCtpx(!showCtpx);
-                setPxInput({
-                    ...pxinput,
-                    tenKH: '',
-                    sdtKH: '',
-                    diachiKH: '',
-                })
-            }
-        })
+        // axios.post(`/api/kho/px`, data).then(res => {
+        //     if (res.data.status === 200) {
+        //         swal('Success', res.data.message, 'success')
+        //         setShowCtpx(!showCtpx);
+        //         setPxInput({
+        //             ...pxinput,
+        //             tenKH: '',
+        //             sdtKH: '',
+        //             diachiKH: '',
+        //         })
+        //     }
+        // })
     }
     // End
 
@@ -137,6 +139,21 @@ function Index() {
     const handleOnSelect = (value) => {
         setProdData(value);
         setShowTable(!showTable)
+    };
+
+    const formatResult = (item) => {
+        return (
+            <div className="result-wrapper">
+                <span className="result-span">
+                    <img
+                        src={`http://localhost:8000/uploadhinh/${item.hinh}`}
+                        style={{ height: '60px' }}
+                        alt=''
+                    />
+                </span>
+                <span className="result-span">{item.tenSP}</span>
+            </div>
+        );
     };
 
     const handleDecrement = () => {
@@ -334,7 +351,8 @@ function Index() {
                                                 onSearch={handleOnSearch}
                                                 onSelect={handleOnSelect}
                                                 fuseOptions={{ keys: ["id", "tenSP"] }}
-                                                resultStringKeyName="tenSP"
+                                                // resultStringKeyName="tenSP"
+                                                formatResult={formatResult}
                                                 styling={{
                                                     height: "36px",
                                                     border: "1px solid lightgray",
