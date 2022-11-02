@@ -103,6 +103,7 @@ class ManagePhieuXuatController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Tạo phiếu xuất thành công',
+                'px_id' => $px->id,
             ]);
         }
     }

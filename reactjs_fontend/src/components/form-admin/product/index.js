@@ -11,9 +11,9 @@ import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import Pagination from "../../form/pagination";
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import EditProd from './EditProd'
-import './style.css'
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import EditProd from "./EditProd";
+import "./style.css";
 
 function Index(props) {
   const [loading, setLoading] = useState(true);
@@ -29,9 +29,9 @@ function Index(props) {
   const [previewIMG, setPreviewIMG] = useState();
   const [errorlist, setError] = useState([]);
   const [viewProd, setViewProd] = useState([]);
-  const [mota, setMota] = useState('');
-  const [ctsp, setCtsp] = useState('');
-  const [tabkey, setTabkey] = useState(1)
+  const [mota, setMota] = useState("");
+  const [ctsp, setCtsp] = useState("");
+  const [tabkey, setTabkey] = useState(1);
   const editorRef = useRef(null);
   const [productInput, setProduct] = useState({
     loaisp_id: "",
@@ -47,11 +47,11 @@ function Index(props) {
 
   const [show, setShow] = useState(false);
   const [prodData, setProdData] = useState();
-  const handleClose = () => setShow(prev => !prev);
+  const handleClose = () => setShow((prev) => !prev);
   const handleShow = (prod) => {
     setShow(true);
     setProdData(prod);
-  }
+  };
 
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {
@@ -78,15 +78,15 @@ function Index(props) {
   useEffect(() => {
     return () => {
       previewIMG && URL.revokeObjectURL(previewIMG.preview);
-    }
-  }, [previewIMG])
+    };
+  }, [previewIMG]);
 
   const handleImage = (e) => {
     setPicture({ image: e.target.files[0] });
 
     const file = e.target.files[0];
 
-    file.preview = URL.createObjectURL(file)
+    file.preview = URL.createObjectURL(file);
 
     setPreviewIMG(file);
   };
@@ -97,18 +97,18 @@ function Index(props) {
 
   const handleMotaInput = (value) => {
     setMota({ moTa: value });
-  }
+  };
 
   const handleOnSearch = (key) => {
-    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then(res => {
+    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
       if (res.data.status === 200) {
-        setNcclist(res.data.ncc)
+        setNcclist(res.data.ncc);
       }
-    })
+    });
   };
 
   const handleOnSelect = (value) => {
-    setNccData(value.id)
+    setNccData(value.id);
   };
 
   useEffect(() => {
@@ -175,8 +175,8 @@ function Index(props) {
             moTa: "",
             ctSanPham: "",
           });
-          setCtsp('');
-          setMota('');
+          setCtsp("");
+          setMota("");
           setError([]);
         } else if (res.data.status === 422) {
           swal("Vui lòng nhập đầy đủ các mục", "", "error");
@@ -206,9 +206,6 @@ function Index(props) {
   }, [page, props.id]);
 
   //pagination
-
-
-
 
   // var display_Productdata = "";
   // if (loading) {
@@ -256,15 +253,21 @@ function Index(props) {
 
   return (
     <>
-      <B.Modal size='xl' show={show} onHide={handleClose}>
-        <B.ModalHeader closeButton className='bg-secondary'>
+      <B.Modal size="xl" show={show} onHide={handleClose}>
+        <B.ModalHeader closeButton className="bg-secondary">
           <B.ModalTitle>Sửa sản phẩm</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
           <EditProd product={prodData} showModal={handleClose} />
         </B.ModalBody>
-        <B.ModalFooter className='bg-secondary'>
-          <B.Button variant='outline-primary' className='mt-2 rounded-0' onClick={handleClose}>Hủy bỏ</B.Button>
+        <B.ModalFooter className="bg-secondary">
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleClose}
+          >
+            Hủy bỏ
+          </B.Button>
         </B.ModalFooter>
       </B.Modal>
 
@@ -311,17 +314,17 @@ function Index(props) {
           </B.Col>
         </B.Row>
 
-
-        <B.Tabs activeKey={tabkey}
-          onSelect={(k) => setTabkey(k)}>
-          <B.Tab eventKey={1} title="Thêm sản phẩm" className=" border border-top-0 py-3 px-3">
+        <B.Tabs activeKey={tabkey} onSelect={(k) => setTabkey(k)}>
+          <B.Tab
+            eventKey={1}
+            title="Thêm sản phẩm"
+            className=" border border-top-0 py-3 px-3"
+          >
             <B.Form onSubmit={submitProduct}>
               <B.Row>
                 <B.Col lg={3}>
                   <div className="prev-container mb-4">
-                    {previewIMG && (
-                      <img src={previewIMG.preview} alt=''></img>
-                    )}
+                    {previewIMG && <img src={previewIMG.preview} alt=""></img>}
                   </div>
                   <B.FormGroup className="">
                     <B.FormControl
@@ -364,7 +367,9 @@ function Index(props) {
                             );
                           })}
                       </B.FormSelect>
-                      <small className="text-danger">{errorlist.loaisp_id}</small>
+                      <small className="text-danger">
+                        {errorlist.loaisp_id}
+                      </small>
                     </B.FormGroup>
                     <B.FormGroup className="me-2 w-100">
                       <B.FormControl
@@ -460,15 +465,21 @@ function Index(props) {
             </B.Form>
           </B.Tab>
 
-          <B.Tab eventKey={2} title="Thêm chi tiết/mô tả" className=" border border-top-0 py-3 px-3">
+          <B.Tab
+            eventKey={2}
+            title="Thêm chi tiết/mô tả"
+            className=" border border-top-0 py-3 px-3"
+          >
             <B.Row>
               <B.Col lg={4}>
-                <label className='ms-1 fs-5 fw-semibold text-uppercase text-primary'>Chi tiết sản phẩm</label>
+                <label className="ms-1 fs-5 fw-semibold text-uppercase text-primary">
+                  Chi tiết sản phẩm
+                </label>
                 <Editor
                   apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
                   onEditorChange={handleCTSPInput}
                   onInit={(evt, editor) => {
-                    editorRef.current = editor
+                    editorRef.current = editor;
                   }}
                   init={{
                     height: 500,
@@ -485,7 +496,7 @@ function Index(props) {
                       "insertdatetime",
                       "table",
                       "wordcount",
-                      "fullscreen"
+                      "fullscreen",
                     ],
                     toolbar:
                       "undo redo | blocks | " +
@@ -498,12 +509,14 @@ function Index(props) {
                 />
               </B.Col>
               <B.Col lg={8}>
-                <label className='ms-1 fs-5 fw-semibold text-uppercase text-primary'>Mô tả sản phẩm</label>
+                <label className="ms-1 fs-5 fw-semibold text-uppercase text-primary">
+                  Mô tả sản phẩm
+                </label>
                 <Editor
                   apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
                   onEditorChange={handleMotaInput}
                   onInit={(evt, editor) => {
-                    editorRef.current = editor
+                    editorRef.current = editor;
                   }}
                   init={{
                     height: 500,
@@ -529,7 +542,7 @@ function Index(props) {
                       "wordcount",
                       "media",
                       "image",
-                      "editimage"
+                      "editimage",
                     ],
                     toolbar:
                       "undo redo | blocks | " +
@@ -548,7 +561,8 @@ function Index(props) {
                         var reader = new FileReader();
                         reader.onload = function () {
                           var id = "blobid" + new Date().getTime();
-                          var blobCache = editorRef.current.editorUpload.blobCache;
+                          var blobCache =
+                            editorRef.current.editorUpload.blobCache;
                           var base64 = reader.result.split(",")[1];
                           var blobInfo = blobCache.create(id, file, base64);
                           blobCache.add(blobInfo);
@@ -564,7 +578,11 @@ function Index(props) {
             </B.Row>
           </B.Tab>
 
-          <B.Tab eventKey={3} title="Xem sản phẩm" className=" border border-top-0 py-3 px-3">
+          <B.Tab
+            eventKey={3}
+            title="Xem sản phẩm"
+            className=" border border-top-0 py-3 px-3"
+          >
             <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
               <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                 <B.FormSelect
@@ -606,12 +624,15 @@ function Index(props) {
                           <td className="align-middle">{item.id}</td>
                           <td className="align-middle">{item.tenSP}</td>
                           <td className="align-middle">{item.maLoai}</td>
-                          <td className="align-middle">{formatMoney(item.gia)}</td>
+                          <td className="align-middle">
+                            {formatMoney(item.gia)}
+                          </td>
                           <td className="align-middle">{item.soLuongSP}</td>
                           <td className="align-middle">
                             <img
                               src={`http://localhost:8000/uploadhinh/${item.hinh}`}
-                              width="50px" alt={item.tenSP}
+                              width="50px"
+                              alt={item.tenSP}
                             />
                           </td>
                           <td className="align-middle fs-5 text-primary">
@@ -622,13 +643,10 @@ function Index(props) {
                     );
                   })}
                 </tbody>
-
-
               </B.Table>
             </B.Col>
 
             <Pagination
-
               currentPage={currentPage}
               totalPage={pageNumbers}
               handlePerPage={handlePerPage}
@@ -654,7 +672,6 @@ function Index(props) {
                                 </div>
                             </B.FormGroup>
                         </B.Form> */}
-
       </B.Container>
     </>
   );

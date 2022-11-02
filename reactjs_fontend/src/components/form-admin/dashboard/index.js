@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Widget from "../widget";
 import Chart from "../chart";
-import  CircelChart  from "../circelChart";
+import CircelChart from "../circelChart";
 import axios from "axios";
 const DashBoard = () => {
   const [data, setData] = useState();
 
   useEffect(() => {
     // const controller = new AbortController();
+    
     axios
       .get("/api/admin/baocao")
       .then((res) => {
