@@ -12,7 +12,7 @@ const AddPhieuNhap = ({ accountData, showModal }) => {
   });
   const handleInput = (e) => {
     e.persist();
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setNCC({ ...NCC, [e.target.name]: e.target.value });
   };
 
@@ -30,7 +30,7 @@ const AddPhieuNhap = ({ accountData, showModal }) => {
     axios
       .post(`api/kho/ncc`, data)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           swal({
             title: "Thêm thành công",
