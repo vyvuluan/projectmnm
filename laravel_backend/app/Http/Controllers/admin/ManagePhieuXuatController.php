@@ -161,7 +161,7 @@ class ManagePhieuXuatController extends Controller
                     ]);
                 } else {
                     return response()->json([
-                        'status' => 402,
+                        'status' => 404,
                         'message' => 'không tìm thấy sản phẩm',
                     ]);
                 }

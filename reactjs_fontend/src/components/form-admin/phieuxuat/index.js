@@ -21,11 +21,13 @@ const checkStatus = [
 
 function Index() {
     const [pxlist, setPxlist] = useState();
+    const [error, setError] = useState([]);
     const [pxinput, setPxInput] = useState({
         tenKH: '',
         sdtKH: '',
         diachiKH: '',
     });
+    const [pxid, setPXid] = useState();
     const [ekey, setEkey] = useState();
     const [searchList, setSearchlist] = useState();
     const [tabkey, setTabkey] = useState(1)
@@ -58,7 +60,7 @@ function Index() {
         pageNumbers.push(i);
     }
 
-    // Function thêm phiếu xuất mới
+    // Function thêm phiếu xuất/Ct phiếu xuất mới
     const handlePxInput = (e) => {
         setPxInput({ ...pxinput, [e.target.name]: e.target.value });
     }
@@ -66,26 +68,62 @@ function Index() {
     const handleSubmitPx = (e) => {
         e.preventDefault();
 
-        setShowCtpx(!showCtpx);
-        // const data = {
-        //     tenKH: pxinput.tenKH,
-        //     sdt: pxinput.sdtKH,
-        //     diaChi: pxinput.diachiKH,
-        //     pt_ThanhToan: 'Tại quầy',
-        // }
+        const data = {
+            tenKH: pxinput.tenKH,
+            sdt: pxinput.sdtKH,
+            diaChi: pxinput.diachiKH,
+            pt_ThanhToan: 'Tại quầy',
+        }
 
-        // axios.post(`/api/kho/px`, data).then(res => {
-        //     if (res.data.status === 200) {
-        //         swal('Success', res.data.message, 'success')
-        //         setShowCtpx(!showCtpx);
-        //         setPxInput({
-        //             ...pxinput,
-        //             tenKH: '',
-        //             sdtKH: '',
-        //             diachiKH: '',
-        //         })
-        //     }
-        // })
+        axios.post(`/api/kho/px`, data).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, 'success')
+                setPXid(res.data.px_id);
+                setShowCtpx(true);
+                setError([]);
+                setPxInput({
+                    ...pxinput,
+                    tenKH: '',
+                    sdtKH: '',
+                    diachiKH: '',
+                })
+            } else if (res.data.status === 400) {
+                setError(res.data.error);
+            }
+        })
+    }
+
+    const submitAddCtpx = (e) => {
+        e.preventDefault();
+
+        const data = {
+            px_id: pxid,
+            product_id: prodData.id,
+            soluong: quantity,
+            gia: prodData.gia * quantity,
+        }
+
+        axios.post(`/api/kho/addctpx`, data).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, 'success');
+                setProdData([]);
+                setError([]);
+                setShowCtpx(false);
+                setShowTable(false);
+                setQuantity(1);
+            } else if (res.data.status === 400) {
+                setError(res.data.error);
+            } else if (res.data.status === 401) {
+                swal('Error', res.data.message, 'error')
+            } else if (res.data.status === 402) {
+                swal('Warning', res.data.message, 'error')
+            } else if (res.data.status === 403) {
+                swal('Error', res.data.message, 'error')
+            } else if (res.data.status === 404) {
+                swal('Error', res.data.message, 'error')
+            }
+        })
+
     }
     // End
 
@@ -138,7 +176,7 @@ function Index() {
 
     const handleOnSelect = (value) => {
         setProdData(value);
-        setShowTable(!showTable)
+        setShowTable(true);
     };
 
     const formatResult = (item) => {
@@ -167,12 +205,7 @@ function Index() {
             setQuantity((prevCount) => prevCount + 1);
         }
     };
-
     // End
-
-
-
-
 
     const test = (status) => {
         var x;
@@ -317,6 +350,7 @@ function Index() {
                                     <B.Col lg={4}>
                                         <B.FormGroup>
                                             <B.FormLabel className='fs-5'>Họ và tên</B.FormLabel>
+                                            <small className='text-danger ms-2'>{error.tenKH}</small>
                                             <B.FormControl type='text' name='tenKH' placeholder='Nhập vào họ và tên' className='rounded-0 shadow-none mb-3'
                                                 value={pxinput.tenKH} onChange={handlePxInput}></B.FormControl>
                                         </B.FormGroup>
@@ -324,6 +358,7 @@ function Index() {
                                     <B.Col lg={4}>
                                         <B.FormGroup>
                                             <B.FormLabel className='fs-5'>Số điện thoại</B.FormLabel>
+                                            <small className='text-danger ms-2'>{error.sdt}</small>
                                             <B.FormControl type='text' name='sdtKH' placeholder='Nhập vào số điện thoại' className='rounded-0 shadow-none mb-3' maxLength='10'
                                                 value={pxinput.sdtKH} onChange={handlePxInput}></B.FormControl>
                                         </B.FormGroup>
@@ -331,6 +366,7 @@ function Index() {
                                     <B.Col lg={4}>
                                         <B.FormGroup>
                                             <B.FormLabel className='fs-5'>Địa chỉ</B.FormLabel>
+                                            <small className='text-danger ms-2'>{error.diaChi}</small>
                                             <B.FormControl as='textarea' rows={1} name='diachiKH' placeholder='Nhập vào địa chỉ' className='rounded-0 shadow-none mb-3'
                                                 value={pxinput.diachiKH} onChange={handlePxInput}></B.FormControl>
                                         </B.FormGroup>
@@ -341,7 +377,7 @@ function Index() {
                         </B.Row>
                         {showCtpx && (
                             <B.Row className='px-xl-3 mb-3'>
-                                <B.Form>
+                                <B.Form onSubmit={submitAddCtpx}>
                                     <h4 className='text-primary mb-3'>Chi tiết phiếu xuất</h4>
                                     <label className='fs-5'>Thêm sản phẩm</label>
                                     <B.Row className='mt-2' >
@@ -351,8 +387,9 @@ function Index() {
                                                 onSearch={handleOnSearch}
                                                 onSelect={handleOnSelect}
                                                 fuseOptions={{ keys: ["id", "tenSP"] }}
-                                                // resultStringKeyName="tenSP"
+                                                resultStringKeyName="tenSP"
                                                 formatResult={formatResult}
+                                                maxResults={5}
                                                 styling={{
                                                     height: "36px",
                                                     border: "1px solid lightgray",
@@ -370,7 +407,12 @@ function Index() {
                                                     zIndex: '2',
                                                 }}
                                             />
-                                            <B.Button variant='primary' className='rounded-0 my-2'>Thêm chi tiết phiếu xuất</B.Button>
+                                            <B.Button type='submit' variant='primary' className='rounded-0 my-2'>Thêm chi tiết phiếu xuất</B.Button>
+                                            <div>
+                                                <small className='text-danger ms-2 d-block'>{error.px_id}</small>
+                                                <small className='text-danger ms-2 d-block'>{error.product_id}</small>
+                                                <small className='text-danger ms-2 d-block'>{error.soluong}</small>
+                                            </div>
                                         </B.Col>
                                         <B.Col lg={8} className='mx-auto table-responsive mb-3' style={{ zIndex: '1' }}>
                                             {showTable && (
@@ -384,7 +426,11 @@ function Index() {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{prodData.tenSP}</td>
+                                                            <td><img
+                                                                src={`http://localhost:8000/uploadhinh/${prodData.hinh}`}
+                                                                style={{ height: '60px' }}
+                                                                alt=''
+                                                            /> {prodData.tenSP}</td>
                                                             <td style={{ width: '130px' }}>
                                                                 <B.InputGroup className="quantity mx-auto">
                                                                     <B.Button
