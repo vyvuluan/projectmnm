@@ -206,7 +206,7 @@ function Checkout() {
                                                 value={checkoutInput.fullname}
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
-                                            <small className="text-danger">{error.fullname}</small>
+                                            <small className="text-danger">{error.tenKH}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={6}>
@@ -219,7 +219,7 @@ function Checkout() {
                                                 value={checkoutInput.phonenumber}
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
-                                            <small className="text-danger">{error.phonenumber}</small>
+                                            <small className="text-danger">{error.sdt}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={12}>
@@ -233,7 +233,7 @@ function Checkout() {
                                                 value={checkoutInput.address}
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
-                                            <small className="text-danger">{error.address}</small>
+                                            <small className="text-danger">{error.diaChi}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                 </B.Row>
