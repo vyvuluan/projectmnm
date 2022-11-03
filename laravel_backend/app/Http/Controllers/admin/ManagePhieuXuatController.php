@@ -411,4 +411,19 @@ class ManagePhieuXuatController extends Controller
             'message' => 'Xoá chi tiết px thành công',
         ]);
     }
+    public function search(Request $request)
+    {
+        $key = $request->key;
+        $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
+            ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
+            ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
+            ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            ->get();
+        $px = $px_query;
+        return response()->json([
+            'data' => $px,
+            'message' => 'kết quả',
+        ]);
+    }
 }
