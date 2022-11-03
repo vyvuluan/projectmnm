@@ -10,3 +10,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.customborder {
+    border-bottom: 4px solid #d19c97;
+    transition: 100ms;
+}
+
+.customborder:hover {
+    /* border-width: 6px; */
+    background-color: lightskyblue;
+    color: white;
+    border-bottom: 0;
+    border-top: 4px solid #d19c97;
+    transition: 100ms;
+}

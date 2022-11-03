@@ -16,7 +16,6 @@ const Ncc = () => {
   const [NCCData, setNCCData] = useState();
   const handleClose = () => setShow((prev) => !prev);
   const handleShow = (NCC) => {
-    console.log(NCC);
     setShow(true);
     setNCCData(NCC);
   };

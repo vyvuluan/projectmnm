@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react'
 import * as B from 'react-bootstrap'
 import Pagination from '../../form/pagination/index'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import { FaSearch, FaMinus, FaPlus, FaRegEye } from "react-icons/fa";
+import { FaSearch, FaMinus, FaPlus, FaRegEye, FaTimes } from "react-icons/fa";
 import { FcPrint } from 'react-icons/fc'
-import { BiEdit } from 'react-icons/bi'
+import { BiEdit, BiReset, BiRefresh } from 'react-icons/bi'
 import { TbTrashX } from 'react-icons/tb'
 import swal from 'sweetalert';
+import EditPx from './editPx'
 import './style.css'
 
 const checkStatus = [
@@ -30,14 +31,22 @@ function Index() {
     const [pxid, setPXid] = useState();
     const [ekey, setEkey] = useState();
     const [searchList, setSearchlist] = useState();
+    const [pxsearchList, setPxSearchlist] = useState([]);
+    const [viewPx, setViewPx] = useState();
+    const [editPx, setEditPx] = useState();
     const [tabkey, setTabkey] = useState(1)
     const [prodData, setProdData] = useState([]);
     const [quantity, setQuantity] = useState(1);
-    // const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
     const [showCtpx, setShowCtpx] = useState(false);
     const [showTable, setShowTable] = useState(false);
-    // const handleClose = () => setShow(prev => !prev);
-    // const handleShow = () => setShow(true);
+    const [showTab, setShowTab] = useState(false);
+    const [showSearchTable, setShowSearchTable] = useState(false);
+    const handleClose = () => setShow(prev => !prev);
+    const handleShow = (ctpx) => {
+        setShow(true);
+        setEditPx(ctpx);
+    }
 
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
@@ -166,7 +175,7 @@ function Index() {
     // End
 
     // Function search và thêm sản phẩm mẫu cho chi tiết phiếu xuất
-    const handleOnSearch = (key) => {
+    const handleOnProdSearch = (key) => {
         axios.get(`http://localhost:8000/api/searchProduct?key=${key}`).then(res => {
             if (res.data.status === 200) {
                 setSearchlist(res.data.product)
@@ -174,7 +183,7 @@ function Index() {
         })
     };
 
-    const handleOnSelect = (value) => {
+    const handleOnProdSelect = (value) => {
         setProdData(value);
         setShowTable(true);
     };
@@ -206,6 +215,70 @@ function Index() {
         }
     };
     // End
+
+    const handleOnPxSearch = (key) => {
+        axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+            // if (res.data.status === 200) {
+
+            // }
+            setPxSearchlist(res.data.data)
+            setShowSearchTable(true);
+        })
+    }
+
+    const handleOnPxClear = () => {
+        setPxSearchlist([]);
+        setShowSearchTable(false);
+    }
+
+    const handleView = (px) => {
+        setShowTab(true);
+        setTabkey(3);
+        setViewPx(px);
+    }
+
+    const handleCloseTab = () => {
+        setShowTab(false);
+        setTabkey(1);
+    }
+
+    const handleAddCtpxProd = (value) => {
+        const data = {
+            px_id: viewPx.id,
+            product_id: value.id,
+            soluong: quantity,
+        }
+
+        axios.post(`/api/kho/addctpx`, data).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, 'success');
+                setQuantity(1);
+                setProdData([]);
+                setError([]);
+            } else if (res.data.status === 400) {
+                setError(res.data.error);
+            } else if (res.data.status === 401) {
+                swal('Error', res.data.message, 'error')
+            } else if (res.data.status === 402) {
+                swal('Warning', res.data.message, 'error')
+            } else if (res.data.status === 403) {
+                swal('Error', res.data.message, 'error')
+            } else if (res.data.status === 404) {
+                swal('Error', res.data.message, 'error')
+            }
+        })
+    }
+
+    const handleRefresh = () => {
+        axios.get(`/api/kho/px?page=${page}`).then(res => {
+            if (res.status === 200) {
+                setPxlist(res.data.data.data);
+                setTotalPage(res.data.data.total);
+                setPerPage(res.data.data.per_page);
+                setCurrentPage(res.data.data.current_page)
+            }
+        });
+    }
 
     const test = (status) => {
         var x;
@@ -257,33 +330,26 @@ function Index() {
     return (
         <>
             <B.Container fluid>
-                <B.Row className='pe-xl-5 mb-4'>
-                    <B.Col lg={4}>
-                        <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1>
-                    </B.Col>
-                    <B.Col lg={2}></B.Col>
-                    <B.Col lg={6}>
-                        <B.Form>
-                            <B.FormGroup>
-                                <B.InputGroup>
-                                    <B.FormControl
-                                        type="text"
-                                        placeholder="Tìm kiếm"
-                                        className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                                    ></B.FormControl>
-                                    <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                                        <FaSearch variant="primary" />
-                                    </B.InputGroup.Text>
-                                </B.InputGroup>
-                            </B.FormGroup>
-                            <B.FormGroup className='d-flex d-inline-block justify-content-between mt-2'>
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo id' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo NCC' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo NSX' />
-                            </B.FormGroup>
-                        </B.Form>
-                    </B.Col>
+                <B.Modal size='lg' show={show} onHide={handleClose}>
+                    <B.ModalHeader closeButton className="bg-secondary">
+                        <B.ModalTitle>Sửa Phiếu xuất</B.ModalTitle>
+                    </B.ModalHeader>
+                    <B.ModalBody>
+                        <EditPx px={editPx} showModal={handleClose} />
+                    </B.ModalBody>
+                    <B.ModalFooter className="bg-secondary">
+                        <B.Button
+                            variant="outline-primary"
+                            className="mt-2 rounded-0"
+                            onClick={handleClose}
+                        >
+                            Hủy bỏ
+                        </B.Button>
+                    </B.ModalFooter>
+                </B.Modal>
 
+                <B.Row className='pe-xl-5 mb-4'>
+                    <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1>
                 </B.Row>
 
                 <B.Tabs activeKey={tabkey}
@@ -291,6 +357,37 @@ function Index() {
 
                     {/* Hien thi phieu xuat */}
                     <B.Tab eventKey={1} title="Danh sách phiếu xuất" className=" border border-top-0 py-3 px-3">
+                        <B.Row className='px-xl-3 mb-3'>
+                            <B.Col lg={4}>
+                                <ReactSearchAutocomplete
+                                    items={pxsearchList}
+                                    onSearch={handleOnPxSearch}
+                                    onClear={handleOnPxClear}
+                                    // fuseOptions={{ keys: ["id", "tenKH", "sdt"] }}
+                                    // resultStringKeyName="tenKH"
+                                    // formatResult={formatResult}
+                                    placeholder='Tìm kiếm phiếu xuất'
+                                    maxResults={10}
+                                    showNoResults={false}
+                                    styling={{
+                                        height: "34px",
+                                        border: "1px solid lightgray",
+                                        borderRadius: "0",
+                                        backgroundColor: "white",
+                                        boxShadow: "none",
+                                        hoverBackgroundColor: "#d19c97",
+                                        color: "black",
+                                        fontSize: "15px",
+                                        // fontFamily: "Courier",
+                                        iconColor: "black",
+                                        lineColor: "#d19c97",
+                                        // placeholderColor: "black",
+                                        clearIconMargin: "3px 8px 0 0",
+                                        zIndex: '2',
+                                    }}
+                                />
+                            </B.Col>
+                        </B.Row>
                         <B.Row className='px-xl-3'>
                             <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5'>
                                 <B.Table className='table-borderless border border-secondary mb-0'>
@@ -307,32 +404,64 @@ function Index() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {pxlist && pxlist.map((px) => {
-                                            return (
-                                                <tr key={px.id}>
-                                                    <td>{px.id}</td>
-                                                    <td>{px.tenKH}</td>
-                                                    <td>{px.sdt}</td>
-                                                    <td>{px.diaChi}</td>
-                                                    <td>{px.pt_ThanhToan}</td>
-                                                    <td>{px.tongTien}</td>
-                                                    <td>
-                                                        <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>
-                                                            {checkStatus.map((val) => (
-                                                                <B.Dropdown.Item key={val.id}
-                                                                    onClick={() => handleUpdateStatus(val, px)}
-                                                                    eventKey={ekey}>{val.name}</B.Dropdown.Item>
-                                                            ))}
-                                                        </B.DropdownButton>
+                                        {!showSearchTable && (
+                                            pxlist && pxlist.map((px) => {
+                                                return (
+                                                    <tr key={px.id}>
+                                                        <td>{px.id}</td>
+                                                        <td>{px.tenKH}</td>
+                                                        <td>{px.sdt}</td>
+                                                        <td>{px.diaChi}</td>
+                                                        <td>{px.pt_ThanhToan}</td>
+                                                        <td>{px.tongTien}</td>
+                                                        <td className='text-success fw-semibold'>{test(px.status)}</td>
+                                                        {/* <td>
+                                                                    <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>
+                                                                        {checkStatus.map((val) => (
+                                                                            <B.Dropdown.Item key={val.id}
+                                                                                onClick={() => handleUpdateStatus(val, px)}
+                                                                                eventKey={ekey}>{val.name}</B.Dropdown.Item>
+                                                                        ))}
+                                                                    </B.DropdownButton>
+                                                                </td> */}
+                                                        <td className='d-flex'>
+                                                            <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
+                                                            <FcPrint className='fs-3' onClick={window.print} />
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        )}
 
-                                                    </td>
-                                                    <td className='d-flex'>
-                                                        <FaRegEye className='fs-3 text-info me-3' />
-                                                        <FcPrint className='fs-3' onClick={window.print} />
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })}
+                                        {showSearchTable && (
+                                            pxsearchList && pxsearchList.map((px) => {
+                                                return (
+                                                    <tr key={px.id}>
+                                                        <td>{px.id}</td>
+                                                        <td>{px.tenKH}</td>
+                                                        <td>{px.sdt}</td>
+                                                        <td>{px.diaChi}</td>
+                                                        <td>{px.pt_ThanhToan}</td>
+                                                        <td>{px.tongTien}</td>
+                                                        <td className='text-success fw-semibold'>{test(px.status)}</td>
+                                                        {/* <td>
+                                                                    <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>
+                                                                        {checkStatus.map((val) => (
+                                                                            <B.Dropdown.Item key={val.id}
+                                                                                onClick={() => handleUpdateStatus(val, px)}
+                                                                                eventKey={ekey}>{val.name}</B.Dropdown.Item>
+                                                                        ))}
+                                                                    </B.DropdownButton>
+                                                                </td> */}
+                                                        <td className='d-flex'>
+                                                            <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
+                                                            <FcPrint className='fs-3' onClick={window.print} />
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+
+                                        )}
                                     </tbody>
                                 </B.Table>
                             </B.Col>
@@ -340,6 +469,153 @@ function Index() {
                         <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
                     </B.Tab>
                     {/* Hien thi phieu xuat */}
+
+                    {/* Xem va sua PX */}
+                    {showTab && (
+                        <B.Tab eventKey={3} title="Xem chi tiết phiếu xuất" className=" border border-top-0 py-3 px-3">
+                            <B.Row className='px-xl-3 mb-3'>
+                                <B.Col lg={8} xs={8}>
+                                    <h5 className='text-primary mb-3'>Chi tiết phiếu xuất</h5>
+                                </B.Col>
+                                <B.Col lg={4} xs={4} className='text-end'>
+                                    <BiReset className='fs-3 customborder' onClick={handleRefresh} />
+                                    <BiEdit className='fs-3 customborder' onClick={() => handleShow(viewPx)} />
+                                    <FaTimes className='fs-3 customborder' onClick={handleCloseTab} />
+                                </B.Col>
+                            </B.Row>
+                            <B.Row className='px-xl-3 mb-3'>
+                                <B.Col lg={5}>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Họ và tên:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.tenKH}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Số điện thoại:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.sdt}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.diaChi}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.pt_ThanhToan}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Đơn giá:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{formatMoney(viewPx.tongTien)}</B.FormLabel>
+                                    </B.FormGroup>
+                                </B.Col>
+                                <B.Col lg={7}>
+                                    <B.Row>
+                                        <B.Col lg={6}>
+                                            <ReactSearchAutocomplete
+                                                items={searchList}
+                                                onSearch={handleOnProdSearch}
+                                                onSelect={handleOnProdSelect}
+                                                fuseOptions={{ keys: ["id", "tenSP"] }}
+                                                resultStringKeyName="tenSP"
+                                                formatResult={formatResult}
+                                                placeholder='Tìm kiếm sản phẩm'
+                                                maxResults={5}
+                                                styling={{
+                                                    height: "36px",
+                                                    border: "1px solid lightgray",
+                                                    borderRadius: "0",
+                                                    backgroundColor: "white",
+                                                    boxShadow: "none",
+                                                    hoverBackgroundColor: "#d19c97",
+                                                    color: "black",
+                                                    fontSize: "15px",
+                                                    iconColor: "black",
+                                                    lineColor: "#d19c97",
+                                                    clearIconMargin: "3px 8px 0 0",
+                                                    zIndex: '2',
+                                                }}
+                                            />
+                                            <div className='pull-left mt-1'>
+                                                <small className='text-danger ms-2 d-block'>{error.px_id}</small>
+                                                <small className='text-danger ms-2 d-block'>{error.product_id}</small>
+                                                <small className='text-danger ms-2 d-block'>{error.soluong}</small>
+                                            </div>
+                                            <B.Button variant='outline-info' className='rounded-0 my-3 pull-right' onClick={() => handleAddCtpxProd(prodData)} >Thêm sản phẩm</B.Button>
+                                        </B.Col>
+                                        <B.Col lg={6}>
+                                            <B.Table className='table-borderless border border-secondary mb-3'>
+                                                <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                                                    <tr>
+                                                        <th>Tên sản phẩm</th>
+                                                        <th>Số lượng</th>
+                                                        <th className='text-center'>Giá</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><img
+                                                            src={`http://localhost:8000/uploadhinh/${prodData.hinh}`}
+                                                            style={{ height: '60px' }}
+                                                            alt=''
+                                                        /> {prodData.tenSP}</td>
+                                                        <td style={{ width: '130px' }}>
+                                                            <B.InputGroup className="quantity mx-auto">
+                                                                <B.Button
+                                                                    className="btn-sm rounded-0"
+                                                                    variant="primary"
+                                                                    type="button"
+                                                                    onClick={handleDecrement}
+                                                                >
+                                                                    <FaMinus />
+                                                                </B.Button>
+                                                                <B.InputGroup.Text className="form-control-sm text-center">
+                                                                    {quantity}
+                                                                </B.InputGroup.Text>
+                                                                <B.Button
+                                                                    className="btn-sm rounded-0"
+                                                                    variant="primary"
+                                                                    type="button"
+                                                                    onClick={handleIncrement}
+                                                                >
+                                                                    <FaPlus />
+                                                                </B.Button>
+                                                            </B.InputGroup>
+                                                        </td>
+                                                        <td className='text-center'>{formatMoney(prodData.gia * quantity)}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </B.Table>
+                                        </B.Col>
+                                    </B.Row>
+                                    <B.Table className='table-borderless border border-secondary mb-0'>
+                                        <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                                            <tr>
+                                                <th>Mã sản phẩm</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá</th>
+                                                <th>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {viewPx.pxct.map((prod) => {
+                                                return (
+                                                    <tr key={prod.product.id}>
+                                                        <td>{prod.product.id}</td>
+                                                        <td>{prod.product.tenSP}</td>
+                                                        <td>{prod.soluong}</td>
+                                                        <td>{formatMoney(prod.product.gia)}</td>
+                                                    </tr>
+                                                )
+                                            })}
+                                            <tr>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </B.Table>
+                                </B.Col>
+                            </B.Row>
+                        </B.Tab>
+                    )}
+                    {/* Xem va sua PX */}
 
                     {/* Form them phieu xuat */}
                     <B.Tab eventKey={2} title="Thêm phiếu xuất" className=" border border-top-0 py-3 px-3">
@@ -384,11 +660,12 @@ function Index() {
                                         <B.Col lg={4}>
                                             <ReactSearchAutocomplete
                                                 items={searchList}
-                                                onSearch={handleOnSearch}
-                                                onSelect={handleOnSelect}
+                                                onSearch={handleOnProdSearch}
+                                                onSelect={handleOnProdSelect}
                                                 fuseOptions={{ keys: ["id", "tenSP"] }}
                                                 resultStringKeyName="tenSP"
                                                 formatResult={formatResult}
+                                                placeholder='Tìm kiếm sản phẩm'
                                                 maxResults={5}
                                                 styling={{
                                                     height: "36px",
@@ -399,10 +676,8 @@ function Index() {
                                                     hoverBackgroundColor: "#d19c97",
                                                     color: "black",
                                                     fontSize: "15px",
-                                                    // fontFamily: "Courier",
                                                     iconColor: "black",
                                                     lineColor: "#d19c97",
-                                                    // placeholderColor: "black",
                                                     clearIconMargin: "3px 8px 0 0",
                                                     zIndex: '2',
                                                 }}
@@ -466,6 +741,8 @@ function Index() {
                         )}
                     </B.Tab>
                     {/* Form them phieu xuat */}
+
+
 
                 </B.Tabs>
             </B.Container>
