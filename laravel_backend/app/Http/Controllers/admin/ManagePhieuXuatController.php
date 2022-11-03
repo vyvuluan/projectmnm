@@ -213,7 +213,7 @@ class ManagePhieuXuatController extends Controller
             'diaChi' => 'required',
             'tenKH' => 'required',
             'sdt' => 'required|numeric|digits:10',
-            'tongTien' => 'required|numeric'
+            //'tongTien' => 'required|numeric'
         ], [
             'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
@@ -238,7 +238,7 @@ class ManagePhieuXuatController extends Controller
                 $px->diaChi = $request->diaChi;
                 $px->tenKH = $request->tenKH;
                 $px->sdt = $request->sdt;
-                $px->tongTien = $request->tongTien;
+                // $px->tongTien = $request->tongTien;
                 $px->save();
                 return response()->json([
                     'status' => 200,
