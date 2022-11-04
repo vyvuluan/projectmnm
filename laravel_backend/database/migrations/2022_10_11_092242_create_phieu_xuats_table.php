@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('status');
             $table->string('pt_ThanhToan');
             $table->string('tenKH');
-            $table->integer('sdt');
+            $table->string('sdt');
             $table->string('diaChi');
             $table->string('payment_id')->nullable();
             $table->bigInteger('tongTien')->nullable();
