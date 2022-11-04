@@ -35,6 +35,7 @@ class ManagePhieuNhapController extends Controller
         $validator = Validator::make($request->all(), [
             'soluong' => 'required|numeric',
             'gia' => 'required|numeric',
+            'product_id' => 'required',
         ], [
 
             'soluong.required' => 'Ô số lượng không được bỏ trống',
@@ -42,6 +43,8 @@ class ManagePhieuNhapController extends Controller
 
             'gia.required' => 'Ô giá không được bỏ trống',
             'gia.numeric' => 'Ô giá phải là số',
+
+            'product_id.required' => 'Ô sản phẩm không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -144,6 +147,7 @@ class ManagePhieuNhapController extends Controller
         $validator = Validator::make($request->all(), [
             'soluong' => 'required|numeric',
             'gia' => 'required|numeric',
+            'product_id' => 'required',
         ], [
 
             'soluong.required' => 'Ô số lượng không được bỏ trống',
@@ -151,6 +155,8 @@ class ManagePhieuNhapController extends Controller
 
             'gia.required' => 'Ô giá không được bỏ trống',
             'gia.numeric' => 'Ô giá phải là số',
+
+            'product_id.required' => 'Ô sản phẩm không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
