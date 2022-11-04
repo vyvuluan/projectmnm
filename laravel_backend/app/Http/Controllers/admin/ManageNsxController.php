@@ -17,7 +17,7 @@ class ManageNsxController extends Controller
      */
     public function index()
     {
-        $Nsx = Nsx::paginate();
+        $Nsx = Nsx::orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'Nsx' => $Nsx,

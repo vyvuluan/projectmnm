@@ -216,20 +216,32 @@ function Index() {
     };
     // End
 
+    const [isSearching, setSearching] = useState(false);
     const handleOnPxSearch = (key) => {
-        axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
-            // if (res.data.status === 200) {
-
-            // }
-            setPxSearchlist(res.data.data)
-            setShowSearchTable(true);
-        })
+        setSearching(true);
+        if (isSearching) {
+            axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+                if (res.status === 200) {
+                    setPxSearchlist(res.data.data)
+                    // setTotalPage(res.data.total);
+                    // setPerPage(res.data.per_page);
+                    // setCurrentPage(res.data.current_page)
+                    setShowSearchTable(true);
+                }
+                else {
+                    setShowSearchTable(false);
+                }
+            })
+        } else setPxSearchlist([]);
     }
 
     const handleOnPxClear = () => {
+        setSearching(false);
         setPxSearchlist([]);
         setShowSearchTable(false);
     }
+
+    console.log(pxsearchList);
 
     const handleView = (px) => {
         setShowTab(true);
@@ -442,7 +454,7 @@ function Index() {
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
-                                                        <td>{px.tongTien}</td>
+                                                        <td>{formatMoney(px.tongTien)}</td>
                                                         <td className='text-success fw-semibold'>{test(px.status)}</td>
                                                         {/* <td>
                                                                     <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>

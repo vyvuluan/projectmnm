@@ -14,10 +14,12 @@ function Index() {
         tenNSX: '',
         country: '',
     });
-
     const [show, setShow] = useState(false);
     const [NSXData, setNSXData] = useState();
-    const handleClose = () => setShow(prev => !prev);
+    const handleClose = () => {
+        setShow(prev => !prev);
+        setSubmitting(true);
+    }
     const handleShow = (NSX) => {
         setShow(true);
         setNSXData(NSX);
@@ -59,26 +61,43 @@ function Index() {
         })
     }
 
+    // useEffect(() => {
+    //     let isMounted = true;
+    //     const controller = new AbortController();
+
+    //     axios.get(`http://localhost:8000/api/kho/nsx?page=${page}`).then((res) => {
+    //         if (isMounted) {
+    //             if (res.data.status === 200) {
+    //                 setNsxList(res.data.Nsx.data);
+    //                 setTotalPage(res.data.Nsx.total);
+    //                 setPerPage(res.data.Nsx.per_page);
+    //                 setCurrentPage(res.data.Nsx.current_page)
+    //             }
+    //         }
+    //     });
+
+    //     return () => {
+    //         isMounted = false;
+    //         controller.abort();
+    //     };
+    // }, [page]);
+    const [submitting, setSubmitting] = useState(true)
+
+    const getNsxData = useCallback(async () => {
+        const res = await axios.get(`http://localhost:8000/api/kho/nsx?page=${page}`)
+        if (res.data.status === 200) {
+            setNsxList(res.data.Nsx.data);
+            setTotalPage(res.data.Nsx.total);
+            setPerPage(res.data.Nsx.per_page);
+            setCurrentPage(res.data.Nsx.current_page)
+        }
+    }, [page])
+
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-
-        axios.get(`http://localhost:8000/api/kho/nsx?page=${page}`).then((res) => {
-            if (isMounted) {
-                if (res.data.status === 200) {
-                    setNsxList(res.data.Nsx.data);
-                    setTotalPage(res.data.Nsx.total);
-                    setPerPage(res.data.Nsx.per_page);
-                    setCurrentPage(res.data.Nsx.current_page)
-                }
-            }
-        });
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        };
-    }, [page]);
+        getNsxData().then(() => setSubmitting(false))
+        var sec = 15;
+        setInterval(getNsxData, sec * 1000)
+    }, [submitting, getNsxData])
 
     return (
         <>
@@ -135,7 +154,7 @@ function Index() {
                                 </B.FormGroup>
                             </B.Col>
                             <B.Col lg={4}>
-                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100'>
+                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100' onClick={() => setSubmitting(true)}>
                                     <BsPersonPlusFill className='me-2' />
                                     Thêm nhà sản xuất
                                 </B.Button>
@@ -173,11 +192,11 @@ function Index() {
                                 </tr>
                             </thead>
                             <tbody className='align-middle'>
-                                {nsxlist && nsxlist.map((item) => {
+                                {nsxlist && nsxlist.map((item, index) => {
                                     return (
                                         <tr key={item.id}>
                                             <td className='align-middle'><input type='checkbox' /></td>
-                                            <td className='align-middle'>{item.id}</td>
+                                            <td className='align-middle'>{index + 1}</td>
                                             <td className='align-middle'>{item.tenNSX}</td>
                                             <td className='align-middle'>{item.quocGia}</td>
                                             <td className='align-middle fs-5 text-primary'><BiEdit onClick={() => handleShow(item)} /></td>
