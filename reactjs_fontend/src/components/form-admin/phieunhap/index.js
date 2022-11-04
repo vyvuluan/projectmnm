@@ -4,7 +4,7 @@ import axios from "axios";
 import swal from "sweetalert";
 import { BsPersonPlusFill } from "react-icons/bs";
 
-import { AiOutlineFileAdd } from "react-icons/ai";
+import { AiOutlineFileAdd, AiFillEye } from "react-icons/ai";
 import { FiTool } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -13,6 +13,8 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
 import UpdateCtPN from "./updateCtPn";
+import Pagination from "../../form/pagination";
+import ShowCTPN from "./showCTPN";
 /*
     xóa tìm kiếm
     chia thành tab giống sản phẩm (1 thêm 2 xem)
@@ -43,20 +45,65 @@ const PhieuNhap = () => {
   const [idProduct, setIdProduct] = useState();
   const [idPN, setIdPN] = useState(null);
   const [errorSL, setErrorSL] = useState();
-
+  const [errorSP, setErrorSP] = useState();
   const [errorGia, setErrorGia] = useState();
   const [pnCt, setPnCt] = useState([]);
 
   const [tongTien, setTongtien] = useState([]);
   const [status, setStatus] = useState();
   const [check, setCheck] = useState();
+  const [dataShowPN, setDataShowPN] = useState([]);
+  // const [inc, setInc] = useState();
+  // const [dec, setDec] = useState();
 
-
+  // const [load, setLoad] = useState(true);
   const handleClose = () => setShow((prev) => !prev);
   const handleCloseUpdateCtPN = () => setShowUpdateCtPN((prev) => !prev);
+  const handleCloseCtPN = () => setShowCtPN((prev) => !prev);
 
   const [show, setShow] = useState(false);
   const [showUpdateCtPN, setShowUpdateCtPN] = useState(false);
+  const [showCtPN, setShowCtPN] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [perPage, setPerPage] = useState();
+  const [currentPage, setCurrentPage] = useState();
+  const handlePerPage = (page) => {
+    setPage(page);
+  };
+
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const CheckStatus = (status) => {
+    var x;
+    switch (status) {
+      case 0: {
+        x = (
+          <>
+            <span className="text-danger fw-semibold">Chưa thanh toán</span>
+          </>
+        );
+        break;
+      }
+      case 1: {
+        x = (
+          <>
+            <span className="text-success fw-semibold">Đã thanh toán</span>
+          </>
+        );
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    return x;
+  };
 
   const [showTable, setShowTable] = useState(false);
   const [inputPN, setInputPN] = useState({
@@ -69,6 +116,9 @@ const PhieuNhap = () => {
   const handleShowUpdateCtPN = () => {
     setShowUpdateCtPN(true);
   };
+  const handleShowCtPN = () => {
+    setShowCtPN(true);
+  };
 
   const [tabkey, setTabKey] = useState(1);
   var today = new Date();
@@ -78,6 +128,7 @@ const PhieuNhap = () => {
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date + " " + time;
   //   console.log(typeof(newDate) );
+
   const handleOnSearch = (key) => {
     axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
       if (res.data.status === 200) {
@@ -85,7 +136,11 @@ const PhieuNhap = () => {
       }
     });
   };
-
+  const handleOnNCClear = () => {
+    setNcclist([]);
+    // setShowSearchTable(false);
+  };
+  // console.log(ncclist);
   const handleOnSelect = (value) => {
     // console.log(value);
     setNccData(value.id);
@@ -109,14 +164,28 @@ const PhieuNhap = () => {
   const formatResult = (item) => {
     return (
       <div className="result-wrapper">
-        <span className="result-span">
-          <img
-            src={`http://localhost:8000/uploadhinh/${item.hinh}`}
-            style={{ height: "60px" }}
-            alt=""
-          />
-        </span>
-        <span className="result-span">{item.tenSP}</span>
+        <B.Row>
+          <B.Col sm={4}>
+            <span className="result-span">
+              <img
+                src={`http://localhost:8000/uploadhinh/${item.hinh}`}
+                style={{ height: "60px" }}
+                alt=""
+              />
+            </span>
+          </B.Col>
+          <B.Col sm={8}>
+            <B.Row>
+              <span className="result-span p-0  ms-1">{item.tenSP}</span>
+            </B.Row>
+            <B.Row>
+              <span className="result-span p-0  ms-1">Giá: {item.gia}</span>
+              <span className="result-span p-0 ms-1">
+                Số lượng: {item.soLuongSP}
+              </span>
+            </B.Row>
+          </B.Col>
+        </B.Row>
       </div>
     );
   };
@@ -181,14 +250,16 @@ const PhieuNhap = () => {
           axios
             .get(`api/kho/PN/${idPN}`)
             .then((res) => {
-              console.log(res);
+              // console.log(res);
 
               if (res.data.status === 200) {
                 setPnCt(res.data.pn.pnct);
 
                 setTongtien(res.data.pn.tongTien);
-                setErrorSL([])
-                setErrorGia([])
+                setErrorSL([]);
+                setErrorGia([]);
+                setErrorSP([]);
+
                 // swal({
                 //   title: res.data.message,
                 //   icon: "success",
@@ -203,20 +274,19 @@ const PhieuNhap = () => {
             });
         } else if (res.data.status === 400) {
           console.log(res.data);
-          setStatus(res.data.status)
+          setStatus(res.data.status);
           setErrorSL(res.data.message.soluong);
           setErrorGia(res.data.message.gia);
-          setCheck(res.data.check)
-          if(res.data.check == 1){
+          setErrorSP(res.data.message.product_id);
+
+          setCheck(res.data.check);
+          if (res.data.check == 1) {
             swal({
               title: res.data.message,
               icon: "warning",
               button: "đóng",
             });
           }
-         
-          
-          
         }
       })
       .catch(function (error) {
@@ -264,23 +334,91 @@ const PhieuNhap = () => {
   //xem tất cả phiếu nhập
   var checkLoi = (
     <>
-       <tr>
-                              
-                              <td className="align-middle"></td>
-                              <td className="align-middle"></td>
-                              <td className="align-middle text-danger">{errorSL}</td>
-                              <td className="align-middle text-danger">{errorGia}</td>
-                              
-                              <td className="align-middle fs-5 text-primary">
-                                
-                              </td>
-                            </tr>
-    </>
-  )
+      <tr>
+        <td className="align-middle"></td>
+        <td className="align-middle text-danger">{errorSP}</td>
+        <td className="align-middle text-danger">{errorSL}</td>
+        <td className="align-middle text-danger">{errorGia}</td>
 
+        <td className="align-middle fs-5 text-primary"></td>
+      </tr>
+    </>
+  );
+  //xem phiếu nhập
+  useEffect(() => {
+    axios
+      .get(`api/kho/getAllPN-new?page=${page}`)
+      .then((res) => {
+        if (res.data.status === 200) {
+          console.log(res.data);
+          setDataShowPN(res.data.pns.data);
+
+          setTotalPage(res.data.pns.total);
+          setPerPage(res.data.pns.per_page);
+          setCurrentPage(res.data.pns.current_page);
+          // swal({
+          //   title: res.data.message,
+          //   icon: "success",
+          //   button: "đóng",
+          // });
+        }
+      })
+
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  }, [page]);
+  // console.log(dataShowPN);
+  //Sắp xếp theo tổng tiền
+  const SortMoney = (e) => {
+    // console.log(e);
+    // setInc(e)
+    if (e == "inc") {
+      axios.get(`api/kho/loc-pn-thap-cao?page=${page}`).then((res) => {
+        console.log(res.data);
+        if (res.data.status === 200) {
+          setDataShowPN(res.data.pns.data);
+          setTotalPage(res.data.pns.total);
+          setPerPage(res.data.pns.per_page);
+          setCurrentPage(res.data.pns.current_page);
+        }
+      });
+    }else if(e =="dec"){
+      axios.get(`api/kho/loc-pn-cao-thap?page=${page}`).then((res) => {
+        console.log(res.data);
+        if (res.data.status === 200) {
+          setDataShowPN(res.data.pns.data);
+          setTotalPage(res.data.pns.total);
+          setPerPage(res.data.pns.per_page);
+          setCurrentPage(res.data.pns.current_page);
+        }
+      });
+    }
+
+    
+  };
   
   return (
     <>
+    <B.Modal show={showCtPN} onHide={handleCloseCtPN}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>Xem chi tiết </B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+           
+          <ShowCTPN   idPN={idPN} showModal={handleCloseCtPN} />
+        </B.ModalBody>
+        <B.ModalFooter className="bg-secondary">
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleCloseCtPN}
+          >
+            Hủy bỏ
+          </B.Button>
+        </B.ModalFooter>
+      </B.Modal>
       <B.Modal show={show} onHide={handleClose}>
         <B.ModalHeader closeButton className="bg-secondary">
           <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
@@ -366,7 +504,6 @@ const PhieuNhap = () => {
                       style={{ width: "150px" }}
                       disabled
                       value={idPN == null ? "PN: " : "PN : " + idPN}
-                     
                     ></B.FormControl>
                   </B.Col>
                   <B.Col>
@@ -377,6 +514,7 @@ const PhieuNhap = () => {
                             placeholder="nhà cung cấp"
                             items={ncclist}
                             onSearch={handleOnSearch}
+                            onClear={handleOnNCClear}
                             onSelect={handleOnSelect}
                             fuseOptions={{ keys: ["id", "tenNCC"] }}
                             resultStringKeyName="tenNCC"
@@ -401,7 +539,8 @@ const PhieuNhap = () => {
 
                         <B.Button
                           onClick={() => handleShow()}
-                          className="rounded-0 shadow-none me-1 mb-3 text-muted  "
+                          className="rounded-0  me-1 mb-3 "
+                          variant="outline-primary"
                         >
                           Thêm
                         </B.Button>
@@ -499,9 +638,8 @@ const PhieuNhap = () => {
                             // placeholder={errorSL}
                           ></B.FormControl>
                           {/* <span className="text-danger">{errorSL}</span> */}
-
                         </td>
-                       
+
                         <td className="align-middle">
                           <B.FormControl
                             name="gia"
@@ -527,15 +665,7 @@ const PhieuNhap = () => {
                           />
                         </td>
                       </tr>
-                            { check==2  &&  status==400 ? checkLoi : null }
-
-                               
-                            
-
-                                
-                            
-                              
-                            
+                      {check == 2 && status == 400 ? checkLoi : null}
 
                       {/* <tr>
                       <td className="align-middle">
@@ -636,19 +766,19 @@ const PhieuNhap = () => {
                 eventKey={2}
                 title="Xem danh sách phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
+                
+                
               >
-                <B.Form>
+                <B.Form style={{ marginBottom: "40px" }}>
                   <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                     <B.FormSelect
                       className="rounded-0 shadow-none"
                       style={{ width: "200px" }}
+                      onChange={(e)=>SortMoney(e.target.value)}
                     >
                       <option>Sắp xếp</option>
-                      <option>Từ A-Z</option>
-                      <option>Theo ID</option>
-                      <option>Theo NCC</option>
-                      <option>Theo NSX</option>
-                      <option>Theo ngày nhập</option>
+                      <option value={"inc"}>Tổng tiền tăng dần </option>
+                      <option value={"dec"}>Tổng tiền giảm dần </option>
                     </B.FormSelect>
                   </B.FormGroup>
                   <B.Table className="table-borderless border border-secondary text-center mb-0">
@@ -657,72 +787,71 @@ const PhieuNhap = () => {
                       style={{ backgroundColor: "#edf1ff" }}
                     >
                       <tr>
-                        <th>
-                          <input type="checkbox" />
-                        </th>
-                        <th>ID</th>
-                        <th>Tên phiếu nhập</th>
-                        <th>Tên sản phẩm</th>
-                        <th>NCC/NSX</th>
-                        <th>Số lượng</th>
-                        <th>Giá nhập</th>
-                        <th>Ngày nhập</th>
+                        <th>STT</th>
+                        <th>Tên nhà cung cấp</th>
+                        <th>Tổng tiền</th>
+                        <th>Ngày tạo</th>
+                        <th>Tình trạng</th>
+
                         <th>Thao tác</th>
                       </tr>
                     </thead>
                     <tbody className="align-middle">
-                      <tr>
-                        <td className="align-middle">
-                          <input type="checkbox" />
-                        </td>
-                        <td className="align-middle">1</td>
-                        <td className="align-middle">
-                          Nhập 50 laptop ASUS đợt 1
-                        </td>
-                        <td className="align-middle">Laptop ASUS TUF A15</td>
-                        <td className="align-middle">GearVN/ASUS</td>
-                        <td className="align-middle">50</td>
-                        <td className="align-middle">2,500,000,000</td>
-                        <td className="align-middle">20/8/2021</td>
-                        <td className="align-middle fs-5 text-primary">
-                          {/* <BiEdit /> */}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="align-middle">
-                          <input type="checkbox" />
-                        </td>
-                        <td className="align-middle">2</td>
-                        <td className="align-middle">
-                          Nhập 50 laptop ASUS đợt 2
-                        </td>
-                        <td className="align-middle">Laptop ASUS ROG G14</td>
-                        <td className="align-middle">GearVN/ASUS</td>
-                        <td className="align-middle">50</td>
-                        <td className="align-middle">3,500,000,000</td>
-                        <td className="align-middle">7/12/2021</td>
-                        <td className="align-middle fs-5 text-primary">
-                          {/* <BiEdit /> */}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="align-middle">
-                          <input type="checkbox" />
-                        </td>
-                        <td className="align-middle">3</td>
-                        <td className="align-middle">Nhập 10 laptop Lenovo</td>
-                        <td className="align-middle">Laptop Lenovo Legion</td>
-                        <td className="align-middle">StarComP/Lenovo</td>
-                        <td className="align-middle">10</td>
-                        <td className="align-middle">300,000,000</td>
-                        <td className="align-middle">2/2/2022</td>
-                        <td className="align-middle fs-5 text-primary">
-                          {/* <BiEdit /> */}
-                        </td>
-                      </tr>
+                      {dataShowPN.map((item, index) => {
+                        // console.log(typeof item.created_at);
+                        let chuoi = item.created_at;
+                        let tachChuoi = chuoi.slice(0, 10);
+                        // console.log(tachChuoi);
+                        return (
+                          <>
+                            <tr>
+                              <td className="align-middle">{index + 1}</td>
+                              <td className="align-middle">
+                                {item?.ncc?.tenNCC}
+                              </td>
+                              <td className="align-middle">{item.tongTien}</td>
+                              <td className="align-middle">{tachChuoi}</td>
+                              <td className="align-middle ">
+                                {CheckStatus(item.status)}
+                              </td>
+
+                              <td className="align-middle fs-5 text-primary">
+                                <AiFillEye
+                                  type="button"
+                                  data-toggle="tooltip"
+                                  data-placement="bottom"
+                                  title="Sửa chi tiết phiếu nhập"
+                                  style={{ marginRight: "15px" }}
+                                  onClick={() => handleShowCtPN()}
+                                />
+                                <FiTool
+                                  type="button"
+                                  data-toggle="tooltip"
+                                  data-placement="bottom"
+                                  title="Sửa chi tiết phiếu nhập"
+                                  style={{ marginRight: "15px" }}
+                                  // onClick={() => handleShowUpdateCtPN()}
+                                />
+                                <MdDeleteForever
+                                  type="button"
+                                  data-toggle="tooltip"
+                                  data-placement="bottom"
+                                  title="Xóa chi tiết phiếu nhập"
+                                  // onClick={handleDelete}
+                                />
+                              </td>
+                            </tr>
+                          </>
+                        );
+                      })}
                     </tbody>
                   </B.Table>
                 </B.Form>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPage={pageNumbers}
+                  handlePerPage={handlePerPage}
+                />
               </B.Tab>
             </B.Tabs>
           </B.Col>
