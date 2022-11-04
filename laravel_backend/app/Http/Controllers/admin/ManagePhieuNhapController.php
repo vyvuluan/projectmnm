@@ -35,6 +35,7 @@ class ManagePhieuNhapController extends Controller
         $validator = Validator::make($request->all(), [
             'soluong' => 'required|numeric',
             'gia' => 'required|numeric',
+            'product_id' => 'required',
         ], [
 
             'soluong.required' => 'Ô số lượng không được bỏ trống',
@@ -42,21 +43,25 @@ class ManagePhieuNhapController extends Controller
 
             'gia.required' => 'Ô giá không được bỏ trống',
             'gia.numeric' => 'Ô giá phải là số',
+
+            'product_id.required' => 'Ô sản phẩm không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
+                'check' => 2,
                 'message' => $validator->messages(),
             ]);
         }
 
         if (auth('sanctum')->check()) {
             $ctpn_check = CtPhieuNhap::where('product_id', $request->product_id)
-            ->where('pn_id', $id)
-            ->first();
+                ->where('pn_id', $id)
+                ->first();
             if (!empty($ctpn_check)) {
                 return response()->json([
                     'status' => 400,
+                    'check' => 1,
                     'message' => 'Đã có product_id bạn đã vừa nhập trong phiếu nhập vui lòng kiểm tra lại',
                 ]);
             }
@@ -144,6 +149,7 @@ class ManagePhieuNhapController extends Controller
         $validator = Validator::make($request->all(), [
             'soluong' => 'required|numeric',
             'gia' => 'required|numeric',
+            'product_id' => 'required',
         ], [
 
             'soluong.required' => 'Ô số lượng không được bỏ trống',
@@ -151,6 +157,8 @@ class ManagePhieuNhapController extends Controller
 
             'gia.required' => 'Ô giá không được bỏ trống',
             'gia.numeric' => 'Ô giá phải là số',
+
+            'product_id.required' => 'Ô sản phẩm không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -339,16 +347,73 @@ class ManagePhieuNhapController extends Controller
             ]);
         } else {
             $cptns = $pn->pnct;
+            foreach ($cptns as $ctpn) {
+                $products = $ctpn->product;
+            }
             return response()->json([
                 'status' => 200,
                 'pn' => $pn,
                 'cptns' => $cptns,
+                'products' => $products,
             ]);
         }
     }
     public function getAllPN()
     {
         $pn = PhieuNhap::paginate(10);
-        return $pn;
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function getAllPN_new()
+    {
+        $pns = PhieuNhap::orderBy('id', 'desc')->paginate(10);
+        foreach ($pns as $pn) {
+            $nccs = $pn->ncc;
+        }
+        return response()->json([
+            'status' => 200,
+            'pns' => $pns,
+            'nccs' => $nccs,
+        ]);
+    }
+    public function locGiaCaoThap()
+    {
+        $pns = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
+        foreach ($pns as $pn) {
+            $nccs = $pn->ncc;
+        }
+        return response()->json([
+            'status' => 200,
+            'pns' => $pns,
+            'nccs' => $nccs,
+
+        ]);
+    }
+    public function locGiaThapCao()
+    {
+        $pns = PhieuNhap::orderBy('tongTien', 'asc')->paginate(10);
+        foreach ($pns as $pn) {
+            $nccs = $pn->ncc;
+        }
+        return response()->json([
+            'status' => 200,
+            'pns' => $pns,
+            'nccs' => $nccs,
+
+        ]);
+    }
+
+    public function searchPn(Request $request)
+    {
+        $pn = PhieuNhap::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('employee_id', 'like', '%' . $request->key . '%')
+            ->orWhere('ncc_id', 'like', '%' . $request->key . '%')
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
     }
 }

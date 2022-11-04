@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
+use App\Models\CtPhieuXuat;
 use App\Models\Product;
 use Validator;
 use Illuminate\Support\Facades\DB;
@@ -150,11 +151,14 @@ class ManagePhieuXuatController extends Controller
                     $checksp->save();
                     $checkpx->tongTien += ($checksp->gia) * $request->soluong;
                     $checkpx->save();
-                    DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
-                                values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
-
-
-
+                    // DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
+                    //  values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
+                    $ctpx = new CtPhieuXuat();
+                    $ctpx->px_id = $request->px_id;
+                    $ctpx->product_id = $request->product_id;
+                    $ctpx->soluong = $request->soluong;
+                    $ctpx->gia = $checksp->gia;
+                    $ctpx->save();
                     return response()->json([
                         'status' => 200,
                         'message' => 'thêm chi tiết thành công',
@@ -299,7 +303,8 @@ class ManagePhieuXuatController extends Controller
                             $checksp->soLuongSP = ($slgio - $slupdate) + $slkho;
                             $checksp->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
-                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
+                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia, 'updated_at' => date('Y-m-d H:i:s')]);
+
                             return response()->json([
                                 'status' => 200,
                                 'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',
@@ -332,7 +337,7 @@ class ManagePhieuXuatController extends Controller
                             $px->tongTien += ($slupdate * $checksp->gia) - ($slgio * $checksp->gia);
                             $px->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
-                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
+                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia, 'updated_at' => date('Y-m-d H:i:s')]);
                             return response()->json([
                                 'status' => 200,
                                 'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',

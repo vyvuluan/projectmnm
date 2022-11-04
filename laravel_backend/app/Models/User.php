@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'status',
     ];
 
     /**
@@ -44,7 +45,7 @@ class User extends Authenticatable
     ];
     public function providers()
     {
-        return $this->hasMany(Provider::class,'user_id','id');
+        return $this->hasMany(Provider::class, 'user_id', 'id');
     }
     public function customer()
     {
@@ -54,6 +55,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Employee::class);
     }
-    
-    
 }
