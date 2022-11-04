@@ -339,10 +339,12 @@ class ManagePhieuNhapController extends Controller
             ]);
         } else {
             $cptns = $pn->pnct;
+            $products = $cptns->product;
             return response()->json([
                 'status' => 200,
                 'pn' => $pn,
                 'cptns' => $cptns,
+                'products' => $products,
             ]);
         }
     }
