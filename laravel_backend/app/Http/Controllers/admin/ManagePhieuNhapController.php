@@ -381,19 +381,27 @@ class ManagePhieuNhapController extends Controller
     public function locGiaCaoThap()
     {
         $pns = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
-        
+        foreach ($pns as $pn) {
+            $nccs = $pn->ncc;
+        }
         return response()->json([
             'status' => 200,
-            'pn' => $pns,
-            
+            'pns' => $pns,
+            'nccs' => $nccs,
+
         ]);
     }
     public function locGiaThapCao()
     {
-        $pn = PhieuNhap::orderBy('tongTien', 'asc')->paginate(10);
+        $pns = PhieuNhap::orderBy('tongTien', 'asc')->paginate(10);
+        foreach ($pns as $pn) {
+            $nccs = $pn->ncc;
+        }
         return response()->json([
             'status' => 200,
-            'pn' => $pn,
+            'pns' => $pns,
+            'nccs' => $nccs,
+
         ]);
     }
 
