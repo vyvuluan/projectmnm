@@ -19,7 +19,7 @@ class ManagePhieuXuatController extends Controller
      */
     public function index()
     {
-        $px = PhieuXuat::orderBy('id', 'asc')->paginate(10);
+        $px = PhieuXuat::orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'data' => $px,
         ]);
@@ -424,9 +424,11 @@ class ManagePhieuXuatController extends Controller
             ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
             ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
             ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            // ->paginate(10);
             ->get();
         $px = $px_query;
         return response()->json([
+            'status' => 200,
             'data' => $px,
             'message' => 'kết quả',
         ]);
