@@ -347,9 +347,8 @@ class ManagePhieuNhapController extends Controller
             ]);
         } else {
             $cptns = $pn->pnct;
-            foreach($cptns as $ctpn)
-            {
-                $products= $ctpn->product;
+            foreach ($cptns as $ctpn) {
+                $products = $ctpn->product;
             }
             return response()->json([
                 'status' => 200,
@@ -369,18 +368,24 @@ class ManagePhieuNhapController extends Controller
     }
     public function getAllPN_new()
     {
-        $pn = PhieuNhap::orderBy('id', 'desc')->paginate(10);
+        $pns = PhieuNhap::orderBy('id', 'desc')->paginate(10);
+        foreach ($pns as $pn) {
+            $nccs = $pn->ncc;
+        }
         return response()->json([
             'status' => 200,
-            'pn' => $pn,
+            'pns' => $pns,
+            'nccs' => $nccs,
         ]);
     }
     public function locGiaCaoThap()
     {
-        $pn = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
+        $pns = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
+        
         return response()->json([
             'status' => 200,
-            'pn' => $pn,
+            'pn' => $pns,
+            
         ]);
     }
     public function locGiaThapCao()
