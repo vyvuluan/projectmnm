@@ -115,11 +115,15 @@ function Checkout() {
 
         switch (payment_mode) {
             case "COD":
-                axios.post(`http://localhost:8000/api/dathang`, data).then((res) => {
+                axios.post(`http://localhost:8000/api/validate-order`, data).then((res) => {
                     if (res.data.status === 200) {
-                        swal("Success", res.data.message, "success");
                         setError([]);
-                        navigate("/");
+                        axios.post(`http://localhost:8000/api/dathang`, data).then((resp) => {
+                            if (resp.data.status === 200) {
+                                swal("Success", resp.data.message, "success");
+                                navigate("/");
+                            }
+                        });
                     } else if (res.data.status === 422) {
                         swal("Vui lòng điều đầy đủ vào các mục", "", "error");
                         setError(res.data.errors);
@@ -206,7 +210,7 @@ function Checkout() {
                                                 value={checkoutInput.fullname}
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
-                                            <small className="text-danger">{error.fullname}</small>
+                                            <small className="text-danger">{error.tenKH}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={6}>
@@ -219,7 +223,7 @@ function Checkout() {
                                                 value={checkoutInput.phonenumber}
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
-                                            <small className="text-danger">{error.phonenumber}</small>
+                                            <small className="text-danger">{error.sdt}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={12}>
@@ -233,7 +237,7 @@ function Checkout() {
                                                 value={checkoutInput.address}
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
-                                            <small className="text-danger">{error.address}</small>
+                                            <small className="text-danger">{error.diaChi}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                 </B.Row>

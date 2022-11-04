@@ -134,6 +134,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
 
 
     //Api Quản lý  Phiếu Xuất
+    Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
     //Api Quản lý chi tiết phiếu xuất

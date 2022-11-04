@@ -21,13 +21,13 @@ class PhieuXuat extends Model
 
 
     ];
+    protected $with = ['pxct'];
     public function pxct()
     {
-        return $this->hasMany(CtPhieuXuat::class,'px_id','id');
+        return $this->hasMany(CtPhieuXuat::class, 'px_id', 'id');
     }
     public function customer()
     {
         return $this->belongsTo(Customer::class);
     }
-
 }

@@ -161,7 +161,7 @@ class ManagePhieuXuatController extends Controller
                     ]);
                 } else {
                     return response()->json([
-                        'status' => 402,
+                        'status' => 404,
                         'message' => 'không tìm thấy sản phẩm',
                     ]);
                 }
@@ -213,7 +213,7 @@ class ManagePhieuXuatController extends Controller
             'diaChi' => 'required',
             'tenKH' => 'required',
             'sdt' => 'required|numeric|digits:10',
-            'tongTien' => 'required|numeric'
+            //'tongTien' => 'required|numeric'
         ], [
             'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
@@ -238,7 +238,7 @@ class ManagePhieuXuatController extends Controller
                 $px->diaChi = $request->diaChi;
                 $px->tenKH = $request->tenKH;
                 $px->sdt = $request->sdt;
-                $px->tongTien = $request->tongTien;
+                // $px->tongTien = $request->tongTien;
                 $px->save();
                 return response()->json([
                     'status' => 200,
@@ -409,6 +409,21 @@ class ManagePhieuXuatController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Xoá chi tiết px thành công',
+        ]);
+    }
+    public function search(Request $request)
+    {
+        $key = $request->key;
+        $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
+            ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
+            ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
+            ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            ->get();
+        $px = $px_query;
+        return response()->json([
+            'data' => $px,
+            'message' => 'kết quả',
         ]);
     }
 }
