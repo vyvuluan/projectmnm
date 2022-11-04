@@ -26,7 +26,6 @@ const PxEdit = ({ px, showModal }) => {
             sdt: editPxInput.sdtKH,
             diaChi: editPxInput.diaChi,
             pt_ThanhToan: px.pt_ThanhToan,
-            tongTien: px.tongTien,
             status: px.status,
         }
 
