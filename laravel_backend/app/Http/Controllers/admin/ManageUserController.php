@@ -12,11 +12,11 @@ class ManageUserController extends Controller
 {
     public function index()
     {
-        $users = User::where('role_id',2)
-        ->orWhere('role_id',3)
-        ->orWhere('role_id',4)
-        ->orderBy('id', 'asc')
-        ->paginate(10);
+        $users = User::where('role_id', 2)
+            ->orWhere('role_id', 3)
+            ->orWhere('role_id', 4)
+            ->orderBy('id', 'asc')
+            ->paginate(10);
         return response()->json([
             'users' => $users,
         ]);
@@ -24,8 +24,8 @@ class ManageUserController extends Controller
 
     public function index2()
     {
-        $users = User::where('role_id',1)
-        ->paginate(10);
+        $users = User::where('role_id', 1)
+            ->paginate(10);
         return response()->json([
             'users' => $users,
         ]);
@@ -68,43 +68,51 @@ class ManageUserController extends Controller
                     'message' => 'Tài khoản hoặc mật khẩu không chính xác',
                 ]);
             } else {
-                if ($user->role_id == 2) //admin
-                {
-                    $token = $user->createToken($user->email . '_AdminToken', ['server:admin'])->plainTextToken;
-                    return response()->json([
-                        'status' => 200,
-                        'username' => $user->username,
-                        'token' => $token,
-                        'role_id' => $user->role_id,
-                        'message' => 'Đăng nhập thành công',
-                    ]);
-                } else if ($user->role_id == 3) //thủ kho
-                {
-                    $token = $user->createToken($user->email . '_AdminToken', ['server:thukho'])->plainTextToken;
-                    return response()->json([
-                        'status' => 200,
-                        'username' => $user->username,
-                        'token' => $token,
-                        'role_id' => $user->role_id,
-                        'message' => 'Đăng nhập thành công',
-                    ]);
-                } else if ($user->role_id == 4) //nhân viên bán hàng
-                {
-                    $token = $user->createToken($user->email . '_AdminToken', ['server:nhanvien'])->plainTextToken;
-                    return response()->json([
-                        'status' => 200,
-                        'username' => $user->username,
-                        'token' => $token,
-                        'role_id' => $user->role_id,
-                        'message' => 'Đăng nhập thành công',
-                    ]);
+                if ($user->status == 1) {
+                    if ($user->role_id == 2) //admin
+                    {
+                        $token = $user->createToken($user->email . '_AdminToken', ['server:admin'])->plainTextToken;
+                        return response()->json([
+                            'status' => 200,
+                            'username' => $user->username,
+                            'token' => $token,
+                            'role_id' => $user->role_id,
+                            'message' => 'Đăng nhập thành công',
+                        ]);
+                    } else if ($user->role_id == 3) //thủ kho
+                    {
+                        $token = $user->createToken($user->email . '_AdminToken', ['server:thukho'])->plainTextToken;
+                        return response()->json([
+                            'status' => 200,
+                            'username' => $user->username,
+                            'token' => $token,
+                            'role_id' => $user->role_id,
+                            'message' => 'Đăng nhập thành công',
+                        ]);
+                    } else if ($user->role_id == 4) //nhân viên bán hàng
+                    {
+                        $token = $user->createToken($user->email . '_AdminToken', ['server:nhanvien'])->plainTextToken;
+                        return response()->json([
+                            'status' => 200,
+                            'username' => $user->username,
+                            'token' => $token,
+                            'role_id' => $user->role_id,
+                            'message' => 'Đăng nhập thành công',
+                        ]);
+                    } else {
+                        return response()->json([
+
+                            'error' => 'Bạn không có quyền đăng nhập vào chức năng này',
+                            'status' => 404,
+                        ]);
+                    }
                 } else {
                     return response()->json([
-
-                        'error' => 'Bạn không có quyền đăng nhập vào chức năng này',
-                        'status' => 404,
+                        'status' => 402,
+                        'message' => 'Tài khoản đã bị khóa',
                     ]);
                 }
+
                 // $token= $user->createToken($user->email.'_Token')->plainTextToken;
             }
         }

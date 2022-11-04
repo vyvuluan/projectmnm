@@ -43,6 +43,12 @@ Route::post('/register', [UserController::class, 'register']);
 Route::get('/searchNcc', [ManageNccController::class, 'searchNcc']);
 //api search sản phẩm theo tên mã
 Route::get('/searchProduct', [ManageProductController::class, 'searchProduct']);
+//api search phiếu nhập
+Route::get('/searchPn', [ManagePhieuNhapController::class, 'searchPn']);
+
+Route::get('/searchEmp', [ManageEmployeeController::class, 'searchEmp']);
+Route::get('/locTenNvAZ', [ManageEmployeeController::class, 'locTenAZ']);
+Route::get('/locTenNvZA', [ManageEmployeeController::class, 'locTenZA']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
@@ -108,10 +114,15 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::put('updateTotal/{pn_id}', [ManagePhieuNhapController::class, 'setTongTien']);
     //api hiển thị all phiếu nhập
     Route::get('getAllPN', [ManagePhieuNhapController::class, 'getAllPN']);
+    //api hiển thị all phiếu nhập theo thứ tự mới nhất đến cũ nhất
+    Route::get('getAllPN-new', [ManagePhieuNhapController::class, 'getAllPN_new']);
     //api hiển thị chi tiết phiếu nhập và phiếu nhập theo id phiếu nhập
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
     //api sản phẩm sắp hết hàng < 10 số lượng
     Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);
+    //lọc phiếu nhập theo giá
+    Route::get('loc-pn-cao-thap', [ManagePhieuNhapController::class, 'locGiaCaoThap']);
+    Route::get('loc-pn-thap-cao', [ManagePhieuNhapController::class, 'locGiaThapCao']);
 
     //api lịch sử nhập hàng theo thời gian
     Route::get('lichSuNhapHang', [ManageBaoCaoController::class, 'lichSuNhapHang']);

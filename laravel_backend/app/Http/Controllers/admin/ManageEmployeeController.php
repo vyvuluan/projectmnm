@@ -166,4 +166,35 @@ class ManageEmployeeController extends Controller
             'message' => 'xóa thành công',
         ]);
     }
+
+
+    public function locTenAZ()
+    {
+        $emp = Employee::orderBy('ten', 'asc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'emp' => $emp,
+        ]);
+    }
+    public function locTenZA()
+    {
+        $emp = Employee::orderBy('ten', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'emp' => $emp,
+        ]);
+    }
+
+    public function searchEmp(Request $request)
+    {
+        $emp = Employee::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('ten', 'like', '%' . $request->key . '%')
+            ->orWhere('sdt', 'like', '%' . $request->key . '%')
+            ->orWhere('diaChi', 'like', '%' . $request->key . '%')
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'emp' => $emp,
+        ]);
+    }
 }

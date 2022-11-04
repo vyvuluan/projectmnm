@@ -52,8 +52,8 @@ class ManagePhieuNhapController extends Controller
 
         if (auth('sanctum')->check()) {
             $ctpn_check = CtPhieuNhap::where('product_id', $request->product_id)
-            ->where('pn_id', $id)
-            ->first();
+                ->where('pn_id', $id)
+                ->first();
             if (!empty($ctpn_check)) {
                 return response()->json([
                     'status' => 400,
@@ -349,6 +349,45 @@ class ManagePhieuNhapController extends Controller
     public function getAllPN()
     {
         $pn = PhieuNhap::paginate(10);
-        return $pn;
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function getAllPN_new()
+    {
+        $pn = PhieuNhap::orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function locGiaCaoThap()
+    {
+        $pn = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function locGiaThapCao()
+    {
+        $pn = PhieuNhap::orderBy('tongTien', 'asc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+
+    public function searchPn(Request $request)
+    {
+        $pn = PhieuNhap::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('employee_id', 'like', '%' . $request->key . '%')
+            ->orWhere('ncc_id', 'like', '%' . $request->key . '%')
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
     }
 }
