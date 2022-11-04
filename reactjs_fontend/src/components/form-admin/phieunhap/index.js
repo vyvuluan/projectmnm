@@ -41,13 +41,16 @@ const PhieuNhap = () => {
   const [nccData, setNccData] = useState();
   const [listProduct, setListProduct] = useState([]);
   const [idProduct, setIdProduct] = useState();
-  const [idPN, setIdPN] = useState();
+  const [idPN, setIdPN] = useState(null);
   const [errorSL, setErrorSL] = useState();
 
   const [errorGia, setErrorGia] = useState();
   const [pnCt, setPnCt] = useState([]);
+
   const [tongTien, setTongtien] = useState([]);
-  const [array, setArray] = useState([]);
+  const [status, setStatus] = useState();
+  const [check, setCheck] = useState();
+
 
   const handleClose = () => setShow((prev) => !prev);
   const handleCloseUpdateCtPN = () => setShowUpdateCtPN((prev) => !prev);
@@ -182,7 +185,10 @@ const PhieuNhap = () => {
 
               if (res.data.status === 200) {
                 setPnCt(res.data.pn.pnct);
+
                 setTongtien(res.data.pn.tongTien);
+                setErrorSL([])
+                setErrorGia([])
                 // swal({
                 //   title: res.data.message,
                 //   icon: "success",
@@ -196,14 +202,21 @@ const PhieuNhap = () => {
               console.log(error);
             });
         } else if (res.data.status === 400) {
-          // console.log(res.data);
+          console.log(res.data);
+          setStatus(res.data.status)
           setErrorSL(res.data.message.soluong);
           setErrorGia(res.data.message.gia);
-          swal({
-            title: res.data.message,
-            icon: "warning",
-            button: "đóng",
-          });
+          setCheck(res.data.check)
+          if(res.data.check == 1){
+            swal({
+              title: res.data.message,
+              icon: "warning",
+              button: "đóng",
+            });
+          }
+         
+          
+          
         }
       })
       .catch(function (error) {
@@ -248,7 +261,24 @@ const PhieuNhap = () => {
       }
     });
   };
+  //xem tất cả phiếu nhập
+  var checkLoi = (
+    <>
+       <tr>
+                              
+                              <td className="align-middle"></td>
+                              <td className="align-middle"></td>
+                              <td className="align-middle text-danger">{errorSL}</td>
+                              <td className="align-middle text-danger">{errorGia}</td>
+                              
+                              <td className="align-middle fs-5 text-primary">
+                                
+                              </td>
+                            </tr>
+    </>
+  )
 
+  
   return (
     <>
       <B.Modal show={show} onHide={handleClose}>
@@ -329,6 +359,16 @@ const PhieuNhap = () => {
                 className=" border border-top-0 py-3 px-3"
               >
                 <B.Row>
+                  <B.Col sm={2}>
+                    <B.FormControl
+                      type="text"
+                      className="rounded-0 shadow-none mb-3 me-3 "
+                      style={{ width: "150px" }}
+                      disabled
+                      value={idPN == null ? "PN: " : "PN : " + idPN}
+                     
+                    ></B.FormControl>
+                  </B.Col>
                   <B.Col>
                     <B.Form>
                       <B.FormGroup className="d-flex d-inline-block justify-content-between">
@@ -456,9 +496,12 @@ const PhieuNhap = () => {
                             required
                             onChange={handleInput}
                             value={inputPN.soluong}
-                            placeholder={errorSL}
+                            // placeholder={errorSL}
                           ></B.FormControl>
+                          {/* <span className="text-danger">{errorSL}</span> */}
+
                         </td>
+                       
                         <td className="align-middle">
                           <B.FormControl
                             name="gia"
@@ -467,8 +510,9 @@ const PhieuNhap = () => {
                             required
                             onChange={handleInput}
                             value={inputPN.gia}
-                            placeholder={errorGia}
+                            // placeholder={errorGia}
                           ></B.FormControl>
+                          {/* <span className="text-danger">{errorGia}</span> */}
                         </td>
 
                         <td
@@ -483,6 +527,15 @@ const PhieuNhap = () => {
                           />
                         </td>
                       </tr>
+                            { check==2  &&  status==400 ? checkLoi : null }
+
+                               
+                            
+
+                                
+                            
+                              
+                            
 
                       {/* <tr>
                       <td className="align-middle">
@@ -544,7 +597,7 @@ const PhieuNhap = () => {
                               <tr key={index}>
                                 <td className="align-middle">{index + 1}</td>
                                 <td className="align-middle">
-                                  {item.product_id}
+                                  {item.product.tenSP}
                                 </td>
                                 <td className="align-middle">{item.soluong}</td>
                                 <td className="align-middle">{item.gia}</td>

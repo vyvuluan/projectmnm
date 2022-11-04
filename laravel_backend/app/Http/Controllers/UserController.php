@@ -59,8 +59,7 @@ class UserController extends Controller
                 'error' => 'Không đúng tài khoản hoặc mật khẩu',
             ]);
         } else {
-            if($user->status == 1)
-            {
+            if ($user->status == 1) {
                 if ($user->role_id == 1) {
                     $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
                 }
@@ -70,9 +69,7 @@ class UserController extends Controller
                     'token' => $token,
                     'message' => 'Đăng nhập thành công',
                 ]);
-            }
-            else
-            {
+            } else {
                 return response()->json([
                     'status' => 402,
                     'message' => 'Tài khoản đã bị khóa',
@@ -113,23 +110,23 @@ class UserController extends Controller
         // ]);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'username' => 'required|max:255|unique:users',
-            'password' => 'required|max:255',
-            're_password' => 'required|max:255',
+            'username' => 'required|min:8|unique:users',
+            'password' => 'required|min:8',
+            're_password' => 'required|min:8',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
             'email.unique' => 'Địa chỉ email đã tồn tại',
 
             'username.required' => 'Ô username không được bỏ trống',
-            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
 
             'password.required' => 'Ô password không được bỏ trống',
-            'password.max' => 'Ô password tối đa 255 ký tự',
+            'password.min' => 'Ô password tối thiểu 8 ký tự',
 
             're_password.required' => 'Ô re_password không được bỏ trống',
-            're_password.max' => 'Ô re_password tối đa 255 ký tự',
+            're_password.min' => 'Ô re_password thiểu đa 8 ký tự',
         ]);
         if ($validator->fails()) {
             return response()->json([
