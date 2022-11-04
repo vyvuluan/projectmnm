@@ -46,6 +46,7 @@ class ManagePhieuNhapController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
+                'check' => 2,
                 'message' => $validator->messages(),
             ]);
         }
@@ -57,6 +58,7 @@ class ManagePhieuNhapController extends Controller
             if (!empty($ctpn_check)) {
                 return response()->json([
                     'status' => 400,
+                    'check' => 1,
                     'message' => 'Đã có product_id bạn đã vừa nhập trong phiếu nhập vui lòng kiểm tra lại',
                 ]);
             }
