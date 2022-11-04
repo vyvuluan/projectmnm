@@ -339,7 +339,10 @@ class ManagePhieuNhapController extends Controller
             ]);
         } else {
             $cptns = $pn->pnct;
-            $products = $cptns->product;
+            foreach($cptns as $ctpn)
+            {
+                $products= $ctpn->product;
+            }
             return response()->json([
                 'status' => 200,
                 'pn' => $pn,
