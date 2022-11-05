@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
+use App\Models\CtPhieuXuat;
 use App\Models\Product;
 use Validator;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class ManagePhieuXuatController extends Controller
      */
     public function index()
     {
-        $px = PhieuXuat::orderBy('id', 'asc')->paginate(10);
+        $px = PhieuXuat::orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'data' => $px,
         ]);
@@ -27,6 +28,7 @@ class ManagePhieuXuatController extends Controller
     {
         $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
+            'status' => 200,
             'data' => $ctpx,
         ]);
     }
@@ -102,6 +104,7 @@ class ManagePhieuXuatController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Tạo phiếu xuất thành công',
+                'px_id' => $px->id,
             ]);
         }
     }
@@ -148,18 +151,21 @@ class ManagePhieuXuatController extends Controller
                     $checksp->save();
                     $checkpx->tongTien += ($checksp->gia) * $request->soluong;
                     $checkpx->save();
-                    DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
-                                values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
-
-
-
+                    // DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
+                    //  values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
+                    $ctpx = new CtPhieuXuat();
+                    $ctpx->px_id = $request->px_id;
+                    $ctpx->product_id = $request->product_id;
+                    $ctpx->soluong = $request->soluong;
+                    $ctpx->gia = $checksp->gia;
+                    $ctpx->save();
                     return response()->json([
                         'status' => 200,
                         'message' => 'thêm chi tiết thành công',
                     ]);
                 } else {
                     return response()->json([
-                        'status' => 402,
+                        'status' => 404,
                         'message' => 'không tìm thấy sản phẩm',
                     ]);
                 }
@@ -211,7 +217,7 @@ class ManagePhieuXuatController extends Controller
             'diaChi' => 'required',
             'tenKH' => 'required',
             'sdt' => 'required|numeric|digits:10',
-            'tongTien' => 'required|numeric'
+            //'tongTien' => 'required|numeric'
         ], [
             'tenKH.required' => 'Ô tên khách hàng Không được bỏ trống',
             'sdt.required' => 'Ô số điện thoại không được bỏ trống',
@@ -236,7 +242,7 @@ class ManagePhieuXuatController extends Controller
                 $px->diaChi = $request->diaChi;
                 $px->tenKH = $request->tenKH;
                 $px->sdt = $request->sdt;
-                $px->tongTien = $request->tongTien;
+                // $px->tongTien = $request->tongTien;
                 $px->save();
                 return response()->json([
                     'status' => 200,
@@ -297,7 +303,8 @@ class ManagePhieuXuatController extends Controller
                             $checksp->soLuongSP = ($slgio - $slupdate) + $slkho;
                             $checksp->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
-                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
+                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia, 'updated_at' => date('Y-m-d H:i:s')]);
+
                             return response()->json([
                                 'status' => 200,
                                 'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',
@@ -330,7 +337,7 @@ class ManagePhieuXuatController extends Controller
                             $px->tongTien += ($slupdate * $checksp->gia) - ($slgio * $checksp->gia);
                             $px->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
-                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia]);
+                                ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia, 'updated_at' => date('Y-m-d H:i:s')]);
                             return response()->json([
                                 'status' => 200,
                                 'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',
@@ -407,6 +414,23 @@ class ManagePhieuXuatController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Xoá chi tiết px thành công',
+        ]);
+    }
+    public function search(Request $request)
+    {
+        $key = $request->key;
+        $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
+            ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
+            ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
+            ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            // ->paginate(10);
+            ->get();
+        $px = $px_query;
+        return response()->json([
+            'status' => 200,
+            'data' => $px,
+            'message' => 'kết quả',
         ]);
     }
 }

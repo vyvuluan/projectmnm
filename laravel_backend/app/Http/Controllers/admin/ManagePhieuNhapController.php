@@ -7,6 +7,7 @@ use App\Models\CtPhieuNhap;
 use Illuminate\Http\Request;
 use App\Models\PhieuNhap;
 use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
 
 class ManagePhieuNhapController extends Controller
 {
@@ -15,7 +16,6 @@ class ManagePhieuNhapController extends Controller
         if (auth('sanctum')->check()) {
             $pn = new PhieuNhap();
             $pn->employee_id = auth('sanctum')->user()->employee->id;
-            $pn->status = $request->status;
             $pn->ncc_id = $request->ncc_id;
             $pn->save();
             return response()->json([
@@ -32,15 +32,50 @@ class ManagePhieuNhapController extends Controller
     }
     public function addCtPN(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'soluong' => 'required|numeric',
+            'gia' => 'required|numeric',
+            'product_id' => 'required',
+        ], [
+
+            'soluong.required' => 'Ô số lượng không được bỏ trống',
+            'soluong.numeric' => 'Ô số lượng phải là số',
+
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+
+            'product_id.required' => 'Ô sản phẩm không được bỏ trống',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'check' => 2,
+                'message' => $validator->messages(),
+            ]);
+        }
+
         if (auth('sanctum')->check()) {
+            $ctpn_check = CtPhieuNhap::where('product_id', $request->product_id)
+                ->where('pn_id', $id)
+                ->first();
+            if (!empty($ctpn_check)) {
+                return response()->json([
+                    'status' => 400,
+                    'check' => 1,
+                    'message' => 'Đã có product_id bạn đã vừa nhập trong phiếu nhập vui lòng kiểm tra lại',
+                ]);
+            }
             $ctpn = new CtPhieuNhap();
             $ctpn->product_id = $request->product_id;
             $ctpn->pn_id = $id;
             $ctpn->soluong = $request->soluong;
             $ctpn->gia = $request->gia;
 
+
+
             $pn = PhieuNhap::find($ctpn->pn_id);
             $pn->tongTien += ($request->gia * $request->soluong);
+
 
             $product = Product::find($ctpn->product_id);
             $product->soLuongSP = $product->soLuongSP +  $ctpn->soluong;
@@ -111,6 +146,26 @@ class ManagePhieuNhapController extends Controller
 
     public function updateCtPN(Request $request, $pn_id, $product_id)
     {
+        $validator = Validator::make($request->all(), [
+            'soluong' => 'required|numeric',
+            'gia' => 'required|numeric',
+            'product_id' => 'required',
+        ], [
+
+            'soluong.required' => 'Ô số lượng không được bỏ trống',
+            'soluong.numeric' => 'Ô số lượng phải là số',
+
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+
+            'product_id.required' => 'Ô sản phẩm không được bỏ trống',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => $validator->messages(),
+            ]);
+        }
         if (auth('sanctum')->check()) {
 
             $pn = PhieuNhap::find($pn_id);
@@ -291,17 +346,67 @@ class ManagePhieuNhapController extends Controller
                 'status' => 404,
             ]);
         } else {
-            $cptns = $pn->pnct;
             return response()->json([
                 'status' => 200,
                 'pn' => $pn,
-                'cptns' => $cptns,
             ]);
         }
     }
     public function getAllPN()
     {
         $pn = PhieuNhap::paginate(10);
-        return $pn;
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function getAllPN_new()
+    {
+        $pns = PhieuNhap::orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pns' => $pns,
+        ]);
+    }
+    public function locGiaCaoThap()
+    {
+        $pns = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pns' => $pns,
+
+        ]);
+    }
+    public function locGiaThapCao()
+    {
+        $pns = PhieuNhap::orderBy('tongTien', 'asc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'pns' => $pns,
+
+        ]);
+    }
+
+    public function searchPn(Request $request)
+    {
+        $pn = PhieuNhap::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('employee_id', 'like', '%' . $request->key . '%')
+            ->orWhere('ncc_id', 'like', '%' . $request->key . '%')
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function setStatusPN(Request $request, $pn_id)
+    {
+        $pn = PhieuNhap::find($pn_id);
+        $pn->status = $request->status_check;
+        $pn->save();
+        return response()->json([
+            'status' => 200,
+            'message' => 'cập nhật tình trạng thành công',
+            'pn' => $pn,
+        ]);
     }
 }

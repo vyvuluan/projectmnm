@@ -3,6 +3,8 @@ import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LoaderIcon from "../../layouts/Loading/index";
+import * as B from 'react-bootstrap'
+import ShowMoreText from "react-show-more-text";
 import {
   BsStarFill,
   BsFacebook,
@@ -19,6 +21,7 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 const DetailProduct = (props) => {
   const { item } = props;
 
+  const [tabkey, setTabkey] = useState(1);
   const navaigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState([]);
@@ -86,6 +89,10 @@ const DetailProduct = (props) => {
     });
   };
 
+  const executeOnClick = (isExpanded) => {
+    console.log(isExpanded);
+  }
+
   if (loading) {
     return <LoaderIcon />;
   } else {
@@ -151,7 +158,7 @@ const DetailProduct = (props) => {
                   <img
                     className="w-100 h-100"
                     src={`http://localhost:8000/uploadhinh/${product.hinh}`}
-                    alt="Image"
+                    alt="prod"
                   ></img>
                 </div>
                 <div className="carousel-item">
@@ -219,13 +226,22 @@ const DetailProduct = (props) => {
               {formatMoney(product.gia)}
             </h3>
             <p className="mb-4">
-              Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat
-              diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem
-              magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore
-              stet, est lorem sit diam sea et justo, amet at lorem et eirmod
-              ipsum diam et rebum kasd rebum.
+              <ShowMoreText
+                /* Default options */
+                lines={3}
+                more="Xem thêm"
+                less="Rút gọn"
+                className="content-css"
+                anchorClass="show-more-less-clickable"
+                onClick={executeOnClick}
+                expanded={false}
+                width={280}
+                truncatedEndingComponent={"..... "}
+              >
+                <div dangerouslySetInnerHTML={{ __html: product.ctSanPham }} />
+              </ShowMoreText>
             </p>
-            <div className="d-flex mb-3">
+            {/* <div className="d-flex mb-3">
               <p className="">Sizes:</p>
               <form className="d-flex">
                 <div className="custom-control custom-radio custom-control-inline">
@@ -284,7 +300,7 @@ const DetailProduct = (props) => {
                   </label>
                 </div>
               </form>
-            </div>
+            </div> */}
 
             <div>{avail_stock}</div>
 
@@ -309,8 +325,8 @@ const DetailProduct = (props) => {
             </div>
           </div>
         </div>
-        <div className="row px-xl-5">
-          <div className="col">
+        <div className="px-xl-5">
+          {/* <div className="col">
             <div className="nav nav-tabs justify-content-center border-secondary mb-4">
               <a
                 className="nav-item nav-link active"
@@ -403,7 +419,58 @@ const DetailProduct = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+          <B.Tabs activeKey={tabkey}
+            onSelect={(k) => setTabkey(k)}
+            className=' justify-content-center'>
+            <B.Tab eventKey={1} title="Mô tả sản phẩm" className="border border-top-0 py-3 px-3">
+              <B.Row className='px-xl-3 mb-3'>
+                {/* {product.ctSanPham} */}
+                <ShowMoreText
+                  /* Default options */
+                  lines={3}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  width={280}
+                  truncatedEndingComponent={"..... "}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: product.moTa }} />
+                </ShowMoreText>
+              </B.Row>
+            </B.Tab>
+
+            <B.Tab eventKey={2} title="Bình luận" className="border border-top-0 py-3 px-3">
+              <B.Row className='px-xl-3 mb-3'>
+                <B.Col lg={4}>
+                  <B.Form>
+                    <B.FormGroup>
+                      <B.FormLabel>Tên người dùng</B.FormLabel>
+                      <B.FormControl type='text' placeholder="Nhập tên hiển thị" className="rounded-0 mb-2"></B.FormControl>
+                    </B.FormGroup>
+                    <B.FormGroup>
+                      <B.FormLabel>Bình luận</B.FormLabel>
+                      <B.FormControl as='textarea' rows={4} placeholder="Nhập bình luận" className="rounded-0 mb-3"></B.FormControl>
+                    </B.FormGroup>
+                    <B.Button variant='primary' className="rounded-0 mb-3" >Đăng bình luận</B.Button>
+                  </B.Form>
+                </B.Col>
+                <B.Col lg={8}>
+                  <B.FormGroup className="border border-2 px-3 py-2 mb-3">
+                    <B.FormLabel className="fs-6">Trần Hoàng Long</B.FormLabel>
+                    <B.FormText>Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac</B.FormText>
+                  </B.FormGroup>
+                  <B.FormGroup className="border border-2 px-3 py-2 mb-3">
+                    <B.FormLabel className="fs-6">Vy Vũ Luân</B.FormLabel>
+                    <B.FormText>Theo mình thấy thì cái bình luận là chưa làm</B.FormText>
+                  </B.FormGroup>
+                </B.Col>
+              </B.Row>
+            </B.Tab>
+          </B.Tabs>
         </div>
       </div>
     </>

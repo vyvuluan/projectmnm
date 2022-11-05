@@ -11,9 +11,11 @@ import LoaderIcon from "../../layouts/Loading/index";
 import { Link } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import Pagination from "../../form/pagination";
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import EditProd from "./EditProd";
+import "./style.css";
 
-function Index() {
+function Index(props) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
@@ -23,6 +25,14 @@ function Index() {
   const [ncclist, setNcclist] = useState([]);
   const [nccData, setNccData] = useState();
   const [nsxlist, setNsxlist] = useState([]);
+  const [pricture, setPicture] = useState([]);
+  const [previewIMG, setPreviewIMG] = useState();
+  const [errorlist, setError] = useState([]);
+  const [viewProd, setViewProd] = useState([]);
+  const [mota, setMota] = useState("");
+  const [ctsp, setCtsp] = useState("");
+  const [tabkey, setTabkey] = useState(1);
+  const editorRef = useRef(null);
   const [productInput, setProduct] = useState({
     loaisp_id: "",
     tenSP: "",
@@ -35,6 +45,14 @@ function Index() {
     ctSanPham: "",
   });
 
+  const [show, setShow] = useState(false);
+  const [prodData, setProdData] = useState();
+  const handleClose = () => setShow((prev) => !prev);
+  const handleShow = (prod) => {
+    setShow(true);
+    setProdData(prod);
+  };
+
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -42,20 +60,11 @@ function Index() {
     }).format(money);
   }
 
-  const [pricture, setPicture] = useState([]);
-  const [errorlist, setError] = useState([]);
-  const [viewProd, setViewProd] = useState([]);
-  const [mota, setMota] = useState('');
-  const [ctsp, setCtsp] = useState('');
-  const editorRef = useRef(null);
-  // const [searchResults, setSearchResults] = useState([]);
-
-  const [tabkey, setTabkey] = useState(1)
-
   const handlePerPage = (page) => {
     console.log(page);
     setPage(page);
   };
+
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
@@ -66,8 +75,20 @@ function Index() {
     setProduct({ ...productInput, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    return () => {
+      previewIMG && URL.revokeObjectURL(previewIMG.preview);
+    };
+  }, [previewIMG]);
+
   const handleImage = (e) => {
     setPicture({ image: e.target.files[0] });
+
+    const file = e.target.files[0];
+
+    file.preview = URL.createObjectURL(file);
+
+    setPreviewIMG(file);
   };
 
   const handleCTSPInput = (value) => {
@@ -76,18 +97,18 @@ function Index() {
 
   const handleMotaInput = (value) => {
     setMota({ moTa: value });
-  }
+  };
 
   const handleOnSearch = (key) => {
-    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then(res => {
+    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
       if (res.data.status === 200) {
-        setNcclist(res.data.ncc)
+        setNcclist(res.data.ncc);
       }
-    })
+    });
   };
 
   const handleOnSelect = (value) => {
-    setNccData(value.id)
+    setNccData(value.id);
   };
 
   useEffect(() => {
@@ -154,8 +175,8 @@ function Index() {
             moTa: "",
             ctSanPham: "",
           });
-          setCtsp('');
-          setMota('');
+          setCtsp("");
+          setMota("");
           setError([]);
         } else if (res.data.status === 422) {
           swal("Vui lòng nhập đầy đủ các mục", "", "error");
@@ -182,12 +203,9 @@ function Index() {
     return () => {
       isMounted = false;
     };
-  }, [page]);
+  }, [page, props.id]);
 
   //pagination
-
-
-
 
   // var display_Productdata = "";
   // if (loading) {
@@ -235,6 +253,24 @@ function Index() {
 
   return (
     <>
+      <B.Modal size="xl" show={show} onHide={handleClose}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>Sửa sản phẩm</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <EditProd product={prodData} showModal={handleClose} />
+        </B.ModalBody>
+        <B.ModalFooter className="bg-secondary">
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleClose}
+          >
+            Hủy bỏ
+          </B.Button>
+        </B.ModalFooter>
+      </B.Modal>
+
       <B.Container fluid>
         <B.Row className="mb-4">
           <B.Col lg={4}>
@@ -278,153 +314,172 @@ function Index() {
           </B.Col>
         </B.Row>
 
-
-        <B.Tabs activeKey={tabkey}
-          onSelect={(k) => setTabkey(k)}>
-          <B.Tab eventKey={1} title="Thêm sản phẩm" className=" border border-top-0 py-3 px-3">
+        <B.Tabs activeKey={tabkey} onSelect={(k) => setTabkey(k)}>
+          <B.Tab
+            eventKey={1}
+            title="Thêm sản phẩm"
+            className=" border border-top-0 py-3 px-3"
+          >
             <B.Form onSubmit={submitProduct}>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  name="tenSP"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Tên sản phẩm"
-                  onChange={handleProductInput}
-                  value={productInput.tenSP}
-                ></B.FormControl>
-                <small className="text-danger">{errorlist.tenSP}</small>
-              </B.FormGroup>
+              <B.Row>
+                <B.Col lg={3}>
+                  <div className="prev-container mb-4">
+                    {previewIMG && <img src={previewIMG.preview} alt=""></img>}
+                  </div>
+                  <B.FormGroup className="">
+                    <B.FormControl
+                      type="file"
+                      name="image"
+                      onChange={handleImage}
+                      className="rounded-0 shadow-none mb-3"
+                    ></B.FormControl>
+                    <small className="text-danger">{errorlist.image}</small>
+                  </B.FormGroup>
+                </B.Col>
+                <B.Col lg={9}>
+                  <B.FormGroup>
+                    <B.FormControl
+                      type="text"
+                      name="tenSP"
+                      className="rounded-0 shadow-none mb-3"
+                      placeholder="Tên sản phẩm"
+                      onChange={handleProductInput}
+                      value={productInput.tenSP}
+                    ></B.FormControl>
+                    <small className="text-danger">{errorlist.tenSP}</small>
+                  </B.FormGroup>
 
-              <div className="d-flex">
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormSelect
-                    name="loaisp_id"
-                    onChange={handleProductInput}
-                    value={productInput.loaisp_id}
-                    className="rounded-0 shadow-none mb-3 text-muted"
+                  <div className="d-flex">
+                    <B.FormGroup className="me-2 w-100">
+                      <B.FormSelect
+                        name="loaisp_id"
+                        onChange={handleProductInput}
+                        value={productInput.loaisp_id}
+                        className="rounded-0 shadow-none mb-3 text-muted"
+                      >
+                        <option>Chọn loại sản phẩm</option>
+                        {categorylist &&
+                          categorylist.map((item) => {
+                            return (
+                              <option value={item.id} key={item.id}>
+                                {item.tenLoai}
+                              </option>
+                            );
+                          })}
+                      </B.FormSelect>
+                      <small className="text-danger">
+                        {errorlist.loaisp_id}
+                      </small>
+                    </B.FormGroup>
+                    <B.FormGroup className="me-2 w-100">
+                      <B.FormControl
+                        type="number"
+                        name="soLuong"
+                        className="rounded-0 shadow-none mb-3"
+                        placeholder="Số lượng"
+                        onChange={handleProductInput}
+                        value={productInput.soLuong}
+                      ></B.FormControl>
+                    </B.FormGroup>
+                    <B.FormGroup className="w-100">
+                      <B.FormControl
+                        type="text"
+                        name="gia"
+                        className="rounded-0 shadow-none mb-3"
+                        placeholder="Giá"
+                        onChange={handleProductInput}
+                        value={productInput.gia}
+                      ></B.FormControl>
+                      <small className="text-danger">{errorlist.gia}</small>
+                    </B.FormGroup>
+                  </div>
+                  <div className="d-flex">
+                    <B.FormGroup className="me-2 w-100">
+                      <B.FormControl
+                        type="text"
+                        name="baohanh"
+                        className="rounded-0 shadow-none mb-3"
+                        placeholder="Bảo hành (tháng)"
+                        onChange={handleProductInput}
+                        value={productInput.baohanh}
+                      ></B.FormControl>
+                      <small className="text-danger">{errorlist.baohanh}</small>
+                    </B.FormGroup>
+                    <div className="w-100 me-2">
+                      <ReactSearchAutocomplete
+                        items={ncclist}
+                        onSearch={handleOnSearch}
+                        onSelect={handleOnSelect}
+                        fuseOptions={{ keys: ["id", "tenNCC"] }}
+                        resultStringKeyName="tenNCC"
+                        showIcon={false}
+                        styling={{
+                          height: "36px",
+                          border: "1px solid lightgray",
+                          borderRadius: "0",
+                          backgroundColor: "white",
+                          boxShadow: "none",
+                          hoverBackgroundColor: "#d19c97",
+                          color: "black",
+                          fontSize: "15px",
+                          // fontFamily: "Courier",
+                          iconColor: "black",
+                          lineColor: "#d19c97",
+                          // placeholderColor: "black",
+                          clearIconMargin: "3px 8px 0 0",
+                        }}
+                      />
+                    </div>
+
+                    <B.FormGroup className="w-100">
+                      <B.FormSelect
+                        name="nsx_id"
+                        onChange={handleProductInput}
+                        value={productInput.nsx_id}
+                        className="rounded-0 shadow-none mb-3 text-muted"
+                      >
+                        <option>Chọn nhà sản xuất</option>
+                        {nsxlist &&
+                          nsxlist.map((item) => {
+                            return (
+                              <option value={item.id} key={item.id}>
+                                {item.tenNSX}
+                              </option>
+                            );
+                          })}
+                      </B.FormSelect>
+                      <small className="text-danger">{errorlist.nsx_id}</small>
+                    </B.FormGroup>
+                  </div>
+
+                  <B.Button
+                    type="submit"
+                    variant="outline-primary"
+                    className="rounded-0 py-2 mb-2"
                   >
-                    <option>Chọn loại sản phẩm</option>
-                    {categorylist &&
-                      categorylist.map((item) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            {item.tenLoai}
-                          </option>
-                        );
-                      })}
-                  </B.FormSelect>
-                  <small className="text-danger">{errorlist.loaisp_id}</small>
-                </B.FormGroup>
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormControl
-                    type="number"
-                    name="soLuong"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Số lượng"
-                    onChange={handleProductInput}
-                    value={productInput.soLuong}
-                  ></B.FormControl>
-                </B.FormGroup>
-                <B.FormGroup className="w-100">
-                  <B.FormControl
-                    type="text"
-                    name="gia"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Giá"
-                    onChange={handleProductInput}
-                    value={productInput.gia}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.gia}</small>
-                </B.FormGroup>
-              </div>
-              <div className="d-flex">
-                <B.FormGroup className="me-2 w-100">
-                  <B.FormControl
-                    type="text"
-                    name="baohanh"
-                    className="rounded-0 shadow-none mb-3"
-                    placeholder="Bảo hành (tháng)"
-                    onChange={handleProductInput}
-                    value={productInput.baohanh}
-                  ></B.FormControl>
-                  <small className="text-danger">{errorlist.baohanh}</small>
-                </B.FormGroup>
-                <div className="w-100 me-2">
-                  <ReactSearchAutocomplete
-                    items={ncclist}
-                    onSearch={handleOnSearch}
-                    onSelect={handleOnSelect}
-                    fuseOptions={{ keys: ["id", "tenNCC"] }}
-                    resultStringKeyName="tenNCC"
-                    showIcon={false}
-                    styling={{
-                      height: "36px",
-                      border: "1px solid lightgray",
-                      borderRadius: "0",
-                      backgroundColor: "white",
-                      boxShadow: "none",
-                      hoverBackgroundColor: "#d19c97",
-                      color: "black",
-                      fontSize: "15px",
-                      // fontFamily: "Courier",
-                      iconColor: "black",
-                      lineColor: "#d19c97",
-                      // placeholderColor: "black",
-                      clearIconMargin: "3px 8px 0 0",
-                    }}
-                  />
-                </div>
-
-                <B.FormGroup className="w-100">
-                  <B.FormSelect
-                    name="nsx_id"
-                    onChange={handleProductInput}
-                    value={productInput.nsx_id}
-                    className="rounded-0 shadow-none mb-3 text-muted"
-                  >
-                    <option>Chọn nhà sản xuất</option>
-                    {nsxlist &&
-                      nsxlist.map((item) => {
-                        return (
-                          <option value={item.id} key={item.id}>
-                            {item.tenNSX}
-                          </option>
-                        );
-                      })}
-                  </B.FormSelect>
-                  <small className="text-danger">{errorlist.nsx_id}</small>
-                </B.FormGroup>
-              </div>
-              <B.FormGroup className="me-2 w-100">
-                <B.FormControl
-                  type="file"
-                  name="image"
-                  onChange={handleImage}
-                  className="rounded-0 shadow-none mb-3"
-                ></B.FormControl>
-                <small className="text-danger">{errorlist.image}</small>
-              </B.FormGroup>
-
-              <B.Button
-                type="submit"
-                variant="outline-primary"
-                className="rounded-0 py-2 mb-2"
-              >
-                <BsPersonPlusFill className="me-2" />
-                Thêm sản phẩm
-              </B.Button>
+                    <BsPersonPlusFill className="me-2" />
+                    Thêm sản phẩm
+                  </B.Button>
+                </B.Col>
+              </B.Row>
             </B.Form>
           </B.Tab>
 
-          <B.Tab eventKey={2} title="Thêm chi tiết/mô tả" className=" border border-top-0 py-3 px-3">
+          <B.Tab
+            eventKey={2}
+            title="Thêm chi tiết/mô tả"
+            className=" border border-top-0 py-3 px-3"
+          >
             <B.Row>
               <B.Col lg={4}>
-                <label className='ms-1 fs-5 fw-semibold text-uppercase text-primary'>Chi tiết sản phẩm</label>
+                <label className="ms-1 fs-5 fw-semibold text-uppercase text-primary">
+                  Chi tiết sản phẩm
+                </label>
                 <Editor
                   apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
                   onEditorChange={handleCTSPInput}
                   onInit={(evt, editor) => {
-                    editorRef.current = editor
+                    editorRef.current = editor;
                   }}
                   init={{
                     height: 500,
@@ -441,7 +496,7 @@ function Index() {
                       "insertdatetime",
                       "table",
                       "wordcount",
-                      "fullscreen"
+                      "fullscreen",
                     ],
                     toolbar:
                       "undo redo | blocks | " +
@@ -454,12 +509,14 @@ function Index() {
                 />
               </B.Col>
               <B.Col lg={8}>
-                <label className='ms-1 fs-5 fw-semibold text-uppercase text-primary'>Mô tả sản phẩm</label>
+                <label className="ms-1 fs-5 fw-semibold text-uppercase text-primary">
+                  Mô tả sản phẩm
+                </label>
                 <Editor
                   apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
                   onEditorChange={handleMotaInput}
                   onInit={(evt, editor) => {
-                    editorRef.current = editor
+                    editorRef.current = editor;
                   }}
                   init={{
                     height: 500,
@@ -485,7 +542,7 @@ function Index() {
                       "wordcount",
                       "media",
                       "image",
-                      "editimage"
+                      "editimage",
                     ],
                     toolbar:
                       "undo redo | blocks | " +
@@ -504,7 +561,8 @@ function Index() {
                         var reader = new FileReader();
                         reader.onload = function () {
                           var id = "blobid" + new Date().getTime();
-                          var blobCache = editorRef.current.editorUpload.blobCache;
+                          var blobCache =
+                            editorRef.current.editorUpload.blobCache;
                           var base64 = reader.result.split(",")[1];
                           var blobInfo = blobCache.create(id, file, base64);
                           blobCache.add(blobInfo);
@@ -520,7 +578,11 @@ function Index() {
             </B.Row>
           </B.Tab>
 
-          <B.Tab eventKey={3} title="Xem sản phẩm" className=" border border-top-0 py-3 px-3">
+          <B.Tab
+            eventKey={3}
+            title="Xem sản phẩm"
+            className=" border border-top-0 py-3 px-3"
+          >
             <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
               <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                 <B.FormSelect
@@ -562,31 +624,29 @@ function Index() {
                           <td className="align-middle">{item.id}</td>
                           <td className="align-middle">{item.tenSP}</td>
                           <td className="align-middle">{item.maLoai}</td>
-                          <td className="align-middle">{formatMoney(item.gia)}</td>
+                          <td className="align-middle">
+                            {formatMoney(item.gia)}
+                          </td>
                           <td className="align-middle">{item.soLuongSP}</td>
                           <td className="align-middle">
                             <img
                               src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                               width="50px"
+                              alt={item.tenSP}
                             />
                           </td>
                           <td className="align-middle fs-5 text-primary">
-                            <Link to={"/"}>
-                              <BiEdit />
-                            </Link>
+                            <BiEdit onClick={() => handleShow(item)} />
                           </td>
                         </tr>
                       </>
                     );
                   })}
                 </tbody>
-
-
               </B.Table>
             </B.Col>
 
             <Pagination
-
               currentPage={currentPage}
               totalPage={pageNumbers}
               handlePerPage={handlePerPage}
@@ -612,7 +672,6 @@ function Index() {
                                 </div>
                             </B.FormGroup>
                         </B.Form> */}
-
       </B.Container>
     </>
   );

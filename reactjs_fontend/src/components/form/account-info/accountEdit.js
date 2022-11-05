@@ -15,7 +15,7 @@ const AccountEdit = ({ accountData, showModal }) => {
   const [ngaySinh, setNgaySinh] = useState(accountData?.customer?.ngaySinh);
   const [errorSdt, setErrorSdt] = useState();
   const [errorBird, setErrorBird] = useState();
-  console.log(accountData?.customer?.gioiTinh);
+  // console.log(accountData?.customer?.gioiTinh);
   const [gender, setGender] = useState(accountData?.customer?.gioiTinh);
   const handleChange = (event) => {
     setGender(event.target.value);
@@ -75,7 +75,7 @@ const AccountEdit = ({ accountData, showModal }) => {
           <Bt.FormLabel className="fw-semibold fs-4">Ngày sinh</Bt.FormLabel>
           {/* <DatePicker  onChange={() =>  { console.log(value); return onChange}} value={value} /> */}
           <Bt.FormControl
-            type="text"
+            type="date"
             name="ngaySinh"
             placeholder="ngày sinh"
             className="rounded-0"

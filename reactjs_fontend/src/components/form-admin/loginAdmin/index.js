@@ -44,9 +44,9 @@ const LoginAdmin = () => {
 
             localStorage.setItem("auth_token", res.data.token);
             localStorage.setItem("auth_name", res.data.username);
-            cookies.set('role_id', res.data.role_id, { path: '/' });
+            cookies.set("role_id", res.data.role_id, { path: "/" });
             // setIdRole(res.data.role_id)
-            // console.log(cookies.get('role_id')); 
+            // console.log(cookies.get('role_id'));
             // console.log(res.data.role_id);
 
             swal({
@@ -57,8 +57,9 @@ const LoginAdmin = () => {
             history("/PageAdmin");
           } else if (res.data.status === 401) {
             // console.log(res.data);
+
             swal({
-              title: res.data.message,
+              title: res.data.error,
               icon: "warning",
               button: "đóng",
             });

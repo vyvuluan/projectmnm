@@ -1,8 +1,9 @@
 import React from "react";
 import "./style.css";
-import OrderDetail from "../order-detail";
+import OrderDetail from "../order-detail";  
 import { Link } from "react-router-dom";
 const CheckOrder = () => {
+  
   return (
     <>
       <div className="container padding-bottom-3x mb-5 mt-5">
@@ -33,7 +34,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-cart"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Đơn hàng đã xác nhận</h4>
+                  <h4 className="step-title">Đơn hàng chờ xác nhận</h4>
                 </div>
                 <div className="step completed">
                   <div className="step-icon-wrap">
@@ -41,7 +42,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-config"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Quy trình đặt hàng</h4>
+                  <h4 className="step-title">Đơn hàng đã xác nhận</h4>
                 </div>
                 <div className="step completed">
                   <div className="step-icon-wrap">
@@ -49,7 +50,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-medal"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Kiểm tra chất lượng</h4>
+                  <h4 className="step-title">Đang được vận chuyển</h4>
                 </div>
                 <div className="step">
                   <div className="step-icon-wrap">
@@ -57,7 +58,7 @@ const CheckOrder = () => {
                       <i className="pe-7s-car"></i>
                     </div>
                   </div>
-                  <h4 className="step-title">Sản phẩm được gửi đi</h4>
+                  <h4 className="step-title">Đã thanh toán</h4>
                 </div>
                 <div className="step">
                   <div className="step-icon-wrap">
@@ -72,14 +73,14 @@ const CheckOrder = () => {
           </div>
           <div className="d-flex flex-wrap flex-md-nowrap justify-content-center justify-content-sm-between align-items-center">
             <div className="custom-control custom-checkbox mr-3">
-              <input
+              {/* <input
                 className="custom-control-input"
                 type="checkbox"
                 id="notify_me"
               />
               <label className="custom-control-label" htmlFor="notify_me">
                 Thông báo cho tôi khi đơn hàng được giao
-              </label>
+              </label> */}
             </div>
             <div className="text-left text-sm-right">
               <Link className="btn btn-outline-primary btn-rounded btn-sm " to={`/OrderDetail`}>

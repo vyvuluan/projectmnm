@@ -18,6 +18,11 @@ class ManageEmployeeController extends Controller
      */
     public function index()
     {
+        $emp = Employee::paginate(5);
+        return response()->json([
+            'status' => 200,
+            'emloyee' =>  $emp,
+        ]);
     }
 
     /**
@@ -49,23 +54,23 @@ class ManageEmployeeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'username' => 'required|max:255|unique:users',
-            'password' => 'required|max:255',
-            're_password' => 'required|max:255',
+            'username' => 'required|min:8|unique:users',
+            'password' => 'required|min:8',
+            're_password' => 'required|min:8',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
             'email.unique' => 'Địa chỉ email đã tồn tại',
 
             'username.required' => 'Ô username không được bỏ trống',
-            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
 
             'password.required' => 'Ô password không được bỏ trống',
-            'password.max' => 'Ô password tối đa 255 ký tự',
+            'password.min' => 'Ô password tối thiểu 8 ký tự',
 
             're_password.required' => 'Ô re_password không được bỏ trống',
-            're_password.max' => 'Ô re_password tối đa 255 ký tự',
+            're_password.min' => 'Ô re_password tối thiểu 8 ký tự',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -159,6 +164,37 @@ class ManageEmployeeController extends Controller
             'status' => 200,
             'user' => $user,
             'message' => 'xóa thành công',
+        ]);
+    }
+
+
+    public function locTenAZ()
+    {
+        $emp = Employee::orderBy('ten', 'asc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'emp' => $emp,
+        ]);
+    }
+    public function locTenZA()
+    {
+        $emp = Employee::orderBy('ten', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'emp' => $emp,
+        ]);
+    }
+
+    public function searchEmp(Request $request)
+    {
+        $emp = Employee::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('ten', 'like', '%' . $request->key . '%')
+            ->orWhere('sdt', 'like', '%' . $request->key . '%')
+            ->orWhere('diaChi', 'like', '%' . $request->key . '%')
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'emp' => $emp,
         ]);
     }
 }

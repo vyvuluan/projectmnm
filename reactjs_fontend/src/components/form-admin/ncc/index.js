@@ -16,7 +16,6 @@ const Ncc = () => {
   const [NCCData, setNCCData] = useState();
   const handleClose = () => setShow((prev) => !prev);
   const handleShow = (NCC) => {
-    console.log(NCC);
     setShow(true);
     setNCCData(NCC);
   };
@@ -88,14 +87,31 @@ const Ncc = () => {
           setCurrentPage(res.data.Ncc.current_page);
         }
       }
+      return () => {
+        controller.abort();
+
+        isMounted = false;
+      };
     });
 
-    return () => {
-      controller.abort();
+  }, [page]);
 
-      isMounted = false;
-    };
-  }, [ncclist, page]);
+  const handleReload = (e) => {
+    const controller = new AbortController();
+
+    axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`).then((res) => {
+      if (res.data.status === 200) {
+        setNcclist(res.data.Ncc.data);
+        setTotalPage(res.data.Ncc.total);
+        setPerPage(res.data.Ncc.per_page);
+        setCurrentPage(res.data.Ncc.current_page);
+      }
+      return () => {
+        controller.abort();
+      };
+    });
+  }
+
 
   return (
     <>
@@ -149,7 +165,7 @@ const Ncc = () => {
             </B.Form>
           </B.Col>
         </B.Row>
-
+        <B.Button variant='primary' onClick={handleReload}>Refresh</B.Button>
         <B.Row className="pe-xl-5 mb-5">
           <B.Form onSubmit={submitNcc} id="formAddNCC">
             <B.Row>
@@ -249,7 +265,7 @@ const Ncc = () => {
                           className="text-center fs-5 text-primary"
                           style={{ cursor: "pointer" }}
                         >
-                          <BiEdit />
+                          <BiEdit className="me-1" />
                           Sửa
                         </td>
                       </tr>

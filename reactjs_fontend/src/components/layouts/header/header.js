@@ -42,7 +42,7 @@ export default function Header() {
             icon: "success",
             button: "đóng",
           });
-          history("/");   
+          history("/");
         }
       });
     });
@@ -121,11 +121,11 @@ export default function Header() {
         <Bt.Row className="py-2 px-xl-5" style={{ backgroundColor: "#edf1ff" }}>
           <Bt.Col lg={6} className="d-none d-lg-block">
             <div className="d-inline-flex align-items-center">
-              <a className="text-dark text-decoration-none">FAQS</a>
+              <Link to='/' className="text-dark text-decoration-none">Chính sách</Link>
               <span className="text-muted px-2">|</span>
-              <a className="text-dark text-decoration-none">Help</a>
+              <Link to='/warranty' className="text-dark text-decoration-none">Kiểm tra bảo hành</Link>
               <span className="text-muted px-2">|</span>
-              <a className="text-dark text-decoration-none">Support</a>
+              <Link to='/contact' className="text-dark text-decoration-none">hotrol3m@gmail.com</Link>
             </div>
           </Bt.Col>
           <Bt.Col lg={6} className="text-end text-lg-right">

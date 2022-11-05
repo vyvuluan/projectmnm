@@ -5,17 +5,26 @@ import { FaUserEdit, FaSearch } from "react-icons/fa";
 import { AiOutlineUserDelete, AiOutlineEdit } from "react-icons/ai";
 import { RiUserAddFill } from "react-icons/ri";
 import { BiEdit } from "react-icons/bi";
+import { BsPersonPlus } from "react-icons/bs";
+
 import axios from "axios";
 const Employees = () => {
   const [user, setUser] = useState([]);
+  const [showPass, setShowPass] = useState(false);
+
+  const handleClosePass = () => setShowPass((prev) => !prev);
+
+  const handleShowChangePass = () => {
+    setShowPass(true);
+  };
   useEffect(() => {
     // const controller = new AbortController();
 
     axios
-      .get("/api/admin/manageUser")
+      .get("/api/admin/manageEmployee")
       .then((res) => {
-        console.log(res.data.users.data);
-        setUser(res.data.users.data);
+        console.log(res.data.emloyee);
+        setUser(res.data.emloyee.data);
       })
       .catch(function (error) {
         // handle error
@@ -194,31 +203,38 @@ const Employees = () => {
                   </th>
                   <th>ID</th>
                   <th>Họ và tên</th>
-                  <th>Email</th>
+                  {/* <th>Email</th> */}
                   <th>Giới tính</th>
                   <th>Địa chỉ</th>
                   <th>Số điện thoại</th>
-                  <th>Hình</th>
+
                   <th>Thao tác</th>
                 </tr>
               </thead>
               <tbody className="align-middle">
                 {user.map((item, index) => {
-                  console.log(item);
+                  // console.log(item);
+                  // if (user_id == null) {
+                  // }
                   return (
                     <tr>
                       <td className="align-middle">
                         <input type="checkbox" />
                       </td>
                       <td className="align-middle">{item.id}</td>
-                      <td className="align-middle">{item.username}</td>
-                      <td className="align-middle">{item.email}</td>
-                      <td className="align-middle">Lưỡng thể</td>
-                      <td className="align-middle">363 Phố hàng trống</td>
-                      <td className="align-middle">0654676532</td>
-                      <td className="align-middle">Hình</td>
-                      <td className="align-middle fs-5 text-primary">
+                      <td className="align-middle">{item.ten}</td>
+                      {/* <td className="align-middle">{item.email}</td> */}
+                      <td className="align-middle">
+                        {item.gioiTinh == 1 ? "Nam" : "Nữ"}
+                      </td>
+                      <td className="align-middle">{item.diaChi}</td>
+                      <td className="align-middle">{item.sdt}</td>
+
+                      <td className="align-middle fs-5 text-primary  ">
                         <BiEdit />
+                        {item.user_id == null ? (
+                          <BsPersonPlus className="ms-4" />
+                        ) : null}
                       </td>
                     </tr>
                   );

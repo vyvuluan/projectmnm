@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('employee_id')->nullable()->unsigned();
             $table->bigInteger('ncc_id')->nullable()->unsigned();
-            $table->integer('status');
-            $table->bigInteger('tongTien')->nullable();
+            $table->integer('status')->default(0);
+            $table->bigInteger('tongTien')->default(0);
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
