@@ -62,13 +62,13 @@ class UserController extends Controller
             if ($user->status == 1) {
                 if ($user->role_id == 1) {
                     $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+                    return response()->json([
+                        'status' => 200,
+                        'username' => $user->username,
+                        'token' => $token,
+                        'message' => 'Đăng nhập thành công',
+                    ]);
                 }
-                return response()->json([
-                    'status' => 200,
-                    'username' => $user->username,
-                    'token' => $token,
-                    'message' => 'Đăng nhập thành công',
-                ]);
             } else {
                 return response()->json([
                     'status' => 402,
