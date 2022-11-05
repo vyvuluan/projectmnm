@@ -372,10 +372,14 @@ class ManagePhieuNhapController extends Controller
         foreach ($pns as $pn) {
             $nccs = $pn->ncc;
         }
+        foreach ($pns as $pn) {
+            $ctpns = $pn->pnct;
+        }
         return response()->json([
             'status' => 200,
             'pns' => $pns,
             'nccs' => $nccs,
+            'ctpns' => $ctpns,
         ]);
     }
     public function locGiaCaoThap()
