@@ -353,8 +353,8 @@ class ManagePhieuNhapController extends Controller
             return response()->json([
                 'status' => 200,
                 'pn' => $pn,
-                'cptns' => $cptns,
-                'products' => $products,
+                //'cptns' => $cptns,
+                //'products' => $products,
             ]);
         }
     }
@@ -379,9 +379,9 @@ class ManagePhieuNhapController extends Controller
         return response()->json([
             'status' => 200,
             'pns' => $pns,
-            'nccs' => $nccs,
-            'ctpns' => $ctpns,
-            'products' => $products,
+            // 'nccs' => $nccs,
+            // 'ctpns' => $ctpns,
+            // 'products' => $products,
         ]);
     }
     public function locGiaCaoThap()
@@ -393,7 +393,7 @@ class ManagePhieuNhapController extends Controller
         return response()->json([
             'status' => 200,
             'pns' => $pns,
-            'nccs' => $nccs,
+            //'nccs' => $nccs,
 
         ]);
     }
@@ -406,7 +406,7 @@ class ManagePhieuNhapController extends Controller
         return response()->json([
             'status' => 200,
             'pns' => $pns,
-            'nccs' => $nccs,
+            //'nccs' => $nccs,
 
         ]);
     }
