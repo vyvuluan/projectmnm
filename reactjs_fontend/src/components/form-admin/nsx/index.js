@@ -94,9 +94,7 @@ function Index() {
     }, [page])
 
     useEffect(() => {
-        getNsxData().then(() => setSubmitting(false))
-        var sec = 15;
-        setInterval(getNsxData, sec * 1000)
+        getNsxData().then(() => setSubmitting(false));
     }, [submitting, getNsxData])
 
     return (
@@ -154,7 +152,8 @@ function Index() {
                                 </B.FormGroup>
                             </B.Col>
                             <B.Col lg={4}>
-                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100' onClick={() => setSubmitting(true)}>
+                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100'>
+                                    {/* <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100' onClick={() => setSubmitting(true)}> */}
                                     <BsPersonPlusFill className='me-2' />
                                     Thêm nhà sản xuất
                                 </B.Button>
