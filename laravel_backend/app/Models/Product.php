@@ -21,13 +21,14 @@ class Product extends Model
         'ctSanPham',
         'moTa'
     ];
+    
     public function loaisp()
     {
         return $this->belongsTo(loaisp::class, 'maLoai', 'id');
     }
     public function pnct()
     {
-        return $this->belongsTo(CtPhieuNhap::class, 'product_id', 'id');
+        return $this->hasOne(CtPhieuNhap::class, 'product_id', 'id');
     }
     public function comments()
     {

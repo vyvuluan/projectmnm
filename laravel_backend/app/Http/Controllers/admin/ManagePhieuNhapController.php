@@ -346,15 +346,9 @@ class ManagePhieuNhapController extends Controller
                 'status' => 404,
             ]);
         } else {
-            $cptns = $pn->pnct;
-            foreach ($cptns as $ctpn) {
-                $products = $ctpn->product;
-            }
             return response()->json([
                 'status' => 200,
                 'pn' => $pn,
-                'cptns' => $cptns,
-                'products' => $products,
             ]);
         }
     }
@@ -369,42 +363,26 @@ class ManagePhieuNhapController extends Controller
     public function getAllPN_new()
     {
         $pns = PhieuNhap::orderBy('id', 'desc')->paginate(10);
-        foreach ($pns as $pn) {
-            $nccs = $pn->ncc;
-        }
-        foreach ($pns as $pn) {
-            $ctpns = $pn->pnct;
-        }
         return response()->json([
             'status' => 200,
             'pns' => $pns,
-            'nccs' => $nccs,
-            'ctpns' => $ctpns,
         ]);
     }
     public function locGiaCaoThap()
     {
         $pns = PhieuNhap::orderBy('tongTien', 'desc')->paginate(10);
-        foreach ($pns as $pn) {
-            $nccs = $pn->ncc;
-        }
         return response()->json([
             'status' => 200,
             'pns' => $pns,
-            'nccs' => $nccs,
 
         ]);
     }
     public function locGiaThapCao()
     {
         $pns = PhieuNhap::orderBy('tongTien', 'asc')->paginate(10);
-        foreach ($pns as $pn) {
-            $nccs = $pn->ncc;
-        }
         return response()->json([
             'status' => 200,
             'pns' => $pns,
-            'nccs' => $nccs,
 
         ]);
     }
@@ -417,6 +395,17 @@ class ManagePhieuNhapController extends Controller
             ->get();
         return response()->json([
             'status' => 200,
+            'pn' => $pn,
+        ]);
+    }
+    public function setStatusPN(Request $request, $pn_id)
+    {
+        $pn = PhieuNhap::find($pn_id);
+        $pn->status = $request->status_check;
+        $pn->save();
+        return response()->json([
+            'status' => 200,
+            'message' => 'cập nhật tình trạng thành công',
             'pn' => $pn,
         ]);
     }

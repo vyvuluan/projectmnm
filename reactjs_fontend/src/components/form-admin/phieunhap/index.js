@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import * as B from "react-bootstrap";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import swal from "sweetalert";
 import { BsPersonPlusFill } from "react-icons/bs";
 
 import { AiOutlineFileAdd, AiFillEye } from "react-icons/ai";
 import { FiTool } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
+import { BiReset, BiEdit } from "react-icons/bi";
+import { FaTimes } from "react-icons/fa";
+
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
@@ -14,7 +17,7 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
 import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
-import ShowCTPN from "./showCTPN";
+
 /*
     xóa tìm kiếm
     chia thành tab giống sản phẩm (1 thêm 2 xem)
@@ -48,6 +51,7 @@ const PhieuNhap = () => {
   const [errorSP, setErrorSP] = useState();
   const [errorGia, setErrorGia] = useState();
   const [pnCt, setPnCt] = useState([]);
+  const [idShowPn, setIdShowPn] = useState([]);
 
   const [tongTien, setTongtien] = useState([]);
   const [status, setStatus] = useState();
@@ -60,11 +64,23 @@ const PhieuNhap = () => {
   const handleClose = () => setShow((prev) => !prev);
   const handleCloseUpdateCtPN = () => setShowUpdateCtPN((prev) => !prev);
   const handleCloseCtPN = () => setShowCtPN((prev) => !prev);
+  const [viewPn, setViewPn] = useState();
+  const [tabkey, setTabKey] = useState(1);
 
   const [show, setShow] = useState(false);
   const [showUpdateCtPN, setShowUpdateCtPN] = useState(false);
   const [showCtPN, setShowCtPN] = useState(false);
-
+  const [showTab, setShowTab] = useState(false);
+  const handleView = (pn) => {
+    console.log(pn);
+    setShowTab(true);
+    setTabKey(3);
+    // set(pn);
+  };
+  const handleCloseTab = () => {
+    setShowTab(false);
+    setTabKey(2);
+  };
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
   const [perPage, setPerPage] = useState();
@@ -120,7 +136,6 @@ const PhieuNhap = () => {
     setShowCtPN(true);
   };
 
-  const [tabkey, setTabKey] = useState(1);
   var today = new Date();
   var date =
     today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
@@ -166,7 +181,7 @@ const PhieuNhap = () => {
       <div className="result-wrapper">
         <B.Row>
           <B.Col sm={4}>
-            <span className="result-span">
+            <span className="result-span ">
               <img
                 src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                 style={{ height: "60px" }}
@@ -176,11 +191,11 @@ const PhieuNhap = () => {
           </B.Col>
           <B.Col sm={8}>
             <B.Row>
-              <span className="result-span p-0  ms-1">{item.tenSP}</span>
+              <span className="result-span p-0  ms-3">{item.tenSP}</span>
             </B.Row>
             <B.Row>
-              <span className="result-span p-0  ms-1">Giá: {item.gia}</span>
-              <span className="result-span p-0 ms-1">
+              <span className="result-span p-0  ms-3">Giá: {item.gia}</span>
+              <span className="result-span p-0 ms-3">
                 Số lượng: {item.soLuongSP}
               </span>
             </B.Row>
@@ -314,7 +329,7 @@ const PhieuNhap = () => {
           axios
             .delete(`api/kho/deleteCtPN/${idPN}/${idProduct}`)
             .then((res) => {
-              console.log(res);
+              // console.log(res);
               if (res.data.status == 200) {
                 swal({
                   title: res.data.message,
@@ -350,9 +365,9 @@ const PhieuNhap = () => {
       .get(`api/kho/getAllPN-new?page=${page}`)
       .then((res) => {
         if (res.data.status === 200) {
-          console.log(res.data);
+          // console.log(res.data.pns);
           setDataShowPN(res.data.pns.data);
-
+          setIdShowPn(res.data.pns);
           setTotalPage(res.data.pns.total);
           setPerPage(res.data.pns.per_page);
           setCurrentPage(res.data.pns.current_page);
@@ -384,7 +399,7 @@ const PhieuNhap = () => {
           setCurrentPage(res.data.pns.current_page);
         }
       });
-    }else if(e =="dec"){
+    } else if (e == "dec") {
       axios.get(`api/kho/loc-pn-cao-thap?page=${page}`).then((res) => {
         console.log(res.data);
         if (res.data.status === 200) {
@@ -395,30 +410,46 @@ const PhieuNhap = () => {
         }
       });
     }
-
-    
   };
-  
+  const handleDeletePN = (id) => {
+    // console.log(id);
+    // e.preventDefault();
+    swal("Chắc chắn xóa", {
+      buttons: {
+        catch: {
+          text: "Chắc",
+          value: "catch",
+        },
+        no: {
+          text: "Chưa",
+          value: "no",
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "catch":
+          axios
+            .delete(`api/kho/deletePN/${id}`)
+            .then((res) => {
+              console.log(res);
+              if (res.data.status == 200) {
+                swal({
+                  title: res.data.message,
+                  icon: "success",
+                  button: "đóng",
+                });
+              }
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            });
+          break;
+      }
+    });
+  };
   return (
     <>
-    <B.Modal show={showCtPN} onHide={handleCloseCtPN}>
-        <B.ModalHeader closeButton className="bg-secondary">
-          <B.ModalTitle>Xem chi tiết </B.ModalTitle>
-        </B.ModalHeader>
-        <B.ModalBody>
-           
-          <ShowCTPN   idPN={idPN} showModal={handleCloseCtPN} />
-        </B.ModalBody>
-        <B.ModalFooter className="bg-secondary">
-          <B.Button
-            variant="outline-primary"
-            className="mt-2 rounded-0"
-            onClick={handleCloseCtPN}
-          >
-            Hủy bỏ
-          </B.Button>
-        </B.ModalFooter>
-      </B.Modal>
       <B.Modal show={show} onHide={handleClose}>
         <B.ModalHeader closeButton className="bg-secondary">
           <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
@@ -766,15 +797,13 @@ const PhieuNhap = () => {
                 eventKey={2}
                 title="Xem danh sách phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
-                
-                
               >
                 <B.Form style={{ marginBottom: "40px" }}>
                   <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                     <B.FormSelect
                       className="rounded-0 shadow-none"
                       style={{ width: "200px" }}
-                      onChange={(e)=>SortMoney(e.target.value)}
+                      onChange={(e) => SortMoney(e.target.value)}
                     >
                       <option>Sắp xếp</option>
                       <option value={"inc"}>Tổng tiền tăng dần </option>
@@ -798,7 +827,7 @@ const PhieuNhap = () => {
                     </thead>
                     <tbody className="align-middle">
                       {dataShowPN.map((item, index) => {
-                        // console.log(typeof item.created_at);
+                        // console.log(item.id);
                         let chuoi = item.created_at;
                         let tachChuoi = chuoi.slice(0, 10);
                         // console.log(tachChuoi);
@@ -820,24 +849,16 @@ const PhieuNhap = () => {
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
-                                  title="Sửa chi tiết phiếu nhập"
+                                  title="Xem chi tiết phiếu nhập"
                                   style={{ marginRight: "15px" }}
-                                  onClick={() => handleShowCtPN()}
-                                />
-                                <FiTool
-                                  type="button"
-                                  data-toggle="tooltip"
-                                  data-placement="bottom"
-                                  title="Sửa chi tiết phiếu nhập"
-                                  style={{ marginRight: "15px" }}
-                                  // onClick={() => handleShowUpdateCtPN()}
+                                  onClick={() => handleView(item)}
                                 />
                                 <MdDeleteForever
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
                                   title="Xóa chi tiết phiếu nhập"
-                                  // onClick={handleDelete}
+                                  onClick={() => handleDeletePN(item.id)}
                                 />
                               </td>
                             </tr>
@@ -853,6 +874,95 @@ const PhieuNhap = () => {
                   handlePerPage={handlePerPage}
                 />
               </B.Tab>
+              {showTab && (
+                <B.Tab
+                  eventKey={3}
+                  title="Xem chi tiết phiếu nhập"
+                  className=" border border-top-0 py-3 px-3"
+                >
+                  <B.Row className="px-xl-3 mb-3">
+                    <B.Col lg={8} xs={8}>
+                      <h5 className="text-primary mb-3">Chi tiết phiếu nhập</h5>
+                    </B.Col>
+                    <B.Col lg={4} xs={4} className="text-end">
+                      <BiReset
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="làm mới"
+                        className="fs-3 customborder"
+                      />
+                      <BiEdit
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Sửa phiếu nhập"
+                        className="fs-3 customborder"
+                        onClick={() => handleShow()}
+                      />
+                      <FaTimes
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Đóng"
+                        className="fs-3 customborder"
+                        onClick={handleCloseTab}
+                      />
+                    </B.Col>
+                  </B.Row>
+                  <B.Form>
+                    <B.Table className=" text-right table-borderless border border-secondary text-center mb-0">
+                      <thead
+                        className="text-dark"
+                        style={{ backgroundColor: "#edf1ff" }}
+                      >
+                        <tr>
+                          <th>STT</th>
+                          <th>Tên sản phẩm</th>
+                          <th>Số lượng</th>
+                          <th>Giá</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody className="align-middle">
+                        {pnCt.map((item, index) => {
+                          console.log(item);
+                          return (
+                            <>
+                              <tr key={index}>
+                                <td className="align-middle">{index + 1}</td>
+                                <td className="align-middle">
+                                  {item.product.tenSP}
+                                </td>
+                                <td className="align-middle">{item.soluong}</td>
+                                <td className="align-middle">{item.gia}</td>
+
+                                <td className="align-middle fs-5 text-primary">
+                                  <FiTool
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="Sửa chi tiết phiếu nhập"
+                                    style={{ marginRight: "15px" }}
+                                    onClick={() => handleShowUpdateCtPN()}
+                                  />
+                                  <MdDeleteForever
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="Xóa chi tiết phiếu nhập"
+                                    onClick={handleDelete}
+                                  />
+                                </td>
+                              </tr>
+                            </>
+                          );
+                        })}
+                      </tbody>
+                    </B.Table>
+                    <h5 className="text-right mt-2 text-primary">
+                      Tổng tiền: {tongTien} VNĐ
+                    </h5>
+                  </B.Form>
+                </B.Tab>
+              )}
             </B.Tabs>
           </B.Col>
         </B.Row>
