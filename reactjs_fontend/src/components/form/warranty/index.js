@@ -10,10 +10,7 @@ export default function Warrantycheck() {
 
     const [warrantyData, setWarrantyData] = useState();
     const [warrantyInput, setWarrantyInput] = useState();
-
-    // const handleWarrantyInput = (e) => {
-    //     setWarrantyInput({...warrantyInput, [e.target.name]: e.target.value});
-    // }
+    const [showWarranty, setShowWarranty] = useState(false);
 
     const handleCheckWarranty = (e) => {
         e.preventDefault();
@@ -22,11 +19,20 @@ export default function Warrantycheck() {
 
         axios.get(`/api/checkBaoHanh/${prodID}`).then(res => {
             if (res.data.status === 200) {
-                setWarrantyData(res.data.kq)
+                setWarrantyData(res.data.kq);
+                setShowWarranty(true);
             } else if (res.data.status === 404) {
                 swal('Error', res.data.message, 'error')
             }
         })
+    }
+
+    const tinhTrang = (status) => {
+        if (status === 'Còn bảo hành') {
+            return <td className='fw-semibold text-success'>Còn bảo hành</td>
+        } else if (status === 'Hết bảo hành') {
+            return <td className='fw-semibold text-danger'>Hết bảo hành</td>
+        }
     }
 
     return (
@@ -55,30 +61,36 @@ export default function Warrantycheck() {
                         </Bt.Col>
                     </Bt.Row>
 
-                    <Bt.Row className='px-xl-5'>
-                        <Bt.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
-                            <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
-                                <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
-                                    <tr>
-                                        <th>Mã Sản phẩm</th>
-                                        <th>Tên Sản phẩm</th>
-                                        <th>Ngày kích hoạt</th>
-                                        <th>Ngày hết hạn</th>
-                                        <th>Tình trạng</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='align-middle'>
-                                    <tr>
-                                        <td className='align-middle'>VNLT1209</td>
-                                        <td className='align-middle'>Laptop Gaming ASUS ROG Zephyrus G14</td>
-                                        <td className='align-middle'>12/3/2021</td>
-                                        <td className='align-middle'>12/3/2023</td>
-                                        <td className='align-middle fw-semibold text-success'>Còn bảo hành</td>
-                                    </tr>
-                                </tbody>
-                            </Bt.Table>
-                        </Bt.Col>
-                    </Bt.Row>
+                    {showWarranty && (
+                        <Bt.Row className='px-xl-5'>
+                            <Bt.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
+                                <Bt.Table className='table-borderless border border-secondary text-center mb-0'>
+                                    <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                                        <tr>
+                                            <th>Tên Sản phẩm</th>
+                                            <th>Thời gian bảo hành</th>
+                                            <th>Ngày kích hoạt</th>
+                                            <th>Ngày hết hạn</th>
+                                            <th>Tình trạng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='align-middle'>
+                                        {warrantyData && warrantyData.map((prod, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{prod.tenSP}</td>
+                                                    <td>{prod.timeBH} tháng</td>
+                                                    <td>{prod.ngayMua}</td>
+                                                    <td>{prod.ngayEnd}</td>
+                                                    {tinhTrang(prod.status)}
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Bt.Table>
+                            </Bt.Col>
+                        </Bt.Row>
+                    )}
                 </Bt.Form>
             </Bt.Container>
         </>
