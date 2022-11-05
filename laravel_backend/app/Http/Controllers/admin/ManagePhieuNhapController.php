@@ -369,13 +369,17 @@ class ManagePhieuNhapController extends Controller
     public function getAllPN_new()
     {
         $pns = PhieuNhap::orderBy('id', 'desc')->paginate(10);
-        foreach ($pns as $pn) {
-            $nccs = $pn->ncc;
-            $ctpns = $pn->pnct;
-        }
-        foreach ($ctpns as $ctpn) {
-            $products = $ctpn->product;
-        }
+        // foreach ($pns as $pn) {
+
+        //     $ctpns = $pn->pnct;
+        // }
+        // foreach ($pns as $pn) {
+        //     $nccs = $pn->ncc;
+        // }
+
+        // foreach ($ctpns as $ctpn) {
+        //     $products = $ctpn->product;
+        // }
         return response()->json([
             'status' => 200,
             'pns' => $pns,

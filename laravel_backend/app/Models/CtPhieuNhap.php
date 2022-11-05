@@ -14,6 +14,7 @@ class CtPhieuNhap extends Model
         'soluong',
         'gia',
     ];
+    protected $with = ['product'];
     public function pn()
     {
         return $this->belongsTo(PhieuNhap::class);
