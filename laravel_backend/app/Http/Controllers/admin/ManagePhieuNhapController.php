@@ -420,4 +420,15 @@ class ManagePhieuNhapController extends Controller
             'pn' => $pn,
         ]);
     }
+    public function setStatusPN(Request $request, $pn_id)
+    {
+        $pn = PhieuNhap::find($pn_id);
+        $pn->status = $request->status_check;
+        $pn->save();
+        return response()->json([
+            'status' => 200,
+            'message' => 'cập nhật tình trạng thành công',
+            'pn' => $pn,
+        ]);
+    }
 }
