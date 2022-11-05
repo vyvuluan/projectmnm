@@ -3,29 +3,47 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Bt from "react-bootstrap";
 import swal from "sweetalert";
-import DatePicker from "react-date-picker";
-const UpdateCtPN = ({ idSP,idPN, showModal }) => {
-    // console.log(dataCTPN);
-    const [CTPN, setCTPN] = useState({
-        soluong: "",
-        gia: "",
-      });
-    const handleInput = (e) => {
-        e.persist();
-        // console.log(e.target.value);
-        setCTPN({ ...CTPN, [e.target.name]: e.target.value });
-      };
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+
+const UpdateCtPN = ({
+  idSP,
+  idPN,
+  showModal,
+  formatResult,
+
+  handleOnSearchSp,
+  listProduct,
+}) => {
+  // console.log(dataCTPN);
+  const [idProduct,setIdProduct] = useState()
+  const [CTPN, setCTPN] = useState({
+    soluong: "",
+    gia: "",
+    // product_id: "",
+  });
+  const handleOnSelectSp = (value) => {
+    // console.log(value.id);
+    setIdProduct(value.id);
+  };
+
+
+
+  const handleInput = (e) => {
+    e.persist();
+    // console.log(e.target.value);
+    setCTPN({ ...CTPN, [e.target.name]: e.target.value });
+  };
   const handleUpdate = (e) => {
     e.preventDefault();
 
     const data = {
       soluong: CTPN.soluong,
       gia: CTPN.gia,
-      
+      product_id: idProduct
     };
     // console.log(e.target.value);
     // console.log(ngaySinh);
-    
+
     axios
       .put(`api/kho/updateCtPN/${idPN}/${idSP}`, data)
       .then((res) => {
@@ -37,7 +55,6 @@ const UpdateCtPN = ({ idSP,idPN, showModal }) => {
             button: "đóng",
           });
           showModal(false);
-          
         }
         if (res.data.status == 400) {
           swal({
@@ -51,11 +68,41 @@ const UpdateCtPN = ({ idSP,idPN, showModal }) => {
         // handle error
         console.log(error);
       });
-      
-  } 
+  };
+ 
   return (
     <>
-      <Bt.Form onSubmit={handleUpdate} >
+      <Bt.Form onSubmit={handleUpdate}>
+        <Bt.FormLabel className="fw-semibold fs-4">Sản phẩm</Bt.FormLabel>
+
+        <div className="w-100 me-2">
+          <ReactSearchAutocomplete
+            placeholder="sản phẩm"
+            items={listProduct}
+            onSearch={handleOnSearchSp}
+            onSelect={handleOnSelectSp}
+            fuseOptions={{ keys: ["id", "tenSP"] }}
+            resultStringKeyName="tenSP"
+            formatResult={formatResult}
+            showIcon={false}
+            
+            styling={{
+              height: "36px",
+              border: "1px solid lightgray",
+              borderRadius: "0",
+              backgroundColor: "white",
+              boxShadow: "none",
+              hoverBackgroundColor: "#d19c97",
+              color: "black",
+              fontSize: "15px",
+              // fontFamily: "Courier",
+              iconColor: "black",
+              lineColor: "#d19c97",
+              // placeholderColor: "black",
+              clearIconMargin: "3px 8px 0 0",
+            }}
+          />
+        </div>
         <Bt.FormGroup className="mb-3" controlId="formName">
           <Bt.FormLabel className="fw-semibold fs-4">Số lượng</Bt.FormLabel>
           <Bt.FormControl
@@ -81,8 +128,8 @@ const UpdateCtPN = ({ idSP,idPN, showModal }) => {
             required
           ></Bt.FormControl>
         </Bt.FormGroup>
-        
-          {/* <span className="text-danger">{errorSdt}</span> */}
+
+        {/* <span className="text-danger">{errorSdt}</span> */}
         <Bt.Button
           variant="primary"
           type="submit"

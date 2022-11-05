@@ -45,7 +45,7 @@ const PhieuNhap = () => {
   const [ncclist, setNcclist] = useState([]);
   const [nccData, setNccData] = useState();
   const [listProduct, setListProduct] = useState([]);
-  const [idProduct, setIdProduct] = useState();
+  const [idProduct, setIdProduct] = useState([]);
   const [idPN, setIdPN] = useState(null);
   const [errorSL, setErrorSL] = useState();
   const [errorSP, setErrorSP] = useState();
@@ -54,6 +54,8 @@ const PhieuNhap = () => {
   const [idShowPn, setIdShowPn] = useState([]);
 
   const [tongTien, setTongtien] = useState([]);
+  const [tongTienPN, setTongtienPN] = useState([]);
+
   const [status, setStatus] = useState();
   const [check, setCheck] = useState();
   const [dataShowPN, setDataShowPN] = useState([]);
@@ -71,12 +73,23 @@ const PhieuNhap = () => {
   const [showUpdateCtPN, setShowUpdateCtPN] = useState(false);
   const [showCtPN, setShowCtPN] = useState(false);
   const [showTab, setShowTab] = useState(false);
-  const handleView = (pn) => {
-    console.log(pn);
+
+  const [buttonText, setButtonText] = useState("Chưa thanh toán");
+
+  // const handleClick = () =>  {
+  //   setButtonText('Đã thanh toán');
+  // }
+
+  const handleView = (item) => {
+    // console.log(item);
     setShowTab(true);
     setTabKey(3);
-    // set(pn);
+    setViewPn(item);
+    setTongtienPN(item.tongTien);
+    setIdPN(item.id);
   };
+
+  // console.log(viewPn);
   const handleCloseTab = () => {
     setShowTab(false);
     setTabKey(2);
@@ -101,7 +114,9 @@ const PhieuNhap = () => {
       case 0: {
         x = (
           <>
-            <span className="text-danger fw-semibold">Chưa thanh toán</span>
+            <B.Button style={{ backgroundColor: "#FF5858" }}>
+              <span className="fw-semibold">Chưa thanh toán</span>
+            </B.Button>
           </>
         );
         break;
@@ -109,7 +124,9 @@ const PhieuNhap = () => {
       case 1: {
         x = (
           <>
-            <span className="text-success fw-semibold">Đã thanh toán</span>
+            <B.Button style={{ backgroundColor: "#54B435" }}>
+              <span className=" fw-semibold">Đã thanh toán</span>
+            </B.Button>
           </>
         );
         break;
@@ -129,7 +146,9 @@ const PhieuNhap = () => {
   const handleShow = () => {
     setShow(true);
   };
-  const handleShowUpdateCtPN = () => {
+  const handleShowUpdateCtPN = (item) => {
+    // console.log(item);
+    setIdProduct(item?.product_id);
     setShowUpdateCtPN(true);
   };
   const handleShowCtPN = () => {
@@ -172,7 +191,7 @@ const PhieuNhap = () => {
   };
 
   const handleOnSelectSp = (value) => {
-    // console.log(value);
+    // console.log(value.id);
     setIdProduct(value.id);
   };
 
@@ -213,7 +232,7 @@ const PhieuNhap = () => {
   const AddPN = () => {
     if (data1.ncc_id !== undefined) {
       axios
-        .post(`api/kho/addPN`, data1)
+        .post(`/api/kho/addPN`, data1)
         .then((res) => {
           // console.log(res);
           if (res.data.status === 200) {
@@ -252,7 +271,7 @@ const PhieuNhap = () => {
   };
   const AddCTPN = () => {
     axios
-      .post(`api/kho/addCtPN/${idPN}`, dataCT)
+      .post(`/api/kho/addCtPN/${idPN}`, dataCT)
       .then((res) => {
         // console.log(res);
         if (res.data.status === 200) {
@@ -263,23 +282,16 @@ const PhieuNhap = () => {
           });
           setShowTable(true);
           axios
-            .get(`api/kho/PN/${idPN}`)
+            .get(`/api/kho/PN/${idPN}`)
             .then((res) => {
               // console.log(res);
 
               if (res.data.status === 200) {
                 setPnCt(res.data.pn.pnct);
-
                 setTongtien(res.data.pn.tongTien);
                 setErrorSL([]);
                 setErrorGia([]);
                 setErrorSP([]);
-
-                // swal({
-                //   title: res.data.message,
-                //   icon: "success",
-                //   button: "đóng",
-                // });
               }
             })
 
@@ -309,9 +321,11 @@ const PhieuNhap = () => {
         console.log(error);
       });
   };
+
   //delete Ctpn
-  const handleDelete = (e) => {
-    e.preventDefault();
+  const handleDelete = (idPN1, idProduct1) => {
+    console.log(idProduct1);
+    // e.preventDefault();
     swal("Chắc chưa", {
       buttons: {
         catch: {
@@ -327,9 +341,9 @@ const PhieuNhap = () => {
       switch (value) {
         case "catch":
           axios
-            .delete(`api/kho/deleteCtPN/${idPN}/${idProduct}`)
+            .delete(`/api/kho/deleteCtPN/${idPN1}/${idProduct1}`)
             .then((res) => {
-              // console.log(res);
+              console.log(res);
               if (res.data.status == 200) {
                 swal({
                   title: res.data.message,
@@ -362,12 +376,14 @@ const PhieuNhap = () => {
   //xem phiếu nhập
   useEffect(() => {
     axios
-      .get(`api/kho/getAllPN-new?page=${page}`)
+      .get(`/api/kho/getAllPN-new?page=${page}`)
       .then((res) => {
         if (res.data.status === 200) {
-          // console.log(res.data.pns);
+          // console.log(res.data.pns.data);
           setDataShowPN(res.data.pns.data);
-          setIdShowPn(res.data.pns);
+          // setIdShowPn(res.data.pns);
+          // setTongtienPN(res.data.pns.data.tongTien)
+          // setIdPN()
           setTotalPage(res.data.pns.total);
           setPerPage(res.data.pns.per_page);
           setCurrentPage(res.data.pns.current_page);
@@ -384,7 +400,7 @@ const PhieuNhap = () => {
         console.log(error);
       });
   }, [page]);
-  // console.log(dataShowPN);
+
   //Sắp xếp theo tổng tiền
   const SortMoney = (e) => {
     // console.log(e);
@@ -429,7 +445,7 @@ const PhieuNhap = () => {
       switch (value) {
         case "catch":
           axios
-            .delete(`api/kho/deletePN/${id}`)
+            .delete(`/api/kho/deletePN/${id}`)
             .then((res) => {
               console.log(res);
               if (res.data.status == 200) {
@@ -447,6 +463,74 @@ const PhieuNhap = () => {
           break;
       }
     });
+  };
+  //tab 2
+  const handleReload = () => {
+    const controller = new AbortController();
+
+    axios.get(`api/kho/getAllPN-new?page=${page}`).then((res) => {
+      if (res.data.status === 200) {
+        setDataShowPN(res.data.pns.data);
+        // setIdShowPn(res.data.pns);
+        // setTongtienPN(res.data.pns.data.tongTien)
+        // setIdPN()
+        setTotalPage(res.data.pns.total);
+        setPerPage(res.data.pns.per_page);
+        setCurrentPage(res.data.pns.current_page);
+      }
+    });
+    return () => {
+      controller.abort();
+    };
+  };
+  //tab 1
+  const handleReloadCTPN = () => {
+    const controller = new AbortController();
+    axios
+      .get(`api/kho/PN/${idPN}`)
+      .then((res) => {
+        // console.log(res);
+
+        if (res.data.status === 200) {
+          setPnCt(res.data.pn.pnct);
+          setTongtien(res.data.pn.tongTien);
+          setErrorSL([]);
+          setErrorGia([]);
+          setErrorSP([]);
+
+          // swal({
+          //   title: res.data.message,
+          //   icon: "success",
+          //   button: "đóng",
+          // });
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+    return () => {
+      controller.abort();
+    };
+  };
+
+  const handleReloadShowCTPNtab3 = () => {
+    const controller = new AbortController();
+    axios
+      .get(`/api/kho/getAllPN-new?page=${page}`)
+      .then((res) => {
+        if (res.data.status === 200) {
+          setDataShowPN(res.data.pns.data);
+        }
+      })
+
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+    return () => {
+      controller.abort();
+    };
   };
   return (
     <>
@@ -475,6 +559,10 @@ const PhieuNhap = () => {
           <UpdateCtPN
             idPN={idPN}
             idSP={idProduct}
+            listProduct={listProduct}
+            handleOnSearchSp={handleOnSearchSp}
+            handleOnSelectSp={handleOnSelectSp}
+            formatResult={formatResult}
             showModal={handleCloseUpdateCtPN}
           />
         </B.ModalBody>
@@ -697,39 +785,6 @@ const PhieuNhap = () => {
                         </td>
                       </tr>
                       {check == 2 && status == 400 ? checkLoi : null}
-
-                      {/* <tr>
-                      <td className="align-middle">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="align-middle">2</td>
-                      <td className="align-middle">
-                        Nhập 50 laptop ASUS đợt 2
-                      </td>
-                      <td className="align-middle">Laptop ASUS ROG G14</td>
-                      <td className="align-middle">GearVN/ASUS</td>
-                      <td className="align-middle">50</td>
-                      <td className="align-middle">3,500,000,000</td>
-                      <td className="align-middle">7/12/2021</td>
-                      <td className="align-middle fs-5 text-primary">
-                        <BiEdit />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="align-middle">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="align-middle">3</td>
-                      <td className="align-middle">Nhập 10 laptop Lenovo</td>
-                      <td className="align-middle">Laptop Lenovo Legion</td>
-                      <td className="align-middle">StarComP/Lenovo</td>
-                      <td className="align-middle">10</td>
-                      <td className="align-middle">300,000,000</td>
-                      <td className="align-middle">2/2/2022</td>
-                      <td className="align-middle fs-5 text-primary">
-                        <BiEdit />
-                      </td>
-                    </tr> */}
                     </tbody>
                   </B.Table>
                 </B.Form>
@@ -748,11 +803,21 @@ const PhieuNhap = () => {
                           <th>Tên sản phẩm</th>
                           <th>Số lượng</th>
                           <th>Giá</th>
-                          <th>Thao tác</th>
+                          <th style={{ width: "15%" }}>
+                            Thao tác
+                            <BiReset
+                              onClick={handleReloadCTPN}
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="làm mới"
+                              className="fs-4 customborder ms-3"
+                            />
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="align-middle">
                         {pnCt.map((item, index) => {
+                          // console.log(item);
                           return (
                             <>
                               <tr key={index}>
@@ -770,14 +835,16 @@ const PhieuNhap = () => {
                                     data-placement="bottom"
                                     title="Sửa chi tiết phiếu nhập"
                                     style={{ marginRight: "15px" }}
-                                    onClick={() => handleShowUpdateCtPN()}
+                                    onClick={() => handleShowUpdateCtPN(item)}
                                   />
                                   <MdDeleteForever
                                     type="button"
                                     data-toggle="tooltip"
                                     data-placement="bottom"
                                     title="Xóa chi tiết phiếu nhập"
-                                    onClick={handleDelete}
+                                    onClick={() =>
+                                      handleDelete(item.pn_id, item.product_id)
+                                    }
                                   />
                                 </td>
                               </tr>
@@ -809,6 +876,7 @@ const PhieuNhap = () => {
                       <option value={"inc"}>Tổng tiền tăng dần </option>
                       <option value={"dec"}>Tổng tiền giảm dần </option>
                     </B.FormSelect>
+                    <B.Button onClick={handleReload}>làm mới</B.Button>
                   </B.FormGroup>
                   <B.Table className="table-borderless border border-secondary text-center mb-0">
                     <thead
@@ -827,7 +895,6 @@ const PhieuNhap = () => {
                     </thead>
                     <tbody className="align-middle">
                       {dataShowPN.map((item, index) => {
-                        // console.log(item.id);
                         let chuoi = item.created_at;
                         let tachChuoi = chuoi.slice(0, 10);
                         // console.log(tachChuoi);
@@ -840,7 +907,7 @@ const PhieuNhap = () => {
                               </td>
                               <td className="align-middle">{item.tongTien}</td>
                               <td className="align-middle">{tachChuoi}</td>
-                              <td className="align-middle ">
+                              <td className="align-middle">
                                 {CheckStatus(item.status)}
                               </td>
 
@@ -890,14 +957,9 @@ const PhieuNhap = () => {
                         data-placement="bottom"
                         title="làm mới"
                         className="fs-3 customborder"
+                        onClick={handleReloadShowCTPNtab3}
                       />
-                      <BiEdit
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Sửa phiếu nhập"
-                        className="fs-3 customborder"
-                        onClick={() => handleShow()}
-                      />
+
                       <FaTimes
                         data-toggle="tooltip"
                         data-placement="bottom"
@@ -922,17 +984,19 @@ const PhieuNhap = () => {
                         </tr>
                       </thead>
                       <tbody className="align-middle">
-                        {pnCt.map((item, index) => {
-                          console.log(item);
+                        {viewPn.pnct.map((item1, index) => {
+                          console.log(item1);
                           return (
                             <>
                               <tr key={index}>
                                 <td className="align-middle">{index + 1}</td>
                                 <td className="align-middle">
-                                  {item.product.tenSP}
+                                  {item1.product.tenSP}
                                 </td>
-                                <td className="align-middle">{item.soluong}</td>
-                                <td className="align-middle">{item.gia}</td>
+                                <td className="align-middle">
+                                  {item1.soluong}
+                                </td>
+                                <td className="align-middle">{item1.gia}</td>
 
                                 <td className="align-middle fs-5 text-primary">
                                   <FiTool
@@ -941,14 +1005,19 @@ const PhieuNhap = () => {
                                     data-placement="bottom"
                                     title="Sửa chi tiết phiếu nhập"
                                     style={{ marginRight: "15px" }}
-                                    onClick={() => handleShowUpdateCtPN()}
+                                    onClick={() => handleShowUpdateCtPN(item1)}
                                   />
                                   <MdDeleteForever
                                     type="button"
                                     data-toggle="tooltip"
                                     data-placement="bottom"
                                     title="Xóa chi tiết phiếu nhập"
-                                    onClick={handleDelete}
+                                    onClick={() =>
+                                      handleDelete(
+                                        item1.pn_id,
+                                        item1.product_id
+                                      )
+                                    }
                                   />
                                 </td>
                               </tr>
@@ -958,7 +1027,7 @@ const PhieuNhap = () => {
                       </tbody>
                     </B.Table>
                     <h5 className="text-right mt-2 text-primary">
-                      Tổng tiền: {tongTien} VNĐ
+                      Tổng tiền: {tongTienPN} VNĐ
                     </h5>
                   </B.Form>
                 </B.Tab>
@@ -966,91 +1035,6 @@ const PhieuNhap = () => {
             </B.Tabs>
           </B.Col>
         </B.Row>
-        {/* table hien thi tai khoan */}
-        {/* <B.Row className="pe-xl-5">
-          <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
-              <B.FormSelect
-                className="rounded-0 shadow-none"
-                style={{ width: "200px" }}
-              >
-                <option>Sắp xếp</option>
-                <option>Từ A-Z</option>
-                <option>Theo ID</option>
-                <option>Theo NCC</option>
-                <option>Theo NSX</option>
-                <option>Theo ngày nhập</option>
-              </B.FormSelect>
-            </B.FormGroup>
-            <B.Table className="table-borderless border border-secondary text-center mb-0">
-              <thead
-                className="text-dark"
-                style={{ backgroundColor: "#edf1ff" }}
-              >
-                <tr>
-                  <th>
-                    <input type="checkbox" />
-                  </th>
-                  <th>ID</th>
-                  <th>Tên phiếu nhập</th>
-                  <th>Tên sản phẩm</th>
-                  <th>NCC/NSX</th>
-                  <th>Số lượng</th>
-                  <th>Giá nhập</th>
-                  <th>Ngày nhập</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="align-middle">
-                <tr>
-                  <td className="align-middle">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="align-middle">1</td>
-                  <td className="align-middle">Nhập 50 laptop ASUS đợt 1</td>
-                  <td className="align-middle">Laptop ASUS TUF A15</td>
-                  <td className="align-middle">GearVN/ASUS</td>
-                  <td className="align-middle">50</td>
-                  <td className="align-middle">2,500,000,000</td>
-                  <td className="align-middle">20/8/2021</td>
-                  <td className="align-middle fs-5 text-primary">
-                    <BiEdit />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="align-middle">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="align-middle">2</td>
-                  <td className="align-middle">Nhập 50 laptop ASUS đợt 2</td>
-                  <td className="align-middle">Laptop ASUS ROG G14</td>
-                  <td className="align-middle">GearVN/ASUS</td>
-                  <td className="align-middle">50</td>
-                  <td className="align-middle">3,500,000,000</td>
-                  <td className="align-middle">7/12/2021</td>
-                  <td className="align-middle fs-5 text-primary">
-                    <BiEdit />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="align-middle">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="align-middle">3</td>
-                  <td className="align-middle">Nhập 10 laptop Lenovo</td>
-                  <td className="align-middle">Laptop Lenovo Legion</td>
-                  <td className="align-middle">StarComP/Lenovo</td>
-                  <td className="align-middle">10</td>
-                  <td className="align-middle">300,000,000</td>
-                  <td className="align-middle">2/2/2022</td>
-                  <td className="align-middle fs-5 text-primary">
-                    <BiEdit />
-                  </td>
-                </tr>
-              </tbody>
-            </B.Table>
-          </B.Col>
-        </B.Row> */}
       </B.Container>
     </>
   );
