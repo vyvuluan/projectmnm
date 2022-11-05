@@ -27,7 +27,7 @@ class Product extends Model
     }
     public function pnct()
     {
-        return $this->belongsTo(CtPhieuNhap::class, 'product_id', 'id');
+        return $this->hasOne(CtPhieuNhap::class, 'product_id', 'id');
     }
     public function comments()
     {

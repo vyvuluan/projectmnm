@@ -371,15 +371,17 @@ class ManagePhieuNhapController extends Controller
         $pns = PhieuNhap::orderBy('id', 'desc')->paginate(10);
         foreach ($pns as $pn) {
             $nccs = $pn->ncc;
-        }
-        foreach ($pns as $pn) {
             $ctpns = $pn->pnct;
+        }
+        foreach ($ctpns as $ctpn) {
+            $products = $ctpn->product;
         }
         return response()->json([
             'status' => 200,
             'pns' => $pns,
             'nccs' => $nccs,
             'ctpns' => $ctpns,
+            'products' => $products,
         ]);
     }
     public function locGiaCaoThap()
