@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams,useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import {
   Slideshow,
@@ -13,8 +13,8 @@ const axios = require("axios").default;
 // Make a request for a user with a given ID
 
 const HomePage = () => {
-  const [paramToken,setParamToken] = useSearchParams()
-  const [paramEmail,setParamEmail] = useSearchParams()
+  const [paramToken, setParamToken] = useSearchParams()
+  const [paramEmail, setParamEmail] = useSearchParams()
   const history = useNavigate();
 
   const [listProductNew, setListProductNew] = useState([]);
@@ -23,15 +23,15 @@ const HomePage = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    if(paramToken.get('token') && paramEmail.get('email')){
-        localStorage.setItem('auth_token', paramToken.get('token'))
-        localStorage.setItem('auth_name',paramEmail.get('email'))
-        swal({
-          title: "Đăng nhập thành công",
-          icon: "success",
-          button: "đóng",
-        });
-        history('/')
+    if (paramToken.get('token') && paramEmail.get('email')) {
+      localStorage.setItem('auth_token', paramToken.get('token'))
+      localStorage.setItem('auth_name', paramEmail.get('email'))
+      swal({
+        title: "Đăng nhập thành công",
+        icon: "success",
+        button: "đóng",
+      });
+      history('/')
     }
     //clear function
     return () => controller.abort();
@@ -61,8 +61,8 @@ const HomePage = () => {
 
   return (
     <>
-      <Slideshow />
-      <SectionTitle title="Service" />
+      {/* <Slideshow /> */}
+      {/* <SectionTitle title="Service" /> */}
       <Features />
       <SectionTitle title="Sản phẩm mới" />
       {listProductNew ? (

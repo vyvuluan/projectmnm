@@ -242,7 +242,7 @@ const DetailProduct = (props) => {
 
           <div className="col-lg-7 pb-5">
             <h3 className="font-weight-semi-bold">{product.tenSP}</h3>
-            <div className="d-flex mb-3">
+            {/* <div className="d-flex mb-3">
               <div className="text-primary mr-2">
                 <small>
                   <BsStarFill />
@@ -261,8 +261,9 @@ const DetailProduct = (props) => {
                 </small>
               </div>
               <small className="pt-1">(50 Reviews)</small>
-            </div>
-            <h3 className="font-weight-semi-bold mb-4">
+            </div> */}
+            <small className="text-primary fw-semibold">{comment.length} bình luận</small>
+            <h3 className="font-weight-semi-bold mt-2 mb-4">
               {formatMoney(product.gia)}
             </h3>
             <p className="mb-4">
@@ -498,7 +499,7 @@ const DetailProduct = (props) => {
                   {comment && comment.map((com, index) => {
                     return (
                       <B.FormGroup key={index} className="border border-2 px-3 py-2 mb-3">
-                        <B.FormLabel className="fs-6">{com.customer_id}</B.FormLabel>
+                        <B.FormLabel className="fs-6">{com.customer.ten}</B.FormLabel>
                         <B.FormText>{com.comment}</B.FormText>
                       </B.FormGroup>
                     )

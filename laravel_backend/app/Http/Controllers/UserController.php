@@ -257,6 +257,7 @@ class UserController extends Controller
     {
         if (auth('sanctum')->check()) {
             return response()->json([
+                'status' => 200,
                 'data_user' => auth('sanctum')->user(),
                 'data_customer' => auth('sanctum')->user()->customer,
             ]);

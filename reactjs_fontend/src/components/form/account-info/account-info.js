@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import product1 from "../../../img/product-1.jpg";
 import * as Bt from "react-bootstrap";
 import axios from "axios";
@@ -15,8 +15,12 @@ const AccountInfo = () => {
   const [showPass, setShowPass] = useState(false);
   const [bird, setBird] = useState();
   const [accountData, setAccountData] = useState();
+  const [submitting, setSubmitting] = useState(true);
   //show đổi tài khoản
-  const handleClose = () => setShow((prev) => !prev);
+  const handleClose = () => {
+    setSubmitting(true);
+    setShow((prev) => !prev);
+  }
 
   const handleShow = () => {
     setShow(true);
@@ -27,24 +31,41 @@ const AccountInfo = () => {
   const handleShowChangePass = () => {
     setShowPass(true);
   };
-  useEffect(() => {
-    axios.get("api/detailUser").then((res) => {
-      // console.log(res.data.data_user.customer.sdt)
-      setAccountData(res.data.data_user)
+
+  // useEffect(() => {
+  //   axios.get("api/detailUser").then((res) => {
+  //     setAccountData(res.data.data_user);
+  //     setEmailUser(res.data.data_user.email);
+  //     setUserName(res.data.data_user.customer.ten);
+  //     setSex(res.data.data_user.customer?.gioiTinh);
+  //     setAddress(res.data.data_user.customer?.diaChi);
+  //     setPhone(res.data.data_user.customer?.sdt);
+  //     setBird(res.data.data_user.customer?.ngaySinh)
+
+  //   });
+  // }, []);
+
+  const getUserData = useCallback(async () => {
+    const res = await axios.get("api/detailUser")
+    if (res.data.status === 200) {
+      setAccountData(res.data.data_user);
       setEmailUser(res.data.data_user.email);
-      setUserName(res.data.data_user.username);
+      setUserName(res.data.data_user.customer.ten);
       setSex(res.data.data_user.customer?.gioiTinh);
       setAddress(res.data.data_user.customer?.diaChi);
       setPhone(res.data.data_user.customer?.sdt);
       setBird(res.data.data_user.customer?.ngaySinh)
+    }
+  }, [])
 
-    });
-  }, []);
-  
-  var Male = "nam";
-  var Female = "nữ";
+  useEffect(() => {
+    getUserData().then(() => setSubmitting(false));
+  }, [submitting, getUserData])
 
-  
+  var Male = "Nam";
+  var Female = "Nữ";
+
+
   return (
     <>
       <Bt.Modal show={show} onHide={handleClose}>
@@ -52,7 +73,7 @@ const AccountInfo = () => {
           <Bt.ModalTitle>Sửa tài khoản</Bt.ModalTitle>
         </Bt.ModalHeader>
         <Bt.ModalBody>
-          <AccountEdit accountData = {accountData}  showModal={handleClose} />
+          <AccountEdit accountData={accountData} showModal={handleClose} />
         </Bt.ModalBody>
         <Bt.ModalFooter className="bg-secondary">
           <Bt.Button

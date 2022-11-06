@@ -8,7 +8,7 @@ const AccountEdit = ({ accountData, showModal }) => {
   //   console.log(accountData);
   const history = useNavigate();
   //   const [value, onChange] = useState(new Date());
-  const [ten, setTen] = useState(accountData?.username);
+  const [ten, setTen] = useState(accountData?.customer.ten);
   const [gioiTinh, setGioiTinh] = useState(accountData?.customer?.gioiTinh);
   const [diaChi, setDiachi] = useState(accountData?.customer?.diaChi);
   const [sdt, setSdt] = useState(accountData?.customer?.sdt);
@@ -40,7 +40,6 @@ const AccountEdit = ({ accountData, showModal }) => {
         console.log(res);
         if (res.data.status === 200) {
           swal("Success", res.data.message, "success");
-          window.location.reload(false);
         } else if (res.data.status === 404) {
           swal("Error", res.data.message, "error");
         } else if (res.data.status === 400) {
@@ -144,7 +143,7 @@ const AccountEdit = ({ accountData, showModal }) => {
           variant="primary"
           type="submit"
           className="rounded-0 py-2 mt-3"
-          // onClick={showModal}
+          onClick={showModal}
         >
           Lưu thay đổi
         </Bt.Button>
