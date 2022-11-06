@@ -10,23 +10,23 @@ const UpdateCtPN = ({
   idPN,
   showModal,
   formatResult,
-
   handleOnSearchSp,
   listProduct,
+  tenSP,
+  gia,
+  soLuong,
 }) => {
-  // console.log(dataCTPN);
-  const [idProduct,setIdProduct] = useState()
+  const [idProduct, setIdProduct] = useState();
+
   const [CTPN, setCTPN] = useState({
-    soluong: "",
-    gia: "",
+    soluong: soLuong,
+    gia: gia,
     // product_id: "",
   });
   const handleOnSelectSp = (value) => {
     // console.log(value.id);
     setIdProduct(value.id);
   };
-
-
 
   const handleInput = (e) => {
     e.persist();
@@ -39,7 +39,7 @@ const UpdateCtPN = ({
     const data = {
       soluong: CTPN.soluong,
       gia: CTPN.gia,
-      product_id: idProduct
+      product_id: idProduct,
     };
     // console.log(e.target.value);
     // console.log(ngaySinh);
@@ -69,7 +69,7 @@ const UpdateCtPN = ({
         console.log(error);
       });
   };
- 
+
   return (
     <>
       <Bt.Form onSubmit={handleUpdate}>
@@ -85,7 +85,8 @@ const UpdateCtPN = ({
             resultStringKeyName="tenSP"
             formatResult={formatResult}
             showIcon={false}
-            
+            inputSearchString={tenSP}
+            onFocus
             styling={{
               height: "36px",
               border: "1px solid lightgray",

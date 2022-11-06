@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import * as B from "react-bootstrap";
 import axios, { Axios } from "axios";
 import swal from "sweetalert";
@@ -17,6 +17,7 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
 import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
+import Ctpn from "./ctpn";
 
 /*
     xóa tìm kiếm
@@ -108,35 +109,52 @@ const PhieuNhap = () => {
     pageNumbers.push(i);
   }
 
-  const CheckStatus = (status) => {
-    var x;
-    switch (status) {
-      case 0: {
-        x = (
-          <>
-            <B.Button style={{ backgroundColor: "#FF5858" }}>
-              <span className="fw-semibold">Chưa thanh toán</span>
-            </B.Button>
-          </>
-        );
-        break;
-      }
-      case 1: {
-        x = (
-          <>
-            <B.Button style={{ backgroundColor: "#54B435" }}>
-              <span className=" fw-semibold">Đã thanh toán</span>
-            </B.Button>
-          </>
-        );
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-    return x;
-  };
+  // const checkStatus = (item) =>{
+  //   // console.log(item);
+  //   axios
+  //     .get(`api/kho/setStatusPn/${idPN}`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.data.status === 200) {
+
+  //         // setDataNV(res.data);
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       console.log(error);
+  //     });
+  // }
+
+  // const CheckStatus = (status) => {
+  //   var x;
+  //   switch (status) {
+  //     case 0: {
+  //       x = (
+  //         <>
+  //           <B.Button style={{ backgroundColor: "#FF5858" }}>
+  //             <span className="fw-semibold">Chưa thanh toán</span>
+  //           </B.Button>
+  //         </>
+  //       );
+  //       break;
+  //     }
+  //     case 1: {
+  //       x = (
+  //         <>
+  //           <B.Button style={{ backgroundColor: "#54B435" }}>
+  //             <span className=" fw-semibold">Đã thanh toán</span>
+  //           </B.Button>
+  //         </>
+  //       );
+  //       break;
+  //     }
+  //     default: {
+  //       break;
+  //     }
+  //   }
+  //   return x;
+  // };
 
   const [showTable, setShowTable] = useState(false);
   const [inputPN, setInputPN] = useState({
@@ -146,9 +164,16 @@ const PhieuNhap = () => {
   const handleShow = () => {
     setShow(true);
   };
+  const [nameProduct, setNameProduct] = useState();
+  const [soLuong, setSoLuong] = useState();
+  const [gia, setGia] = useState();
+
   const handleShowUpdateCtPN = (item) => {
-    // console.log(item);
+    // console.log(item.gia);
     setIdProduct(item?.product_id);
+    setNameProduct(item?.product.tenSP);
+    setSoLuong(item?.soluong);
+    setGia(item?.gia);
     setShowUpdateCtPN(true);
   };
   const handleShowCtPN = () => {
@@ -513,25 +538,40 @@ const PhieuNhap = () => {
       controller.abort();
     };
   };
+  //Đang sử lý
+  // const handleReloadShowCTPNtab3 = useCallback(() => {
+  //   const controller = new AbortController();
+  //   // console.log("tab3");
+  //   axios
+  //     .get(`/api/kho/getAllPN-new?page=${page}`)
+  //     .then((res) => {
+  //       if (res.data.status === 200) {
+  //         const listData = res.data.pns.data;
+  //         console.log(listData[listData.length - 1].pnct);
+  //         setDataShowPN(listData);
+  //         // setViewPn(listData[listData.length - 1].pnct);
+  //         // if (viewPn) {
+  //         //   var test = [];
+  //         //   viewPn.pnct.map((item) => {
+  //         //     listData.filter((e) => e.id == item.id);
+  //         //   });
+  //         //   setViewPn(test);
+  //         // }
+  //         // console.log();
+  //         // setViewPn(res.data.pns.data)
+  //         // handleView(res.data.pns.data[0].pnct)
+  //       }
+  //     })
 
-  const handleReloadShowCTPNtab3 = () => {
-    const controller = new AbortController();
-    axios
-      .get(`/api/kho/getAllPN-new?page=${page}`)
-      .then((res) => {
-        if (res.data.status === 200) {
-          setDataShowPN(res.data.pns.data);
-        }
-      })
-
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-    return () => {
-      controller.abort();
-    };
-  };
+  //     .catch(function (error) {
+  //       // handle error
+  //       console.log(error);
+  //     });
+  //   return () => {
+  //     controller.abort();
+  //   };
+  // });
+  // console.log();
   return (
     <>
       <B.Modal show={show} onHide={handleClose}>
@@ -559,7 +599,10 @@ const PhieuNhap = () => {
           <UpdateCtPN
             idPN={idPN}
             idSP={idProduct}
+            soLuong={soLuong}
+            gia={gia}
             listProduct={listProduct}
+            tenSP={nameProduct}
             handleOnSearchSp={handleOnSearchSp}
             handleOnSelectSp={handleOnSelectSp}
             formatResult={formatResult}
@@ -865,6 +908,17 @@ const PhieuNhap = () => {
                 title="Xem danh sách phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
               >
+                {/* <Ctpn
+                  SortMoney={SortMoney}
+                  handleReload={handleReload}
+                  dataShowPN={dataShowPN}
+                  currentPage={currentPage}
+                  pageNumbers={pageNumbers}
+                  handlePerPage={handlePerPage}
+                  Pagination={Pagination}
+                  handleView={handleView}
+                  handleDeletePN={handleDeletePN}
+                ></Ctpn> */}
                 <B.Form style={{ marginBottom: "40px" }}>
                   <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                     <B.FormSelect
@@ -897,7 +951,7 @@ const PhieuNhap = () => {
                       {dataShowPN.map((item, index) => {
                         let chuoi = item.created_at;
                         let tachChuoi = chuoi.slice(0, 10);
-                        // console.log(tachChuoi);
+
                         return (
                           <>
                             <tr>
@@ -908,7 +962,13 @@ const PhieuNhap = () => {
                               <td className="align-middle">{item.tongTien}</td>
                               <td className="align-middle">{tachChuoi}</td>
                               <td className="align-middle">
-                                {CheckStatus(item.status)}
+                                <B.Button
+                                  style={{ backgroundColor: "#FF5858" }}
+                                >
+                                  <span className="fw-semibold">
+                                    Chưa thanh toán
+                                  </span>
+                                </B.Button>
                               </td>
 
                               <td className="align-middle fs-5 text-primary">
@@ -947,7 +1007,15 @@ const PhieuNhap = () => {
                   title="Xem chi tiết phiếu nhập"
                   className=" border border-top-0 py-3 px-3"
                 >
-                  <B.Row className="px-xl-3 mb-3">
+                  <Ctpn
+                    tongTienPN={tongTienPN}
+                    handleDelete={handleDelete}
+                    handleShowUpdateCtPN={handleShowUpdateCtPN}
+                    viewPn={viewPn}
+                    handleCloseTab={handleCloseTab}
+                    // handleReloadShowCTPNtab3={handleReloadShowCTPNtab3}
+                  ></Ctpn>
+                  {/* <B.Row className="px-xl-3 mb-3">
                     <B.Col lg={8} xs={8}>
                       <h5 className="text-primary mb-3">Chi tiết phiếu nhập</h5>
                     </B.Col>
@@ -1029,7 +1097,7 @@ const PhieuNhap = () => {
                     <h5 className="text-right mt-2 text-primary">
                       Tổng tiền: {tongTienPN} VNĐ
                     </h5>
-                  </B.Form>
+                  </B.Form> */}
                 </B.Tab>
               )}
             </B.Tabs>

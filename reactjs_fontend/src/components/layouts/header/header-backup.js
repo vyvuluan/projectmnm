@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home";
 import { DropDownMenu } from "../../form";
 
-export default function Header() {
+export default function HeaderBackUP() {
   const history = useNavigate();
   const [nameUser, setNameUser] = useState(null);
   const [product, setProduct] = useState([]);
