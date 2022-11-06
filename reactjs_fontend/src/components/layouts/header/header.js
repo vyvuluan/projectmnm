@@ -7,19 +7,23 @@ import {
   FaUser,
   FaShoppingBag,
 } from "react-icons/fa";
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { Link, NavLink, Route, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home";
-import { DropDownMenu } from "../../form";
+import { DropDownMenu, Slideshow } from "../../form";
 
 export default function Header() {
   const history = useNavigate();
+  const [open, setOpen] = useState(true);
   const [nameUser, setNameUser] = useState(null);
   const [product, setProduct] = useState([]);
-  const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("pageproducts?search=" + search);
+  const [cart, setCart] = useState();
+  const [search, setSearch] = useState('');
+  const [query, setQuery] = useState('pageproducts?search=' + search);
+
 
   useEffect(() => {
     if (localStorage.getItem("auth_name")) {
@@ -205,19 +209,58 @@ export default function Header() {
 
       <Bt.Container fluid mb={5}>
         <Bt.Row className="border-top px-xl-5">
-          <Bt.Col lg>
+          <Bt.Col lg={3} className='d-none d-lg-block'>
+            <Bt.Button
+              onClick={() => setOpen(!open)}
+              aria-controls="collapse-categories"
+              aria-expanded={open}
+              className='rounded-0 w-100 fw-semibold fs-5 shadow-none text-start'
+              style={{ height: '65px', marginTop: '-1px', padding: '0 25px' }}
+            >
+              Danh mục
+              <MdOutlineKeyboardArrowDown className='pull-right mt-2' />
+            </Bt.Button>
+            <Bt.Collapse in={open} class="w-100">
+              <div id="collapse-categories">
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Laptop</Link>
+                </div>
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính bàn</Link>
+                </div>
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
+                </div>
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
+                </div>
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
+                </div>
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
+                </div>
+                <div className="py-3 border border-top-0">
+                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
+                </div>
+              </div>
+            </Bt.Collapse>
+          </Bt.Col>
+          <Bt.Col lg >
             <Bt.Navbar
               collapseOnSelect
               expand="lg"
               className="py-3 py-lg-0 px-0"
             >
-              <Bt.NavbarBrand href={""} className="d-block d-lg-none">
-                <h1 className="text-dark m-0 display-5 fw-semibold">
-                  <span className="font-weight-bold border px-3 me-1 text-primary">
-                    L3M
-                  </span>
-                  Shop
-                </h1>
+              <Bt.NavbarBrand className="d-block d-lg-none">
+                <Link to='/' className="text-decoration-none">
+                  <h1 className="text-dark m-0 display-5 fw-semibold">
+                    <span className="fw-bold border px-3 me-1 text-primary">
+                      L3M
+                    </span>
+                    Shop
+                  </h1>
+                </Link>
               </Bt.NavbarBrand>
               <Bt.Navbar.Toggle
                 aria-controls="responsive-navbar-nav"
@@ -225,7 +268,7 @@ export default function Header() {
               ></Bt.Navbar.Toggle>
               <Bt.Navbar.Collapse
                 id="responsive-navbar-nav"
-                className="justify-content-between"
+                className="d-flex justify-content-between"
               >
                 <Bt.Nav className="me-auto py-2">
                   <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
@@ -233,18 +276,6 @@ export default function Header() {
                       Home
                     </Link>
                   </Bt.NavLink>
-                  <Bt.NavDropdown title="Shop" className="fs-5 fw-normal me-2">
-                    <Bt.NavDropdown.Item className="fs-5 fw-light">
-                      Laptop
-                    </Bt.NavDropdown.Item>
-                    <Bt.NavDropdown.Divider></Bt.NavDropdown.Divider>
-                    <Bt.NavDropdown.Item className="fs-5 fw-light">
-                      Máy tính để bàn
-                    </Bt.NavDropdown.Item>
-                  </Bt.NavDropdown>
-                  {/* <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Shop</Bt.NavLink>
-                                    <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Laptop</Bt.NavLink>
-                                    <Bt.NavLink href="#" className='fs-5 fw-normal me-2'>Máy tính để bàn</Bt.NavLink> */}
                   <Bt.NavLink className="fs-5 fw-normal me-2">
                     <Link className="text-decoration-none" to="/contact">
                       Liên hệ
@@ -257,29 +288,30 @@ export default function Header() {
                   </Bt.NavLink>
                 </Bt.Nav>
 
-                <Bt.Nav className="ms-auto py-2">
-                  {/* <Bt.NavLink className="fs-5 fw-normal me-2">
+                {/* <Bt.Nav className="ms-auto py-2">
+                  <Bt.NavLink className="fs-5 fw-normal me-2">
                     <Link className="text-decoration-none" to="/login">
                       Login
                     </Link>
-                  </Bt.NavLink> */}
-                  {/* <Bt.NavLink className="fs-5 fw-normal me-2"> */}
-                  {/* <Link className="text-decoration-none" to="/login"> */}
-                  {/* Logout */}
-                  {/* </Link> */}
-                  {/* </Bt.NavLink> */}
+                  </Bt.NavLink>
+                  <Bt.NavLink className="fs-5 fw-normal me-2">
+                  <Link className="text-decoration-none" to="/login">
+                  Logout
+                  </Link>
+                  </Bt.NavLink>
 
-                  {/* <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
+                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
                     Register
-                  </Bt.NavLink> */}
-                  {/* <Bt.NavLink>xin chào, user</Bt.NavLink> */}
-                  {/* {AuthButton} */}
-                </Bt.Nav>
+                  </Bt.NavLink>
+                  <Bt.NavLink>xin chào, user</Bt.NavLink>
+                  {AuthButton}
+                </Bt.Nav> */}
               </Bt.Navbar.Collapse>
             </Bt.Navbar>
-          </Bt.Col>
-        </Bt.Row>
-      </Bt.Container>
+            <Slideshow />
+          </Bt.Col >
+        </Bt.Row >
+      </Bt.Container >
     </>
   );
 }
