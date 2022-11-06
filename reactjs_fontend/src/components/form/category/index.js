@@ -52,7 +52,7 @@ const Category = () => {
               >
                 <a
                   className="nav-item nav-link"
-                  // onClick={HandleClickCategory}
+                // onClick={HandleClickCategory}
                 >
                   {item.tenLoai}
                 </a>
@@ -70,7 +70,7 @@ const Category = () => {
     <>
       <div className="col-sm-2 d-none d-lg-block">
         <a
-          className="btn d-flex align-items-center bg-primary text-white"
+          className="btn d-flex align-items-center bg-primary text-white rounded-0"
           style={{ height: "48px", paddingLeft: "10px" }}
         >
           <h5 className="m-0 font-size-30">Categories</h5>

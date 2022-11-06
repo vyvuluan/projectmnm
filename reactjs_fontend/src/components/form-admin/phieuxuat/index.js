@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import * as B from 'react-bootstrap'
 import Pagination from '../../form/pagination/index'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import { FaSearch, FaMinus, FaPlus, FaRegEye, FaTimes } from "react-icons/fa";
+import { FaMinus, FaPlus, FaRegEye, FaTimes } from "react-icons/fa";
 import { FcPrint } from 'react-icons/fc'
-import { BiEdit, BiReset, BiRefresh } from 'react-icons/bi'
+import { BiEdit, } from 'react-icons/bi'
 import { TbTrashX } from 'react-icons/tb'
 import swal from 'sweetalert';
 import EditPx from './editPx'
@@ -43,8 +43,12 @@ function Index() {
     const [showCtpx, setShowCtpx] = useState(false);
     const [showTable, setShowTable] = useState(false);
     const [showTab, setShowTab] = useState(false);
+    const [submitting, setSubmitting] = useState(true);
     const [showSearchTable, setShowSearchTable] = useState(false);
-    const handleClose = () => setShow(prev => !prev);
+    const handleClose = () => {
+        setSubmitting(true);
+        setShow(prev => !prev)
+    };
     const handleShow = (ctpx) => {
         setShow(true);
         setEditPx(ctpx);
@@ -101,6 +105,7 @@ function Index() {
                 swal('Success', res.data.message, 'success')
                 setPXid(res.data.px_id);
                 setShowCtpx(true);
+                setSubmitting(true);
                 setError([]);
                 setPxInput({
                     ...pxinput,
@@ -128,6 +133,7 @@ function Index() {
             if (res.data.status === 200) {
                 swal('Success', res.data.message, 'success');
                 setProdData([]);
+                setSubmitting(true);
                 setError([]);
                 setShowCtpx(false);
                 setShowTable(false);
@@ -149,41 +155,36 @@ function Index() {
     // End
 
     // Fetch data phiếu xuất
+    const getAllPx = useCallback(async () => {
+        const res = await axios.get(`/api/kho/px?page=${page}`)
+        if (res.status === 200) {
+            setPxlist(res.data.data.data);
+            setTotalPage(res.data.data.total);
+            setPerPage(res.data.data.per_page);
+            setCurrentPage(res.data.data.current_page)
+        }
+    }, [page]);
+
     useEffect(() => {
-        let isMounted = true;
+        getAllPx().then(() => setSubmitting(false));
+    }, [submitting, getAllPx]);
 
-        axios.get(`/api/kho/px?page=${page}`).then(res => {
-            if (isMounted) {
-                if (res.status === 200) {
-                    setPxlist(res.data.data.data);
-                    setTotalPage(res.data.data.total);
-                    setPerPage(res.data.data.per_page);
-                    setCurrentPage(res.data.data.current_page)
-                }
-            }
-        });
-
-        return () => {
-            isMounted = false;
-        }
-    }, [page])
-
-    const handleUpdateStatus = (value, px) => {
-        const data = {
-            tenKH: px.tenKH,
-            diaChi: px.diaChi,
-            pt_ThanhToan: px.pt_ThanhToan,
-            sdt: ` 0${px.sdt} `,
-            tongTien: px.tongTien,
-            status: value.id,
-        }
-        axios.put(`/api/kho/px/${px.id}`, data).then(res => {
-            if (res.status === 200) {
-                // setPxlist(res.data.data.data);
-                // setEkey()
-            }
-        })
-    }
+    // const handleUpdateStatus = (value, px) => {
+    //     const data = {
+    //         tenKH: px.tenKH,
+    //         diaChi: px.diaChi,
+    //         pt_ThanhToan: px.pt_ThanhToan,
+    //         sdt: ` 0${px.sdt} `,
+    //         tongTien: px.tongTien,
+    //         status: value.id,
+    //     }
+    //     axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+    //         if (res.status === 200) {
+    //             setPxlist(res.data.data.data);
+    //             setEkey()
+    //         }
+    //     })
+    // }
     // End
 
     // Function search và thêm sản phẩm mẫu cho chi tiết phiếu xuất
@@ -228,28 +229,22 @@ function Index() {
     };
     // End
 
-    const [isSearching, setSearching] = useState(false);
     const handleOnPxSearch = (key) => {
-        setSearching(true);
-        if (isSearching) {
-            axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
-                if (res.status === 200) {
-                    setPxSearchlist(res.data.data)
-                    // setTotalPage(res.data.total);
-                    // setPerPage(res.data.per_page);
-                    // setCurrentPage(res.data.current_page)
-                    setShowSearchTable(true);
-                }
-                else {
-                    setShowSearchTable(false);
-                }
-            })
-        } else setPxSearchlist([]);
+        axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+            if (res.status === 200) {
+                setPxSearchlist(res.data.data)
+                // setTotalPage(res.data.total);
+                // setPerPage(res.data.per_page);
+                // setCurrentPage(res.data.current_page)
+                setShowSearchTable(true);
+            }
+            else {
+                setShowSearchTable(false);
+            }
+        })
     }
 
     const handleOnPxClear = () => {
-        setSearching(false);
-        setPxSearchlist([]);
         setShowSearchTable(false);
     }
 
@@ -260,6 +255,7 @@ function Index() {
     }
 
     const handleCloseTab = () => {
+        setSubmitting(true);
         setShowTab(false);
         setTabkey(1);
     }
@@ -287,6 +283,33 @@ function Index() {
                 swal('Error', res.data.message, 'error')
             } else if (res.data.status === 404) {
                 swal('Error', res.data.message, 'error')
+            }
+        })
+    }
+
+    const handleDelete = (value) => {
+        const px_id = viewPx.id;
+        const product_id = value.product.id;
+        swal({
+            title: 'Bạn có chắc bạn muốn xóa sản phẩm này?',
+            text: 'Bạn sẽ xóa sản phẩm này khỏi phiếu!',
+            icon: 'warning',
+            buttons: {
+                cancel: "Hủy bỏ",
+                delete: {
+                    text: "Vâng, hãy xóa nó",
+                    value: "delete",
+                },
+            }
+        }).then((value) => {
+            if (value) {
+                axios.delete(`/api/kho/deletectpx/${px_id}/${product_id}`).then(res => {
+                    if (res.data.status === 200) {
+                        swal('Thành công', res.data.message, 'success');
+                    } else if (res.data.status === 400) {
+                        swal('Cảnh báo', res.data.message, 'warning');
+                    }
+                })
             }
         })
     }
@@ -373,7 +396,6 @@ function Index() {
                         </B.Button>
                     </B.ModalFooter>
                 </B.Modal>
-
 
                 <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
                     <div ref={componentRef}>
@@ -489,7 +511,6 @@ function Index() {
                     </B.ModalFooter>
                 </B.Modal>
 
-
                 <B.Row className='pe-xl-5 mb-4'>
                     <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1>
                 </B.Row>
@@ -547,10 +568,10 @@ function Index() {
                                     </thead>
                                     <tbody>
                                         {!showSearchTable && (
-                                            pxlist && pxlist.map((px) => {
+                                            pxlist && pxlist.map((px, index) => {
                                                 return (
                                                     <tr key={px.id}>
-                                                        <td>{px.id}</td>
+                                                        <td>{index + 1}</td>
                                                         <td>{px.tenKH}</td>
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>
@@ -620,7 +641,6 @@ function Index() {
                                     <h5 className='text-primary mb-3'>Chi tiết phiếu xuất</h5>
                                 </B.Col>
                                 <B.Col lg={4} xs={4} className='text-end'>
-                                    <BiReset className='fs-3 customborder' onClick={handleRefresh} />
                                     <BiEdit className='fs-3 customborder' onClick={() => handleShow(viewPx)} />
                                     <FaTimes className='fs-3 customborder' onClick={handleCloseTab} />
                                 </B.Col>
@@ -745,6 +765,7 @@ function Index() {
                                                         <td>{prod.product.tenSP}</td>
                                                         <td>{prod.soluong}</td>
                                                         <td>{formatMoney(prod.product.gia)}</td>
+                                                        <td className='text-center'><TbTrashX className='fs-4 text-primary' onClick={() => handleDelete(prod)} /></td>
                                                     </tr>
                                                 )
                                             })}
