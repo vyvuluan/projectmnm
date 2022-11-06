@@ -69,7 +69,7 @@ class ProductController extends Controller
                 $comment->save();
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Đăng commnet thành công',
+                    'message' => 'Đăng commnent thành công',
                 ]);
             } else {
                 return response()->json([

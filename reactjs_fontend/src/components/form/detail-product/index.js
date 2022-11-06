@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -26,6 +26,9 @@ const DetailProduct = (props) => {
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [comInput, setComInput] = useState();
+  const [comment, setComment] = useState([]);
+  const [submitting, setSubmitting] = useState(true);
   const { id } = useParams();
 
   function formatMoney(money) {
@@ -91,6 +94,43 @@ const DetailProduct = (props) => {
 
   const executeOnClick = (isExpanded) => {
     console.log(isExpanded);
+  }
+
+  // useEffect(() => {
+  //   axios.get(`/api/allcomment/${id}`).then(res => {
+  //     if (res.data.status === 200) {
+  //       setComment(res.data.comment);
+  //     }
+  //   })
+  // }, [id])
+
+  const getComments = useCallback(async () => {
+    const res = await axios.get(`/api/allcomment/${id}`)
+    if (res.data.status === 200) {
+      setComment(res.data.comment);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    getComments().then(() => setSubmitting(false))
+  }, [submitting, getComments])
+
+  const handleSubmitComment = (e) => {
+    e.preventDefault();
+
+    const data = {
+      comment: comInput,
+      product_id: id,
+    }
+
+    axios.post(`/api/addcomment`, data).then(res => {
+      if (res.data.status === 200) {
+        setSubmitting(true);
+        swal('Success', res.data.message, 'success');
+      } else if (res.data.status === 401) {
+        swal('Error', res.data.message, 'error')
+      }
+    })
   }
 
   if (loading) {
@@ -446,27 +486,23 @@ const DetailProduct = (props) => {
             <B.Tab eventKey={2} title="Bình luận" className="border border-top-0 py-3 px-3">
               <B.Row className='px-xl-3 mb-3'>
                 <B.Col lg={4}>
-                  <B.Form>
-                    <B.FormGroup>
-                      <B.FormLabel>Tên người dùng</B.FormLabel>
-                      <B.FormControl type='text' placeholder="Nhập tên hiển thị" className="rounded-0 mb-2"></B.FormControl>
-                    </B.FormGroup>
+                  <B.Form onSubmit={handleSubmitComment}>
                     <B.FormGroup>
                       <B.FormLabel>Bình luận</B.FormLabel>
-                      <B.FormControl as='textarea' rows={4} placeholder="Nhập bình luận" className="rounded-0 mb-3"></B.FormControl>
+                      <B.FormControl as='textarea' rows={4} name='binhluan' value={comInput} onChange={(e) => setComInput(e.target.value)} placeholder="Nhập bình luận" className="rounded-0 mb-3"></B.FormControl>
                     </B.FormGroup>
-                    <B.Button variant='primary' className="rounded-0 mb-3" >Đăng bình luận</B.Button>
+                    <B.Button variant='primary' type='submit' className="rounded-0 mb-3">Đăng bình luận</B.Button>
                   </B.Form>
                 </B.Col>
                 <B.Col lg={8}>
-                  <B.FormGroup className="border border-2 px-3 py-2 mb-3">
-                    <B.FormLabel className="fs-6">Trần Hoàng Long</B.FormLabel>
-                    <B.FormText>Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac Máy xài như cac</B.FormText>
-                  </B.FormGroup>
-                  <B.FormGroup className="border border-2 px-3 py-2 mb-3">
-                    <B.FormLabel className="fs-6">Vy Vũ Luân</B.FormLabel>
-                    <B.FormText>Theo mình thấy thì cái bình luận là chưa làm</B.FormText>
-                  </B.FormGroup>
+                  {comment && comment.map((com, index) => {
+                    return (
+                      <B.FormGroup key={index} className="border border-2 px-3 py-2 mb-3">
+                        <B.FormLabel className="fs-6">{com.customer_id}</B.FormLabel>
+                        <B.FormText>{com.comment}</B.FormText>
+                      </B.FormGroup>
+                    )
+                  })}
                 </B.Col>
               </B.Row>
             </B.Tab>
