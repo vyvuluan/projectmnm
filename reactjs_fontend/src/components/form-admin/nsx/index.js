@@ -56,6 +56,7 @@ function Index() {
 
         axios.post(`/api/kho/nsx`, data).then(res => {
             if (res.data.status === 200) {
+                setSubmitting(true);
                 swal('Success', res.data.message, 'success')
             }
         })
@@ -94,9 +95,7 @@ function Index() {
     }, [page])
 
     useEffect(() => {
-        getNsxData().then(() => setSubmitting(false))
-        var sec = 15;
-        setInterval(getNsxData, sec * 1000)
+        getNsxData().then(() => setSubmitting(false));
     }, [submitting, getNsxData])
 
     return (
@@ -154,18 +153,10 @@ function Index() {
                                 </B.FormGroup>
                             </B.Col>
                             <B.Col lg={4}>
-                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100' onClick={() => setSubmitting(true)}>
+                                <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100'>
                                     <BsPersonPlusFill className='me-2' />
                                     Thêm nhà sản xuất
                                 </B.Button>
-                                {/* <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                                    <FaUserEdit className='me-2' />
-                                    Sửa nhà sản xuất
-                                </B.Button>
-                                <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                                    <AiOutlineUserDelete className='me-2' />
-                                    Xóa nhà sản xuất
-                                </B.Button> */}
                             </B.Col>
                         </B.Row>
                     </B.Form>

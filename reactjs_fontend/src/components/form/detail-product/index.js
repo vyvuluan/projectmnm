@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LoaderIcon from "../../layouts/Loading/index";
+import * as B from 'react-bootstrap'
+import ShowMoreText from "react-show-more-text";
 import {
   BsStarFill,
   BsFacebook,
@@ -19,10 +21,14 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 const DetailProduct = (props) => {
   const { item } = props;
 
+  const [tabkey, setTabkey] = useState(1);
   const navaigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [comInput, setComInput] = useState();
+  const [comment, setComment] = useState([]);
+  const [submitting, setSubmitting] = useState(true);
   const { id } = useParams();
 
   function formatMoney(money) {
@@ -85,6 +91,47 @@ const DetailProduct = (props) => {
       }
     });
   };
+
+  const executeOnClick = (isExpanded) => {
+    console.log(isExpanded);
+  }
+
+  // useEffect(() => {
+  //   axios.get(`/api/allcomment/${id}`).then(res => {
+  //     if (res.data.status === 200) {
+  //       setComment(res.data.comment);
+  //     }
+  //   })
+  // }, [id])
+
+  const getComments = useCallback(async () => {
+    const res = await axios.get(`/api/allcomment/${id}`)
+    if (res.data.status === 200) {
+      setComment(res.data.comment);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    getComments().then(() => setSubmitting(false))
+  }, [submitting, getComments])
+
+  const handleSubmitComment = (e) => {
+    e.preventDefault();
+
+    const data = {
+      comment: comInput,
+      product_id: id,
+    }
+
+    axios.post(`/api/addcomment`, data).then(res => {
+      if (res.data.status === 200) {
+        setSubmitting(true);
+        swal('Success', res.data.message, 'success');
+      } else if (res.data.status === 401) {
+        swal('Error', res.data.message, 'error')
+      }
+    })
+  }
 
   if (loading) {
     return <LoaderIcon />;
@@ -151,7 +198,7 @@ const DetailProduct = (props) => {
                   <img
                     className="w-100 h-100"
                     src={`http://localhost:8000/uploadhinh/${product.hinh}`}
-                    alt="Image"
+                    alt="prod"
                   ></img>
                 </div>
                 <div className="carousel-item">
@@ -219,13 +266,22 @@ const DetailProduct = (props) => {
               {formatMoney(product.gia)}
             </h3>
             <p className="mb-4">
-              Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat
-              diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem
-              magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore
-              stet, est lorem sit diam sea et justo, amet at lorem et eirmod
-              ipsum diam et rebum kasd rebum.
+              <ShowMoreText
+                /* Default options */
+                lines={3}
+                more="Xem thêm"
+                less="Rút gọn"
+                className="content-css"
+                anchorClass="show-more-less-clickable"
+                onClick={executeOnClick}
+                expanded={false}
+                width={280}
+                truncatedEndingComponent={"..... "}
+              >
+                <div dangerouslySetInnerHTML={{ __html: product.ctSanPham }} />
+              </ShowMoreText>
             </p>
-            <div className="d-flex mb-3">
+            {/* <div className="d-flex mb-3">
               <p className="">Sizes:</p>
               <form className="d-flex">
                 <div className="custom-control custom-radio custom-control-inline">
@@ -284,7 +340,7 @@ const DetailProduct = (props) => {
                   </label>
                 </div>
               </form>
-            </div>
+            </div> */}
 
             <div>{avail_stock}</div>
 
@@ -309,8 +365,8 @@ const DetailProduct = (props) => {
             </div>
           </div>
         </div>
-        <div className="row px-xl-5">
-          <div className="col">
+        <div className="px-xl-5">
+          {/* <div className="col">
             <div className="nav nav-tabs justify-content-center border-secondary mb-4">
               <a
                 className="nav-item nav-link active"
@@ -403,7 +459,54 @@ const DetailProduct = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+          <B.Tabs activeKey={tabkey}
+            onSelect={(k) => setTabkey(k)}
+            className=' justify-content-center'>
+            <B.Tab eventKey={1} title="Mô tả sản phẩm" className="border border-top-0 py-3 px-3">
+              <B.Row className='px-xl-3 mb-3'>
+                {/* {product.ctSanPham} */}
+                <ShowMoreText
+                  /* Default options */
+                  lines={3}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  width={280}
+                  truncatedEndingComponent={"..... "}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: product.moTa }} />
+                </ShowMoreText>
+              </B.Row>
+            </B.Tab>
+
+            <B.Tab eventKey={2} title="Bình luận" className="border border-top-0 py-3 px-3">
+              <B.Row className='px-xl-3 mb-3'>
+                <B.Col lg={4}>
+                  <B.Form onSubmit={handleSubmitComment}>
+                    <B.FormGroup>
+                      <B.FormLabel>Bình luận</B.FormLabel>
+                      <B.FormControl as='textarea' rows={4} name='binhluan' value={comInput} onChange={(e) => setComInput(e.target.value)} placeholder="Nhập bình luận" className="rounded-0 mb-3"></B.FormControl>
+                    </B.FormGroup>
+                    <B.Button variant='primary' type='submit' className="rounded-0 mb-3">Đăng bình luận</B.Button>
+                  </B.Form>
+                </B.Col>
+                <B.Col lg={8}>
+                  {comment && comment.map((com, index) => {
+                    return (
+                      <B.FormGroup key={index} className="border border-2 px-3 py-2 mb-3">
+                        <B.FormLabel className="fs-6">{com.customer_id}</B.FormLabel>
+                        <B.FormText>{com.comment}</B.FormText>
+                      </B.FormGroup>
+                    )
+                  })}
+                </B.Col>
+              </B.Row>
+            </B.Tab>
+          </B.Tabs>
         </div>
       </div>
     </>

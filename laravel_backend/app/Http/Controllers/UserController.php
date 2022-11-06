@@ -62,13 +62,18 @@ class UserController extends Controller
             if ($user->status == 1) {
                 if ($user->role_id == 1) {
                     $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+                    return response()->json([
+                        'status' => 200,
+                        'username' => $user->username,
+                        'token' => $token,
+                        'message' => 'Đăng nhập thành công',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 402,
+                        'message' => 'Tài khoản bạn đang có quyền quản lý ko có quyền đăng nhập ở trang khách hàng',
+                    ]);
                 }
-                return response()->json([
-                    'status' => 200,
-                    'username' => $user->username,
-                    'token' => $token,
-                    'message' => 'Đăng nhập thành công',
-                ]);
             } else {
                 return response()->json([
                     'status' => 402,

@@ -118,8 +118,6 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('getAllPN-new', [ManagePhieuNhapController::class, 'getAllPN_new']);
     //api hiển thị chi tiết phiếu nhập và phiếu nhập theo id phiếu nhập
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
-    //api set tình trạng phiếu nhập
-    Route::put('setStatusPN/{pn_id}', [ManagePhieuNhapController::class, 'setStatusPN']);
     //api sản phẩm sắp hết hàng < 10 số lượng
     Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);
     //lọc phiếu nhập theo giá

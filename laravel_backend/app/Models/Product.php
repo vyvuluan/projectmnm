@@ -21,6 +21,7 @@ class Product extends Model
         'ctSanPham',
         'moTa'
     ];
+    
     public function loaisp()
     {
         return $this->belongsTo(loaisp::class, 'maLoai', 'id');
