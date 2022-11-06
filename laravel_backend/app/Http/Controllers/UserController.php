@@ -68,6 +68,11 @@ class UserController extends Controller
                         'token' => $token,
                         'message' => 'Đăng nhập thành công',
                     ]);
+                } else {
+                    return response()->json([
+                        'status' => 402,
+                        'message' => 'Tài khoản bạn đang có quyền quản lý ko có quyền đăng nhập ở trang khách hàng',
+                    ]);
                 }
             } else {
                 return response()->json([

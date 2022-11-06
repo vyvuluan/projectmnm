@@ -170,7 +170,7 @@ class ManageBaoCaoController extends Controller
         $timeNow = Carbon::now();
         $arrayTime = array();
         $total_sl = array();
-        $total_pn = array();
+        $total_px = array();
         for ($i = 1; $i <= 12; $i++) {
             if ($i == 1) {
                 $arrayTime[$i] = $timeNow->toDateString();
@@ -187,7 +187,7 @@ class ManageBaoCaoController extends Controller
                     ->where('employee_id', auth()->user()->employee->id)
                     ->first();
 
-                $total_pn[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
+                $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
                     ->first();
@@ -206,7 +206,7 @@ class ManageBaoCaoController extends Controller
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
                     ->first();
-                $total_pn[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
+                $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
                     ->first();
@@ -214,8 +214,8 @@ class ManageBaoCaoController extends Controller
         }
         return response()->json([
             'status' => 200,
-            'total_sl' => $total_pn,
-            'total_pn' => $total_sl,
+            'total_sl' => $total_sl,
+            'total_px' => $total_px,
         ]);
     }
 }
