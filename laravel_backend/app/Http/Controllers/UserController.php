@@ -115,6 +115,7 @@ class UserController extends Controller
         // ]);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
+            'fullname' => 'required|min:8',
             'username' => 'required|min:8|unique:users',
             'password' => 'required|min:8',
             're_password' => 'required|min:8',
@@ -126,6 +127,9 @@ class UserController extends Controller
             'username.required' => 'Ô username không được bỏ trống',
             'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
+
+            'fullname.required' => 'Ô fullname không được bỏ trống',
+            'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
 
             'password.required' => 'Ô password không được bỏ trống',
             'password.min' => 'Ô password tối thiểu 8 ký tự',
@@ -156,6 +160,7 @@ class UserController extends Controller
             $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
             $customer = new Customer();
             $customer->user_id = $user->id;
+            $customer->ten = $request->fullname;
             $customer->save();
             return response()->json([
                 'status' => 200,
