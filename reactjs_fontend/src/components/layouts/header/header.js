@@ -39,6 +39,8 @@ export default function Header() {
           // console.log(res);
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_name");
+          localStorage.removeItem("auth_fullname");
+          
           swal({
             title: res.data.message,
             icon: "success",

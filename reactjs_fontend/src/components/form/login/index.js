@@ -43,7 +43,7 @@ const Login = () => {
         if (res.data.status === 200) {
           localStorage.setItem("auth_token", res.data.token);
           localStorage.setItem("auth_name", res.data.username);
-          // localStorage.setItem("auth_name", res.data.username);
+          localStorage.setItem("auth_fullname", res.data.fullname);
 
           
           swal({
