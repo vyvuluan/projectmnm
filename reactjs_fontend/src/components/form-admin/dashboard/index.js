@@ -4,18 +4,23 @@ import Chart from "../chart";
 import CircelChart from "../circelChart";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import * as Bt from "react-bootstrap";
 
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Table from "react-bootstrap/Table";
 const DashBoard = () => {
   const [data, setData] = useState();
+  const [tabkey, setTabKey] = useState(1);
   const [dataKho, setDataKho] = useState();
   const [dataNV, setDataNV] = useState();
-
+  const [dataSPganhet, setDataSPganhet] = useState([]);
 
   const cookies = new Cookies();
 
   useEffect(() => {
     const controller = new AbortController();
-    if(cookies.get('role_id')==2){
+    if (cookies.get("role_id") == 2) {
       axios
         .get("/api/admin/baocao")
         .then((res) => {
@@ -28,7 +33,7 @@ const DashBoard = () => {
           // handle error
           console.log(error);
         });
-    }else if (cookies.get('role_id')==3) {
+    } else if (cookies.get("role_id") == 3) {
       axios
         .get("/api/kho/thongKeChiTieuSoLuong")
         .then((res) => {
@@ -41,29 +46,161 @@ const DashBoard = () => {
           // handle error
           console.log(error);
         });
-    }else if (cookies.get('role_id')==4) {
+    } else if (cookies.get("role_id") == 4) {
       axios
-      .get("/api/nhanvien/doanhThuNhanVien")
+        .get("/api/nhanvien/doanhThuNhanVien")
+        .then((res) => {
+          // console.log(res);
+          if (res.data.status === 200) {
+            setDataNV(res.data);
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    }
+    return () => controller.abort();
+  }, []);
+  // console.log(dataKho);
+
+  //sản phẩm gần hết
+
+  useEffect(() => {
+    axios
+      .get("/api/kho/spGanHet")
       .then((res) => {
-        // console.log(res);
+        // console.log(res.data.product.data);
         if (res.data.status === 200) {
-          
-          setDataNV(res.data);
+          setDataSPganhet(res.data.product.data);
         }
       })
       .catch(function (error) {
         // handle error
         console.log(error);
       });
-    }
-    return () => controller.abort();
   }, []);
-  // console.log(dataKho);
 
+  var UIkho = (
+    <>
+      {/* <Widget dataWidget={data} /> */}
+
+      <div className="row" style={{ justifyContent: "center" }}>
+        <div className="col-xl-10 col-lg-7">
+          <Tabs
+            activeKey={tabkey}
+            onSelect={(k) => setTabKey(k)}
+            className="mb-3"
+          >
+            <Tab eventKey={1} title="Thống kê">
+              <Chart dataKho={dataKho} />
+            </Tab>
+            <Tab eventKey={2} title="Sản phẩm gần hết">
+              <h2>Sản phẩm gần hết</h2>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên sản phẩm </th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataSPganhet.map((item, index) => {
+                    return (
+                      <>
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{item.tenSP}</td>
+                          <td className="text-danger">{item.soLuongSP}</td>
+                          <td>{item.gia}</td>
+                        </tr>
+                      </>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Tab>
+            <Tab eventKey={3} title="Lịch sử nhập hàng">
+              <h2>Lịch sử nhập hàng</h2>
+
+              <Bt.FormGroup className="mb-3" controlId="formName">
+                <Bt.Row>
+                  <Bt.Col>
+                    <Bt.FormLabel className="fw-semibold fs-4">
+                      Từ ngày
+                    </Bt.FormLabel>
+                    {/* <DatePicker  onChange={() =>  { console.log(value); return onChange}} value={value} /> */}
+                    <Bt.FormControl
+                      type="date"
+                      name="dateFrom"
+                      className="rounded"
+                      
+                      // value={ngaySinh}
+                      // onChange={(e) => setNgaySinh(e.target.value)}
+                    ></Bt.FormControl>
+                  </Bt.Col>
+                  <Bt.Col>
+                    <Bt.FormLabel className="fw-semibold fs-4">
+                      Đến ngày
+                    </Bt.FormLabel>
+                    {/* <DatePicker  onChange={() =>  { console.log(value); return onChange}} value={value} /> */}
+                    <Bt.FormControl
+                      type="date"
+                      name="dateTo"
+                      
+                      className="rounded"
+                      // value={ngaySinh}
+                      // onChange={(e) => setNgaySinh(e.target.value)}
+                    ></Bt.FormControl>
+                  </Bt.Col>
+                </Bt.Row>
+                {/* <span className="text-danger">{errorBird}</span> */}
+              </Bt.FormGroup>
+            </Tab>
+          </Tabs>
+        </div>
+      </div>
+    </>
+  );
+  var UINV = (
+    <>
+      <Widget dataWidget={data} />
+      <div className="row">
+        <div className="col-xl-8 col-lg-7">
+          <Chart dataNV={dataNV} />
+        </div>
+        <div className="col-xl-4 col-lg-5">
+          <CircelChart data2={data} />
+        </div>
+      </div>
+    </>
+  );
+  var UIAdmin = (
+    <>
+      <Widget dataWidget={data} />
+      <div className="row">
+        <div className="col-xl-8 col-lg-7">
+          <Chart data1={data} />
+        </div>
+        <div className="col-xl-4 col-lg-5">
+          <CircelChart data2={data} />
+        </div>
+      </div>
+    </>
+  );
   // console.log(data);
   return (
     <>
-      <Widget dataWidget={data} />
+      {cookies.get("role_id") == 3
+        ? UIkho
+        : cookies.get("role_id") == 4
+        ? UINV
+        : cookies.get("role_id") == 2
+        ? UIAdmin
+        : null}
+      {/* <Widget dataWidget={data} />
       <div className="row">
         <div className="col-xl-8 col-lg-7">
           <Chart data1={data} dataKho={dataKho} dataNV={dataNV}  />
@@ -71,7 +208,7 @@ const DashBoard = () => {
         <div className="col-xl-4 col-lg-5">
           <CircelChart data2={data} />
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

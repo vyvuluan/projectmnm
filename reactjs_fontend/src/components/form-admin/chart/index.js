@@ -62,6 +62,7 @@ const Chart = ({ data1, dataKho, dataNV }) => {
     plugins: {
       legend: {
         position: "top",
+        
       },
       title: {
         display: true,
@@ -140,7 +141,9 @@ const Chart = ({ data1, dataKho, dataNV }) => {
 
   return (
     <Bar
-      className="card shadow mb-4 h-100"
+
+      className="card shadow mb-4 h-100" 
+      
       options={options}
       data={
         cookies.get("role_id") == 3

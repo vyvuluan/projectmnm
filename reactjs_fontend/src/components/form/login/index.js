@@ -66,6 +66,13 @@ const Login = () => {
             icon: "warning",
             button: "đóng",
           });
+        }else if (res.data.status === 402) {
+          // console.log(res.data.err);
+          swal({
+            title: res.data.message,
+            icon: "warning",
+            button: "đóng",
+          });
         }
       });
     });

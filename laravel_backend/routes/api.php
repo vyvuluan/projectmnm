@@ -120,7 +120,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
 
     //api set tình trạng phiếu nhập
-    Route::get('setStatusPn/{pn_id}', [ManagePhieuNhapController::class, 'setStatusPN']);
+    Route::put('setStatusPn/{pn_id}', [ManagePhieuNhapController::class, 'setStatusPN']);
 
     //api sản phẩm sắp hết hàng < 10 số lượng
     Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);

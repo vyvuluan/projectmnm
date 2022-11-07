@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import * as Bt from "react-bootstrap";
 
 import {
   Slideshow,
@@ -61,7 +62,11 @@ const HomePage = () => {
 
   return (
     <>
-      {/* <Slideshow /> */}
+    <Bt.Container fluid mb={5}>
+    <Bt.Row className=" px-xl-5">
+      <Slideshow />
+      </Bt.Row>
+    </Bt.Container>
       {/* <SectionTitle title="Service" /> */}
       <Features />
       <SectionTitle title="Sản phẩm mới" />

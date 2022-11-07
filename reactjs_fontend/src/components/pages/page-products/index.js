@@ -31,6 +31,7 @@ const PageProducts = () => {
 
   const [searchParam, setSearchParam] = useSearchParams();
   useEffect(() => {
+    console.log(searchParam.get("category"));
     const controller = new AbortController();
 
     if (searchParam.get("category")) {
@@ -38,14 +39,14 @@ const PageProducts = () => {
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
         .then(function (response) {
           // handle success
-          // console.log(response.data.Loaisp);
+          console.log(response.data.Loaisp);
           // console.log("hello"+[...searchParam][0][1]);
 
           // setListProduct(response.data.Loaisp);
+          setListProduct(response.data.Loaisp.data);
 
           setTotalPage(response.data.Loaisp.total);
           setPerPage(response.data.Loaisp.per_page);
-          setListProduct(response.data.Loaisp.data);
           setCurrentPage(response.data.Loaisp.current_page)
           // console.log(response.data.Loaisp.length);
           // if(response.data.Loaisp.length)
@@ -106,10 +107,10 @@ const PageProducts = () => {
   }
   return (
     <>
-      <Container fluid>
+      <Container fluid className="mt-5">
         <Row>
-          <Col>
-            <SectionTitle title="Sản phẩm" />
+          <Col >
+            <SectionTitle title="Sản phẩm"  />
             {product_HTML}
             <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
           </Col>

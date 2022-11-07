@@ -538,6 +538,21 @@ const PhieuNhap = () => {
       controller.abort();
     };
   };
+
+  
+  const changeStatus = ()=> {
+    const controller = new AbortController();
+
+    axios.get(`api/kho/setStatusPn/${idPN}`).then((res) => {
+
+      if (res.data.status === 200) {
+
+      }
+    });
+    return () => {
+      controller.abort();
+    };
+  }
   //Đang sử lý
   // const handleReloadShowCTPNtab3 = useCallback(() => {
   //   const controller = new AbortController();
@@ -964,6 +979,7 @@ const PhieuNhap = () => {
                               <td className="align-middle">
                                 <B.Button
                                   style={{ backgroundColor: "#FF5858" }}
+                                  
                                 >
                                   <span className="fw-semibold">
                                     Chưa thanh toán

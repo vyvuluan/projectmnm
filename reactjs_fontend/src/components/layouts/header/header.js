@@ -13,11 +13,11 @@ import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home";
-import { DropDownMenu, Slideshow } from "../../form";
+import { Category, DropDownMenu, Slideshow } from "../../form";
 
 export default function Header() {
   const history = useNavigate();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [nameUser, setNameUser] = useState(null);
   const [product, setProduct] = useState([]);
   const [cart, setCart] = useState();
@@ -210,8 +210,10 @@ export default function Header() {
       </Bt.Container>
 
       <Bt.Container fluid mb={5}>
-        <Bt.Row className="border-top px-xl-5">
-          <Bt.Col lg={3} className='d-none d-lg-block'>
+        <Bt.Row className="border-bottom px-xl-5">
+          <Bt.Col lg={3} className='d-none d-lg-block' style={{position:"relative",zIndex:"10"}}>
+            <div style={{position:"absolute",backgroundColor:"#fff",width:"100%"}}>
+
             <Bt.Button
               onClick={() => setOpen(!open)}
               aria-controls="collapse-categories"
@@ -222,31 +224,12 @@ export default function Header() {
               Danh mục
               <MdOutlineKeyboardArrowDown className='pull-right mt-2' />
             </Bt.Button>
-            <Bt.Collapse in={open} class="w-100">
-              <div id="collapse-categories">
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Laptop</Link>
-                </div>
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính bàn</Link>
-                </div>
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
-                </div>
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
-                </div>
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
-                </div>
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
-                </div>
-                <div className="py-3 border border-top-0">
-                  <Link to='/' className="text-decoration-none text-dark ms-4">Máy tính đồng bộ</Link>
-                </div>
+            <Bt.Collapse in={open} className="w-100">
+              <div id="collapse-categories" >
+                <Category/>
               </div>
             </Bt.Collapse>
+            </div>
           </Bt.Col>
           <Bt.Col lg >
             <Bt.Navbar
@@ -310,7 +293,7 @@ export default function Header() {
                 </Bt.Nav> */}
               </Bt.Navbar.Collapse>
             </Bt.Navbar>
-            <Slideshow />
+            {/* <Slideshow /> */}
           </Bt.Col >
         </Bt.Row >
       </Bt.Container >
