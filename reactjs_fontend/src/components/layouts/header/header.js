@@ -40,7 +40,7 @@ export default function Header() {
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_name");
           localStorage.removeItem("auth_fullname");
-          
+
           swal({
             title: res.data.message,
             icon: "success",
@@ -210,28 +210,28 @@ export default function Header() {
       </Bt.Container>
 
       <Bt.Container fluid mb={5}>
-        <Bt.Row className="border-bottom px-xl-5">
-          <Bt.Col lg={3} className='d-none d-lg-block' style={{position:"relative",zIndex:"10"}}>
-            <div style={{position:"absolute",backgroundColor:"#fff",width:"100%"}}>
+        <Bt.Row className="border-top border-secondary px-xl-5">
+          <Bt.Col lg={3} className='d-none d-lg-block' style={{ position: "relative", zIndex: "10" }}>
+            <div style={{ position: "absolute", backgroundColor: "#fff", width: "100%" }}>
 
-            <Bt.Button
-              onClick={() => setOpen(!open)}
-              aria-controls="collapse-categories"
-              aria-expanded={open}
-              className='rounded-0 w-100 fw-semibold fs-5 shadow-none text-start'
-              style={{ height: '65px', marginTop: '-1px', padding: '0 25px' }}
-            >
-              Danh mục
-              <MdOutlineKeyboardArrowDown className='pull-right mt-2' />
-            </Bt.Button>
-            <Bt.Collapse in={open} className="w-100">
-              <div id="collapse-categories" >
-                <Category/>
-              </div>
-            </Bt.Collapse>
+              <Bt.Button
+                onClick={() => setOpen(!open)}
+                aria-controls="collapse-categories"
+                aria-expanded={open}
+                className='rounded-0 w-100 fw-semibold fs-5 shadow-none text-start'
+                style={{ height: '63px', marginTop: '-1px', padding: '0 25px' }}
+              >
+                Danh mục
+                <MdOutlineKeyboardArrowDown className='pull-right mt-2' />
+              </Bt.Button>
+              <Bt.Collapse in={open} className="w-100">
+                <div id="collapse-categories">
+                  <Category />
+                </div>
+              </Bt.Collapse>
             </div>
           </Bt.Col>
-          <Bt.Col lg >
+          <Bt.Col lg className="ms-5">
             <Bt.Navbar
               collapseOnSelect
               expand="lg"
