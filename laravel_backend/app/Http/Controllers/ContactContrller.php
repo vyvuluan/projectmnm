@@ -23,7 +23,7 @@ class ContactContrller extends Controller
         $validator = Validator::make($request->all(), [
             'message' => 'required|max:255',
         ], [
-            'message.required' => 'Ô message không được bỏ trông',
+            'message.required' => 'Ô message không được bỏ trống',
             'message.max' => 'Ô message tối đa 255 ký tự',
         ]);
 
@@ -61,11 +61,14 @@ class ContactContrller extends Controller
     }
     public function sendMail(Request $request, $customer_id)
     {
-        $cus = Customer::find($customer_id)->first();
+        $cus = Customer::where('id',$customer_id)->first();
         $user = Customer::find($customer_id)->user;
         $tmp = $request->msg;
         $ten = $cus->ten;
         if ($user) {
+            $contact = Contact::where('id', $customer_id)->where('message', $tmp)->first();
+            $contact->status=$request->status;
+            $contact->save();
             $user->notify(new SendMailContact($tmp,$ten));
             return response()->json([
                 'status' => 200,

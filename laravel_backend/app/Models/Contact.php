@@ -11,6 +11,7 @@ class Contact extends Model
     protected $fillable = [
         'id',
         'message',
+        'status',
     ];
     protected $with = ['customer'];
     public function customer()

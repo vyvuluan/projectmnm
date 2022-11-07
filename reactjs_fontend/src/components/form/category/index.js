@@ -41,7 +41,7 @@ const Category = () => {
       category_Html = (
         <>
           {listCategory.map((item) => {
-            
+
             return (
               <div className="py-3 border border-top-0">
                 <Link
@@ -49,9 +49,9 @@ const Category = () => {
                   to={"/pageproducts?category=" + item.id}
                   className="text-decoration-none text-dark ms-4"
                 >
-                
+
                   {item.tenLoai}
-                  
+
                 </Link>
               </div>
               // <Link
