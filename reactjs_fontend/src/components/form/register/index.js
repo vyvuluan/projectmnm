@@ -77,7 +77,7 @@ const Resgiter = () => {
               </Link>
             </div>
             <div className="form-group mt-3">
-              <label>Họ và Tên</label>
+              <label>Họ và Tên</label><span className="error1 ms-2">{errorTrung?.fullname}</span>
               <input
                 name="fullname"
                 type="text"
@@ -88,8 +88,10 @@ const Resgiter = () => {
                 required
               />
             </div>
+            
+
             <div className="form-group mt-3">
-              <label>UserName</label>
+              <label>UserName</label><span className="error1 ms-2">{errorTrung?.username}</span>
               <input
                 name="name"
                 type="text"
@@ -100,9 +102,9 @@ const Resgiter = () => {
                 required
               />
             </div>
-            <span className="error1">{errorTrung?.username}</span>
+            
             <div className="form-group mt-3">
-              <label>Email</label>
+              <label>Email</label><span className="error1 ms-2">{errorTrung?.email}</span>
               <input
                 type="email"
                 name="email"
@@ -113,10 +115,10 @@ const Resgiter = () => {
                 required
               />
             </div>
-            <span className="error1">{errorTrung?.email}</span>
+            
 
             <div className="form-group mt-3">
-              <label>Password</label>
+              <label>Password</label><span className="error1 ms-2">{errorTrung?.password}</span>
               <input
                 type="password"
                 name="pass"
@@ -127,9 +129,10 @@ const Resgiter = () => {
                 required
               />
             </div>
+            
 
             <div className="form-group mt-3">
-              <label>Xác nhận mật khẩu</label>
+              <label>Xác nhận mật khẩu</label><span className="error1 ms-2">{errorTrung?.re_password}</span>
               <input
                 type="password"
                 name="repass"
@@ -140,6 +143,8 @@ const Resgiter = () => {
                 required
               />
             </div>
+            
+
             <span className="error1">{errorPass}</span>
             <div className="d-grid gap-2 mt-3">
               <button type="submit" className="btn btn-primary shadow-sm">
