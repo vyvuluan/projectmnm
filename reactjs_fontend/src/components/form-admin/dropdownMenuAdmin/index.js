@@ -6,6 +6,7 @@ import settings from "../../../img/settings.png";
 import help from "../../../img/question.png";
 import logout from "../../../img/log-out.png";
 import React, { useState, useEffect, useRef } from "react";
+import { RiLogoutBoxFill } from 'react-icons/ri'
 import { FaUser } from "react-icons/fa";
 import "./style.css";
 const DropDownMenuAdmin = (props) => {
@@ -37,11 +38,11 @@ const DropDownMenuAdmin = (props) => {
         }}
       >
         {/* <img className="anh" src={user}></img> */}
-        <FaUser className="m-2"/>
+        <FaUser className="m-2" />
 
         <div className={`dropdown-menu1 ${open ? "active" : "inactive"}`}>
           <ul className="ul">
-            <DropdownItem img={logout} text={"Logout"} logout1={props.logout} />
+            <DropdownItem icon={<RiLogoutBoxFill />} text={"Logout"} logout1={props.logout} />
           </ul>
         </div>
       </div>
@@ -53,8 +54,8 @@ function DropdownItem(props) {
   // console.log(props.logout1);
   return (
     <li className="dropdownItem1" onClick={props.logout1}>
-      <img className="anhItem" src={props.img}></img>
-      <a className="iconItem"> {props.text} </a>
+      <span className="fs-5 text-dark">{props.icon}</span>
+      <a className="iconItem ms-3"> {props.text} </a>
     </li>
   );
 }
