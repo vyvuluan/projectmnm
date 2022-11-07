@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
-import OrderDetail from "../order-detail";  
+import OrderDetail from "../order-detail";
 import { Link } from "react-router-dom";
 const CheckOrder = () => {
-  
+
   return (
     <>
       <div className="container padding-bottom-3x mb-5 mt-5">

@@ -1,9 +1,8 @@
 // import logo from "./logo.svg";
 import user from "../../../img/user.png";
 import edit from "../../../img/edit.png";
-import inbox from "../../../img/envelope.png";
-import settings from "../../../img/settings.png";
-import help from "../../../img/question.png";
+import { FaUserCircle, FaClipboardList } from 'react-icons/fa'
+import { RiLogoutBoxFill } from 'react-icons/ri'
 import logout from "../../../img/log-out.png";
 import React, { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
@@ -46,13 +45,10 @@ const DropDownMenu = (props) => {
 
         <div className={`dropdown-menu1 ${open ? "active" : "inactive"}`}>
           <ul className="ul">
-            <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem img={user} text={"My Profile"} /></Link>
+            <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem icon={<FaUserCircle />} text={"Tài khoản"} /></Link>
             {/* logout1={test}  */}
-            <Link to={'/CheckOrder'} className='text-decoration-none'><DropdownItem img={edit} text={"Check Order"} /></Link>
-            <DropdownItem img={inbox} text={"Inbox"} />
-            <DropdownItem img={settings} text={"Settings"} />
-            <DropdownItem img={help} text={"Helps"} />
-            <DropdownItem img={logout} text={"Logout"} logout1={props.logout} />
+            <Link to={'/CheckOrder'} className='text-decoration-none'><DropdownItem icon={<FaClipboardList />} text={"Đơn hàng"} /></Link>
+            <DropdownItem icon={<RiLogoutBoxFill />} text={"Đăng xuất"} logout1={props.logout} />
           </ul>
         </div>
       </div>
@@ -64,8 +60,8 @@ function DropdownItem(props) {
   // console.log(props.logout1);
   return (
     <li className="dropdownItem1" onClick={props.logout1}>
-      <img className="anhItem" src={props.img}></img>
-      <a className="iconItem"> {props.text} </a>
+      <span className="fs-4">{props.icon}</span>
+      <a className="iconItem mt-2 ms-3"> {props.text} </a>
     </li>
   );
 }
