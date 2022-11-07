@@ -61,11 +61,14 @@ class UserController extends Controller
         } else {
             if ($user->status == 1) {
                 if ($user->role_id == 1) {
+                    $cus = Customer::where('user_id', $user->id)->first();
                     $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
                     return response()->json([
                         'status' => 200,
                         'username' => $user->username,
+                        'fullname' => $cus->fullname,
                         'token' => $token,
+
                         'message' => 'Đăng nhập thành công',
                     ]);
                 } else {
@@ -90,29 +93,6 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        // $request->validate([
-        //     'email' => 'required|email|unique:users',
-        //     'username' => 'required|max:255|unique:users',
-        //     'password' => 'required|max:255',
-        //     're_password' => 'required|max:255',
-        // ],[
-        //     'email.required' => 'Ô email Không được bỏ trống',
-        //     'email.email' => 'Địa chỉ email không hợp lệ',
-        //     'email.unique' => 'Địa chỉ email đã tồn tại',
-
-        //     'username.required' => 'Ô username không được bỏ trống',
-        //     'username.max' => 'Ô username tối đa 255 ký tự',
-        //     'username.unique' => 'username đã tồn tại',
-
-        //     'password.required' => 'Ô password không được bỏ trống',
-        //     'password.max' => 'Ô password tối đa 255 ký tự',
-
-        //     're_password.required' => 'Ô re_password không được bỏ trống',
-        //     're_password.max' => 'Ô re_password tối đa 255 ký tự',
-
-
-
-        // ]);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'fullname' => 'required|min:8',
@@ -165,6 +145,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
+                'fullname' => $request->fullname,
                 'token' => $token,
                 'message' => 'Đăng ký thành công',
             ]);
