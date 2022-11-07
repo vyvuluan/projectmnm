@@ -66,7 +66,7 @@ class UserController extends Controller
                     return response()->json([
                         'status' => 200,
                         'username' => $user->username,
-                        'fullname' => $cus->fullname,
+                        'fullname' => $cus->ten,
                         'token' => $token,
 
                         'message' => 'Đăng nhập thành công',
