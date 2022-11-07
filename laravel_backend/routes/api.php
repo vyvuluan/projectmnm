@@ -185,6 +185,9 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
 
     //api thống kê doanh thu và số lượng của nhân viên
     Route::get('doanhThuNhanVien', [ManageBaoCaoController::class, 'doanhThuNhanVien']);
+    //api hiển thị danh sách các contact
+    Route::get('/contact', [ContactContrller::class, 'index']);
+    Route::get('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
 });
 
 

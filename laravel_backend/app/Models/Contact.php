@@ -12,4 +12,10 @@ class Contact extends Model
         'id',
         'message',
     ];
+    protected $with = ['customer'];
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'id', 'id');
+    }
+    
 }
