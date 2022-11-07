@@ -161,8 +161,8 @@ class ManageBaoCaoController extends Controller
         }
         return response()->json([
             'status' => 200,
-            'total_sl' => $total_pn,
-            'total_pn' => $total_sl,
+            'total_sl' => $total_sl,
+            'total_pn' => $total_pn,
         ]);
     }
     public function doanhThuNhanVien()
