@@ -16,10 +16,6 @@ const Account = () => {
     password: "",
     role_id: "",
   });
-  const handleInput = (e) => {
-    e.persist();
-    setAddAccount({ ...addAccount, [e.target.name]: e.target.value });
-  };
 
   //   hiển thị ds user
 
@@ -50,6 +46,7 @@ const Account = () => {
         });
     }
   }, []);
+
   var htmlRole;
   return (
     <>
@@ -98,57 +95,6 @@ const Account = () => {
                 </B.FormSelect>
               </B.FormGroup>
             </B.Form>
-          </B.Col>
-        </B.Row>
-
-        <B.Row className="pe-xl-5 mb-5">
-          <B.Col lg={8}>
-            <B.Form>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Username"
-                ></B.FormControl>
-              </B.FormGroup>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Email"
-                ></B.FormControl>
-              </B.FormGroup>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Mật khẩu"
-                ></B.FormControl>
-              </B.FormGroup>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Quyền"
-                ></B.FormControl>
-              </B.FormGroup>
-            </B.Form>
-          </B.Col>
-          <B.Col lg={4}>
-            <B.Button
-              variant="outline-primary"
-              className="rounded-0 py-2 mb-2 w-100"
-            >
-              <FaUserEdit className="me-2" />
-              Sửa tài khoản
-            </B.Button>
-            <B.Button
-              variant="outline-primary"
-              className="rounded-0 py-2 mb-2 w-100"
-            >
-              <AiOutlineUserDelete className="me-2" />
-              Xóa tài khoản
-            </B.Button>
           </B.Col>
         </B.Row>
 

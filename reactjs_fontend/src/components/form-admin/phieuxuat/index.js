@@ -169,22 +169,21 @@ function Index() {
         getAllPx().then(() => setSubmitting(false));
     }, [submitting, getAllPx]);
 
-    // const handleUpdateStatus = (value, px) => {
-    //     const data = {
-    //         tenKH: px.tenKH,
-    //         diaChi: px.diaChi,
-    //         pt_ThanhToan: px.pt_ThanhToan,
-    //         sdt: ` 0${px.sdt} `,
-    //         tongTien: px.tongTien,
-    //         status: value.id,
-    //     }
-    //     axios.put(`/api/kho/px/${px.id}`, data).then(res => {
-    //         if (res.status === 200) {
-    //             setPxlist(res.data.data.data);
-    //             setEkey()
-    //         }
-    //     })
-    // }
+    const handleUpdateStatus = (value, px) => {
+        const data = {
+            tenKH: px.tenKH,
+            diaChi: px.diaChi,
+            pt_ThanhToan: px.pt_ThanhToan,
+            sdt: px.sdt,
+            tongTien: px.tongTien,
+            status: value.id,
+        }
+        axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+            if (res.data.status === 200) {
+                setSubmitting(true);
+            }
+        })
+    }
     // End
 
     // Function search và thêm sản phẩm mẫu cho chi tiết phiếu xuất
@@ -355,6 +354,51 @@ function Index() {
         return x;
     }
 
+    const variant = (status) => {
+        var x;
+        switch (status) {
+            case 0: {
+                x = 'dark';
+                break;
+            }
+            case 1: {
+                x = 'primary';
+                break;
+            }
+            case 2: {
+                x = 'info';
+                break;
+            }
+            case 3: {
+                x = 'warning';
+                break;
+            }
+            case 4: {
+                x = 'success';
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        return x;
+    }
+
+    const [dayStart, setDayStart] = useState();
+    const [dayEnd, setDayEnd] = useState();
+    const [xemXuat, setXemXuat] = useState([]);
+
+    const xemLichSuXuatHang = (e) => {
+        e.preventDefault();
+
+        axios.get(`/api/kho/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
+            if (res.data.status === 200) {
+                setXemXuat(res.data.px.data);
+            }
+        });
+    }
+
+
     // hàm này sau này có thể sẽ dùng
 
     // const handleOnSelect = (value) => {
@@ -370,6 +414,7 @@ function Index() {
     //     }
     //     setShowTable(!showTable)
     // };
+
 
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
     let month = new Date().toLocaleString("vi-VN", { month: "long" });
@@ -577,16 +622,16 @@ function Index() {
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
                                                         <td>{px.tongTien}</td>
-                                                        <td className='text-success fw-semibold'>{test(px.status)}</td>
-                                                        {/* <td>
-                                                                    <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>
-                                                                        {checkStatus.map((val) => (
-                                                                            <B.Dropdown.Item key={val.id}
-                                                                                onClick={() => handleUpdateStatus(val, px)}
-                                                                                eventKey={ekey}>{val.name}</B.Dropdown.Item>
-                                                                        ))}
-                                                                    </B.DropdownButton>
-                                                                </td> */}
+                                                        {/* <td className='text-success fw-semibold'>{test(px.status)}</td> */}
+                                                        <td>
+                                                            <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
+                                                                {checkStatus.map((val) => (
+                                                                    <B.Dropdown.Item key={val.id}
+                                                                        onClick={() => handleUpdateStatus(val, px)}
+                                                                        eventKey={ekey}>{val.name}</B.Dropdown.Item>
+                                                                ))}
+                                                            </B.DropdownButton>
+                                                        </td>
                                                         <td className='d-flex'>
                                                             <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
                                                             <FcPrint className='fs-3' onClick={() => handleShowPrint(px)} />
@@ -905,7 +950,47 @@ function Index() {
                     </B.Tab>
                     {/* Form them phieu xuat */}
 
-
+                    <B.Tab eventKey={4} title='Lịch sử xuất hàng' className='border border-top-0 py-3 px-3'>
+                        <B.Row className='px-xl-3 mb-3'>
+                            <B.Col lg={6}>
+                                <B.FormGroup className='d-flex'>
+                                    <B.FormControl type='date' className='rounded-0 me-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
+                                    <B.FormControl type='date' className='rounded-0 me-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
+                                    <B.Button variant='outline-primary' className='rounded-0' onClick={xemLichSuXuatHang}>Xem</B.Button>
+                                </B.FormGroup>
+                            </B.Col>
+                        </B.Row>
+                        <B.Row className='px-xl-3 mb-3'>
+                            <B.Table responsive className='table-borderless border border-secondary mb-0'>
+                                <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên Khách hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Phương thức thanh toán</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {xemXuat && xemXuat.map((item, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.tenKH}</td>
+                                                <td>{item.sdt}</td>
+                                                <td>{item.diaChi}</td>
+                                                <td>{item.pt_ThanhToan}</td>
+                                                <td>{formatMoney(item.tongTien)}</td>
+                                                <td>{test(item.status)}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </B.Table>
+                        </B.Row>
+                    </B.Tab>
 
                 </B.Tabs>
             </B.Container>

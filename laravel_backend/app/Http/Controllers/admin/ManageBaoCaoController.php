@@ -165,6 +165,58 @@ class ManageBaoCaoController extends Controller
             'total_pn' => $total_pn,
         ]);
     }
+
+    public function thongKeDoanhThuSoLuong()
+    {
+        $timeNow = Carbon::now();
+        $arrayTime = array();
+        $total_sl = array();
+        $total_px = array();
+        for ($i = 1; $i <= 12; $i++) {
+            if ($i == 1) {
+                $arrayTime[$i] = $timeNow->toDateString();
+
+                $monthYear = explode('-', $arrayTime[$i]);
+                $stringMY = $monthYear[1] . '-' . $monthYear[0];
+                $from = date($monthYear[0] . '-' . $monthYear[1] . '-01');
+                $dayInMonth = Carbon::parse($from)->daysInMonth;
+                $to = date($monthYear[0] . '-' . $monthYear[1] . '-' . $dayInMonth);
+
+                $total_sl[$stringMY] =  CtPhieuNhap::selectRaw('sum(soluong) as soluong')
+                    ->join('phieu_xuats', 'ct_phieu_xuats.pn_id', '=', 'phieu_xuats.id')
+                    ->whereBetween('phieu_xuats.created_at', [$from, $to])
+                    ->first();
+
+                $total_px[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
+                    ->whereBetween('created_at', [$from, $to])
+                    ->first();
+            } else {
+                $timeNow = $timeNow->subMonth();
+                $arrayTime[$i] = $timeNow->toDateString();
+
+                $monthYear = explode('-', $arrayTime[$i]);
+                $stringMY = $monthYear[1] . '-' . $monthYear[0];
+                $from = date($monthYear[0] . '-' . $monthYear[1] . '-01');
+                $dayInMonth = Carbon::parse($from)->daysInMonth;
+                $to = date($monthYear[0] . '-' . $monthYear[1] . '-' . $dayInMonth);
+
+                $total_sl[$stringMY] =  CtPhieuNhap::selectRaw('sum(soluong) as soluong')
+                    ->join('phieu_xuats', 'ct_phieu_xuats.pn_id', '=', 'phieu_xuats.id')
+                    ->whereBetween('phieu_xuats.created_at', [$from, $to])
+
+                    ->first();
+                $total_px[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
+                    ->whereBetween('created_at', [$from, $to])
+                    ->first();
+            }
+        }
+        return response()->json([
+            'status' => 200,
+            'total_sl' => $total_sl,
+            'total_px' => $total_pn,
+        ]);
+    }
+
     public function doanhThuNhanVien()
     {
         $timeNow = Carbon::now();
