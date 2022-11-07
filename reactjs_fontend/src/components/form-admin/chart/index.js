@@ -102,7 +102,7 @@ const Chart = ({ data1, dataKho, dataNV }) => {
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
-      label: "Tổng tiền số lượng",
+      label: "Tổng số lượng",
       data: dataTongSL,
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
