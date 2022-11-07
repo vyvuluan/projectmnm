@@ -187,7 +187,7 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::get('doanhThuNhanVien', [ManageBaoCaoController::class, 'doanhThuNhanVien']);
     //api hiển thị danh sách các contact
     Route::get('/contact', [ContactContrller::class, 'index']);
-    Route::put('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
+    Route::post('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
 });
 
 

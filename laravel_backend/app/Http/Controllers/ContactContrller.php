@@ -61,15 +61,16 @@ class ContactContrller extends Controller
     }
     public function sendMail(Request $request, $customer_id)
     {
-        $cus = Customer::where('id',$customer_id)->first();
+        $cus = Customer::where('id', $customer_id)->first();
         $user = Customer::find($customer_id)->user;
+
         $tmp = $request->msg;
         $ten = $cus->ten;
         if ($user) {
-            $contact = Contact::where('id', $customer_id)->where('message', $tmp)->first();
-            $contact->status=$request->status;
+            $contact = Contact::where('customer_id', $customer_id)->first();
+            $contact->status = 1;
             $contact->save();
-            $user->notify(new SendMailContact($tmp,$ten));
+            $user->notify(new SendMailContact($tmp, $ten));
             return response()->json([
                 'status' => 200,
                 'message' => 'Gửi mail thành công'
