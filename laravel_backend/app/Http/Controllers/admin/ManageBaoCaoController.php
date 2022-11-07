@@ -94,8 +94,8 @@ class ManageBaoCaoController extends Controller
     }
     public function lichSuNhapHang(Request $request)
     {
-        $from = Carbon::createFromFormat('d/m/Y', $request->dateFrom)->format('Y-m-d');
-        $to = Carbon::createFromFormat('d/m/Y', $request->dateTo)->format('Y-m-d');
+        $from = Carbon::createFromFormat('Y-m-d', $request->dateFrom)->format('Y-m-d');
+        $to = Carbon::createFromFormat('Y-m-d', $request->dateTo)->format('Y-m-d');
         $pn =  PhieuNhap::whereBetween('created_at', [$from, $to])
             ->paginate(10);
         return response()->json([
