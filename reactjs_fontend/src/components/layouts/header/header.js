@@ -26,8 +26,8 @@ export default function Header() {
 
 
   useEffect(() => {
-    if (localStorage.getItem("auth_name")) {
-      setNameUser(localStorage.getItem("auth_name"));
+    if (localStorage.getItem("auth_fullname")) {
+      setNameUser(localStorage.getItem("auth_fullname"));
     }
   }, []);
 

@@ -11,6 +11,7 @@ const Resgiter = () => {
   const history = useNavigate();
 
   const [registerInput, setRegister] = useState({
+    fullname:"",
     name: "",
     email: "",
     pass: "",
@@ -26,6 +27,7 @@ const Resgiter = () => {
   const registerSubmit = (e) => {
     e.preventDefault();
     const data = {
+      fullname: registerInput.fullname,
       username: registerInput.name,
       email: registerInput.email,
       password: registerInput.pass,
@@ -34,9 +36,13 @@ const Resgiter = () => {
     // console.log(data);
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/register", data).then((res) => {
+        console.log(res);
         if (res.data.status === 200) {
+          
           localStorage.setItem("auth_token", res.data.token);
           localStorage.setItem("auth_name", res.data.username);
+          localStorage.setItem("auth_fullname", res.data.fullname);
+
           // console.log("thanh cong");
           swal({
             title: "Đăng ký thành công",
@@ -71,12 +77,24 @@ const Resgiter = () => {
               </Link>
             </div>
             <div className="form-group mt-3">
-              <label>Họ Tên</label>
+              <label>Họ và Tên</label>
+              <input
+                name="fullname"
+                type="text"
+                className="form-control mt-1 shadow-sm"
+                placeholder="example: Đỗ Đình Mạnh"
+                onChange={handleInput}
+                value={registerInput?.fullname}
+                required
+              />
+            </div>
+            <div className="form-group mt-3">
+              <label>UserName</label>
               <input
                 name="name"
                 type="text"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: Đỗ Đình Mạnh"
+                placeholder="example: abc"
                 onChange={handleInput}
                 value={registerInput?.name}
                 required

@@ -33,7 +33,7 @@ const DashBoard = () => {
         .get("/api/kho/thongKeChiTieuSoLuong")
         .then((res) => {
           if (res.data.status === 200) {
-            console.log(res.data);
+            // console.log(res.data);
             setDataKho(res.data);
           }
         })
@@ -45,7 +45,7 @@ const DashBoard = () => {
       axios
       .get("/api/nhanvien/doanhThuNhanVien")
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status === 200) {
           
           setDataNV(res.data);

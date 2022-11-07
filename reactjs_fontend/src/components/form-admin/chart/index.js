@@ -88,12 +88,13 @@ const Chart = ({ data1, dataKho, dataNV }) => {
     labels,
     datasets: dataBaoCaoAdmin,
   };
-  // console.log(dataTongPX);
+
   //kho
   const pnKho = Object.keys(dateTime).map((key) => dateTime[key]);
-  let dataTongPNKho = pnKho.map(({ soluong }) => soluong);
+  let dataTongPNKho = pnKho.map(({ tongTien }) => tongTien);
   const dataSl = Object.keys(sl).map((key) => sl[key]);
-  let dataTongSL = dataSl.map(({ tongTien }) => tongTien);
+  let dataTongSL = dataSl.map(({ soluong }) => soluong);
+
   const dataBaoCaoKho = [
     {
       label: "Tổng tiền phiếu nhập",
@@ -113,9 +114,9 @@ const Chart = ({ data1, dataKho, dataNV }) => {
   };
   //nhanvien
   const pxNV = Object.keys(dateTime).map((key) => dateTime[key]);
-  let dataTongPXNV = pxNV.map(({ soluong }) => soluong);
+  let dataTongPXNV = pxNV.map(({ tongTien }) => tongTien);
   const dataSlNV = Object.keys(sl).map((key) => sl[key]);
-  let dataTongSLNV = dataSlNV.map(({ tongTien }) => tongTien);
+  let dataTongSLNV = dataSlNV.map(({ soluong }) => soluong);
 
   const dataBaoCaoNV = [
     {
