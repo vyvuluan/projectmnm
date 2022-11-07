@@ -9,14 +9,13 @@ class Contact extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
+        'customer_id',
         'message',
         'status',
     ];
     protected $with = ['customer'];
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'id', 'id');
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
-    
 }
