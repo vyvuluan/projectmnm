@@ -35,7 +35,7 @@ class ContactContrller extends Controller
         }
         if (auth('sanctum')->check()) {
             $contact = new Contact();
-            $contact->id = auth('sanctum')->user()->customer->id;
+            $contact->customer_id = auth('sanctum')->user()->customer->id;
             $contact->message  = $request->message;
             $contact->save();
 
