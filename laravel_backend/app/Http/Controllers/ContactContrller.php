@@ -60,15 +60,17 @@ class ContactContrller extends Controller
             'contact' => $contact,
         ]);
     }
-    public function sendMail(Request $request, $customer_id)
+    public function sendMail(Request $request, $contact_id)
     {
-        $cus = Customer::where('id', $customer_id)->first();
-        $user = Customer::find($customer_id)->user;
+        $contact = Contact::where('id', $contact_id)->first();
+
+        $cus = Customer::where('id', $contact->customer_id)->first();
+        $user = Customer::find($contact->customer_id)->user;
 
         $tmp = $request->msg;
         $ten = $cus->ten;
         if ($user) {
-            $contact = Contact::where('customer_id', $customer_id)->first();
+            //$contact = Contact::where('customer_id', $customer_id)->first();
             $contact->status = 1;
             $contact->save();
             $user->notify(new SendMailContact($tmp, $ten));
@@ -78,5 +80,4 @@ class ContactContrller extends Controller
             ]);
         }
     }
-
 }
