@@ -54,24 +54,27 @@ class ManagePhieuXuatController extends Controller
             ]);
         }
     }
-    public function locPxTheoTT($status)
+    public function locPx(Request $request)
     {
-        $px = PhieuXuat::where('status', $status)->paginate(10);
-        if ($px) {
-            return response()->json([
-                'status' => 200,
-                'data' => $px,
-            ]);
-        }
-    }
-    public function locPxTheoPT($pt)
-    {
-        $px = PhieuXuat::where('pt_ThanhToan', $pt)->paginate(10);
-        if ($px) {
-            return response()->json([
-                'status' => 200,
-                'data' => $px,
-            ]);
+        $key = $request->key;
+        $value = $request->value;
+        switch ($key) {
+            case 1; // Lọc theo tình trạng
+                $px = PhieuXuat::where('status', $value)->paginate(10);
+                if ($px) {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $px,
+                    ]);
+                }
+            case 2; // Lọc theo Pt Thanh toán
+                $px = PhieuXuat::where('pt_ThanhToan', $value)->paginate(10);
+                if ($px) {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $px,
+                    ]);
+                }
         }
     }
 

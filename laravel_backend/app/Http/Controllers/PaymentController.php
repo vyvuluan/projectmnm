@@ -7,6 +7,7 @@ use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
 use App\Models\CtPhieuXuat;
+use App\Models\Discount;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -56,6 +57,15 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
+            $date = getdate();
+            $discount = Discount::where('discount_id', $request->discount)
+                ->where('start', '<', $date)
+                ->where('end', '>', $date)
+                ->first();
+            if (!empty($discount)) {
+                $payment->discount = $request->discount;
+                $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
+            }
             $payment->save();
             $payment->pxct()->createMany($pxChiTiet);
             Cart::destroy($cart);
