@@ -109,52 +109,31 @@ const PhieuNhap = () => {
     pageNumbers.push(i);
   }
 
-  // const checkStatus = (item) =>{
-  //   // console.log(item);
-  //   axios
-  //     .get(`api/kho/setStatusPn/${idPN}`)
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.data.status === 200) {
-
-  //         // setDataNV(res.data);
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       // handle error
-  //       console.log(error);
-  //     });
-  // }
-
-  // const CheckStatus = (status) => {
-  //   var x;
-  //   switch (status) {
-  //     case 0: {
-  //       x = (
-  //         <>
-  //           <B.Button style={{ backgroundColor: "#FF5858" }}>
-  //             <span className="fw-semibold">Chưa thanh toán</span>
-  //           </B.Button>
-  //         </>
-  //       );
-  //       break;
-  //     }
-  //     case 1: {
-  //       x = (
-  //         <>
-  //           <B.Button style={{ backgroundColor: "#54B435" }}>
-  //             <span className=" fw-semibold">Đã thanh toán</span>
-  //           </B.Button>
-  //         </>
-  //       );
-  //       break;
-  //     }
-  //     default: {
-  //       break;
-  //     }
-  //   }
-  //   return x;
-  // };
+  const CheckStatus = (status) => {
+    var x;
+    switch (status) {
+      case 0: {
+        x = (
+          <>
+            <span className="fw-semibold">Chưa thanh toán</span>
+          </>
+        );
+        break;
+      }
+      case 1: {
+        x = (
+          <>
+            <span className=" fw-semibold">Đã thanh toán</span>
+          </>
+        );
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    return x;
+  };
 
   const [showTable, setShowTable] = useState(false);
   const [inputPN, setInputPN] = useState({
@@ -480,6 +459,13 @@ const PhieuNhap = () => {
                   button: "đóng",
                 });
               }
+              else if (res.status ==200) {
+                swal({
+                  title: res.data.message,
+                  icon: "warning",
+                  button: "đóng",
+                });
+              }
             })
             .catch(function (error) {
               // handle error
@@ -539,20 +525,27 @@ const PhieuNhap = () => {
     };
   };
 
-  
-  const changeStatus = ()=> {
+  const dataStatus = {
+    status_check: 1,
+  };
+
+  const changeStatus = (item) => {
+    const id = item.id;
     const controller = new AbortController();
-
-    axios.get(`api/kho/setStatusPn/${idPN}`).then((res) => {
-
+    axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
+      // console.log(res);
       if (res.data.status === 200) {
-
+        swal({
+          title: res.data.message,
+          icon: "success",
+          button: "đóng",
+        });
       }
     });
     return () => {
       controller.abort();
     };
-  }
+  };
   //Đang sử lý
   // const handleReloadShowCTPNtab3 = useCallback(() => {
   //   const controller = new AbortController();
@@ -977,18 +970,33 @@ const PhieuNhap = () => {
                               <td className="align-middle">{item.tongTien}</td>
                               <td className="align-middle">{tachChuoi}</td>
                               <td className="align-middle">
-                                <B.Button
-                                  style={{ backgroundColor: "#FF5858" }}
-                                  
-                                >
-                                  <span className="fw-semibold">
-                                    Chưa thanh toán
-                                  </span>
-                                </B.Button>
+                                {item.status == 1 ? (
+                                  <B.Button
+                                    disabled
+                                    style={{
+                                      backgroundColor: "green",
+                                      border: "none",
+                                    }}
+                                    onClick={() => changeStatus(item)}
+                                  >
+                                    {CheckStatus(item.status)}
+                                  </B.Button>
+                                ) : (
+                                  <B.Button
+                                    style={{
+                                      backgroundColor: "red",
+                                      border: "none",
+                                    }}
+                                    onClick={() => changeStatus(item)}
+                                  >
+                                    {CheckStatus(item.status)}
+                                  </B.Button>
+                                )}
                               </td>
 
                               <td className="align-middle fs-5 text-primary">
                                 <AiFillEye
+                                  
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
@@ -996,7 +1004,9 @@ const PhieuNhap = () => {
                                   style={{ marginRight: "15px" }}
                                   onClick={() => handleView(item)}
                                 />
+
                                 <MdDeleteForever
+
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"

@@ -63,6 +63,13 @@ const UpdateCtPN = ({
             button: "đóng",
           });
         }
+        if (res.status == 200) {
+          swal({
+            title: res.data.message,
+            icon: "warning",
+            button: "đóng",
+          });
+        }
       })
       .catch(function (error) {
         // handle error

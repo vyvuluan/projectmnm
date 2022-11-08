@@ -59,7 +59,7 @@ const LoginAdmin = () => {
             // console.log(res.data);
 
             swal({
-              title: res.data.error,
+              title: res.data.message,
               icon: "warning",
               button: "đóng",
             });

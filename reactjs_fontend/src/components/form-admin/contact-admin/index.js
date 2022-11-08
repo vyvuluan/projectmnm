@@ -3,7 +3,7 @@ import { MdDeleteForever } from "react-icons/md";
 import * as B from 'react-bootstrap'
 import axios from "axios";
 import Pagination from '../../form/pagination/index'
-import { RiMailSendFill } from 'react-icons/ri'
+import { RiMailSendFill, RiMailCheckFill } from 'react-icons/ri'
 import { GrSend } from 'react-icons/gr'
 import swal from "sweetalert";
 
@@ -54,25 +54,21 @@ const ContactAdmin = () => {
   const SubmitReply = (e) => {
     e.preventDefault();
 
-    const customer_id = contact.customer.id;
+    const customer_id = contact.customer_id;
 
     const data = {
       msg: reply,
-      status: '1',
     }
 
-    axios.put(`/api/nhanvien/contact/${customer_id}`, data).then(res => {
+    axios.post(`/api/nhanvien/contact/${customer_id}`, data).then(res => {
       if (res.data.status === 200) {
         swal('Thành công', res.data.message, 'success');
+        setSubmitting(true);
         setShow(false);
         setReply();
       }
     })
   }
-
-  // const checkStatus = (stt) = {
-
-  // }
 
   return (
     <>
@@ -106,10 +102,10 @@ const ContactAdmin = () => {
 
       <B.Container fluid>
         <B.Row className='pe-xl-5 mb-4'>
-          <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1>
+          <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ LIÊN HỆ</h1>
         </B.Row>
 
-        <B.Row className='pe-xl-5 mb-4'>
+        <B.Row className='pe-xl-5 mb-5'>
           <B.Table responsive='lg' className='table-borderless border border-secondary mb-0'>
             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
               <tr>
@@ -117,18 +113,19 @@ const ContactAdmin = () => {
                 <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Trạng thái</th>
-                <th>Thao tác</th>
+                <th className="text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {contactList && contactList.map((contact, index) => {
                 return (
                   <tr key={index}>
-                    <td>{contact.customer.ten}</td>
-                    <td>{contact.customer.user.email}</td>
-                    <td>{contact.customer.sdt}</td>
-                    <td>{contact.customer.id}</td>
-                    <td><RiMailSendFill className="text-info fs-4" onClick={() => handleShow(contact)} /></td>
+                    <td>{contact.customer?.ten}</td>
+                    <td>{contact.customer?.user.email}</td>
+                    <td>{contact.customer?.sdt}</td>
+                    <td>{contact.status === 0 ? 'Chưa phản hồi' : 'Đã phản hồi'}</td>
+                    <td className="text-center">{contact.status === 0 ? <RiMailSendFill className="text-info fs-4" onClick={() => handleShow(contact)} />
+                      : <RiMailCheckFill className="text-success fs-4" />}</td>
                   </tr>
                 )
               })}
