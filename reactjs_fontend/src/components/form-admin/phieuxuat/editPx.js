@@ -32,6 +32,8 @@ const PxEdit = ({ px, showModal }) => {
         axios.put(`/api/kho/px/${idpx}`, data).then(res => {
             if (res.data.status === 200) {
                 swal('Success', res.data.message, 'success')
+            } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.message, 'warning')
             }
         })
     }

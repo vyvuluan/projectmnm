@@ -21,6 +21,7 @@ class ManagePhieuXuatController extends Controller
     {
         $px = PhieuXuat::orderBy('id', 'desc')->paginate(10);
         return response()->json([
+            'status' => 200,
             'data' => $px,
         ]);
     }

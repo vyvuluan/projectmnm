@@ -11,7 +11,7 @@ class ManageLoaispController extends Controller
 {
     public function index()
     {
-        $loaisp = Loaisp::all();
+        $loaisp = Loaisp::orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'Loaisp' => $loaisp,

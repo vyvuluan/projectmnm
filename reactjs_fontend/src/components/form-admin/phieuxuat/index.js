@@ -14,10 +14,7 @@ import './style.css'
 
 const checkStatus = [
     { id: 0, name: 'Chờ xác nhận' },
-    { id: 1, name: 'Đã xác nhận' },
-    { id: 2, name: 'Đang đóng gói' },
-    { id: 3, name: 'Đang vận chuyển' },
-    { id: 4, name: 'Giao hàng thành công' },
+    { id: 6, name: 'Đã xuất kho' },
     { id: 5, name: 'Hủy đơn hàng' },
 ];
 
@@ -183,7 +180,7 @@ function Index() {
             if (res.data.status === 200) {
                 setSubmitting(true);
             } else if (res.data.status === 400) {
-                swal('Cảnh báo', res.data.message, 'warning')
+                swal('Thất bại', res.data.message, 'warning')
             }
         })
     }
@@ -248,12 +245,9 @@ function Index() {
         }
     }
 
-    console.log(pxsearchList);
-    console.log(showSearchTable);
-
     const handleOnPxClear = () => {
         setShowSearchTable(false);
-
+        setPxSearchlist([]);
     }
 
     const handleView = (px) => {
@@ -356,6 +350,10 @@ function Index() {
                 x = 'Giao hàng thành công';
                 break;
             }
+            case 6: {
+                x = 'Đã xuất kho';
+                break;
+            }
             case 5: {
                 x = 'Hủy đơn hàng';
                 break;
@@ -392,6 +390,10 @@ function Index() {
             }
             case 5: {
                 x = 'danger';
+                break;
+            }
+            case 6: {
+                x = 'success';
                 break;
             }
             default: {
