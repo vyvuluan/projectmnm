@@ -195,7 +195,7 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     //api set status đơn hàng
     Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
     //discount
-    Route::resource('discount', [DiscountController::class]);
+    Route::resource('discount', DiscountController::class);
 });
 
 
