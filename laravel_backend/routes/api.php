@@ -143,6 +143,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
+    Route::get('loctheott/{status}', [ManagePhieuXuatController::class, 'locPxTheoTT']);
+    Route::get('loctheopt/{pt}', [ManagePhieuXuatController::class, 'locPxTheoPT']);
     //Api Quản lý chi tiết phiếu xuất
     Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class, 'xemctpx']);
     Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'editctpx']);
@@ -191,12 +193,13 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::get('/contact', [ContactContrller::class, 'index']);
     Route::post('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
     //api set status đơn hàng
-    Route::post('setstatusDH/{id}', [ContactContrller::class, 'setstatusDH']);
+    Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
 });
 
 
 // API Long
 // API Khách hàng
+Route::put('huyDH/{id}', [ManagePhieuXuatController::class, 'huyDH']); // Huỷ đơn hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
 Route::get('products-search', [ProductController::class, 'search']);

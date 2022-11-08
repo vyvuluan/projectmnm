@@ -14,10 +14,8 @@ import './style.css'
 
 const checkStatus = [
     { id: 0, name: 'Chờ xác nhận' },
-    { id: 1, name: 'Đã xác nhận' },
-    { id: 2, name: 'Đang đóng gói' },
-    { id: 3, name: 'Đang vận chuyển' },
-    { id: 4, name: 'Giao hàng thành công' },
+    { id: 6, name: 'Đã xuất kho' },
+    { id: 5, name: 'Hủy đơn hàng' },
 ];
 
 
@@ -181,6 +179,8 @@ function Index() {
         axios.put(`/api/kho/px/${px.id}`, data).then(res => {
             if (res.data.status === 200) {
                 setSubmitting(true);
+            } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.message, 'warning')
             }
         })
     }
@@ -229,22 +229,25 @@ function Index() {
     // End
 
     const handleOnPxSearch = (key) => {
-        axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
-            if (res.status === 200) {
-                setPxSearchlist(res.data.data)
-                // setTotalPage(res.data.total);
-                // setPerPage(res.data.per_page);
-                // setCurrentPage(res.data.current_page)
-                setShowSearchTable(true);
-            }
-            else {
-                setShowSearchTable(false);
-            }
-        })
+        if (key != "") {
+            axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+                if (res.status === 200) {
+                    setPxSearchlist(res.data.data)
+                    // setTotalPage(res.data.total);
+                    // setPerPage(res.data.per_page);
+                    // setCurrentPage(res.data.current_page)
+                    setShowSearchTable(true);
+                }
+                else {
+                    setShowSearchTable(false);
+                }
+            })
+        }
     }
 
     const handleOnPxClear = () => {
         setShowSearchTable(false);
+        setPxSearchlist([]);
     }
 
     const handleView = (px) => {
@@ -347,6 +350,14 @@ function Index() {
                 x = 'Giao hàng thành công';
                 break;
             }
+            case 6: {
+                x = 'Đã xuất kho';
+                break;
+            }
+            case 5: {
+                x = 'Hủy đơn hàng';
+                break;
+            }
             default: {
                 break;
             }
@@ -374,6 +385,14 @@ function Index() {
                 break;
             }
             case 4: {
+                x = 'success';
+                break;
+            }
+            case 5: {
+                x = 'danger';
+                break;
+            }
+            case 6: {
                 x = 'success';
                 break;
             }

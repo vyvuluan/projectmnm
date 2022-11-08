@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
 use App\Models\CtPhieuXuat;
 use App\Models\Product;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class ManagePhieuXuatController extends Controller
@@ -21,6 +21,7 @@ class ManagePhieuXuatController extends Controller
     {
         $px = PhieuXuat::orderBy('id', 'desc')->paginate(10);
         return response()->json([
+            'status' => 200,
             'data' => $px,
         ]);
     }
@@ -53,6 +54,27 @@ class ManagePhieuXuatController extends Controller
             ]);
         }
     }
+    public function locPxTheoTT($status)
+    {
+        $px = PhieuXuat::where('status', $status)->paginate(10);
+        if ($px) {
+            return response()->json([
+                'status' => 200,
+                'data' => $px,
+            ]);
+        }
+    }
+    public function locPxTheoPT($pt)
+    {
+        $px = PhieuXuat::where('pt_ThanhToan', $pt)->paginate(10);
+        if ($px) {
+            return response()->json([
+                'status' => 200,
+                'data' => $px,
+            ]);
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -129,12 +151,18 @@ class ManagePhieuXuatController extends Controller
             ]);
         } else {
             $checkpx = PhieuXuat::find($request->px_id);
+            if ($checkpx->status > 1) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Đơn hành đã thánh toán !',
+                ]);
+            }
             if ($checkpx) {
                 $checksp = Product::find($request->product_id);
                 if ($checksp) {
                     if ($request->soluong > $checksp->soLuongSP) {
                         return response()->json([
-                            'status' => 402,
+                            'status' => 400,
                             'message' => 'Kho không đủ hàng !',
                         ]);
                     }
@@ -142,7 +170,7 @@ class ManagePhieuXuatController extends Controller
                     foreach ($pxcts as $pxct) {
                         if ($pxct->product_id == $request->product_id) {
                             return response()->json([
-                                'status' => 403,
+                                'status' => 400,
                                 'message' => 'Sản phẩm đã tồn tại trong phiếu xuất',
                             ]);
                         }
@@ -211,15 +239,51 @@ class ManagePhieuXuatController extends Controller
     {
 
         $maNV = auth('sanctum')->user()->employee->id;
-        $request->status;
         $px = PhieuXuat::find($id);
-        $px->status = $request->staus;
+        if ($request->status == 0 && $px->status != 0) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã được xác nhận không thể chỉnh sửa',
+            ]);
+        } else if ($px->status == 5) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+            ]);
+        }
+        $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
         return response()->json([
             'status' => 200,
             'message' => 'Cập nhật phiếu thành công ',
         ]);
+    }
+    public function huyDH($id)
+    {
+        if (auth('sanctum')->check()) {
+            $maKH = auth('sanctum')->user()->customer->id;
+            $px = PhieuXuat::find($id);
+            if ($maKH == $px->customer_id) {
+
+                $px->status = 6;
+                $px->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Huỷ đơn hàng thành công ',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Đơn hàng không thuộc về tài khoản này !',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Bạn chưa đăng nhập',
+            ]);
+        }
     }
     public function update(Request $request, $id)
     {
@@ -249,6 +313,12 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
+                if ($px->status >= 1) {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
+                    ]);
+                }
                 //  $px->employee_id = $request->employee_id;
                 $px->customer_id = $request->customer_id;
                 $px->status = $request->status;
@@ -297,6 +367,12 @@ class ManagePhieuXuatController extends Controller
             ]);
         } else {
             $px = PhieuXuat::find($mapx);
+            if ($px->status >= 1) {
+                return response()->json([
+                    'status' => 400,
+                    'error' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
+                ]);
+            }
             $pxcts = $px->pxct;
             $data =  $pxcts->where('product_id', $maspct)->first();
             if ($data) {
@@ -388,10 +464,10 @@ class ManagePhieuXuatController extends Controller
     public function destroy($id)
     {
         $px = PhieuXuat::find($id);
-        if ($px->status == 1) {
+        if ($px->status >= 1) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Đơn hàng đã được thanh toán nên không thể xoá',
+                'message' => 'Đơn hàng đã được xác nhận nên không thể xoá',
             ]);
         } else {
             $pxcts = PhieuXuat::find($id)->pxct;
@@ -416,10 +492,14 @@ class ManagePhieuXuatController extends Controller
         $mapx = $px_id;
         $maspct = $product_id;
         $px = PhieuXuat::find($mapx);
+        if ($px->status >= 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã được xác nhận nên không thể xoá',
+            ]);
+        }
         $pxcts = $px->pxct;
         $data =  $pxcts->where('product_id', $maspct)->first();
-        var_dump($data);
-        exit;
         $spkho = Product::find($maspct);
         $spkho->soLuongSP += $data->soluong;
         $px->tongTien -= $data->soluong * $spkho->gia;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as B from "react-bootstrap";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
@@ -14,7 +14,11 @@ const Ncc = () => {
   const [ncclist, setNcclist] = useState([]);
   const [show, setShow] = useState(false);
   const [NCCData, setNCCData] = useState();
-  const handleClose = () => setShow((prev) => !prev);
+  const [submitting, setSubmitting] = useState(true)
+  const handleClose = () => {
+    setShow((prev) => !prev);
+    setSubmitting(true);
+  };
   const handleShow = (NCC) => {
     setShow(true);
     setNCCData(NCC);
@@ -65,6 +69,7 @@ const Ncc = () => {
           sdt: "",
           diachi: "",
         });
+        setSubmitting(true);
         setError([]);
       } else if (res.data.status === 400) {
         swal("Error", res.data.message, "error");
@@ -74,44 +79,19 @@ const Ncc = () => {
   };
   // Thêm NCC (end)
 
+  const getNccData = useCallback(async () => {
+    const res = await axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`)
+    if (res.data.status === 200) {
+      setNcclist(res.data.Ncc.data);
+      setTotalPage(res.data.Ncc.total);
+      setPerPage(res.data.Ncc.per_page);
+      setCurrentPage(res.data.Ncc.current_page);
+    }
+  }, [page])
+
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
-    axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`).then((res) => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setNcclist(res.data.Ncc.data);
-          setTotalPage(res.data.Ncc.total);
-          setPerPage(res.data.Ncc.per_page);
-          setCurrentPage(res.data.Ncc.current_page);
-        }
-      }
-      return () => {
-        controller.abort();
-
-        isMounted = false;
-      };
-    });
-
-  }, [page]);
-
-  const handleReload = (e) => {
-    const controller = new AbortController();
-
-    axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`).then((res) => {
-      if (res.data.status === 200) {
-        setNcclist(res.data.Ncc.data);
-        setTotalPage(res.data.Ncc.total);
-        setPerPage(res.data.Ncc.per_page);
-        setCurrentPage(res.data.Ncc.current_page);
-      }
-      return () => {
-        controller.abort();
-      };
-    });
-  }
-
+    getNccData().then(() => setSubmitting(false));
+  }, [submitting, getNccData])
 
   return (
     <>
@@ -165,7 +145,6 @@ const Ncc = () => {
             </B.Form>
           </B.Col>
         </B.Row>
-        <B.Button variant='primary' onClick={handleReload}>Refresh</B.Button>
         <B.Row className="pe-xl-5 mb-5">
           <B.Form onSubmit={submitNcc} id="formAddNCC">
             <B.Row>

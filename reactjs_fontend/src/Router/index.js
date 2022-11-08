@@ -24,6 +24,7 @@ import {
   Checkout,
   Accountinfo,
   NewPass,
+  MyOrder,
 
 } from "../components/form";
 import {
@@ -40,8 +41,10 @@ import {
   Emplyee,
   Phieunhap,
   PhieuXuat,
+  DonHang,
+  LoaiSP,
 } from "../components/form-admin";
-import Chart  from "../components/form-admin/chart";
+import Chart from "../components/form-admin/chart";
 import LoginAdmin from "../components/form-admin/loginAdmin";
 export const PublicRouter = [
   {
@@ -61,7 +64,7 @@ export const PublicRouter = [
   },
 
   {
-    path: "/CheckOrder",
+    path: "/myorder/CheckOrder/:id",
     component: CheckOrder,
     layout: _Layout,
   },
@@ -132,6 +135,11 @@ export const PublicRouter = [
     component: Accountinfo,
     layout: _Layout,
   },
+  {
+    path: "/myorder",
+    component: MyOrder,
+    layout: _Layout,
+  },
 ];
 //chưa xử lý
 export const PublicRouter_Admin = [
@@ -199,6 +207,16 @@ export const PublicRouter_Admin = [
   {
     path: "/Phieuxuat",
     component: PhieuXuat,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/donhang",
+    component: DonHang,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/loaisp",
+    component: LoaiSP,
     layout: _LayoutAdmin,
   },
 ];

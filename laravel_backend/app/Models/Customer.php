@@ -25,8 +25,8 @@ class Customer extends Model
     {
         return $this->hasMany(PhieuXuat::class);
     }
-    public function product()
+    public function comments()
     {
-        return $this->hasOne(Comment::class, 'customer_id', 'id');
+        return $this->hasMany(Comment::class, 'customer_id', 'id');
     }
 }
