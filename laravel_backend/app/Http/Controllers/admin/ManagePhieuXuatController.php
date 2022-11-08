@@ -269,7 +269,7 @@ class ManagePhieuXuatController extends Controller
             $px = PhieuXuat::find($id);
             if ($maKH == $px->customer_id) {
 
-                $px->status = 6;
+                $px->status = 5;
                 $px->save();
                 return response()->json([
                     'status' => 200,
