@@ -25,10 +25,15 @@ class PaymentController extends Controller
     {
         if (auth('sanctum')->check()) {
             $maKH = auth('sanctum')->user()->customer->id;
+            if ($request->payment_id != null) {
+                $stus = 4;
+            } else {
+                $stus = 0;
+            }
             // $maKH=$request->maKH;
             $payment = new PhieuXuat;
             $payment->customer_id = $maKH;
-            $payment->status = 0;
+            $payment->status = $stus;
             $payment->pt_ThanhToan = $request->payment_mode;
             $payment->tenKH = $request->tenKH;
             $payment->sdt = $request->sdt;
@@ -455,7 +460,7 @@ class PaymentController extends Controller
     }
     public function getDH_maKH()
     {
-        $px = PhieuXuat::where('customer_id',auth('sanctum')->user()->customer->id)->paginate(5);
+        $px = PhieuXuat::where('customer_id', auth('sanctum')->user()->customer->id)->paginate(5);
         // $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
             'donHang' => $px,

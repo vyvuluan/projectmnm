@@ -182,12 +182,12 @@ class ManageBaoCaoController extends Controller
                 $dayInMonth = Carbon::parse($from)->daysInMonth;
                 $to = date($monthYear[0] . '-' . $monthYear[1] . '-' . $dayInMonth);
 
-                $total_sl[$stringMY] =  CtPhieuNhap::selectRaw('sum(soluong) as soluong')
-                    ->join('phieu_xuats', 'ct_phieu_xuats.pn_id', '=', 'phieu_xuats.id')
+                $total_sl[$stringMY] =  CtPhieuXuat::selectRaw('sum(soluong) as soluong')
+                    ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
                     ->first();
 
-                $total_px[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
+                $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
                     ->first();
             } else {
@@ -200,12 +200,12 @@ class ManageBaoCaoController extends Controller
                 $dayInMonth = Carbon::parse($from)->daysInMonth;
                 $to = date($monthYear[0] . '-' . $monthYear[1] . '-' . $dayInMonth);
 
-                $total_sl[$stringMY] =  CtPhieuNhap::selectRaw('sum(soluong) as soluong')
-                    ->join('phieu_xuats', 'ct_phieu_xuats.pn_id', '=', 'phieu_xuats.id')
+                $total_sl[$stringMY] =  CtPhieuXuat::selectRaw('sum(soluong) as soluong')
+                    ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
 
                     ->first();
-                $total_px[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
+                $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
                     ->first();
             }
@@ -213,9 +213,11 @@ class ManageBaoCaoController extends Controller
         return response()->json([
             'status' => 200,
             'total_sl' => $total_sl,
-            'total_px' => $total_pn,
+            'total_px' => $total_px,
         ]);
     }
+
+
 
     public function doanhThuNhanVien()
     {

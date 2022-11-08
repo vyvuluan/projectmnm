@@ -136,7 +136,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
 
     //api thống kê doanh thu và số lượng
     Route::get('thongKeChiTieuSoLuong', [ManageBaoCaoController::class, 'thongKeChiTieuSoLuong']);
-
+    //Api Thống kê của phiếu xuất
+    Route::get('thongKeDoanhThuSoLuong', [ManageBaoCaoController::class, 'thongKeDoanhThuSoLuong']);
 
     //Api Quản lý  Phiếu Xuất
     Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
@@ -189,11 +190,14 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     //api hiển thị danh sách các contact
     Route::get('/contact', [ContactContrller::class, 'index']);
     Route::post('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
+    //api set status đơn hàng
+    Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
 });
 
 
 // API Long
 // API Khách hàng
+Route::put('huyDH/{id}', [ManagePhieuXuatController::class, 'huyDH']); // Huỷ đơn hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
 Route::get('products-search', [ProductController::class, 'search']);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Contact;
 use App\Models\User;
+use App\Models\PhieuXuat;
 use App\Notifications\SendMailContact;
 use Illuminate\Support\Facades\Validator;
 
@@ -77,4 +78,5 @@ class ContactContrller extends Controller
             ]);
         }
     }
+
 }
