@@ -191,7 +191,7 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::get('/contact', [ContactContrller::class, 'index']);
     Route::post('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
     //api set status đơn hàng
-    Route::post('setstatusDH/{id}', [ContactContrller::class, 'setstatusDH']);
+    Route::post('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
 });
 
 

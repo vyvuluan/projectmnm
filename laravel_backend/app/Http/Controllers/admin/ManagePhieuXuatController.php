@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
 use App\Models\CtPhieuXuat;
 use App\Models\Product;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class ManagePhieuXuatController extends Controller
@@ -211,9 +211,9 @@ class ManagePhieuXuatController extends Controller
     {
 
         $maNV = auth('sanctum')->user()->employee->id;
-        $request->status;
+
         $px = PhieuXuat::find($id);
-        $px->status = $request->staus;
+        $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
         return response()->json([
