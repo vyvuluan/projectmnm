@@ -88,18 +88,13 @@ export default function Cart() {
   const deleteCartItem = (e, id_cart) => {
     e.preventDefault();
 
-    const thisClicked = e.currentTarget;
-    thisClicked.innerText = "Removing";
-
     axios
       .delete(`http://localhost:8000/api/deletecart/${id_cart}`)
       .then((res) => {
         if (res.data.status === 200) {
           swal("Success", res.data.message, "success");
-          thisClicked.closest("tr").remove();
         } else if (res.data.status === 404) {
           swal("Error", res.data.message, "error");
-          thisClicked.innerText = "Remove";
         }
       });
   };

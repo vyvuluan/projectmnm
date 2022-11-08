@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('sdt');
             $table->string('diaChi');
             $table->string('payment_id')->nullable();
+            $table->integer('discount')->default(0);
             $table->bigInteger('tongTien')->nullable();
             $table->timestamps();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

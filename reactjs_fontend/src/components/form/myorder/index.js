@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import * as B from 'react-bootstrap'
 import imgage from '../../../img/user.jpg'
 import axios from 'axios'
+import swal from 'sweetalert'
 
 function Index() {
     const [orderlist, setOrderlist] = useState([]);
@@ -60,6 +61,18 @@ function Index() {
         return x;
     }
 
+    const handleAbortOrder = (data) => {
+        const id = data;
+        axios.put(`/api/huyDH/${id}`).then(res => {
+            if (res.data.status === 200) {
+                setSubmitting(true);
+                swal('Thành công', res.data.message, 'success')
+            } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.message, 'warning')
+            }
+        })
+    }
+
     return (
         <>
             <B.Container fluid className="bg-secondary mb-5">
@@ -82,9 +95,12 @@ function Index() {
 
             <B.Container className='px-lg-5 pb-lg-5'>
                 <B.Row>
-                    <B.Col lg>
-                        <label>Đơn hàng của</label>
-                        <h4 className='text-primary'>Đinh Đức Lương</h4>
+                    <B.Col lg className='d-none d-lg-block'>
+                        <label className='fs-5'>Đơn hàng của bạn</label>
+                        <label className='fs-5'>Hỗ trợ 24/7 các ngày trong tuần</label>
+                        <label className='fs-5'>Nếu không thể hủy đơn hàng liên hệ bên dưới</label>
+                        <label className='fs-5 fst-italic fw-normal'>Hotline: 0123498765</label>
+                        <label className='fs-5 fst-italic fw-normal'>Email: hotrol3m@gmail.com</label>
                     </B.Col>
                     <B.Col lg={8}>
                         {orderlist && orderlist.map((order) => {
@@ -118,7 +134,7 @@ function Index() {
                                     <div>
                                         {order.status === 5 ? <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem chi tiết đơn hàng</B.Button></Link>
                                             : <div>
-                                                <B.Button variant='outline-primary' className='rounded-0 pull-right'>Hủy đơn hàng</B.Button>
+                                                <B.Button variant='outline-primary' className='rounded-0 pull-right' onClick={() => handleAbortOrder(order.id)}>Hủy đơn hàng</B.Button>
                                                 <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem chi tiết đơn hàng</B.Button></Link>
                                             </div>
                                         }
