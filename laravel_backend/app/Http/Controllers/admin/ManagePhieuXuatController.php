@@ -217,8 +217,13 @@ class ManagePhieuXuatController extends Controller
     {
 
         $maNV = auth('sanctum')->user()->employee->id;
-
         $px = PhieuXuat::find($id);
+        if ($request->status == 0 && $px->status != 0) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Đơn hàng đã được xác nhận',
+            ]);
+        }
         $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
