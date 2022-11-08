@@ -316,17 +316,18 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-                if ($px->status >= 1 && $request->status = 0) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
-                    ]);
-                } else if (4 <= $px->status && $px->status <= 6) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
-                    ]);
-                }
+                // if ($px->status >= 1 && $request->status = 0) {
+                //     return response()->json([
+                //         'status' => 400,
+                //         'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
+                //     ]);
+                // } else if ($px->status = 6) {
+                //     return response()->json([
+                //         'status' => 400,
+                //         'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+                //     ]);
+                // }
+                $this->checkstatus($request->status, $px->status);
                 //  $px->employee_id = $request->employee_id;
                 $px->customer_id = $request->customer_id;
                 $px->status = $request->status;
@@ -346,6 +347,40 @@ class ManagePhieuXuatController extends Controller
                     'message' => 'Không tìm thấy phiếu xuất',
                 ]);
             }
+        }
+    }
+    public function checkstatus($stusinput, $stuspx)
+    {
+        if ($stuspx == 1 && $stusinput < 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
+            ]);
+        } else if ($stuspx == 6 && $stusinput < 6) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã Xuất không thể chỉnh sửa',
+            ]);
+        } else if ($stuspx == 5 && $stusinput < 5) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+            ]);
+        } else if ($stuspx == 4 && $stusinput < 4) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
+            ]);
+        } else if ($stuspx == 3 && $stusinput < 3) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đang vận chuyển không thể về bước trước',
+            ]);
+        } else if ($stuspx == 2 && $stusinput < 2) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đang đóng gói không thể quay về bước trước',
+            ]);
         }
     }
     public function checksl($slgio, $slupdate, $slkho)
