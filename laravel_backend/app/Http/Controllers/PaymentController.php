@@ -445,12 +445,21 @@ class PaymentController extends Controller
     public function getStatus($id)
     {
         $px = PhieuXuat::find($id);
-        $ctpx = PhieuXuat::find($id)->pxct;
+        // $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
             'id' => $px->id,
             'tinhTrang' => $px->status,
             'donHang' => $px,
-            'ctpx' => $ctpx,
+            // 'ctpx' => $ctpx,
+        ]);
+    }
+    public function getDH_maKH()
+    {
+        $px = PhieuXuat::where('customer_id',auth('sanctum')->user()->customer->id)->paginate(5);
+        // $ctpx = PhieuXuat::find($id)->pxct;
+        return response()->json([
+            'donHang' => $px,
+            // 'ctpx' => $ctpx,
         ]);
     }
 

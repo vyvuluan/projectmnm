@@ -53,6 +53,8 @@ Route::get('/locTenNvZA', [ManageEmployeeController::class, 'locTenZA']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/contact', [ContactContrller::class, 'store']);
+    //api xem danh sách đơn hàng của khách hàng
+    Route::get('/danh-sach-don-hang-khach-hang', [PaymentController::class, 'getDH_maKH']);
 });
 
 Route::get('/login/{provider}', [UserController::class, 'redirectToProvider']);
@@ -89,7 +91,6 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên
     Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class, 'createUser']);
-
     //api báo cáo thống kê
     Route::get('baocao', [ManageBaoCaoController::class, 'thongKeDoanhThuThang']);
 });
@@ -222,8 +223,11 @@ Route::post('momo', [PaymentController::class, 'momopay']);
 Route::get('saveorder', [PaymentController::class, 'saveorder']); // api này front end không dùng
 
 
-
-
+//lọc sản phẩm
+Route::get('loc-sp-cao-thap', [ProductController::class, 'locGiaSPCaoThap']);
+Route::get('loc-sp-thap-cao', [ProductController::class, 'locGiaSPThapCao']);
+Route::get('/locTenSpAZ', [ProductController::class, 'locTenSpAZ']);
+Route::get('/locTenSpZA', [ProductController::class, 'locTenSpZA']);
 
 
 

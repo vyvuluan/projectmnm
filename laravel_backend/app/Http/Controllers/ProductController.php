@@ -272,4 +272,41 @@ class ProductController extends Controller
             'message' => 'kết quả',
         ]);
     }
+
+
+    public function locTenSpAZ()
+    {
+        $product = Product::orderBy('tenSP', 'asc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
+    }
+    public function locTenSpZA()
+    {
+        $product = Product::orderBy('tenSP', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
+    }
+
+    public function locGiaSPCaoThap()
+    {
+        $product = Product::orderBy('gia', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+
+        ]);
+    }
+    public function locGiaSPThapCao()
+    {
+        $product = Product::orderBy('gia', 'asc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+
+        ]);
+    }
 }
