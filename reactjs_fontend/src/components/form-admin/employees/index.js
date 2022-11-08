@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback } from "react";
 import * as B from "react-bootstrap";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
-import { AiOutlineUserDelete, AiOutlineEdit } from "react-icons/ai";
-import { RiUserAddFill } from "react-icons/ri";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+
 import { BiEdit } from "react-icons/bi";
 import { BsPersonPlus } from "react-icons/bs";
 import swal from "sweetalert";
+import { MdDeleteForever } from "react-icons/md";
 
 import axios from "axios";
 import Pagination from "../../form/pagination";
 import UpdateNV from "./updateNV";
 import CreateAccNV from "./createAccNV";
 const Employees = () => {
+  const [submitting, setSubmitting] = useState(true);
+
   const [user, setUser] = useState([]);
   const [username, setUsername] = useState();
   const [valueGT, setValueGT] = useState();
@@ -24,6 +27,9 @@ const Employees = () => {
   const [show, setShow] = useState(false);
   const [showCreateAcc, setShowCreateAcc] = useState(false);
   const [createAcc, setCreateAcc] = useState();
+  const [listNV, setListNV] = useState([]);
+  const [NVData, setNVData] = useState();
+  const [viewSearchNV, setViewSearchNV] = useState([]);
 
   const handleClose = () => setShow((prev) => !prev);
   const handleCloseCreateAcc = () => setShowCreateAcc((prev) => !prev);
@@ -35,7 +41,7 @@ const Employees = () => {
   };
   const handleShowCreate = (item) => {
     // setUsername(item)
-    setCreateAcc(item)
+    setCreateAcc(item);
     setShowCreateAcc(true);
   };
   const handlePerPage = (page) => {
@@ -82,6 +88,7 @@ const Employees = () => {
     axios
       .get(`/api/admin/manageEmployee?page=${page}`)
       .then((res) => {
+        // console.log(res);
         setUser(res.data.emloyee.data);
         setTotalPage(res.data.emloyee.total);
         setPerPage(res.data.emloyee.per_page);
@@ -105,8 +112,10 @@ const Employees = () => {
     axios
       .post("/api/admin/manageEmployee", data)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.status == 200) {
+          setSubmitting(true);
+
           swal("Success", res.data.message, "success");
         }
       })
@@ -116,7 +125,97 @@ const Employees = () => {
         swal("Warning", "vui lòng kiểm tra lại thông tin vừa nhập ", "warning");
       });
   };
+  const handleDeleteNV = (id) => {
+    // console.log(id);
+    // e.preventDefault();
+    swal("Chắc chắn xóa", {
+      buttons: {
+        catch: {
+          text: "Chắc",
+          value: "catch",
+        },
+        no: {
+          text: "Chưa",
+          value: "no",
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "catch":
+          axios
+            .delete(`/api/admin/manageEmployee/${id}`)
+            .then((res) => {
+              console.log(res);
+              if (res.data.status == 200) {
+                setSubmitting(true);
 
+                swal({
+                  title: res.data.message,
+                  icon: "success",
+                  button: "đóng",
+                });
+              } else if (res.status == 200) {
+                swal({
+                  title: res.data.message,
+                  icon: "warning",
+                  button: "đóng",
+                });
+              }
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            });
+          break;
+      }
+    });
+  };
+  const handleOnSearch = (key) => {
+    axios.get(`/api/admin/manageEmployee?key=${key}`).then((res) => {
+      if (res.data.status === 200) {
+        // console.log(res.data.emloyee);
+        setListNV(res.data.emloyee.data);
+      }
+    });
+  };
+  var array = [];
+  const handleOnSelect = (value) => {
+    array = [value];
+    setViewSearchNV(value);
+    setUser(array);
+    setNVData(value.id);
+  };
+  const formatResult = (item) => {
+    return (
+      <div className="result-wrapper">
+        <B.Row>
+          <B.Col>
+            <span className="result-span p-0  ms-3">Họ tên: {item.ten}</span>
+          </B.Col>
+          <B.Col>
+            <span className="result-span p-0  ms-3">Sđt: {item.sdt}</span>
+          </B.Col>
+          <B.Col>
+            <span className="result-span p-0 ms-3">Địa chỉ: {item.diaChi}</span>
+          </B.Col>
+        </B.Row>
+      </div>
+    );
+  };
+  const handleOnNVclear = () => {
+    setSubmitting(true);
+  };
+  const refreshNV = useCallback(async () => {
+    const res = await axios.get(`/api/admin/manageEmployee?page=${page}`)
+      setUser(res.data.emloyee.data);
+      setTotalPage(res.data.emloyee.total);
+      setPerPage(res.data.emloyee.per_page);
+      setCurrentPage(res.data.emloyee.current_page);
+    
+}, [page]);
+useEffect(() => {
+  refreshNV().then(() => setSubmitting(false));
+}, [submitting, refreshNV]);
   return (
     <>
       <B.Modal show={show} onHide={handleClose}>
@@ -155,48 +254,46 @@ const Employees = () => {
       </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
-          <B.Col lg={4}>
+          <B.Col lg={5}>
             <h1 className="fw-bold text-primary mb-4 text-capitalize">
               QUẢN LÝ NHÂN VIÊN
             </h1>
           </B.Col>
-          <B.Col lg={2}></B.Col>
+          <B.Col lg={1}></B.Col>
           <B.Col lg={6}>
             <B.Form>
               <B.FormGroup>
-                <B.InputGroup>
-                  <B.FormControl
-                    type="text"
-                    placeholder="Tìm kiếm"
-                    className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                  ></B.FormControl>
-                  <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
-                  </B.InputGroup.Text>
-                </B.InputGroup>
-              </B.FormGroup>
-              <B.FormGroup className="d-flex d-inline-block justify-content-between mt-2">
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo id"
-                />
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo tên"
-                />
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo số điện thoại"
-                />
-                <B.FormSelect className="w-25 rounded-0 shadow-none">
-                  <option>Theo quyền</option>
-                  <option>Administrator</option>
-                  <option>Thủ kho</option>
-                  <option>Nhân viên</option>
-                </B.FormSelect>
+                <div
+                  className="w-100 me-2 "
+                  style={{ position: "relative", zIndex: "3" }}
+                >
+                  <ReactSearchAutocomplete
+                    placeholder="Tìm kiếm nhân viên"
+                    items={listNV}
+                    onSearch={handleOnSearch}
+                    onClear={handleOnNVclear}
+                    onSelect={handleOnSelect}
+                    fuseOptions={{ keys: ["id", "ten"] }}
+                    resultStringKeyName="ten"
+                    showIcon={false}
+                    formatResult={formatResult}
+                    styling={{
+                      height: "36px",
+                      border: "1px solid lightgray",
+                      borderRadius: "0",
+                      backgroundColor: "white",
+                      boxShadow: "none",
+                      hoverBackgroundColor: "#d19c97",
+                      color: "black",
+                      fontSize: "15px",
+                      // fontFamily: "Courier",
+                      iconColor: "black",
+                      lineColor: "#d19c97",
+                      // placeholderColor: "black",
+                      clearIconMargin: "3px 8px 0 0",
+                    }}
+                  />
+                </div>
               </B.FormGroup>
             </B.Form>
           </B.Col>
@@ -306,42 +403,47 @@ const Employees = () => {
                   <th>Địa chỉ</th>
                   <th>Số điện thoại</th>
 
-                  <th>Thao tác</th>
+                  <th style={{ width: "120px" }}>Thao tác</th>
                 </tr>
               </thead>
               <tbody className="align-middle">
-                {user.map((item, index) => {
-                  // console.log(item);
-                  // if (user_id == null) {
-                  // }
-                  return (
-                    <tr>
-                      <td className="align-middle">{item.id}</td>
-                      <td className="align-middle">{item.ten}</td>
-                      {/* <td className="align-middle">{item.email}</td> */}
-                      <td className="align-middle">
-                        {item.gioiTinh == 1 ? "Nam" : "Nữ"}
-                      </td>
-                      <td
-                        className="align-middle"
-                        style={{ wordBreak: "break-word", width: "400px" }}
-                      >
-                        {item.diaChi}
-                      </td>
-                      <td className="align-middle">{item.sdt}</td>
+                {user &&
+                  user.map((item, index) => {
+                    // console.log(item);
+                    // if (user_id == null) {
+                    // }
+                    return (
+                      <tr key={index}>
+                        <td className="align-middle">{item.id}</td>
+                        <td className="align-middle">{item.ten}</td>
+                        {/* <td className="align-middle">{item.email}</td> */}
+                        <td className="align-middle">
+                          {item.gioiTinh == 1 ? "Nam" : "Nữ"}
+                        </td>
+                        <td
+                          className="align-middle"
+                          style={{ wordBreak: "break-word", width: "400px" }}
+                        >
+                          {item.diaChi}
+                        </td>
+                        <td className="align-middle">{item.sdt}</td>
 
-                      <td className="align-middle fs-5 text-primary  ">
-                        <BiEdit onClick={() => handleShow(item)} />
-                        {item.user_id == null ? (
-                          <BsPersonPlus
-                            onClick={() => handleShowCreate(item)}
-                            className="ms-4"
+                        <td className="fs-5 text-primary text-left  ">
+                          <BiEdit onClick={() => handleShow(item)} />
+                          <MdDeleteForever
+                            className="ms-3"
+                            onClick={() => handleDeleteNV(item.id)}
                           />
-                        ) : null}
-                      </td>
-                    </tr>
-                  );
-                })}
+                          {item.user_id == null ? (
+                            <BsPersonPlus
+                              onClick={() => handleShowCreate(item)}
+                              className="ms-3"
+                            />
+                          ) : null}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </B.Table>
           </B.Col>

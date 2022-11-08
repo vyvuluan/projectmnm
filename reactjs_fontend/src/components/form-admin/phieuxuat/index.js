@@ -18,6 +18,7 @@ const checkStatus = [
     { id: 2, name: 'Đang đóng gói' },
     { id: 3, name: 'Đang vận chuyển' },
     { id: 4, name: 'Giao hàng thành công' },
+    { id: 5, name: 'Hủy đơn hàng' },
 ];
 
 
@@ -181,6 +182,8 @@ function Index() {
         axios.put(`/api/kho/px/${px.id}`, data).then(res => {
             if (res.data.status === 200) {
                 setSubmitting(true);
+            } else if (res.data.status === 400) {
+                swal('Cảnh báo', res.data.message, 'warning')
             }
         })
     }
@@ -229,22 +232,28 @@ function Index() {
     // End
 
     const handleOnPxSearch = (key) => {
-        axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
-            if (res.status === 200) {
-                setPxSearchlist(res.data.data)
-                // setTotalPage(res.data.total);
-                // setPerPage(res.data.per_page);
-                // setCurrentPage(res.data.current_page)
-                setShowSearchTable(true);
-            }
-            else {
-                setShowSearchTable(false);
-            }
-        })
+        if (key != "") {
+            axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+                if (res.status === 200) {
+                    setPxSearchlist(res.data.data)
+                    // setTotalPage(res.data.total);
+                    // setPerPage(res.data.per_page);
+                    // setCurrentPage(res.data.current_page)
+                    setShowSearchTable(true);
+                }
+                else {
+                    setShowSearchTable(false);
+                }
+            })
+        }
     }
+
+    console.log(pxsearchList);
+    console.log(showSearchTable);
 
     const handleOnPxClear = () => {
         setShowSearchTable(false);
+
     }
 
     const handleView = (px) => {
@@ -347,6 +356,10 @@ function Index() {
                 x = 'Giao hàng thành công';
                 break;
             }
+            case 5: {
+                x = 'Hủy đơn hàng';
+                break;
+            }
             default: {
                 break;
             }
@@ -375,6 +388,10 @@ function Index() {
             }
             case 4: {
                 x = 'success';
+                break;
+            }
+            case 5: {
+                x = 'danger';
                 break;
             }
             default: {

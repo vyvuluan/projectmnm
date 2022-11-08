@@ -53,6 +53,7 @@ const PhieuNhap = () => {
   const [errorGia, setErrorGia] = useState();
   const [pnCt, setPnCt] = useState([]);
   const [idShowPn, setIdShowPn] = useState([]);
+  const [submitting, setSubmitting] = useState(true);
 
   const [tongTien, setTongtien] = useState([]);
   const [tongTienPN, setTongtienPN] = useState([]);
@@ -199,6 +200,17 @@ const PhieuNhap = () => {
     setIdProduct(value.id);
   };
 
+  const refresh = useCallback(async () => {
+    const res = await axios.get(`/api/kho/getAllPN-new?page=${page}`);
+    setDataShowPN(res.data.pns.data);
+    setTotalPage(res.data.pns.total);
+    setPerPage(res.data.pns.per_page);
+    setCurrentPage(res.data.pns.current_page);
+  }, [page]);
+  
+  useEffect(() => {
+    refresh().then(() => setSubmitting(false));
+  }, [submitting, refresh]);
   const formatResult = (item) => {
     return (
       <div className="result-wrapper">
@@ -349,6 +361,8 @@ const PhieuNhap = () => {
             .then((res) => {
               console.log(res);
               if (res.data.status == 200) {
+                setSubmitting(true);
+
                 swal({
                   title: res.data.message,
                   icon: "success",
@@ -453,13 +467,14 @@ const PhieuNhap = () => {
             .then((res) => {
               console.log(res);
               if (res.data.status == 200) {
+                setSubmitting(true);
+
                 swal({
                   title: res.data.message,
                   icon: "success",
                   button: "đóng",
                 });
-              }
-              else if (res.status ==200) {
+              } else if (res.status == 200) {
                 swal({
                   title: res.data.message,
                   icon: "warning",
@@ -535,6 +550,8 @@ const PhieuNhap = () => {
     axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
       // console.log(res);
       if (res.data.status === 200) {
+        setSubmitting(true);
+
         swal({
           title: res.data.message,
           icon: "success",
@@ -605,6 +622,7 @@ const PhieuNhap = () => {
         </B.ModalHeader>
         <B.ModalBody>
           <UpdateCtPN
+            
             idPN={idPN}
             idSP={idProduct}
             soLuong={soLuong}
@@ -996,7 +1014,6 @@ const PhieuNhap = () => {
 
                               <td className="align-middle fs-5 text-primary">
                                 <AiFillEye
-                                  
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
@@ -1006,7 +1023,6 @@ const PhieuNhap = () => {
                                 />
 
                                 <MdDeleteForever
-
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"

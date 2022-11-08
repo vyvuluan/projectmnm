@@ -48,24 +48,18 @@ const UpdateCtPN = ({
       .put(`api/kho/updateCtPN/${idPN}/${idSP}`, data)
       .then((res) => {
         console.log(res);
-        if (res.data.status == 200) {
+        if (res.status == 200) {
           swal({
-            title: "sửa thành công",
+            title: res.data.message,
             icon: "success",
             button: "đóng",
           });
           showModal(false);
+
         }
         if (res.data.status == 400) {
           swal({
             title: "Nhập sai định dạng",
-            icon: "warning",
-            button: "đóng",
-          });
-        }
-        if (res.status == 200) {
-          swal({
-            title: res.data.message,
             icon: "warning",
             button: "đóng",
           });

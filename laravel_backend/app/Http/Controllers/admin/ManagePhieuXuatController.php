@@ -284,7 +284,7 @@ class ManagePhieuXuatController extends Controller
                 if ($px->status >= 1) {
                     return response()->json([
                         'status' => 400,
-                        'error' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
+                        'message' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
                     ]);
                 }
                 //  $px->employee_id = $request->employee_id;

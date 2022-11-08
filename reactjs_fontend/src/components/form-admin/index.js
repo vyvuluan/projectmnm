@@ -16,6 +16,8 @@ export { default as Nsx } from "./nsx/index.js";
 export { default as Phieunhap } from "./phieunhap/index.js";
 export { default as PhieuXuat } from "./phieuxuat/index.js";
 export { default as DropdownMenuAdmin } from "./dropdownMenuAdmin/index.js";
+export { default as DonHang } from "./donHang/index.js";
+
 
 
 

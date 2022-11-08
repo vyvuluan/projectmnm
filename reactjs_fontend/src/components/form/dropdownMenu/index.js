@@ -47,7 +47,7 @@ const DropDownMenu = (props) => {
           <ul className="ul">
             <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem icon={<FaUserCircle />} text={"Tài khoản"} /></Link>
             {/* logout1={test}  */}
-            <Link to={'/CheckOrder'} className='text-decoration-none'><DropdownItem icon={<FaClipboardList />} text={"Đơn hàng"} /></Link>
+            <Link to={'/myorder'} className='text-decoration-none'><DropdownItem icon={<FaClipboardList />} text={"Đơn hàng"} /></Link>
             <DropdownItem icon={<RiLogoutBoxFill />} text={"Đăng xuất"} logout1={props.logout} />
           </ul>
         </div>

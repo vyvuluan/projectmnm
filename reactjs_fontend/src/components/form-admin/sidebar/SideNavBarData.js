@@ -4,6 +4,7 @@ import * as AiI from "react-icons/ai";
 import * as IoI from "react-icons/io";
 import * as RiI from "react-icons/ri";
 import * as HiI from "react-icons/hi";
+import {FaProductHunt} from "react-icons/fa"
 import { AiOutlineContacts } from "react-icons/ai";
 import {
   MdOutlineManageAccounts,
@@ -95,5 +96,12 @@ export const SideNavBarData = [
     icon: <MdOutlineRequestPage />,
     link: "/Phieuxuat",
     id_role: [3]
+  },
+  {
+    title: "Đơn hàng",
+    path: "/donhang",
+    icon: <FaProductHunt />,
+    link: "/donhang",
+    id_role: [4]
   },
 ];
