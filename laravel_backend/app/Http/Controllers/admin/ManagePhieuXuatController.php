@@ -53,6 +53,27 @@ class ManagePhieuXuatController extends Controller
             ]);
         }
     }
+    public function locPxTheoTT($status)
+    {
+        $px = PhieuXuat::where('status', $status)->get();
+        if ($px) {
+            return response()->json([
+                'status' => 200,
+                'data' => $px,
+            ]);
+        }
+    }
+    public function locPxTheoPT($pt)
+    {
+        $px = PhieuXuat::where('pt_ThanhToan', $pt)->get();
+        if ($px) {
+            return response()->json([
+                'status' => 200,
+                'data' => $px,
+            ]);
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -220,8 +241,13 @@ class ManagePhieuXuatController extends Controller
         $px = PhieuXuat::find($id);
         if ($request->status == 0 && $px->status != 0) {
             return response()->json([
-                'status' => 200,
+                'status' => 400,
                 'message' => 'Đơn hàng đã được xác nhận không thể chỉnh sửa',
+            ]);
+        } else if ($px->status == 5) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
             ]);
         }
         $px->status = $request->status;
