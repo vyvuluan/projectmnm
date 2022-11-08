@@ -16,6 +16,7 @@ function Checkout() {
         fullname: "",
         phonenumber: "",
         address: "",
+        discount: "",
     });
     const [error, setError] = useState([]);
     const [cart, setCart] = useState([]);
@@ -65,6 +66,7 @@ function Checkout() {
         tenKH: checkoutInput.fullname,
         sdt: checkoutInput.phonenumber,
         diaChi: checkoutInput.address,
+        discount: checkoutInput.discount,
         payment_mode: "PayPal",
         payment_id: "",
     };
@@ -109,6 +111,7 @@ function Checkout() {
             tenKH: checkoutInput.fullname,
             sdt: checkoutInput.phonenumber,
             diaChi: checkoutInput.address,
+            discount: checkoutInput.discount,
             payment_mode: payment_mode,
             payment_id: "",
         };
@@ -200,7 +203,7 @@ function Checkout() {
                             </B.Card.Header>
                             <B.Card.Body>
                                 <B.Row>
-                                    <B.Col md={6}>
+                                    <B.Col md={4}>
                                         <B.FormGroup className="mb-3">
                                             <B.FormLabel>Họ và tên</B.FormLabel>
                                             <B.FormControl
@@ -213,7 +216,7 @@ function Checkout() {
                                             <small className="text-danger">{error.tenKH}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    <B.Col md={6}>
+                                    <B.Col md={4}>
                                         <B.FormGroup className="mb-3">
                                             <B.FormLabel>Số điện thoại</B.FormLabel>
                                             <B.FormControl
@@ -224,6 +227,19 @@ function Checkout() {
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
                                             <small className="text-danger">{error.sdt}</small>
+                                        </B.FormGroup>
+                                    </B.Col>
+                                    <B.Col md={4}>
+                                        <B.FormGroup className="mb-3">
+                                            <B.FormLabel>Mã giảm giá</B.FormLabel>
+                                            <B.FormControl
+                                                type="text"
+                                                name="discount"
+                                                onChange={handleInput}
+                                                value={checkoutInput.discount}
+                                                className="rounded-0 shadow-none"
+                                            ></B.FormControl>
+                                            <small className="text-danger">{error.discount}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={12}>

@@ -54,13 +54,13 @@ const ContactAdmin = () => {
   const SubmitReply = (e) => {
     e.preventDefault();
 
-    const customer_id = contact.customer_id;
+    const contact_id = contact.id;
 
     const data = {
       msg: reply,
     }
 
-    axios.post(`/api/nhanvien/contact/${customer_id}`, data).then(res => {
+    axios.put(`/api/nhanvien/contact/${contact_id}`, data).then(res => {
       if (res.data.status === 200) {
         swal('Thành công', res.data.message, 'success');
         setSubmitting(true);

@@ -28,7 +28,6 @@ function Index() {
         diachiKH: '',
     });
     const [pxid, setPXid] = useState();
-    const [ekey, setEkey] = useState();
     const [searchList, setSearchlist] = useState();
     const [pxsearchList, setPxSearchlist] = useState([]);
     const [viewPx, setViewPx] = useState();
@@ -393,7 +392,7 @@ function Index() {
     }
 
     const SortStt = (e) => {
-        axios.get(`/api/kho/loctheott/${e}`).then(res => {
+        axios.get(`/api/kho/locpx?key=1&value=${e}`).then(res => {
             if (res.data.status === 200) {
                 setPxlist(res.data.data.data);
                 setTotalPage(res.data.data.total);
@@ -404,7 +403,7 @@ function Index() {
     }
 
     const SortPTTT = (e) => {
-        axios.get(`/api/kho/loctheopt/${e}`).then(res => {
+        axios.get(`/api/kho/locpx?key=2&value=${e}`).then(res => {
             if (res.data.status === 200) {
                 setPxlist(res.data.data.data);
                 setTotalPage(res.data.data.total);
@@ -685,7 +684,7 @@ function Index() {
                                                                 {checkStatus.map((val) => (
                                                                     <B.Dropdown.Item key={val.id}
                                                                         onClick={() => handleUpdateStatus(val, px)}
-                                                                        eventKey={ekey}>{val.name}</B.Dropdown.Item>
+                                                                    >{val.name}</B.Dropdown.Item>
                                                                 ))}
                                                             </B.DropdownButton>
                                                         </td>
