@@ -12,7 +12,7 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
-
+use Carbon\Carbon;
 use PHPUnit\Framework\Constraint\Count;
 
 class PaymentController extends Controller
@@ -57,7 +57,7 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
-            $date = getdate();
+            $date = Carbon::today();
             $discount = Discount::where('discount_id', $request->discount)
                 ->where('start', '<', $date)
                 ->where('end', '>', $date)
