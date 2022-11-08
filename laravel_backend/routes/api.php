@@ -191,12 +191,13 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::get('/contact', [ContactContrller::class, 'index']);
     Route::post('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
     //api set status đơn hàng
-    Route::post('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
+    Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
 });
 
 
 // API Long
 // API Khách hàng
+Route::put('huyDH/{id}', [ManagePhieuXuatController::class, 'huyDH']); // Huỷ đơn hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
 Route::get('products-search', [ProductController::class, 'search']);
