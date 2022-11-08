@@ -269,7 +269,7 @@ class ManagePhieuXuatController extends Controller
             $px = PhieuXuat::find($id);
             if ($maKH == $px->customer_id) {
 
-                $px->status = 6;
+                $px->status = 5;
                 $px->save();
                 return response()->json([
                     'status' => 200,
@@ -316,10 +316,15 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-                if ($px->status >= 1) {
+                if ($px->status >= 1 && $request->status = 0) {
                     return response()->json([
                         'status' => 400,
                         'message' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
+                    ]);
+                } else if (4 <= $px->status && $px->status <= 6) {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
                     ]);
                 }
                 //  $px->employee_id = $request->employee_id;
