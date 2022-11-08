@@ -207,6 +207,20 @@ class ManagePhieuXuatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function setstatusDH(Request $request, $id)
+    {
+
+        $maNV = auth('sanctum')->user()->employee->id;
+        $request->status;
+        $px = PhieuXuat::find($id);
+        $px->status = $request->staus;
+        $px->employee_id = $maNV;
+        $px->save();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cập nhật phiếu thành công ',
+        ]);
+    }
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -235,7 +249,7 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-                $px->employee_id = $request->employee_id;
+                //  $px->employee_id = $request->employee_id;
                 $px->customer_id = $request->customer_id;
                 $px->status = $request->status;
                 $px->pt_ThanhToan = $request->pt_ThanhToan;
@@ -404,6 +418,8 @@ class ManagePhieuXuatController extends Controller
         $px = PhieuXuat::find($mapx);
         $pxcts = $px->pxct;
         $data =  $pxcts->where('product_id', $maspct)->first();
+        var_dump($data);
+        exit;
         $spkho = Product::find($maspct);
         $spkho->soLuongSP += $data->soluong;
         $px->tongTien -= $data->soluong * $spkho->gia;
