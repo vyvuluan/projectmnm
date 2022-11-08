@@ -126,6 +126,8 @@ const Account = () => {
                   <th>Email</th>
 
                   <th>Quyền</th>
+                  <th>Hoạt động</th>
+
                   <th>Thao tác</th>
                 </tr>
               </thead>
@@ -168,6 +170,9 @@ const Account = () => {
                       <td className="align-middle">{item.email}</td>
 
                       {htmlRole}
+                      <td className="align-middle fw-bold" style={{color:"#379237"}}>ON</td>
+                      {/* <td className="align-middle fw-bold" style={{color:"#cecece"}}>OFF</td> */}
+                      
                       <td className="align-middle fs-5 text-primary">
                         <BiEdit />
                       </td>
