@@ -143,6 +143,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
+    Route::get('loctheott/{status}', [ManagePhieuXuatController::class, 'locPxTheoTT']);
+    Route::get('loctheopt/{pt}', [ManagePhieuXuatController::class, 'locPxTheoPT']);
     //Api Quản lý chi tiết phiếu xuất
     Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class, 'xemctpx']);
     Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'editctpx']);
