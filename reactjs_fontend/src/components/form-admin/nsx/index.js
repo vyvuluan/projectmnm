@@ -62,26 +62,6 @@ function Index() {
         })
     }
 
-    // useEffect(() => {
-    //     let isMounted = true;
-    //     const controller = new AbortController();
-
-    //     axios.get(`http://localhost:8000/api/kho/nsx?page=${page}`).then((res) => {
-    //         if (isMounted) {
-    //             if (res.data.status === 200) {
-    //                 setNsxList(res.data.Nsx.data);
-    //                 setTotalPage(res.data.Nsx.total);
-    //                 setPerPage(res.data.Nsx.per_page);
-    //                 setCurrentPage(res.data.Nsx.current_page)
-    //             }
-    //         }
-    //     });
-
-    //     return () => {
-    //         isMounted = false;
-    //         controller.abort();
-    //     };
-    // }, [page]);
     const [submitting, setSubmitting] = useState(true)
 
     const getNsxData = useCallback(async () => {

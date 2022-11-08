@@ -21,6 +21,7 @@ class ManagePhieuXuatController extends Controller
     {
         $px = PhieuXuat::orderBy('id', 'desc')->paginate(10);
         return response()->json([
+            'status' => 200,
             'data' => $px,
         ]);
     }
@@ -220,7 +221,7 @@ class ManagePhieuXuatController extends Controller
         $px = PhieuXuat::find($id);
         if ($request->status == 0 && $px->status != 0) {
             return response()->json([
-                'status' => 200,
+                'status' => 400,
                 'message' => 'Đơn hàng đã được xác nhận không thể chỉnh sửa',
             ]);
         }

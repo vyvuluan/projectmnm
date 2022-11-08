@@ -205,52 +205,6 @@ function Index(props) {
     };
   }, [page, props.id]);
 
-  //pagination
-
-  // var display_Productdata = "";
-  // if (loading) {
-  //     return <LoaderIcon />
-
-  // }
-  // else {
-  //     display_Productdata =
-  // }
-
-  // const [categoryInput, setCategory] = useState({
-  //     tenLoai: '',
-  //     error_list: [],
-  // });
-
-  // const handleInput = (e) => {
-  //     e.persist();
-  //     setCategory({ ...categoryInput, [e.target.name]: e.target.value })
-  // }
-
-  // const submitCategory = (e) => {
-  //     e.preventDefault();
-
-  //     const data = {
-  //         tenLoai: categoryInput.tenLoai,
-  //     }
-
-  //     axios.post(`http://localhost:8000/api/kho/loaisp`, data).then(res => {
-  //         if (res.data.status === 200) {
-  //             swal('Success', res.data.message, 'success')
-  //             document.getElementById('formLoaiSP').reset();
-  //         }
-  //         else if (res.data.status === 400) {
-  //             setCategory({ ...categoryInput, error_list: res.data.error })
-  //         }
-  //     });
-  // }
-
-  // var display_error = [];
-  // if (categoryInput.error_list) {
-  //     display_error = [
-  //         categoryInput.error_list.tenLoai,
-  //     ]
-  // }
-
   return (
     <>
       <B.Modal size="xl" show={show} onHide={handleClose}>
@@ -653,25 +607,6 @@ function Index(props) {
             />
           </B.Tab>
         </B.Tabs>
-
-        {/* <B.Form onSubmit={submitCategory} id='formLoaiSP'>
-                            <hr />
-                            <B.FormGroup>
-                                <B.FormControl type='text' name='tenLoaiSP' className='rounded-0 shadow-none mt-1 mb-2' placeholder='Tên loại sản phẩm'
-                                    onChange={handleProductInput} value={categoryInput.tenLoaiSP}></B.FormControl>
-                                <span>{categoryInput.error_list.tenLoai}</span>
-                                <div className='d-flex d-inline-block justify-content-between'>
-                                    <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 w-50 me-1'>
-                                        <CgExtensionAdd className='me-2' />
-                                        Thêm loại
-                                    </B.Button>
-                                    <B.Button variant='outline-primary' className='rounded-0 py-2 w-50 ms-1'>
-                                        <AiOutlineEdit className='me-2' />
-                                        Sửa loại
-                                    </B.Button>
-                                </div>
-                            </B.FormGroup>
-                        </B.Form> */}
       </B.Container>
     </>
   );
