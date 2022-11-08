@@ -274,39 +274,49 @@ class ProductController extends Controller
     }
 
 
-    public function locTenSpAZ()
+    public function sortProduct(Request $request)
     {
-        $product = Product::orderBy('tenSP', 'asc')->paginate(10);
-        return response()->json([
-            'status' => 200,
-            'product' => $product,
-        ]);
-    }
-    public function locTenSpZA()
-    {
-        $product = Product::orderBy('tenSP', 'desc')->paginate(10);
-        return response()->json([
-            'status' => 200,
-            'product' => $product,
-        ]);
-    }
+        switch ($request->key) {
+            case 1: { //tên A - Z
+                    $product = Product::orderBy('tenSP',    'asc')->paginate(10);
+                    return response()->json([
+                        'status' => 200,
+                        'product' => $product,
+                    ]);
+                }
+                // $this->locTenSpAZ();
+                break;
+            case 2: { // tên Z - A
+                    $product = Product::orderBy('tenSP', 'desc')->paginate(10);
+                    return response()->json([
+                        'status' => 200,
+                        'product' => $product,
+                    ]);
+                }
+                break;
+            case 3: { //giá cao thấp
+                    $product = Product::orderBy('gia', 'desc')->paginate(10);
+                    return response()->json([
+                        'status' => 200,
+                        'product' => $product,
 
-    public function locGiaSPCaoThap()
-    {
-        $product = Product::orderBy('gia', 'desc')->paginate(10);
-        return response()->json([
-            'status' => 200,
-            'product' => $product,
+                    ]);
+                }
+                break;
+            case 4: { //giá thấp cao
+                    $product = Product::orderBy('gia', 'asc')->paginate(10);
+                    return response()->json([
+                        'status' => 200,
+                        'product' => $product,
 
-        ]);
-    }
-    public function locGiaSPThapCao()
-    {
-        $product = Product::orderBy('gia', 'asc')->paginate(10);
-        return response()->json([
-            'status' => 200,
-            'product' => $product,
-
-        ]);
+                    ]);
+                }
+                break;
+            default:
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'không tồn tại',
+                ]);
+        }
     }
 }

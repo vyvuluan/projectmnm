@@ -155,7 +155,7 @@ function Index() {
     // Fetch data phiếu xuất
     const getAllPx = useCallback(async () => {
         const res = await axios.get(`/api/kho/px?page=${page}`)
-        if (res.status === 200) {
+        if (res.data.status === 200) {
             setPxlist(res.data.data.data);
             setTotalPage(res.data.data.total);
             setPerPage(res.data.data.per_page);
@@ -316,17 +316,6 @@ function Index() {
         })
     }
 
-    const handleRefresh = () => {
-        axios.get(`/api/kho/px?page=${page}`).then(res => {
-            if (res.status === 200) {
-                setPxlist(res.data.data.data);
-                setTotalPage(res.data.data.total);
-                setPerPage(res.data.data.per_page);
-                setCurrentPage(res.data.data.current_page)
-            }
-        });
-    }
-
     const test = (status) => {
         var x;
         switch (status) {
@@ -402,6 +391,30 @@ function Index() {
         }
         return x;
     }
+
+    const SortStt = (e) => {
+        axios.get(`/api/kho/loctheott/${e}`).then(res => {
+            if (res.data.status === 200) {
+                setPxlist(res.data.data.data);
+                setTotalPage(res.data.data.total);
+                setPerPage(res.data.data.per_page);
+                setCurrentPage(res.data.data.current_page);
+            }
+        })
+    }
+
+    const SortPTTT = (e) => {
+        axios.get(`/api/kho/loctheopt/${e}`).then(res => {
+            if (res.data.status === 200) {
+                setPxlist(res.data.data.data);
+                setTotalPage(res.data.data.total);
+                setPerPage(res.data.data.per_page);
+                setCurrentPage(res.data.data.current_page);
+            }
+        })
+    }
+
+
 
     const [dayStart, setDayStart] = useState();
     const [dayEnd, setDayEnd] = useState();
@@ -613,6 +626,31 @@ function Index() {
                                         zIndex: '2',
                                     }}
                                 />
+                            </B.Col>
+                            <B.Col lg={8}>
+                                <div className='d-flex justify-content-end'>
+                                    <B.Button variant='outline-primary' className='rounded-0 mb-2 me-2' onClick={() => setSubmitting(true)}>Bỏ sắp xếp</B.Button>
+                                    <B.FormGroup className='mb-2 me-2'>
+                                        <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
+                                            <option>Sắp xếp trạng thái</option>
+                                            <option value={0}>Chờ xác nhận</option>
+                                            <option value={1}>Đã xác nhận</option>
+                                            <option value={2}>Đang đóng gói</option>
+                                            <option value={3}>Đang vận chuyển</option>
+                                            <option value={4}>Giao hàng thành công</option>
+                                            <option value={5}>Đơn hàng đã hủy</option>
+                                            <option value={6}>Đã xuất kho</option>
+                                        </B.FormSelect>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='mb-2'>
+                                        <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortPTTT(e.target.value)}>
+                                            <option>Sắp xếp PT thanh toán</option>
+                                            <option value='COD'>COD</option>
+                                            <option value='PayPal'>Paypal</option>
+                                            <option value='Tại quầy'>Tại quầy</option>
+                                        </B.FormSelect>
+                                    </B.FormGroup>
+                                </div>
                             </B.Col>
                         </B.Row>
                         <B.Row className='px-xl-3'>

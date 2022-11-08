@@ -183,7 +183,7 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     //api thông tin tài khoản theo user id
     Route::get('manageUser/{user_id}', [ManageUserController::class, 'edit']);
     //api sửa tài khoản
-    Route::put('manageUser/{user_id}', [ManageUserController::class, 'update']);
+    Route::put('manageUser/{user_id}', [ManageUserController::class, 'update_tk_kh']);
     //api xóa tài khoản
     Route::delete('manageUser/{user_id}', [ManageUserController::class, 'destroy_user_customer']);
 
@@ -227,12 +227,7 @@ Route::get('saveorder', [PaymentController::class, 'saveorder']); // api này fr
 
 
 //lọc sản phẩm
-Route::get('loc-sp-cao-thap', [ProductController::class, 'locGiaSPCaoThap']);
-Route::get('loc-sp-thap-cao', [ProductController::class, 'locGiaSPThapCao']);
-Route::get('/locTenSpAZ', [ProductController::class, 'locTenSpAZ']);
-Route::get('/locTenSpZA', [ProductController::class, 'locTenSpZA']);
-
-
+Route::get('/sortProduct', [ProductController::class, 'sortProduct']);
 
 
 
