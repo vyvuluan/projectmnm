@@ -159,12 +159,26 @@ class ManageEmployeeController extends Controller
     public function destroy($manageEmloyee)
     {
         $emloyee = Employee::find($manageEmloyee);
-        $user = User::where('id', $emloyee->user_id)->delete();
-        return response()->json([
-            'status' => 200,
-            'user' => $user,
-            'message' => 'xóa thành công',
-        ]);
+        $user = User::where('id', $emloyee->user_id)->first();
+        if(empty($user))
+        {
+            $emloyee->delete();
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'xóa thành công',
+            ]);
+        }
+        else
+        {
+            $user->delete();
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'xóa thành công',
+            ]);
+        }
+        
     }
 
 
