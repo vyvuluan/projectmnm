@@ -55,7 +55,7 @@ class ManagePhieuXuatController extends Controller
     }
     public function locPxTheoTT($status)
     {
-        $px = PhieuXuat::where('status', $status)->get();
+        $px = PhieuXuat::where('status', $status)->paginate(10);
         if ($px) {
             return response()->json([
                 'status' => 200,
@@ -65,7 +65,7 @@ class ManagePhieuXuatController extends Controller
     }
     public function locPxTheoPT($pt)
     {
-        $px = PhieuXuat::where('pt_ThanhToan', $pt)->get();
+        $px = PhieuXuat::where('pt_ThanhToan', $pt)->paginate(10);
         if ($px) {
             return response()->json([
                 'status' => 200,
