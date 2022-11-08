@@ -53,6 +53,8 @@ Route::get('/locTenNvZA', [ManageEmployeeController::class, 'locTenZA']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/contact', [ContactContrller::class, 'store']);
+    //api xem danh sách đơn hàng của khách hàng
+    Route::get('/danh-sach-don-hang-khach-hang', [PaymentController::class, 'getDH_maKH']);
 });
 
 Route::get('/login/{provider}', [UserController::class, 'redirectToProvider']);
