@@ -221,7 +221,7 @@ class ManagePhieuXuatController extends Controller
         if ($request->status == 0 && $px->status != 0) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Đơn hàng đã được xác nhận',
+                'message' => 'Đơn hàng đã được xác nhận không thể chỉnh sửa',
             ]);
         }
         $px->status = $request->status;
