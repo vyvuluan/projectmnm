@@ -137,7 +137,7 @@ class ManageUserController extends Controller
             'email' => 'required|email|unique:users',
             'username' => 'required|max:255|unique:users',
             'role_id' => 'required|max:4|numeric|min:2',
-
+            'status' => 'required',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
@@ -152,6 +152,8 @@ class ManageUserController extends Controller
 
             'role_id.numeric' => 'Ô role_id phải là số',
             'role_id.min' => 'Ô role_id có giá trị từ 2 đến 4',
+
+            'status.required' => 'Ô status không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -181,6 +183,37 @@ class ManageUserController extends Controller
         ]);
     }
 
+    public function update_tk_kh(Request $request, $user_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users',
+            'username' => 'required|max:255|unique:users',
+            'status' => 'required',
+        ], [
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.email' => 'Địa chỉ email không hợp lệ',
+            'email.unique' => 'Địa chỉ email đã tồn tại',
+
+            'username.required' => 'Ô username không được bỏ trống',
+            'username.max' => 'Ô username tối đa 255 ký tự',
+            'username.unique' => 'username đã tồn tại',
+
+            'status.required' => 'Ô status không được bỏ trống',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->messages(),
+            ]);
+        }
+        $user = User::find($user_id);
+        $user = $user->update($request->all());
+        return response()->json([
+            'status' => 200,
+            'user' => $user,
+            'message' => 'sửa thành công',
+        ]);
+    }
 
     public function destroy_user_customer($user_id)
     {
