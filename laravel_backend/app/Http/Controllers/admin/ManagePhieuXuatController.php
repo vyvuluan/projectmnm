@@ -281,10 +281,10 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-                if ($px->staus >= 1) {
+                if ($px->status >= 1) {
                     return response()->json([
                         'status' => 400,
-                        'error' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
+                        'message' => 'Phiếu Xuất đã được xác nhận không thể chỉnh sửa ',
                     ]);
                 }
                 //  $px->employee_id = $request->employee_id;

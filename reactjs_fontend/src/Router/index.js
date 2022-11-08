@@ -24,6 +24,7 @@ import {
   Checkout,
   Accountinfo,
   NewPass,
+  MyOrder,
 
 } from "../components/form";
 import {
@@ -41,7 +42,7 @@ import {
   Phieunhap,
   PhieuXuat,
 } from "../components/form-admin";
-import Chart  from "../components/form-admin/chart";
+import Chart from "../components/form-admin/chart";
 import LoginAdmin from "../components/form-admin/loginAdmin";
 export const PublicRouter = [
   {
@@ -61,7 +62,7 @@ export const PublicRouter = [
   },
 
   {
-    path: "/CheckOrder",
+    path: "/myorder/CheckOrder/:id",
     component: CheckOrder,
     layout: _Layout,
   },
@@ -130,6 +131,11 @@ export const PublicRouter = [
   {
     path: "/Accountinfo",
     component: Accountinfo,
+    layout: _Layout,
+  },
+  {
+    path: "/myorder",
+    component: MyOrder,
     layout: _Layout,
   },
 ];
