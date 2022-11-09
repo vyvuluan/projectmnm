@@ -15,6 +15,7 @@ const UpdateCtPN = ({
   tenSP,
   gia,
   soLuong,
+  test,
 }) => {
   const [idProduct, setIdProduct] = useState();
 
@@ -47,7 +48,7 @@ const UpdateCtPN = ({
     axios
       .put(`api/kho/updateCtPN/${idPN}/${idSP}`, data)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         if (res.status == 200) {
           swal({
             title: res.data.message,
@@ -55,7 +56,32 @@ const UpdateCtPN = ({
             button: "đóng",
           });
           showModal(false);
+          // const data1 = {
+          //   created_at: "2022-11-08T12:48:06.000000Z",
+          //   gia: CTPN.gia,
+          //   pn_id: idPN,
+          //   product: {
+          //     baoHanh: 12,
+          //     created_at: null,
+          //     ctSanPham: "12",
+          //     gia: 1200000,
 
+          //     hinh: "12",
+          //     id: idProduct,
+          //     maLoai: 2,
+          //     maNCC: 2,
+          //     maNSX: 2,
+          //     moTa: "12",
+          //     soLuongSP: 286,
+          //     tenSP: "laptop dell vip",
+          //     updated_at: "2022-11-08T13:30:26.000000Z",
+          //   },
+
+          //   product_id: idProduct,
+          //   soluong: CTPN.soluong,
+          //   updated_at: "2022-11-08T13:30:26.000000Z",
+          // };
+          // test(data1);
         }
         if (res.data.status == 400) {
           swal({
