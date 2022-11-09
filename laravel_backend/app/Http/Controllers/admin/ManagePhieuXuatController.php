@@ -180,7 +180,7 @@ class ManagePhieuXuatController extends Controller
                     }
                     $checksp->soLuongSP -= $request->soluong;
                     $checksp->save();
-                    $checkpx->tongTien += ($checksp->gia) * $request->soluong;
+                    $checkpx->tongTien += ($checksp->gia) * $request->soluong * (100 * 1.0 - $checkpx->discount) / 100;
                     $checkpx->save();
                     // DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
                     //  values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
@@ -480,6 +480,8 @@ class ManagePhieuXuatController extends Controller
                             $checksp->soLuongSP -= $slupdate;
                             $checksp->save();
                             $px->tongTien += ($slupdate * $checksp->gia) - ($slgio * $checksp->gia);
+
+                            //* (100 * 1.0 - $discount->phantram) / 100
                             $px->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
                                 ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia, 'updated_at' => date('Y-m-d H:i:s')]);
@@ -557,7 +559,7 @@ class ManagePhieuXuatController extends Controller
         $data =  $pxcts->where('product_id', $maspct)->first();
         $spkho = Product::find($maspct);
         $spkho->soLuongSP += $data->soluong;
-        $px->tongTien -= $data->soluong * $spkho->gia;
+        $px->tongTien -= $data->soluong * $spkho->gia  * (100 * 1.0 - $px->discount) / 100;
         $px->save();
         $spkho->save();
         DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
