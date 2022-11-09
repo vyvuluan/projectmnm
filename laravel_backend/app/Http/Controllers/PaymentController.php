@@ -64,10 +64,16 @@ class PaymentController extends Controller
                     ->where('end', '>', $date)
                     ->first();
                 if (!empty($discount)) {
-                    $payment->discount = $discount->phantram;
-                    $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
-                }
-                 else {
+                    if ($discount->dieukien < $tongTien) {
+                        $payment->discount = $discount->phantram;
+                        $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
+                    } else {
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
+                        ]);
+                    }
+                } else {
                     return response()->json([
                         'status' => 400,
                         'message' => 'Không có mã giảm giá bạn vừa nhập',

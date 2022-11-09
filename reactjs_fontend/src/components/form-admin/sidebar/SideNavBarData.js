@@ -6,6 +6,7 @@ import * as RiI from "react-icons/ri";
 import * as HiI from "react-icons/hi";
 import { FaProductHunt } from "react-icons/fa"
 import { AiOutlineContacts } from "react-icons/ai";
+import { TbDiscount2 } from 'react-icons/tb'
 import {
   MdOutlineManageAccounts,
   MdOutlineRequestPage,
@@ -48,6 +49,13 @@ export const SideNavBarData = [
     icon: <BiCategory />,
     link: "/loaisp",
     id_role: [3]
+  },
+  {
+    title: "Khuyến mại",
+    path: "/discount",
+    icon: <TbDiscount2 />,
+    link: "/discount",
+    id_role: [4]
   },
   {
     title: "Liên hệ",

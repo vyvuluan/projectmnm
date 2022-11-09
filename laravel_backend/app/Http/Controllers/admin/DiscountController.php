@@ -132,14 +132,13 @@ class DiscountController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'discount_id' => 'required|unique:discounts',
+            'discount_id' => 'required',
             'phantram' => 'required|numeric|max:100',
             'dieukien' => 'required|numeric',
             'start' => 'required',
             'end' => 'required',
         ], [
             'discount_id.required' => 'Ô discount_id Không được bỏ trống',
-            'discount_id.unique' => 'discount_id đã tồn tại',
 
             'phantram.required' => 'Ô phantram không được bỏ trống',
             'phantram.numeric' => 'Ô phantram phải là số',
@@ -158,8 +157,8 @@ class DiscountController extends Controller
             ]);
         }
 
-        $discount = Discount::where('discount_id', $id)->first();
-        $discount = $discount->update($request->all());
+        $discount = Discount::where('discount_id', $id)->delete();
+        $discount = Discount::create($request->all());
         return response()->json([
             'status' => 200,
             'discount' => $discount,

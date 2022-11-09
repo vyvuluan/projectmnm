@@ -43,6 +43,7 @@ import {
   PhieuXuat,
   DonHang,
   LoaiSP,
+  Discount,
 } from "../components/form-admin";
 import Chart from "../components/form-admin/chart";
 import LoginAdmin from "../components/form-admin/loginAdmin";
@@ -222,6 +223,11 @@ export const PublicRouter_Admin = [
   {
     path: "/loaisp",
     component: LoaiSP,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/discount",
+    component: Discount,
     layout: _LayoutAdmin,
   },
 ];

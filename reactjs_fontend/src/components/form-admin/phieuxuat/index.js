@@ -639,9 +639,6 @@ function Index() {
                                     items={pxsearchList}
                                     onSearch={handleOnPxSearch}
                                     onClear={handleOnPxClear}
-                                    // fuseOptions={{ keys: ["id", "tenKH", "sdt"] }}
-                                    // resultStringKeyName="tenKH"
-                                    // formatResult={formatResult}
                                     placeholder='Tìm kiếm phiếu xuất'
                                     maxResults={10}
                                     showNoResults={false}
@@ -654,10 +651,8 @@ function Index() {
                                         hoverBackgroundColor: "#d19c97",
                                         color: "black",
                                         fontSize: "15px",
-                                        // fontFamily: "Courier",
                                         iconColor: "black",
                                         lineColor: "#d19c97",
-                                        // placeholderColor: "black",
                                         clearIconMargin: "3px 8px 0 0",
                                         zIndex: '2',
                                     }}

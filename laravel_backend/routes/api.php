@@ -41,6 +41,8 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 //api search nhà cung cấp theo tên mã số điện thoại
 Route::get('/searchNcc', [ManageNccController::class, 'searchNcc']);
+//api search nhà sản xuất theo tên mã quốc gia
+Route::get('/searchNsx', [ManageNsxController::class, 'searchNsx']);
 //api search sản phẩm theo tên mã
 Route::get('/searchProduct', [ManageProductController::class, 'searchProduct']);
 //api search phiếu nhập
