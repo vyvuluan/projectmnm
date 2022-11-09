@@ -23,11 +23,11 @@ const Prodedit = ({ product, showModal }) => {
     });
 
     const handleMotaChange = (value) => {
-        setMota({ moTa: value });
+        setMota(value);
     }
 
     const handleCTSPChange = (value) => {
-        setCtsp({ ctSanPham: value })
+        setCtsp(value)
     }
 
     const handleProductChange = (e) => {
@@ -46,8 +46,8 @@ const Prodedit = ({ product, showModal }) => {
             maLoai: prodEdit.loaisp,
             maNCC: prodEdit.ncc,
             maNSX: prodEdit.nsx,
-            moTa: mota.moTa,
-            ctSanPham: ctsp.ctSanPham,
+            moTa: mota,
+            ctSanPham: ctsp,
         }
 
         axios.put(`/api/kho/products/${id}`, data).then(res => {
@@ -67,41 +67,35 @@ const Prodedit = ({ product, showModal }) => {
             >
                 <B.Tab eventKey={1} title="Thông tin sản phẩm" className=" border border-top-0 py-3 px-3">
                     <B.Form onSubmit={handleUpdate}>
-                        <B.FormGroup>
-                            <B.FormLabel>Tên sản phẩm</B.FormLabel>
-                            <B.FormControl type='text' name='tenSP' className='rounded-0 shadow-none mb-3' placeholder='Tên sản phẩm'
-                                value={prodEdit.tenSP} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        <B.FormGroup>
-                            <B.FormLabel>Số Lượng</B.FormLabel>
-                            <B.FormControl type='text' name='sl' className='rounded-0 shadow-none mb-3' placeholder='Số Lượng'
-                                value={prodEdit.sl} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        <B.FormGroup>
-                            <B.FormLabel>Giá</B.FormLabel>
-                            <B.FormControl type='text' name='gia' className='rounded-0 shadow-none mb-3' placeholder='Giá'
-                                value={prodEdit.gia} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        {/* <B.FormGroup>
-                            <B.FormLabel>Loại sản phẩm</B.FormLabel>
-                            <B.FormControl type='text' name='loaisp' className='rounded-0 shadow-none mb-3' placeholder='Loại sản phẩm'
-                                value={prodEdit.loaisp} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup> */}
-                        <B.FormGroup>
-                            <B.FormLabel>Bảo Hành</B.FormLabel>
-                            <B.FormControl type='text' name='baohanh' className='rounded-0 shadow-none mb-3' placeholder='Bảo Hành'
-                                value={prodEdit.baohanh} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        {/* <B.FormGroup>
-                            <B.FormLabel>Nhà cung cấp</B.FormLabel>
-                            <B.FormControl type='text' name='ncc' className='rounded-0 shadow-none mb-3' placeholder='Nhà cung cấp'
-                                value={prodEdit.ncc} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        <B.FormGroup>
-                            <B.FormLabel>Nhà sản xuất</B.FormLabel>
-                            <B.FormControl type='text' name='nsx' className='rounded-0 shadow-none mb-3' placeholder='Nhà sản xuất'
-                                value={prodEdit.nsx} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup> */}
+                        <B.Row>
+                            <B.Col lg={4}>
+                                <div className="prev-container mb-2 me-2">
+                                    {<img src={`http://localhost:8000/uploadhinh/${product.hinh}`} alt=""></img>}
+                                </div>
+                            </B.Col>
+                            <B.Col lg={8}>
+                                <B.FormGroup>
+                                    <B.FormLabel>Tên sản phẩm</B.FormLabel>
+                                    <B.FormControl type='text' name='tenSP' className='rounded-0 shadow-none mb-3 w-100' placeholder='Tên sản phẩm'
+                                        value={prodEdit.tenSP} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Số Lượng</B.FormLabel>
+                                    <B.FormControl type='text' name='sl' className='rounded-0 shadow-none mb-3' placeholder='Số Lượng'
+                                        value={prodEdit.sl} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Giá</B.FormLabel>
+                                    <B.FormControl type='text' name='gia' className='rounded-0 shadow-none mb-3' placeholder='Giá'
+                                        value={prodEdit.gia} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Bảo Hành</B.FormLabel>
+                                    <B.FormControl type='text' name='baohanh' className='rounded-0 shadow-none mb-3' placeholder='Bảo Hành'
+                                        value={prodEdit.baohanh} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                            </B.Col>
+                        </B.Row>
                         <B.Button variant='primary' type='submit' className='rounded-0 w-100' onClick={showModal}>Lưu thay đổi</B.Button>
                     </B.Form>
                 </B.Tab>
@@ -113,7 +107,6 @@ const Prodedit = ({ product, showModal }) => {
                             editorRef.current = editor
                         }}
                         initialValue={mota}
-                        // value={mota}
                         init={{
                             height: 500,
                             menubar: false,
