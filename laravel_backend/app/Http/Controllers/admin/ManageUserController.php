@@ -134,8 +134,8 @@ class ManageUserController extends Controller
     public function update(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users',
-            'username' => 'required|max:255|unique:users',
+            'email' => 'required|email',
+            'username' => 'required|max:255',
             'role_id' => 'required|max:4|numeric|min:2',
             'status' => 'required',
         ], [
@@ -162,12 +162,89 @@ class ManageUserController extends Controller
             ]);
         }
         $user = User::find($user_id);
-        $user = $user->update($request->all());
-        return response()->json([
-            'status' => 200,
-            'user' => $user,
-            'message' => 'sửa thành công',
-        ]);
+
+        // $check_email = User::where('email',$request->email)->where('id',$user_id)->count();
+        // $check_username = User::where('username',$request->username)->where('id',$user_id)->count();
+
+        if ($user->email == $request->email && $user->username = $request->username) {
+            $user = $user->update($request->all());
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'sửa thành công',
+            ]);
+        }
+        $check_email = User::where('email', $request->email)->count();
+        $check_username = User::where('username', $request->username)->count();
+        // if($check_email != 0 && $check_username != 0)
+        // {
+        //     $user = $user->update($request->all());
+        //     return response()->json([
+        //         'status' => 200,
+        //         'user' => $user,
+        //         'message' => 'sửa thành công',
+        //     ]);
+        // }
+        // else if($check_email == 0 && $check_username != 0)
+        // {
+        //     $user->username = $request->username ;
+        //     $user->role_id = $request->role_id ;
+        //     $user->status = $request->status ;
+        //     $user->save() ;
+        //     return response()->json([
+        //         'status' => 200,
+        //         'user' => $user,
+        //         'message' => 'sửa thành công',
+        //     ]);
+        // }
+        // else if($check_email != 0 && $check_username == 0)
+        // {
+        //     $user->email = $request->email ;
+        //     $user->role_id = $request->role_id ;
+        //     $user->status = $request->status ;
+        //     $user->save() ;
+        //     return response()->json([
+        //         'status' => 200,
+        //         'user' => $user,
+        //         'message' => 'sửa thành công',
+        //     ]);
+        // }
+        // else
+        // {
+
+        // }
+
+        // if ($request->email != $user->email && $request->username != $user->username)
+        // {
+        //     $check = User::where('email',$request->email)->count();
+        // }
+        // if($request->email != $user->email)
+        // {
+
+        // }
+        // else if($request->username != $user->username)
+        // {
+
+        // }
+        // else
+        // {
+
+        // }
+
+        if ($check_email != 0 || $check_username != 0) {
+
+            return response()->json([
+                'status' => 400,
+                'message' => 'ko thành công',
+            ]);
+        } else {
+            $user = $user->update($request->all());
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'sửa thành công',
+            ]);
+        }
     }
     public function destroy($user_id)
     {
