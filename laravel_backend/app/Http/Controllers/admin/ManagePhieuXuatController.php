@@ -75,14 +75,14 @@ class ManagePhieuXuatController extends Controller
                         'data' => $px,
                     ]);
                 }
-            case 3; // Lọc theo giá cao
+            case 3; // Lọc theo giá thấp đến cao
                 $px = PhieuXuat::orderBy('tongTien', 'asc')->paginate(10);
                 return response()->json([
                     'status' => 200,
                     'data' => $px,
 
                 ]);
-            case 4; // Lọc theo giá thấp
+            case 4; // Lọc theo giá cao đến thấp
                 $px = PhieuXuat::orderBy('tongTien', 'desc')->paginate(10);
                 return response()->json([
                     'status' => 200,
