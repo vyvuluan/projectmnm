@@ -175,13 +175,61 @@ function Index() {
             tongTien: px.tongTien,
             status: value.id,
         }
-        axios.put(`/api/kho/px/${px.id}`, data).then(res => {
-            if (res.data.status === 200) {
-                setSubmitting(true);
-            } else if (res.data.status === 400) {
-                swal('Thất bại', res.data.message, 'warning')
-            }
-        })
+        if (value.id === 4 && px.status !== 4 && px.status !== 5) {
+            swal({
+                text: 'Khi xuất kho bạn sẽ không thể thay đổi phiếu xuất!',
+                title: 'Bạn chắc chứ?',
+                icon: 'warning',
+                buttons: {
+                    cancel: "Hủy bỏ",
+                    yes: {
+                        text: "Xuất kho",
+                        value: "yes",
+                    },
+                }
+            }).then((value) => {
+                if (value === 'yes') {
+                    axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                        if (res.data.status === 200) {
+                            setSubmitting(true);
+                        } else if (res.data.status === 400) {
+                            swal('Thất bại', res.data.message, 'warning')
+                        }
+                    })
+                }
+            })
+        } else if (value.id === 5 && px.status !== 5 && px.status !== 4) {
+            swal({
+                text: 'Khi hủy đơn bạn sẽ không thể xuất hay thay đổi phiếu!',
+                title: 'Bạn chắc chứ?',
+                icon: 'warning',
+                buttons: {
+                    cancel: "Hủy bỏ",
+                    yes: {
+                        text: "Hủy phiếu",
+                        value: "yes",
+                    },
+                }
+            }).then((value) => {
+                if (value === 'yes') {
+                    axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                        if (res.data.status === 200) {
+                            setSubmitting(true);
+                        } else if (res.data.status === 400) {
+                            swal('Thất bại', res.data.message, 'warning')
+                        }
+                    })
+                }
+            })
+        } else {
+            axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                if (res.data.status === 200) {
+                    setSubmitting(true);
+                } else if (res.data.status === 400) {
+                    swal('Thất bại', res.data.message, 'warning')
+                }
+            })
+        }
     }
     // End
 
@@ -228,7 +276,7 @@ function Index() {
     // End
 
     const handleOnPxSearch = (key) => {
-        if (key != "") {
+        if (key !== "") {
             axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
                 if (res.status === 200) {
                     setPxSearchlist(res.data.data)
@@ -339,7 +387,7 @@ function Index() {
                 break;
             }
             case 5: {
-                x = 'Hủy đơn hàng';
+                x = 'Đã hủy đơn';
                 break;
             }
             default: {
@@ -384,28 +432,41 @@ function Index() {
     }
 
     const SortStt = (e) => {
-        axios.get(`/api/kho/locpx?key=1&value=${e}`).then(res => {
-            if (res.data.status === 200) {
-                setPxlist(res.data.data.data);
-                setTotalPage(res.data.data.total);
-                setPerPage(res.data.data.per_page);
-                setCurrentPage(res.data.data.current_page);
-            }
-        })
+        var key = '';
+        switch (e) {
+            case '0': case '1': case '2': case '3': case '4': case '5':
+                {
+                    key = 1;
+                    break;
+                }
+            case 'COD': case 'PayPal': case 'Tại quầy':
+                {
+                    key = 2;
+                    break;
+                }
+            case '':
+                {
+                    key = '';
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+        if (key !== '') {
+            axios.get(`/api/kho/locpx?key=${key}&value=${e}`).then(res => {
+                if (res.data.status === 200) {
+                    setPxlist(res.data.data.data);
+                    setTotalPage(res.data.data.total);
+                    setPerPage(res.data.data.per_page);
+                    setCurrentPage(res.data.data.current_page);
+                }
+            })
+        } else if (key === '') {
+            setSubmitting(true);
+        }
     }
-
-    const SortPTTT = (e) => {
-        axios.get(`/api/kho/locpx?key=2&value=${e}`).then(res => {
-            if (res.data.status === 200) {
-                setPxlist(res.data.data.data);
-                setTotalPage(res.data.data.total);
-                setPerPage(res.data.data.per_page);
-                setCurrentPage(res.data.data.current_page);
-            }
-        })
-    }
-
-
 
     const [dayStart, setDayStart] = useState();
     const [dayEnd, setDayEnd] = useState();
@@ -420,23 +481,6 @@ function Index() {
             }
         });
     }
-
-
-    // hàm này sau này có thể sẽ dùng
-
-    // const handleOnSelect = (value) => {
-    //     var checkProductExist = prodData.filter((val) => {
-    //         return val.id == value.id ? true : false
-    //     });
-
-    //     if (checkProductExist.length > 0) {
-    //         checkProductExist[0].soLuongSP += 1;
-    //     } else {
-    //         value.soLuongSP = 1;
-    //         setProdData((prev) => [...prev, value]);
-    //     }
-    //     setShowTable(!showTable)
-    // };
 
 
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
@@ -619,29 +663,20 @@ function Index() {
                                 />
                             </B.Col>
                             <B.Col lg={8}>
-                                <div className='d-flex justify-content-end'>
-                                    <B.Button variant='outline-primary' className='rounded-0 mb-2 me-2' onClick={() => setSubmitting(true)}>Bỏ sắp xếp</B.Button>
-                                    <B.FormGroup className='mb-2 me-2'>
-                                        <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
-                                            <option>Sắp xếp trạng thái</option>
-                                            <option value={0}>Chờ xác nhận</option>
-                                            <option value={1}>Đã xác nhận</option>
-                                            <option value={2}>Đang đóng gói</option>
-                                            <option value={3}>Đang vận chuyển</option>
-                                            <option value={4}>Giao hàng thành công</option>
-                                            <option value={5}>Đơn hàng đã hủy</option>
-                                            <option value={6}>Đã xuất kho</option>
-                                        </B.FormSelect>
-                                    </B.FormGroup>
-                                    <B.FormGroup className='mb-2'>
-                                        <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortPTTT(e.target.value)}>
-                                            <option>Sắp xếp PT thanh toán</option>
-                                            <option value='COD'>COD</option>
-                                            <option value='PayPal'>Paypal</option>
-                                            <option value='Tại quầy'>Tại quầy</option>
-                                        </B.FormSelect>
-                                    </B.FormGroup>
-                                </div>
+                                <B.FormGroup className='mb-2 pull-right'>
+                                    <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
+                                        <option value=''>Sắp xếp</option>
+                                        <option value='0'>Chờ xác nhận</option>
+                                        <option value='1'>Đã xác nhận</option>
+                                        <option value='2'>Đang đóng gói</option>
+                                        <option value='3'>Đang vận chuyển</option>
+                                        <option value='4'>Giao hàng thành công</option>
+                                        <option value='5'>Đơn hàng đã hủy</option>
+                                        <option value='COD'>COD</option>
+                                        <option value='PayPal'>Paypal</option>
+                                        <option value='Tại quầy'>Tại quầy</option>
+                                    </B.FormSelect>
+                                </B.FormGroup>
                             </B.Col>
                         </B.Row>
                         <B.Row className='px-xl-3'>

@@ -256,7 +256,7 @@ class ManagePhieuXuatController extends Controller
         } else if ($px->status == 5 && $request->status < 5) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
+                'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
             ]);
         } else if ($px->status == 4 && $request->status < 4) {
             return response()->json([
@@ -351,7 +351,7 @@ class ManagePhieuXuatController extends Controller
                 } else if ($px->status == 5 && $request->status < 5) {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
+                        'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
                     ]);
                 } else if ($px->status == 4 && $request->status < 4) {
                     return response()->json([
