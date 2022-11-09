@@ -141,11 +141,10 @@ class ManageUserController extends Controller
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
-            'email.unique' => 'Địa chỉ email đã tồn tại',
+
 
             'username.required' => 'Ô username không được bỏ trống',
             'username.max' => 'Ô username tối đa 255 ký tự',
-            'username.unique' => 'username đã tồn tại',
 
             'role_id.required' => 'Ô role_id không được bỏ trống',
             'role_id.max' => 'Ô role_id có giá trị từ 2 đến 4',
@@ -235,7 +234,7 @@ class ManageUserController extends Controller
 
             return response()->json([
                 'status' => 400,
-                'message' => 'ko thành công',
+                'message' => 'Username hoặc email đã tồn tại',
             ]);
         } else {
             $user = $user->update($request->all());
