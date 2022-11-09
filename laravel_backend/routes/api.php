@@ -25,7 +25,7 @@ use  App\Http\Controllers\admin\ManageLoaispController;
 use  App\Http\Controllers\admin\ManageCustomerController;
 use  App\Http\Controllers\admin\ManagePhieuNhapController;
 use  App\Http\Controllers\admin\ManageBaoCaoController;
-
+use  App\Http\Controllers\admin\DiscountController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -191,9 +191,11 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::get('doanhThuNhanVien', [ManageBaoCaoController::class, 'doanhThuNhanVien']);
     //api hiển thị danh sách các contact
     Route::get('/contact', [ContactContrller::class, 'index']);
-    Route::post('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
+    Route::put('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
     //api set status đơn hàng
     Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
+    //discount
+    Route::resource('discount', DiscountController::class);
 });
 
 

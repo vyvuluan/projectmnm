@@ -13,8 +13,7 @@ const DashBoard = () => {
   const [data, setData] = useState();
   const [tabkey, setTabKey] = useState(1);
   const [dataKho, setDataKho] = useState();
-  
-
+  const [dataKho2, setDataKho2] = useState();
   const [dataNV, setDataNV] = useState();
   const [dataSPganhet, setDataSPganhet] = useState([]);
 
@@ -48,8 +47,18 @@ const DashBoard = () => {
           // handle error
           console.log(error);
         });
-        
-      
+      axios
+        .get("/api/kho/thongKeDoanhThuSoLuong")
+        .then((res) => {
+          if (res.data.status === 200) {
+            // console.log(res.data);
+            setDataKho2(res.data);
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
     } else if (cookies.get("role_id") == 4) {
       axios
         .get("/api/nhanvien/doanhThuNhanVien")
@@ -96,8 +105,8 @@ const DashBoard = () => {
             onSelect={(k) => setTabKey(k)}
           
           >
-            <Tab eventKey={1} title="Thống kê PN" className=" border border-top-0 py-3 px-3">
-              <Chart dataKho={dataKho} />
+            <Tab eventKey={1} title="Thống kê">
+              <Chart dataKho={dataKho} dataKho2={dataKho2} />
             </Tab>
             
             <Tab eventKey={3} title="Sản phẩm gần hết">
@@ -165,10 +174,10 @@ const DashBoard = () => {
       {cookies.get("role_id") == 3
         ? UIkho
         : cookies.get("role_id") == 4
-        ? UINV
-        : cookies.get("role_id") == 2
-        ? UIAdmin
-        : null}
+          ? UINV
+          : cookies.get("role_id") == 2
+            ? UIAdmin
+            : null}
       {/* <Widget dataWidget={data} />
       <div className="row">
         <div className="col-xl-8 col-lg-7">

@@ -12,6 +12,7 @@ use App\Models\loaisp;
 use App\Models\Product as ModelsProduct;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+
 // use File;
 use Illuminate\Support\Facades\File;
 
@@ -278,6 +279,7 @@ class ProductController extends Controller
     {
         switch ($request->key) {
             case 1: { //tên A - Z
+                
                     $product = Product::orderBy('tenSP',    'asc')->paginate(10);
                     return response()->json([
                         'status' => 200,

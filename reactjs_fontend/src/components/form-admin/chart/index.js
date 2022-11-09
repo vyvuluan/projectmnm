@@ -20,15 +20,17 @@ ChartJS.register(
   Legend
 );
 
-const Chart = ({ data1, dataKho, dataNV }) => {
+const Chart = ({ data1, dataKho, dataKho2, dataNV }) => {
   const cookies = new Cookies();
 
   // console.log(data1?.total_pn);
   const [dateTime, setDateTime] = useState({});
+  const [dateTime2, setDateTime2] = useState({});
   const [terms, setTerms] = useState(true);
 
   const [px, setpx] = useState({});
   const [sl, setSL] = useState({});
+  const [sl2, setSL2] = useState({});
 
   useEffect(() => {
     if (cookies.get("role_id") == 2) {
@@ -38,10 +40,12 @@ const Chart = ({ data1, dataKho, dataNV }) => {
         setpx(data1?.total_px);
       }
     } else if (cookies.get("role_id") == 3) {
-      if (dataKho && terms) {
+      if (dataKho && dataKho2 && terms) {
         setTerms(false);
         setDateTime(dataKho?.total_pn);
+        setDateTime2(dataKho2?.total_px);
         setSL(dataKho?.total_sl);
+        setSL2(dataKho2?.total_sl);
       }
     } else if (cookies.get("role_id") == 4) {
       if (dataNV && terms) {
@@ -50,7 +54,7 @@ const Chart = ({ data1, dataKho, dataNV }) => {
         setSL(dataNV?.total_sl);
       }
     }
-  });
+  }, [cookies, data1, dataKho, dataKho2, dataNV, terms]);
 
   const pn = Object.keys(dateTime).map((key) => dateTime[key]);
   let dataTongPN = pn.map(({ tongTien }) => tongTien);
@@ -62,7 +66,7 @@ const Chart = ({ data1, dataKho, dataNV }) => {
     plugins: {
       legend: {
         position: "top",
-        
+
       },
       title: {
         display: true,
@@ -95,6 +99,10 @@ const Chart = ({ data1, dataKho, dataNV }) => {
   let dataTongPNKho = pnKho.map(({ tongTien }) => tongTien);
   const dataSl = Object.keys(sl).map((key) => sl[key]);
   let dataTongSL = dataSl.map(({ soluong }) => soluong);
+  const pxKho = Object.keys(dateTime2).map((key) => dateTime2[key]);
+  let dataTongPXKho = pxKho.map(({ tongTien }) => tongTien);
+  const dataSl2 = Object.keys(sl2).map((key) => sl2[key]);
+  let dataTongSL2 = dataSl2.map(({ soluong }) => soluong);
 
   const dataBaoCaoKho = [
     {
@@ -103,9 +111,19 @@ const Chart = ({ data1, dataKho, dataNV }) => {
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
-      label: "Tổng số lượng",
+      label: "Doanh thu phiếu xuất",
+      data: dataTongPXKho,
+      backgroundColor: "rgba(255, 120, 0, 0.5)",
+    },
+    {
+      label: "Tổng số lượng Phiếu nhập",
       data: dataTongSL,
       backgroundColor: "rgba(53, 162, 235, 0.5)",
+    },
+    {
+      label: "Tổng số lượng Phiếu xuất",
+      data: dataTongSL2,
+      backgroundColor: "rgba(0, 255, 128, 0.5)",
     },
   ];
 
@@ -142,17 +160,17 @@ const Chart = ({ data1, dataKho, dataNV }) => {
   return (
     <Bar
 
-      className="card shadow mb-4 h-100" 
-      
+      className="card shadow mb-4 h-100"
+
       options={options}
       data={
         cookies.get("role_id") == 3
           ? dataViewKho
           : cookies.get("role_id") == 2
-          ? dataAdmin
-          : cookies.get("role_id") == 4
-          ? dataViewNV
-          : null
+            ? dataAdmin
+            : cookies.get("role_id") == 4
+              ? dataViewNV
+              : null
       }
     />
   );
