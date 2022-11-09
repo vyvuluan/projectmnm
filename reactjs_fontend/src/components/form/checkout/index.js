@@ -123,8 +123,12 @@ function Checkout() {
                         setError([]);
                         axios.post(`http://localhost:8000/api/dathang`, data).then((resp) => {
                             if (resp.data.status === 200) {
-                                swal("Success", resp.data.message, "success");
+                                swal("Thành công", resp.data.message, "success");
                                 navigate("/");
+                            } else if (resp.data.status === 401) {
+                                swal("Đăng nhập", resp.data.message, "error");
+                            } else if (resp.data.status === 400) {
+                                swal("Xin lỗi", resp.data.message, "error");
                             }
                         });
                     } else if (res.data.status === 422) {
@@ -311,19 +315,11 @@ function Checkout() {
                                     );
                                 })}
                                 <tr>
-                                    <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        Thuế
-                                    </td>
-                                    <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        10%
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td colSpan={2} className="text-end fw-semibold fs-4">
                                         Tổng tiền
                                     </td>
                                     <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        {formatMoney(totalCartPrice * 1.1)}
+                                        {formatMoney(totalCartPrice)}
                                     </td>
                                 </tr>
                             </tbody>
