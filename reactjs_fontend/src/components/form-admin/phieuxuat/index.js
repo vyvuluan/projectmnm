@@ -690,6 +690,7 @@ function Index() {
                                             <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
                                             <th>Phương thức thanh toán</th>
+                                            <th>Giảm giá</th>
                                             <th>Tổng tiền</th>
                                             <th>Trạng thái</th>
                                             <th>Thao tác</th>
@@ -705,8 +706,8 @@ function Index() {
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
-                                                        <td>{px.tongTien}</td>
-                                                        {/* <td className='text-success fw-semibold'>{test(px.status)}</td> */}
+                                                        <td>{px.discount}%</td>
+                                                        <td>{formatMoney(px.tongTien)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
                                                                 {checkStatus.map((val) => (
@@ -734,17 +735,18 @@ function Index() {
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
+                                                        <td>{px.discount}%</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
                                                         <td className='text-success fw-semibold'>{test(px.status)}</td>
-                                                        {/* <td>
-                                                                    <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>
-                                                                        {checkStatus.map((val) => (
-                                                                            <B.Dropdown.Item key={val.id}
-                                                                                onClick={() => handleUpdateStatus(val, px)}
-                                                                                eventKey={ekey}>{val.name}</B.Dropdown.Item>
-                                                                        ))}
-                                                                    </B.DropdownButton>
-                                                                </td> */}
+                                                        <td>
+                                                            <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
+                                                                {checkStatus.map((val) => (
+                                                                    <B.Dropdown.Item key={val.id}
+                                                                        onClick={() => handleUpdateStatus(val, px)}
+                                                                    >{val.name}</B.Dropdown.Item>
+                                                                ))}
+                                                            </B.DropdownButton>
+                                                        </td>
                                                         <td className='d-flex'>
                                                             <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
                                                             <FcPrint className='fs-3' onClick={() => handleShowPrint(px)} />
@@ -791,6 +793,10 @@ function Index() {
                                     <B.FormGroup className='d-flex'>
                                         <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
                                         <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.pt_ThanhToan}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Giảm giá:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.discount}%</B.FormLabel>
                                     </B.FormGroup>
                                     <B.FormGroup className='d-flex'>
                                         <B.FormLabel className='fs-6'>Đơn giá:</B.FormLabel>
@@ -1036,10 +1042,12 @@ function Index() {
 
                     <B.Tab eventKey={4} title='Lịch sử xuất hàng' className='border border-top-0 py-3 px-3'>
                         <B.Row className='px-xl-3 mb-3'>
-                            <B.Col lg={6}>
+                            <B.Col lg={9}>
                                 <B.FormGroup className='d-flex'>
-                                    <B.FormControl type='date' className='rounded-0 me-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
-                                    <B.FormControl type='date' className='rounded-0 me-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
+                                    <B.FormLabel className='fs-5'>Từ</B.FormLabel>
+                                    <B.FormControl type='date' className='rounded-0 ms-2 me-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
+                                    <B.FormLabel className='fs-5'>Đến</B.FormLabel>
+                                    <B.FormControl type='date' className='rounded-0 ms-2 me-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
                                     <B.Button variant='outline-primary' className='rounded-0' onClick={xemLichSuXuatHang}>Xem</B.Button>
                                 </B.FormGroup>
                             </B.Col>
