@@ -59,9 +59,10 @@ class ManageBaoCaoController extends Controller
             }
         }
 
-        //chưa xong
+
         $ctpxs = CtPhieuXuat::selectRaw('sum(soluong) as soluong,  maLoai')
             ->join('products', 'ct_phieu_xuats.product_id', '=', 'products.id')
+            ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
             ->groupBy('maLoai')
             ->get();
         $tongPhanTram = 0;
@@ -138,10 +139,12 @@ class ManageBaoCaoController extends Controller
                 $total_sl[$stringMY] =  CtPhieuNhap::selectRaw('sum(soluong) as soluong')
                     ->join('phieu_nhaps', 'ct_phieu_nhaps.pn_id', '=', 'phieu_nhaps.id')
                     ->whereBetween('phieu_nhaps.created_at', [$from, $to])
+                    ->where('status', 1)
                     ->first();
 
                 $total_pn[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 1)
                     ->first();
             } else {
                 $timeNow = $timeNow->subMonth();
@@ -156,10 +159,11 @@ class ManageBaoCaoController extends Controller
                 $total_sl[$stringMY] =  CtPhieuNhap::selectRaw('sum(soluong) as soluong')
                     ->join('phieu_nhaps', 'ct_phieu_nhaps.pn_id', '=', 'phieu_nhaps.id')
                     ->whereBetween('phieu_nhaps.created_at', [$from, $to])
-
+                    ->where('status', 1)
                     ->first();
                 $total_pn[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 1)
                     ->first();
             }
         }
@@ -189,10 +193,12 @@ class ManageBaoCaoController extends Controller
                 $total_sl[$stringMY] =  CtPhieuXuat::selectRaw('sum(soluong) as soluong')
                     ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
+                    ->where('status', 4)
                     ->first();
 
                 $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 4)
                     ->first();
             } else {
                 $timeNow = $timeNow->subMonth();
@@ -207,10 +213,11 @@ class ManageBaoCaoController extends Controller
                 $total_sl[$stringMY] =  CtPhieuXuat::selectRaw('sum(soluong) as soluong')
                     ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
-
+                    ->where('status', 4)
                     ->first();
                 $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 4)
                     ->first();
             }
         }
@@ -243,11 +250,13 @@ class ManageBaoCaoController extends Controller
                     ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
+                    ->where('status', 4)
                     ->first();
 
                 $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
+                    ->where('status', 4)
                     ->first();
             } else {
                 $timeNow = $timeNow->subMonth();
@@ -263,10 +272,12 @@ class ManageBaoCaoController extends Controller
                     ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
                     ->whereBetween('phieu_xuats.created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
+                    ->where('status', 4)
                     ->first();
                 $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
                     ->where('employee_id', auth()->user()->employee->id)
+                    ->where('status', 4)
                     ->first();
             }
         }
