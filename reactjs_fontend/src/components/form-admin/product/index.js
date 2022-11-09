@@ -112,6 +112,18 @@ function Index() {
     setNccData(value.id);
   };
 
+  const handleOnNsxSearch = (key) => {
+    axios.get(`http://localhost:8000/api/searchNsx?key=${key}`).then((res) => {
+      if (res.data.status === 200) {
+        setNsxlist(res.data.nsx);
+      }
+    });
+  };
+
+  const handleOnNsxSelect = (value) => {
+    setNsxData(value.id);
+  };
+
   const handleOnProdSearch = (key) => {
     if (key !== '') {
       axios.get(`http://localhost:8000/api/searchProduct?key=${key}`).then((res) => {
@@ -123,7 +135,7 @@ function Index() {
     }
   };
 
-  const handleOnProdClear = (value) => {
+  const handleOnProdClear = () => {
     setShowtable(false);
     setProdSearchlist([]);
   };
@@ -144,22 +156,6 @@ function Index() {
     };
   }, []);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    axios.get(`http://localhost:8000/api/kho/nsxall`).then((res) => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setNsxlist(res.data.Nsx);
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
   const submitProduct = (e) => {
     e.preventDefault();
 
@@ -170,7 +166,7 @@ function Index() {
     formData.append("soLuongSP", productInput.soLuong);
     formData.append("gia", productInput.gia);
     formData.append("maNCC", nccData);
-    formData.append("maNSX", productInput.nsx_id);
+    formData.append("maNSX", nsxData);
     formData.append("moTa", mota.moTa);
     formData.append("baoHanh", productInput.baohanh);
     formData.append("ctSanPham", ctsp.ctSanPham);
@@ -351,8 +347,8 @@ function Index() {
                       <small className="text-danger">{errorlist.gia}</small>
                     </B.FormGroup>
                   </div>
-                  <div className="d-flex">
-                    <B.FormGroup className="me-2 w-100">
+                  <div className="d-flex justify-content-between">
+                    <B.FormGroup className="w-100 me-2">
                       <B.FormControl
                         type="text"
                         name="baohanh"
@@ -386,27 +382,30 @@ function Index() {
                         }}
                       />
                     </div>
-                    <B.FormGroup className="w-100">
-                      <B.FormSelect
-                        name="nsx_id"
-                        onChange={handleProductInput}
-                        value={productInput.nsx_id}
-                        className="rounded-0 shadow-none mb-3 text-muted"
-                      >
-                        <option>Chọn nhà sản xuất</option>
-                        {nsxlist &&
-                          nsxlist.map((item) => {
-                            return (
-                              <option value={item.id} key={item.id}>
-                                {item.tenNSX}
-                              </option>
-                            );
-                          })}
-                      </B.FormSelect>
-                      <small className="text-danger">{errorlist.nsx_id}</small>
-                    </B.FormGroup>
+                    <div className="w-100">
+                      <ReactSearchAutocomplete
+                        items={nsxlist}
+                        onSearch={handleOnNsxSearch}
+                        onSelect={handleOnNsxSelect}
+                        placeholder='Tìm kiếm nhà sản xuất'
+                        fuseOptions={{ keys: ["id", "tenNSX"] }}
+                        resultStringKeyName="tenNSX"
+                        styling={{
+                          height: "36px",
+                          border: "1px solid lightgray",
+                          borderRadius: "0",
+                          backgroundColor: "white",
+                          boxShadow: "none",
+                          hoverBackgroundColor: "#d19c97",
+                          color: "black",
+                          fontSize: "15px",
+                          iconColor: "black",
+                          lineColor: "#d19c97",
+                          clearIconMargin: "3px 8px 0 0",
+                        }}
+                      />
+                    </div>
                   </div>
-
                   <B.Button
                     type="submit"
                     variant="outline-primary"
