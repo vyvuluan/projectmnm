@@ -444,6 +444,16 @@ function Index() {
                     key = 2;
                     break;
                 }
+            case 'h-l':
+                {
+                    key = 4;
+                    break;
+                }
+            case 'l-h':
+                {
+                    key = 3;
+                    break;
+                }
             case '':
                 {
                     key = '';
@@ -662,7 +672,8 @@ function Index() {
                                 <B.FormGroup className='mb-2 pull-right'>
                                     <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
                                         <option value=''>Sắp xếp</option>
-                                        <option value='0'>Chờ xác nhận</option>
+                                        <option value='h-l'>Giá cao-thấp</option>
+                                        <option value='l-h'>Giá thấp-cao</option>
                                         <option value='1'>Đã xác nhận</option>
                                         <option value='2'>Đang đóng gói</option>
                                         <option value='3'>Đang vận chuyển</option>
