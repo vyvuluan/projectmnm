@@ -108,10 +108,6 @@ const DonHang = () => {
         x = 'Đơn hàng đã hủy';
         break;
       }
-      case 6: {
-        x = 'Đã xuất kho';
-        break;
-      }
       default: {
         break;
       }
@@ -144,10 +140,6 @@ const DonHang = () => {
       }
       case 5: {
         x = 'danger';
-        break;
-      }
-      case 6: {
-        x = 'success';
         break;
       }
       default: {

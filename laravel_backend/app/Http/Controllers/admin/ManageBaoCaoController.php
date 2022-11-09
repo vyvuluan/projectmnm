@@ -31,10 +31,12 @@ class ManageBaoCaoController extends Controller
 
                 $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 4)
                     ->first();
 
                 $total_pn[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 1)
                     ->first();
             } else {
                 $timeNow = $timeNow->subMonth();
@@ -48,14 +50,16 @@ class ManageBaoCaoController extends Controller
 
                 $total_px[$stringMY] =  PhieuXuat::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 4)
                     ->first();
                 $total_pn[$stringMY] =  PhieuNhap::selectRaw('sum(tongTien) as tongTien')
                     ->whereBetween('created_at', [$from, $to])
+                    ->where('status', 1)
                     ->first();
             }
         }
 
-
+        //chưa xong
         $ctpxs = CtPhieuXuat::selectRaw('sum(soluong) as soluong,  maLoai')
             ->join('products', 'ct_phieu_xuats.product_id', '=', 'products.id')
             ->groupBy('maLoai')
@@ -70,10 +74,10 @@ class ManageBaoCaoController extends Controller
             $phanTramLoai[$ctpx->maLoai] = ($ctpx->soluong * 100) / $tongPhanTram;
         }
 
-        $doanhthu = PhieuXuat::selectRaw('sum(tongTien) as tongTien')
+        $doanhthu = PhieuXuat::selectRaw('sum(tongTien) as tongTien')->where('status', 4)
             ->first();
 
-        $chitieu = PhieuNhap::selectRaw('sum(tongTien) as tongTien')
+        $chitieu = PhieuNhap::selectRaw('sum(tongTien) as tongTien')->where('status', 1)
             ->first();
         return response()->json([
             'status' => 200,
@@ -96,7 +100,7 @@ class ManageBaoCaoController extends Controller
     {
         $from = Carbon::createFromFormat('Y-m-d', $request->dateFrom)->format('Y-m-d');
         $to = Carbon::createFromFormat('Y-m-d', $request->dateTo)->format('Y-m-d');
-        $pn =  PhieuNhap::whereBetween('created_at', [$from, $to])
+        $pn =  PhieuNhap::whereBetween('created_at', [$from, $to])->where('status', 1)
             ->paginate(10);
         return response()->json([
             'status' => 200,
@@ -107,14 +111,14 @@ class ManageBaoCaoController extends Controller
     {
         $from = Carbon::createFromFormat('Y-m-d', $request->dateFrom)->format('Y-m-d');
         $to = Carbon::createFromFormat('Y-m-d', $request->dateTo)->format('Y-m-d');
-        $px =  PhieuXuat::whereBetween('created_at', [$from, $to])
+        $px =  PhieuXuat::whereBetween('created_at', [$from, $to])->where('status', 4)
             ->paginate(10);
         return response()->json([
             'status' => 200,
             'px' => $px,
         ]);
     }
-
+    //chưa xong
     public function thongKeChiTieuSoLuong()
     {
         $timeNow = Carbon::now();

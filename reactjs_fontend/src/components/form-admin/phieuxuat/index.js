@@ -14,7 +14,7 @@ import './style.css'
 
 const checkStatus = [
     { id: 0, name: 'Chờ xác nhận' },
-    { id: 6, name: 'Đã xuất kho' },
+    { id: 4, name: 'Đã xuất kho' },
     { id: 5, name: 'Hủy đơn hàng' },
 ];
 
@@ -335,10 +335,6 @@ function Index() {
                 break;
             }
             case 4: {
-                x = 'Giao hàng thành công';
-                break;
-            }
-            case 6: {
                 x = 'Đã xuất kho';
                 break;
             }
@@ -378,10 +374,6 @@ function Index() {
             }
             case 5: {
                 x = 'danger';
-                break;
-            }
-            case 6: {
-                x = 'success';
                 break;
             }
             default: {
