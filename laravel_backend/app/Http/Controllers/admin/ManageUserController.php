@@ -135,16 +135,11 @@ class ManageUserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'username' => 'required|max:255',
             'role_id' => 'required|max:4|numeric|min:2',
             'status' => 'required',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
-
-
-            'username.required' => 'Ô username không được bỏ trống',
-            'username.max' => 'Ô username tối đa 255 ký tự',
 
             'role_id.required' => 'Ô role_id không được bỏ trống',
             'role_id.max' => 'Ô role_id có giá trị từ 2 đến 4',
