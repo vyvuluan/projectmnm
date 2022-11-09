@@ -140,6 +140,11 @@ export const PublicRouter = [
     component: MyOrder,
     layout: _Layout,
   },
+  {
+    path: "/sortProduct",
+    component: PageProducts,
+    layout: _Layout,
+  },
 ];
 //chưa xử lý
 export const PublicRouter_Admin = [

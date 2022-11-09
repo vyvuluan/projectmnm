@@ -21,6 +21,8 @@ export { default as DropDownMenu } from "./dropdownMenu/index.js";
 export { default as Accountinfo } from "./account-info/account-info";
 export { default as NewPass } from "./newPassword/index.js";
 export { default as MyOrder } from "./myorder/index.js";
+export { default as SortProduct } from "./sortProduct/index.js";
+
 
 
 
