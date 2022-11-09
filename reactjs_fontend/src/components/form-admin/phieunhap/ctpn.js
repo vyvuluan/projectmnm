@@ -13,6 +13,12 @@ const Ctpn = ({
     handleCloseTab,
     handleReloadShowCTPNtab3
 }) => {
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
   return (
     <>
       <B.Row className="px-xl-3 mb-3">
@@ -85,7 +91,7 @@ const Ctpn = ({
           </tbody>
         </B.Table>
         <h5 className="text-right mt-2 text-primary">
-          Tổng tiền: {tongTienPN} VNĐ
+          Tổng tiền: {formatMoney(tongTienPN)}
         </h5>
       </B.Form>
     </>

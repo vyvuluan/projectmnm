@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import * as B from "react-bootstrap";
-import { BsPersonPlusFill } from "react-icons/bs";
+import { AiFillEye } from "react-icons/ai";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
-import { AiOutlineUserDelete } from "react-icons/ai";
+import { MdDeleteForever } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
 import Cookies from "universal-cookie";
-
+import ViewAccount from "./viewAccount";
+import swal from "sweetalert";
 const Account = () => {
   const cookies = new Cookies();
   const [user, setUser] = useState([]);
+  const [viewAcc, setViewAcc] = useState();
+
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow((prev) => !prev);
+  const handleShow = (item) => {
+    // console.log(item);
+    setViewAcc(item)
+    setShow(true);
+  };
   const [addAccount, setAddAccount] = useState({
     username: "",
     email: "",
@@ -47,9 +58,61 @@ const Account = () => {
     }
   }, []);
 
+  const handleDeleteAccount = (item) => {
+    console.log(item);
+    const id = item.id;
+    swal("Chắc chưa", {
+      buttons: {
+        catch: {
+          text: "Chắc",
+          value: "catch",
+        },
+        no: {
+          text: "chưa",
+          value: "no",
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "catch":
+          axios
+          .delete(`/api/admin/manageUser/${id}`)
+          .then((res) => {
+            // console.log(res.data.product.data);
+            if (res.data.status === 200) {
+              // setDataSPganhet(res.data.product.data);
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+          break;
+      }
+    });
+    
+  };
+
   var htmlRole;
   return (
     <>
+    <B.Modal show={show} onHide={handleClose}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <ViewAccount viewAcc={viewAcc} showModal={handleClose} />
+        </B.ModalBody>
+        <B.ModalFooter className="bg-secondary">
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleClose}
+          >
+            Hủy bỏ
+          </B.Button>
+        </B.ModalFooter>
+      </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
           <B.Col lg={4}>
@@ -118,9 +181,7 @@ const Account = () => {
                 style={{ backgroundColor: "#edf1ff" }}
               >
                 <tr>
-                  <th>
-                    <input type="checkbox" />
-                  </th>
+                  
                   <th>ID</th>
                   <th>Username</th>
                   <th>Email</th>
@@ -161,20 +222,40 @@ const Account = () => {
                     );
                   }
                   return (
-                    <tr>
-                      <td className="align-middle">
-                        <input type="checkbox" />
-                      </td>
+                    <tr key={index}>
+                      
                       <td className="align-middle">{item.id}</td>
                       <td className="align-middle">{item.username}</td>
                       <td className="align-middle">{item.email}</td>
 
                       {htmlRole}
-                      <td className="align-middle fw-bold" style={{color:"#379237"}}>ON</td>
+                      <td
+                        className="align-middle fw-bold"
+                        style={{ color: "#379237" }}
+                      >
+                        ON
+                      </td>
                       {/* <td className="align-middle fw-bold" style={{color:"#cecece"}}>OFF</td> */}
-                      
+
                       <td className="align-middle fs-5 text-primary">
-                        <BiEdit />
+                        <AiFillEye
+                          type="button"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Xem chi tiết "
+                          style={{ marginRight: "15px" }}
+                          onClick={() => handleShow(item)}
+                        />
+                        
+                        <MdDeleteForever
+                          type="button"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Xóa tài khoản"
+
+                          
+                          onClick={() => handleDeleteAccount(item)}
+                        />
                       </td>
                     </tr>
                   );

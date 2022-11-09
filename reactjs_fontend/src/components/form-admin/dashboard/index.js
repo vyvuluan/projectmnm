@@ -103,12 +103,13 @@ const DashBoard = () => {
           <Tabs
             activeKey={tabkey}
             onSelect={(k) => setTabKey(k)}
-            className="mb-3"
+          
           >
             <Tab eventKey={1} title="Thống kê">
               <Chart dataKho={dataKho} dataKho2={dataKho2} />
             </Tab>
-            <Tab eventKey={2} title="Sản phẩm gần hết">
+            
+            <Tab eventKey={3} title="Sản phẩm gần hết">
               <h2>Sản phẩm gần hết</h2>
               <Table>
                 <thead>
@@ -135,43 +136,7 @@ const DashBoard = () => {
                 </tbody>
               </Table>
             </Tab>
-            <Tab eventKey={3} title="Lịch sử nhập hàng">
-              <h2>Lịch sử nhập hàng</h2>
-
-              <Bt.FormGroup className="mb-3" controlId="formName">
-                <Bt.Row>
-                  <Bt.Col>
-                    <Bt.FormLabel className="fw-semibold fs-4">
-                      Từ ngày
-                    </Bt.FormLabel>
-                    {/* <DatePicker  onChange={() =>  { console.log(value); return onChange}} value={value} /> */}
-                    <Bt.FormControl
-                      type="date"
-                      name="dateFrom"
-                      className="rounded"
-
-                    // value={ngaySinh}
-                    // onChange={(e) => setNgaySinh(e.target.value)}
-                    ></Bt.FormControl>
-                  </Bt.Col>
-                  <Bt.Col>
-                    <Bt.FormLabel className="fw-semibold fs-4">
-                      Đến ngày
-                    </Bt.FormLabel>
-                    {/* <DatePicker  onChange={() =>  { console.log(value); return onChange}} value={value} /> */}
-                    <Bt.FormControl
-                      type="date"
-                      name="dateTo"
-
-                      className="rounded"
-                    // value={ngaySinh}
-                    // onChange={(e) => setNgaySinh(e.target.value)}
-                    ></Bt.FormControl>
-                  </Bt.Col>
-                </Bt.Row>
-                {/* <span className="text-danger">{errorBird}</span> */}
-              </Bt.FormGroup>
-            </Tab>
+            
           </Tabs>
         </div>
       </div>

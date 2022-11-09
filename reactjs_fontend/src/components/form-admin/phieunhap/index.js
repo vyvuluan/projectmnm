@@ -18,6 +18,7 @@ import AddPhieuNhap from "./addPhieunhap";
 import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
 import Ctpn from "./ctpn";
+import LichSuNhapHang from "./lichsunhaphang";
 
 /*
     xóa tìm kiếm
@@ -83,7 +84,7 @@ const PhieuNhap = () => {
   // }
 
   const handleView = (item) => {
-    // console.log(item);
+    console.log(item);
     setShowTab(true);
     setTabKey(3);
     setViewPn(item);
@@ -91,7 +92,29 @@ const PhieuNhap = () => {
     setIdPN(item.id);
   };
 
-  // console.log(viewPn);
+  // const test = (value) => {
+  //   console.log(value);
+  //   const d = dataShowPN.filter((item, index) => {
+  //     return item.id == value.pn_id
+  //       ? dataShowPN[index].pnct.filter((item1, index1) => {
+  //           // return console.log(index1);
+  //           return item1.pn_id == value.pn_id &&
+  //             item1.product_id == value.product_id
+  //             ? setDataShowPN((prev) => [
+  //                 ...prev,
+  //                 (prev[index].pnct[index1] = value),
+  //               ])
+  //             : null;
+  //         })
+  //       : null;
+  //   });
+  //   console.log(d);
+    // setDataShowPN((prev) => [
+    //   ...prev, (dataShowPN.splice(dataShowPN.length - 1, 1)
+    // )])
+  // };
+
+  // console.log(dataShowPN);
   const handleCloseTab = () => {
     setShowTab(false);
     setTabKey(2);
@@ -200,6 +223,8 @@ const PhieuNhap = () => {
     setIdProduct(value.id);
   };
 
+  // console.log(dataShowPN);
+
   const refresh = useCallback(async () => {
     const res = await axios.get(`/api/kho/getAllPN-new?page=${page}`);
     setDataShowPN(res.data.pns.data);
@@ -207,7 +232,7 @@ const PhieuNhap = () => {
     setPerPage(res.data.pns.per_page);
     setCurrentPage(res.data.pns.current_page);
   }, [page]);
-  
+
   useEffect(() => {
     refresh().then(() => setSubmitting(false));
   }, [submitting, refresh]);
@@ -240,6 +265,12 @@ const PhieuNhap = () => {
     );
   };
 
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
   //thêm pn
   const data1 = {
     ncc_id: nccData,
@@ -340,7 +371,7 @@ const PhieuNhap = () => {
 
   //delete Ctpn
   const handleDelete = (idPN1, idProduct1) => {
-    console.log(idProduct1);
+    // console.log(idProduct1);
     // e.preventDefault();
     swal("Chắc chưa", {
       buttons: {
@@ -622,7 +653,6 @@ const PhieuNhap = () => {
         </B.ModalHeader>
         <B.ModalBody>
           <UpdateCtPN
-            
             idPN={idPN}
             idSP={idProduct}
             soLuong={soLuong}
@@ -633,6 +663,7 @@ const PhieuNhap = () => {
             handleOnSelectSp={handleOnSelectSp}
             formatResult={formatResult}
             showModal={handleCloseUpdateCtPN}
+            // test={test}
           />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
@@ -923,7 +954,7 @@ const PhieuNhap = () => {
                       </tbody>
                     </B.Table>
                     <h5 className="text-right mt-2 text-primary">
-                      Tổng tiền: {tongTien} VNĐ
+                      Tổng tiền: {formatMoney(tongTien)}
                     </h5>
                   </B.Form>
                 )}
@@ -956,6 +987,7 @@ const PhieuNhap = () => {
                       <option value={"inc"}>Tổng tiền tăng dần </option>
                       <option value={"dec"}>Tổng tiền giảm dần </option>
                     </B.FormSelect>
+
                     <B.Button onClick={handleReload}>làm mới</B.Button>
                   </B.FormGroup>
                   <B.Table className="table-borderless border border-secondary text-center mb-0">
@@ -975,8 +1007,8 @@ const PhieuNhap = () => {
                     </thead>
                     <tbody className="align-middle">
                       {dataShowPN.map((item, index) => {
-                        let chuoi = item.created_at;
-                        let tachChuoi = chuoi.slice(0, 10);
+                        // let chuoi = item.created_at;
+                        // let tachChuoi = chuoi.slice(0, 10);
 
                         return (
                           <>
@@ -986,7 +1018,7 @@ const PhieuNhap = () => {
                                 {item?.ncc?.tenNCC}
                               </td>
                               <td className="align-middle">{item.tongTien}</td>
-                              <td className="align-middle">{tachChuoi}</td>
+                              <td className="align-middle">1255252</td>
                               <td className="align-middle">
                                 {item.status == 1 ? (
                                   <B.Button
@@ -1142,6 +1174,9 @@ const PhieuNhap = () => {
                   </B.Form> */}
                 </B.Tab>
               )}
+              <B.Tab eventKey={4} title="Lịch sử nhập hàng">
+                <LichSuNhapHang />
+              </B.Tab>
             </B.Tabs>
           </B.Col>
         </B.Row>
