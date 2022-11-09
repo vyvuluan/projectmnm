@@ -75,6 +75,20 @@ class ManagePhieuXuatController extends Controller
                         'data' => $px,
                     ]);
                 }
+            case 3; // Lọc theo giá cao
+                $px = PhieuXuat::orderBy('tongTien', 'asc')->paginate(10);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $px,
+
+                ]);
+            case 4; // Lọc theo giá thấp
+                $px = PhieuXuat::orderBy('tongTien', 'desc')->paginate(10);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $px,
+
+                ]);
         }
     }
 
@@ -180,7 +194,7 @@ class ManagePhieuXuatController extends Controller
                     }
                     $checksp->soLuongSP -= $request->soluong;
                     $checksp->save();
-                    $checkpx->tongTien += ($checksp->gia) * $request->soluong * (100 * 1.0 - $checkpx->discount) / 100;
+                    $checkpx->tongTien += ($checksp->gia) * $request->soluong;
                     $checkpx->save();
                     // DB::insert('insert into ct_phieu_xuats (px_id ,product_id,soluong,gia)
                     //  values (' . $request->px_id . ',' . $request->product_id . ',' . $request->soluong . ',' . $checksp->gia . ')');
@@ -256,7 +270,7 @@ class ManagePhieuXuatController extends Controller
         } else if ($px->status == 5 && $request->status < 5) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+                'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
             ]);
         } else if ($px->status == 4 && $request->status < 4) {
             return response()->json([
@@ -313,7 +327,40 @@ class ManagePhieuXuatController extends Controller
             ]);
         }
     }
-
+    // public function checkstatus($stusinput, $stuspx)
+    // {
+    //     if ($stuspx == 1 && $stusinput < 1) {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
+    //         ]);
+    //     } else if ($stuspx == 6 && $stusinput < 6) {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'Đơn hàng đã Xuất không thể chỉnh sửa',
+    //         ]);
+    //     } else if ($stuspx == 5 && $stusinput < 5) {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+    //         ]);
+    //     } else if ($stuspx == 4 && $stusinput < 4) {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
+    //         ]);
+    //     } else if ($stuspx == 3 && $stusinput < 3) {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'Đơn hàng đang vận chuyển không thể về bước trước',
+    //         ]);
+    //     } else if ($stuspx == 2 && $stusinput < 2) {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'Đơn hàng đang đóng gói không thể quay về bước trước',
+    //         ]);
+    //     }
+    // }
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -342,16 +389,31 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-
+                // if ($px->status >= 1 && $request->status = 0) {
+                //     return response()->json([
+                //         'status' => 400,
+                //         'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
+                //     ]);
+                // } else if ($px->status = 6) {
+                //     return response()->json([
+                //         'status' => 400,
+                //         'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+                //     ]);
+                // }
                 if ($px->status == 1 && $request->status < 1) {
                     return response()->json([
                         'status' => 400,
                         'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
                     ]);
+                } else if ($px->status == 6 && $request->status < 6) {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Đơn hàng đã Xuất không thể chỉnh sửa',
+                    ]);
                 } else if ($px->status == 5 && $request->status < 5) {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+                        'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
                     ]);
                 } else if ($px->status == 4 && $request->status < 4) {
                     return response()->json([
@@ -368,10 +430,10 @@ class ManagePhieuXuatController extends Controller
                         'status' => 400,
                         'message' => 'Đơn hàng đang đóng gói không thể quay về bước trước',
                     ]);
-                } else if ($px->status == 4 && $request->status == 5) {
+                } else if ($px->status == 5 && $request->status == 6) {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
+                        'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
                     ]);
                 }
                 $px->customer_id = $request->customer_id;
@@ -480,8 +542,6 @@ class ManagePhieuXuatController extends Controller
                             $checksp->soLuongSP -= $slupdate;
                             $checksp->save();
                             $px->tongTien += ($slupdate * $checksp->gia) - ($slgio * $checksp->gia);
-
-                            //* (100 * 1.0 - $discount->phantram) / 100
                             $px->save();
                             DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
                                 ->update(['product_id' => $checksp->id, 'soluong' => $slupdate, 'gia' =>  $checksp->gia, 'updated_at' => date('Y-m-d H:i:s')]);
@@ -559,7 +619,7 @@ class ManagePhieuXuatController extends Controller
         $data =  $pxcts->where('product_id', $maspct)->first();
         $spkho = Product::find($maspct);
         $spkho->soLuongSP += $data->soluong;
-        $px->tongTien -= $data->soluong * $spkho->gia  * (100 * 1.0 - $px->discount) / 100;
+        $px->tongTien -= $data->soluong * $spkho->gia;
         $px->save();
         $spkho->save();
         DB::table('ct_phieu_xuats')->where('px_id', $mapx)->where('product_id', $maspct)
