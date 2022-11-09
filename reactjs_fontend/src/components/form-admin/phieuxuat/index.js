@@ -606,13 +606,14 @@ function Index() {
                         </B.ModalBody>
                     </div>
                     <B.ModalFooter>
-                        <B.Button
-                            variant="outline-primary"
-                            className="mt-2 me-2 rounded-0"
-                            onClick={handlePrint}
-                        >
-                            In hóa đơn
-                        </B.Button>
+                        {viewPx && viewPx.status > 0 && viewPx.status < 5 ?
+                            <B.Button
+                                variant="outline-primary"
+                                className="mt-2 me-2 rounded-0"
+                                onClick={handlePrint}
+                            >
+                                In hóa đơn
+                            </B.Button> : null}
                         <B.Button
                             variant="outline-primary"
                             className="mt-2 rounded-0"
