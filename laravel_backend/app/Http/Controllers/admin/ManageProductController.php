@@ -145,6 +145,7 @@ class ManageProductController extends Controller
             'baoHanh' => 'required|numeric',
             'moTa' => 'required',
             'ctSanPham' => 'required',
+            'maLoai' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -169,7 +170,7 @@ class ManageProductController extends Controller
                     $hinh = $request->file('hinh');
                     $ext = $hinh->getClientOriginalExtension();
                     $name = time() . '_' . $hinh->getClientOriginalName();
-                    Storage::disk('../public')->put($name, File::get($hinh));
+                    Storage::disk('public')->put($name, File::get($hinh));
                     $product->hinh = $name;
                 }
                 $product->update();
