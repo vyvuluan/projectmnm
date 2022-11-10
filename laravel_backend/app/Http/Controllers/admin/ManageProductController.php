@@ -65,6 +65,21 @@ class ManageProductController extends Controller
             'baoHanh' => 'required|numeric',
             'moTa' => 'required',
             'ctSanPham' => 'required',
+            'maLoai' => 'required'
+        ], [
+
+            'tenSP.required' => 'Ô tên sản phẩm không được bỏ trống',
+            'soLuongSP.numeric' => 'Ô số lượng phải là số',
+            'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
+            'maNSX.required' => 'Ô maNSX không được bỏ trống',
+            'maNCC.required' => 'Ô maNCC không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'baoHanh.numeric' => 'Ô bảo hành phải là số',
+            'baoHanh.required' => 'Ô bảo hành không được bỏ trống',
+            'moTa.required' => 'Ô mô tả không được bỏ trống',
+            'ctSanPham.required' => 'Ô ctSanPham không được bỏ trống',
+            'maLoai.required' => 'Ô mã loại không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -146,6 +161,20 @@ class ManageProductController extends Controller
             'moTa' => 'required',
             'ctSanPham' => 'required',
             'maLoai' => 'required'
+        ], [
+
+            'tenSP.required' => 'Ô tên sản phẩm không được bỏ trống',
+            'soLuongSP.numeric' => 'Ô số lượng phải là số',
+            'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
+            'maNSX.required' => 'Ô maNSX không được bỏ trống',
+            'maNCC.required' => 'Ô maNCC không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'baoHanh.numeric' => 'Ô bảo hành phải là số',
+            'baoHanh.required' => 'Ô bảo hành không được bỏ trống',
+            'moTa.required' => 'Ô mô tả không được bỏ trống',
+            'ctSanPham.required' => 'Ô ctSanPham không được bỏ trống',
+            'maLoai.required' => 'Ô mã loại không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -167,6 +196,7 @@ class ManageProductController extends Controller
                 // var_dump($request->hasFile('hinh'));
                 // exit;
                 if ($request->hasFile('hinh')) {
+                    unlink('public/uploadhinh/' . $product->hinh);
                     $hinh = $request->file('hinh');
                     $ext = $hinh->getClientOriginalExtension();
                     $name = time() . '_' . $hinh->getClientOriginalName();
