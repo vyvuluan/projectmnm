@@ -64,7 +64,7 @@ class PaymentController extends Controller
                     ->where('end', '>', $date)
                     ->first();
                 if (!empty($discount)) {
-                    if ($discount->dieukien < $tongTien) {
+                    if ($discount->dieukien <= $tongTien) {
                         $payment->discount = $discount->phantram;
                         $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
                     } else {

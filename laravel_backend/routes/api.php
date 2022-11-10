@@ -49,6 +49,8 @@ Route::get('/searchPn', [ManagePhieuNhapController::class, 'searchPn']);
 Route::get('/searchEmp', [ManageEmployeeController::class, 'searchEmp']);
 Route::get('/locTenNvAZ', [ManageEmployeeController::class, 'locTenAZ']);
 Route::get('/locTenNvZA', [ManageEmployeeController::class, 'locTenZA']);
+//api check discount
+Route::get('check-discount',[DiscountController::class,'check_discount'] );
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);

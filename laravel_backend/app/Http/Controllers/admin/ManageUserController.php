@@ -15,7 +15,7 @@ class ManageUserController extends Controller
         $users = User::where('role_id', 2)
             ->orWhere('role_id', 3)
             ->orWhere('role_id', 4)
-            ->orderBy('id', 'asc')
+            ->orderBy('id', 'desc')
             ->paginate(10);
         return response()->json([
             'users' => $users,

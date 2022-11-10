@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Discount;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class DiscountController extends Controller
 {
@@ -16,7 +17,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discount = Discount::paginate(10);
+        $discount = Discount::orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'discount' =>  $discount,
@@ -175,10 +176,33 @@ class DiscountController extends Controller
     public function destroy($id)
     {
         $discount = Discount::where('discount_id', $id)->delete();
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Xóa thành công',
         ]);
+    }
+    public function check_discount(Request $request)
+    {
+        if (isset($request->discount)) {
+            $date = Carbon::today();
+            $discount = Discount::where('discount_id', $request->discount)
+                ->where('start', '<', $date)
+                ->where('end', '>', $date)
+                ->first();
+            if (!empty($discount)) {
+                if ($discount->dieukien > $request->tongTien) {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Không có mã giảm giá bạn vừa nhập',
+                ]);
+            }
+        }
     }
 }
