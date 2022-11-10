@@ -145,6 +145,7 @@ class ManageProductController extends Controller
             'baoHanh' => 'required|numeric',
             'moTa' => 'required',
             'ctSanPham' => 'required',
+            'maLoai' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json([
