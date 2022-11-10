@@ -194,7 +194,7 @@ class DiscountController extends Controller
                 if ($discount->dieukien > $request->tongTien) {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
+                        'message' => 'Đơn hàng cần tối thiểu ' . number_format($discount->dieukien, 0, ',', '.') . 'đ'  . ' để áp dụng',
                     ]);
                 } else {
                     return response()->json([
