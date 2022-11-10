@@ -196,6 +196,11 @@ class DiscountController extends Controller
                         'status' => 400,
                         'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
                     ]);
+                } else {
+                    return response()->json([
+                        'status' => 200,
+                        'discount' => $discount->phantram,
+                    ]);
                 }
             } else {
                 return response()->json([
