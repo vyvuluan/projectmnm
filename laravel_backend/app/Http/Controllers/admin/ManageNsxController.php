@@ -168,4 +168,15 @@ class ManageNsxController extends Controller
             ]);
         }
     }
+    public function searchNsx(Request $request)
+    {
+        $nsx = Nsx::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('tenNSX', 'like', '%' . $request->key . '%')
+            ->orWhere('quocGia', 'like', '%' . $request->key . '%')
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'nsx' => $nsx,
+        ]);
+    }
 }

@@ -444,6 +444,16 @@ function Index() {
                     key = 2;
                     break;
                 }
+            case 'h-l':
+                {
+                    key = 4;
+                    break;
+                }
+            case 'l-h':
+                {
+                    key = 3;
+                    break;
+                }
             case '':
                 {
                     key = '';
@@ -486,7 +496,6 @@ function Index() {
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
     let month = new Date().toLocaleString("vi-VN", { month: "long" });
     let year = new Date().getFullYear();
-
 
     return (
         <>
@@ -583,6 +592,18 @@ function Index() {
                                         <tr>
                                             <td></td>
                                             <td></td>
+                                            <td>Tạm tính: </td>
+                                            <td>{viewPx && viewPx.discount !== 0 ? formatMoney(viewPx?.tongTien / (1 - viewPx?.discount / 100)) : formatMoney(viewPx?.tongTien)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Giảm giá: </td>
+                                            <td>{viewPx && viewPx.discount}%</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td className='fw-semibold'>Tổng tiền: </td>
                                             <td>{formatMoney(viewPx && viewPx.tongTien)}</td>
                                         </tr>
@@ -639,9 +660,6 @@ function Index() {
                                     items={pxsearchList}
                                     onSearch={handleOnPxSearch}
                                     onClear={handleOnPxClear}
-                                    // fuseOptions={{ keys: ["id", "tenKH", "sdt"] }}
-                                    // resultStringKeyName="tenKH"
-                                    // formatResult={formatResult}
                                     placeholder='Tìm kiếm phiếu xuất'
                                     maxResults={10}
                                     showNoResults={false}
@@ -654,10 +672,8 @@ function Index() {
                                         hoverBackgroundColor: "#d19c97",
                                         color: "black",
                                         fontSize: "15px",
-                                        // fontFamily: "Courier",
                                         iconColor: "black",
                                         lineColor: "#d19c97",
-                                        // placeholderColor: "black",
                                         clearIconMargin: "3px 8px 0 0",
                                         zIndex: '2',
                                     }}
@@ -667,7 +683,8 @@ function Index() {
                                 <B.FormGroup className='mb-2 pull-right'>
                                     <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
                                         <option value=''>Sắp xếp</option>
-                                        <option value='0'>Chờ xác nhận</option>
+                                        <option value='h-l'>Giá cao-thấp</option>
+                                        <option value='l-h'>Giá thấp-cao</option>
                                         <option value='1'>Đã xác nhận</option>
                                         <option value='2'>Đang đóng gói</option>
                                         <option value='3'>Đang vận chuyển</option>
