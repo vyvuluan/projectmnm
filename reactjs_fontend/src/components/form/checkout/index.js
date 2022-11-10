@@ -5,12 +5,15 @@ import swal from "sweetalert";
 import { Link, useNavigate } from "react-router-dom";
 import { MdPayments } from "react-icons/md";
 import { BsFillBagCheckFill, BsPaypal } from "react-icons/bs";
-import { BiEdit } from "react-icons/bi";
+import { TiTimesOutline } from "react-icons/ti";
 import LoaderIcon from "../../layouts/Loading/index";
 import * as B from "react-bootstrap";
+import './style.css'
 
 function Checkout() {
     const navigate = useNavigate();
+    const [discountInput, setDiscountInput] = useState();
+    const [discount, setDiscount] = useState();
     const [loading, setLoading] = useState(true);
     const [checkoutInput, setCheckoutInput] = useState({
         fullname: "",
@@ -24,6 +27,22 @@ function Checkout() {
     var totalCartPrice = 0;
 
     const handleClose = () => setShow(false);
+
+    const handleGetDiscount = () => {
+        axios.get(`/api/check-discount?discount=${discountInput}&tongTien=${totalCartPrice}`).then(res => {
+            if (res.data.status === 200) {
+                setDiscount(res.data.discount);
+            } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.message, 'warning');
+                setDiscountInput('')
+            }
+        })
+    }
+
+    const handleDeleteDiscount = () => {
+        setDiscount();
+        setDiscountInput('');
+    }
 
     if (!localStorage.getItem("auth_token")) {
         navigate("/");
@@ -66,7 +85,7 @@ function Checkout() {
         tenKH: checkoutInput.fullname,
         sdt: checkoutInput.phonenumber,
         diaChi: checkoutInput.address,
-        discount: checkoutInput.discount,
+        discount: discountInput,
         payment_mode: "PayPal",
         payment_id: "",
     };
@@ -75,17 +94,21 @@ function Checkout() {
         React,
         ReactDOM,
     });
+
+    var money = 0;
+
     const createOrder = (data, actions) => {
         return actions.order.create({
             purchase_units: [
                 {
                     amount: {
-                        value: totalCartPrice,
+                        value: (discount ? totalCartPrice * (1 - discount / 100) / 25000 : totalCartPrice / 25000),
                     },
                 },
             ],
         });
     };
+    console.log(totalCartPrice);
 
     const onApprove = (data, actions) => {
         return actions.order.capture().then(function (details) {
@@ -111,7 +134,7 @@ function Checkout() {
             tenKH: checkoutInput.fullname,
             sdt: checkoutInput.phonenumber,
             diaChi: checkoutInput.address,
-            discount: checkoutInput.discount,
+            discount: discountInput,
             payment_mode: payment_mode,
             payment_id: "",
         };
@@ -277,9 +300,8 @@ function Checkout() {
                                 <B.FormGroup className="mb-3">
                                     <B.FormControl
                                         type="text"
-                                        name="discount"
-                                        onChange={handleInput}
-                                        value={checkoutInput.discount}
+                                        onChange={(e) => setDiscountInput(e.target.value)}
+                                        value={discountInput}
                                         className="rounded-0 shadow-none"
                                         placeholder="Thêm mã giảm giá"
                                     ></B.FormControl>
@@ -287,7 +309,7 @@ function Checkout() {
                                 </B.FormGroup>
                             </B.Col>
                             <B.Col className="col-2">
-                                <B.Button variant="info" className="rounded-0 w-100">Thêm mã</B.Button>
+                                <B.Button variant="primary" className="rounded-0 w-100" onClick={handleGetDiscount}>Thêm mã</B.Button>
                             </B.Col>
                         </B.Row>
                         <B.Table responsive className="table-bordered border border-secondary text-center mb-0">
@@ -319,22 +341,19 @@ function Checkout() {
                                     );
                                 })}
                                 <tr>
-                                    <td colSpan={1} className="text-end fs-5">
-                                        Mã giảm giá
+                                    <td colSpan={2} className="text-end fs-5">
+                                        Tạm tính
                                     </td>
                                     <td colSpan={2} className="text-end fw-semibold fs-5">
                                         {formatMoney(totalCartPrice)}
-                                    </td>
-                                    <td colSpan={2} className="text-center">
-                                        <B.Button variant="outline-info" className='rounded-0'>Xóa mã</B.Button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colSpan={2} className="text-end fs-5">
-                                        Giảm
+                                        Mã giảm giá
                                     </td>
                                     <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        {formatMoney(totalCartPrice)}
+                                        {discount && discount !== null ? discount : '0'}%<TiTimesOutline className="ms-4 fs-4 customclosebtn" onClick={handleDeleteDiscount} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -342,7 +361,7 @@ function Checkout() {
                                         Tổng tiền
                                     </td>
                                     <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        {formatMoney(totalCartPrice)}
+                                        {discount ? formatMoney(totalCartPrice * (1 - discount / 100)) : formatMoney(totalCartPrice)}
                                     </td>
                                 </tr>
                             </tbody>

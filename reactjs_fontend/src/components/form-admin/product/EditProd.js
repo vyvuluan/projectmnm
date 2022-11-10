@@ -56,19 +56,6 @@ const Prodedit = ({ product, showModal }) => {
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        // const data = {
-        //     tenSP: prodEdit.tenSP,
-        //     soLuongSP: prodEdit.sl,
-        //     gia: prodEdit.gia,
-        //     baoHanh: prodEdit.baohanh,
-        //     maLoai: prodEdit.loaisp,
-        //     maNCC: prodEdit.ncc,
-        //     maNSX: prodEdit.nsx,
-        //     moTa: mota,
-        //     ctSanPham: ctsp,
-        //     hinh: picture.image,
-        // }
-
         const formData = new FormData();
         formData.set("hinh", picture.image);
         formData.set("maLoai", prodEdit.loaisp);
