@@ -207,7 +207,7 @@ function Checkout() {
                             </B.Card.Header>
                             <B.Card.Body>
                                 <B.Row>
-                                    <B.Col md={4}>
+                                    <B.Col md={6}>
                                         <B.FormGroup className="mb-3">
                                             <B.FormLabel>Họ và tên</B.FormLabel>
                                             <B.FormControl
@@ -220,7 +220,7 @@ function Checkout() {
                                             <small className="text-danger">{error.tenKH}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    <B.Col md={4}>
+                                    <B.Col md={6}>
                                         <B.FormGroup className="mb-3">
                                             <B.FormLabel>Số điện thoại</B.FormLabel>
                                             <B.FormControl
@@ -231,19 +231,6 @@ function Checkout() {
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
                                             <small className="text-danger">{error.sdt}</small>
-                                        </B.FormGroup>
-                                    </B.Col>
-                                    <B.Col md={4}>
-                                        <B.FormGroup className="mb-3">
-                                            <B.FormLabel>Mã giảm giá</B.FormLabel>
-                                            <B.FormControl
-                                                type="text"
-                                                name="discount"
-                                                onChange={handleInput}
-                                                value={checkoutInput.discount}
-                                                className="rounded-0 shadow-none"
-                                            ></B.FormControl>
-                                            <small className="text-danger">{error.discount}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={12}>
@@ -284,9 +271,26 @@ function Checkout() {
                             </B.Card.Footer>
                         </B.Card>
                     </B.Col>
-
-                    <B.Col md={5} className="d-grd gap-2 mx-auto table-responsive mb-5">
-                        <B.Table className="table-bordered border border-secondary text-center mb-0">
+                    <B.Col md={5} className="mx-auto mb-5">
+                        <B.Row>
+                            <B.Col className="col-10">
+                                <B.FormGroup className="mb-3">
+                                    <B.FormControl
+                                        type="text"
+                                        name="discount"
+                                        onChange={handleInput}
+                                        value={checkoutInput.discount}
+                                        className="rounded-0 shadow-none"
+                                        placeholder="Thêm mã giảm giá"
+                                    ></B.FormControl>
+                                    <small className="text-danger">{error.discount}</small>
+                                </B.FormGroup>
+                            </B.Col>
+                            <B.Col className="col-2">
+                                <B.Button variant="info" className="rounded-0 w-100">Thêm mã</B.Button>
+                            </B.Col>
+                        </B.Row>
+                        <B.Table responsive className="table-bordered border border-secondary text-center mb-0">
                             <thead
                                 className="text-dark fs-5"
                                 style={{ backgroundColor: "#edf1ff" }}
@@ -314,6 +318,25 @@ function Checkout() {
                                         </tr>
                                     );
                                 })}
+                                <tr>
+                                    <td colSpan={1} className="text-end fs-5">
+                                        Mã giảm giá
+                                    </td>
+                                    <td colSpan={2} className="text-end fw-semibold fs-5">
+                                        {formatMoney(totalCartPrice)}
+                                    </td>
+                                    <td colSpan={2} className="text-center">
+                                        <B.Button variant="outline-info" className='rounded-0'>Xóa mã</B.Button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={2} className="text-end fs-5">
+                                        Giảm
+                                    </td>
+                                    <td colSpan={2} className="text-end fw-semibold fs-5">
+                                        {formatMoney(totalCartPrice)}
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td colSpan={2} className="text-end fw-semibold fs-4">
                                         Tổng tiền
@@ -380,7 +403,7 @@ function Checkout() {
                 </div>
             </B.Container>
 
-            <B.Container fluid pt={5}>
+            <B.Container fluid pt={5} className="mb-5">
                 <B.Form>{checkout_HTML}</B.Form>
             </B.Container>
         </>

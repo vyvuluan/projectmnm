@@ -278,6 +278,18 @@ const DonHang = () => {
                   <tr>
                     <td></td>
                     <td></td>
+                    <td>Tạm tính: </td>
+                    <td>{viewOrder && viewOrder.discount !== 0 ? formatMoney(viewOrder?.tongTien / (1 - viewOrder?.discount / 100)) : formatMoney(viewOrder?.tongTien)}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Giảm giá: </td>
+                    <td>{viewOrder && viewOrder.discount}%</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
                     <td className='fw-semibold'>Tổng tiền: </td>
                     <td>{formatMoney(viewOrder && viewOrder.tongTien)}</td>
                   </tr>
@@ -333,6 +345,8 @@ const DonHang = () => {
                 <th>Họ và tên khách hàng</th>
                 <th>Số điện thoại</th>
                 <th>Địa chỉ</th>
+                <th>Giảm giá</th>
+                <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th className="text-center">Thao tác</th>
               </tr>
@@ -344,6 +358,8 @@ const DonHang = () => {
                   <td>{item.tenKH}</td>
                   <td>{item.sdt}</td>
                   <td>{item.diaChi}</td>
+                  <td>{item.discount}%</td>
+                  <td>{formatMoney(item.tongTien)}</td>
                   <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
                     {checkStatus.map((val) => (
                       <B.Dropdown.Item key={val.id}

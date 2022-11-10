@@ -497,7 +497,6 @@ function Index() {
     let month = new Date().toLocaleString("vi-VN", { month: "long" });
     let year = new Date().getFullYear();
 
-
     return (
         <>
             <B.Container fluid>
@@ -590,6 +589,18 @@ function Index() {
                                         })}
                                     </tbody>
                                     <tfoot className='border-top'>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Tạm tính: </td>
+                                            <td>{viewPx && viewPx.discount !== 0 ? formatMoney(viewPx?.tongTien / (1 - viewPx?.discount / 100)) : formatMoney(viewPx?.tongTien)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Giảm giá: </td>
+                                            <td>{viewPx && viewPx.discount}%</td>
+                                        </tr>
                                         <tr>
                                             <td></td>
                                             <td></td>

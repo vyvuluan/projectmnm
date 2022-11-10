@@ -44,6 +44,8 @@ function Index() {
     ctSanPham: "",
   });
 
+  const [editorKey, setEditorKey] = React.useState(4);
+
   const [show, setShow] = useState(false);
   const [prodData, setProdData] = useState();
   const handleClose = () => {
@@ -170,6 +172,22 @@ function Index() {
     formData.append("moTa", mota.moTa);
     formData.append("baoHanh", productInput.baohanh);
     formData.append("ctSanPham", ctsp.ctSanPham);
+    const newKey = editorKey * 43;
+
+    // const data = {
+    //   hinh: pricture.image,
+    //   maLoai: productInput.loaisp_id,
+    //   tenSP: productInput.tenSP,
+    //   soLuongSP: productInput.soLuong,
+    //   gia: productInput.gia,
+    //   maNCC: nccData,
+    //   maNSX: nsxData,
+    //   baoHanh: productInput.baohanh,
+    //   moTa: mota.moTa,
+    //   ctSanPham: ctsp.ctSanPham,
+    // }
+
+    // console.log(data);
     axios
       .post(`http://localhost:8000/api/kho/products`, formData)
       .then((res) => {
@@ -190,6 +208,8 @@ function Index() {
           setCtsp("");
           setMota("");
           setError([]);
+          setSubmitting(true);
+          setEditorKey(newKey);
         } else if (res.data.status === 422) {
           swal("Vui lòng nhập đầy đủ các mục", "", "error");
           setError(res.data.errors);
@@ -430,6 +450,7 @@ function Index() {
                   Chi tiết sản phẩm
                 </label>
                 <Editor
+                  key={editorKey}
                   apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
                   onEditorChange={handleCTSPInput}
                   onInit={(evt, editor) => {
@@ -467,6 +488,7 @@ function Index() {
                   Mô tả sản phẩm
                 </label>
                 <Editor
+                  key={editorKey}
                   apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
                   onEditorChange={handleMotaInput}
                   onInit={(evt, editor) => {
