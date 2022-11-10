@@ -168,6 +168,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::resource('loaisp', ManageLoaispController::class);
     // Chi tiết sản phẩm
     Route::get('products/chitiet/{id}', [ManageProductController::class, 'ctsp']);
+    // Cập nhật sản phẩm
+    Route::post('products/update/{id}', [ManageProductController::class, 'update']);
 });
 
 //nhân viên

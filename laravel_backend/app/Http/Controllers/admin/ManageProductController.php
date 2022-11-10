@@ -172,7 +172,7 @@ class ManageProductController extends Controller
                     Storage::disk('../public')->put($name, File::get($hinh));
                     $product->hinh = $name;
                 }
-                $product->save();
+                $product->update();
                 return response()->json([
                     'status' => 200,
                     'message' => 'Cập nhật thành công',
