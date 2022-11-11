@@ -213,9 +213,9 @@ export default function Cart() {
                   <h6 className="fw-medium">{formatMoney(totalCartPrice)}</h6>
                 </div>
                 <div className="d-flex justify-content-between mb-3 pt-1">
-                  <h6 className="fw-medium">Thuế 10%</h6>
+                  <h6 className="fw-medium">Giảm giá</h6>
                   <h6 className="fw-medium">
-                    {formatMoney(totalCartPrice * 0.1)}
+                    0% (Có thể áp dụng mã tại bước thanh toán)
                   </h6>
                 </div>
               </Bt.Card.Body>
@@ -223,7 +223,7 @@ export default function Cart() {
                 <div className="d-flex justify-content-between mt-2">
                   <h5 className="fw-bold">Tổng tiền</h5>
                   <h5 className="fw-bold">
-                    {formatMoney(totalCartPrice * 1.1)}
+                    {formatMoney(totalCartPrice)}
                   </h5>
                 </div>
                 <Link to="/checkout">
@@ -281,7 +281,7 @@ export default function Cart() {
         </div>
       </Bt.Container>
 
-      <Bt.Container fluid pt={5}>
+      <Bt.Container fluid pt={5} className="mb-5">
         <Bt.Form>{cart_HTML}</Bt.Form>
       </Bt.Container>
     </>

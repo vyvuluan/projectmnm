@@ -10,6 +10,7 @@ import { TbTrashX } from 'react-icons/tb'
 import swal from 'sweetalert';
 import EditPx from './editPx'
 import { useReactToPrint } from 'react-to-print';
+import { useDownloadExcel } from 'react-export-table-to-excel';
 import './style.css'
 
 const checkStatus = [
@@ -42,6 +43,8 @@ function Index() {
     const [showTab, setShowTab] = useState(false);
     const [submitting, setSubmitting] = useState(true);
     const [showSearchTable, setShowSearchTable] = useState(false);
+    const tableRef = useRef(null);
+    const [showExport, setShowExp] = useState(false);
     const handleClose = () => {
         setSubmitting(true);
         setShow(prev => !prev)
@@ -488,9 +491,17 @@ function Index() {
         axios.get(`/api/kho/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
             if (res.data.status === 200) {
                 setXemXuat(res.data.px.data);
+                setShowExp(true);
             }
         });
     }
+
+    const { onDownload } =
+        useDownloadExcel({
+            currentTableRef: tableRef.current,
+            filename: 'Lich su xuat hang',
+            sheet: 'Phiếu xuất'
+        })
 
 
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
@@ -1059,18 +1070,28 @@ function Index() {
 
                     <B.Tab eventKey={4} title='Lịch sử xuất hàng' className='border border-top-0 py-3 px-3'>
                         <B.Row className='px-xl-3 mb-3'>
-                            <B.Col lg={9}>
+                            <B.Col lg={4}>
                                 <B.FormGroup className='d-flex'>
                                     <B.FormLabel className='fs-5'>Từ</B.FormLabel>
-                                    <B.FormControl type='date' className='rounded-0 ms-2 me-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
-                                    <B.FormLabel className='fs-5'>Đến</B.FormLabel>
-                                    <B.FormControl type='date' className='rounded-0 ms-2 me-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
-                                    <B.Button variant='outline-primary' className='rounded-0' onClick={xemLichSuXuatHang}>Xem</B.Button>
+                                    <B.FormControl type='date' className='rounded-0 ms-2 mb-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
                                 </B.FormGroup>
+                            </B.Col>
+                            <B.Col lg={4}>
+                                <B.FormGroup className='d-flex'>
+                                    <B.FormLabel className='fs-5'>Đến</B.FormLabel>
+                                    <B.FormControl type='date' className='rounded-0 ms-2 mb-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
+                                </B.FormGroup>
+                            </B.Col>
+                            <B.Col lg={1}>
+                                <B.Button variant='outline-primary' className='rounded-0' onClick={xemLichSuXuatHang}>Xem</B.Button>
+
+                            </B.Col>
+                            <B.Col lg={3}>
+                                {showExport ? <B.Button variant='outline-success' className='rounded-0 pull-right' onClick={onDownload}>Xuất ra Excel</B.Button> : null}
                             </B.Col>
                         </B.Row>
                         <B.Row className='px-xl-3 mb-3'>
-                            <B.Table responsive className='table-borderless border border-secondary mb-0'>
+                            <B.Table ref={tableRef} responsive className='table-borderless border border-secondary mb-0'>
                                 <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                     <tr>
                                         <th>ID</th>

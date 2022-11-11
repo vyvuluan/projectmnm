@@ -49,6 +49,11 @@ export default function Warrantycheck() {
             </Bt.Container>
 
             <Bt.Container pt={5}>
+                <Bt.Row className='px-xl-5 pt-5 text-center'>
+                    <div>Khách hàng có thể mang đến địa chỉ:
+                        <span className='fw-bold'> 273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</span> để được bảo hành
+                    </div>
+                </Bt.Row>
                 <Bt.Form>
                     <Bt.Row className='px-xl-5 py-5'>
                         <Bt.Col lg={6} className='d-grid gap-2 mx-auto'>
