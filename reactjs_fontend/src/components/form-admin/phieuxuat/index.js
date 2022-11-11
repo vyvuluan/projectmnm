@@ -175,13 +175,61 @@ function Index() {
             tongTien: px.tongTien,
             status: value.id,
         }
-        axios.put(`/api/kho/px/${px.id}`, data).then(res => {
-            if (res.data.status === 200) {
-                setSubmitting(true);
-            } else if (res.data.status === 400) {
-                swal('Thất bại', res.data.message, 'warning')
-            }
-        })
+        if (value.id === 4 && px.status !== 4 && px.status !== 5) {
+            swal({
+                text: 'Khi xuất kho bạn sẽ không thể thay đổi phiếu xuất!',
+                title: 'Bạn chắc chứ?',
+                icon: 'warning',
+                buttons: {
+                    cancel: "Hủy bỏ",
+                    yes: {
+                        text: "Xuất kho",
+                        value: "yes",
+                    },
+                }
+            }).then((value) => {
+                if (value === 'yes') {
+                    axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                        if (res.data.status === 200) {
+                            setSubmitting(true);
+                        } else if (res.data.status === 400) {
+                            swal('Thất bại', res.data.message, 'warning')
+                        }
+                    })
+                }
+            })
+        } else if (value.id === 5 && px.status !== 5 && px.status !== 4) {
+            swal({
+                text: 'Khi hủy đơn bạn sẽ không thể xuất hay thay đổi phiếu!',
+                title: 'Bạn chắc chứ?',
+                icon: 'warning',
+                buttons: {
+                    cancel: "Hủy bỏ",
+                    yes: {
+                        text: "Hủy phiếu",
+                        value: "yes",
+                    },
+                }
+            }).then((value) => {
+                if (value === 'yes') {
+                    axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                        if (res.data.status === 200) {
+                            setSubmitting(true);
+                        } else if (res.data.status === 400) {
+                            swal('Thất bại', res.data.message, 'warning')
+                        }
+                    })
+                }
+            })
+        } else {
+            axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                if (res.data.status === 200) {
+                    setSubmitting(true);
+                } else if (res.data.status === 400) {
+                    swal('Thất bại', res.data.message, 'warning')
+                }
+            })
+        }
     }
     // End
 
@@ -228,7 +276,7 @@ function Index() {
     // End
 
     const handleOnPxSearch = (key) => {
-        if (key != "") {
+        if (key !== "") {
             axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
                 if (res.status === 200) {
                     setPxSearchlist(res.data.data)
@@ -339,7 +387,7 @@ function Index() {
                 break;
             }
             case 5: {
-                x = 'Hủy đơn hàng';
+                x = 'Đã hủy đơn';
                 break;
             }
             default: {
@@ -384,28 +432,51 @@ function Index() {
     }
 
     const SortStt = (e) => {
-        axios.get(`/api/kho/locpx?key=1&value=${e}`).then(res => {
-            if (res.data.status === 200) {
-                setPxlist(res.data.data.data);
-                setTotalPage(res.data.data.total);
-                setPerPage(res.data.data.per_page);
-                setCurrentPage(res.data.data.current_page);
-            }
-        })
+        var key = '';
+        switch (e) {
+            case '0': case '1': case '2': case '3': case '4': case '5':
+                {
+                    key = 1;
+                    break;
+                }
+            case 'COD': case 'PayPal': case 'Tại quầy':
+                {
+                    key = 2;
+                    break;
+                }
+            case 'h-l':
+                {
+                    key = 4;
+                    break;
+                }
+            case 'l-h':
+                {
+                    key = 3;
+                    break;
+                }
+            case '':
+                {
+                    key = '';
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+        if (key !== '') {
+            axios.get(`/api/kho/locpx?key=${key}&value=${e}`).then(res => {
+                if (res.data.status === 200) {
+                    setPxlist(res.data.data.data);
+                    setTotalPage(res.data.data.total);
+                    setPerPage(res.data.data.per_page);
+                    setCurrentPage(res.data.data.current_page);
+                }
+            })
+        } else if (key === '') {
+            setSubmitting(true);
+        }
     }
-
-    const SortPTTT = (e) => {
-        axios.get(`/api/kho/locpx?key=2&value=${e}`).then(res => {
-            if (res.data.status === 200) {
-                setPxlist(res.data.data.data);
-                setTotalPage(res.data.data.total);
-                setPerPage(res.data.data.per_page);
-                setCurrentPage(res.data.data.current_page);
-            }
-        })
-    }
-
-
 
     const [dayStart, setDayStart] = useState();
     const [dayEnd, setDayEnd] = useState();
@@ -422,27 +493,9 @@ function Index() {
     }
 
 
-    // hàm này sau này có thể sẽ dùng
-
-    // const handleOnSelect = (value) => {
-    //     var checkProductExist = prodData.filter((val) => {
-    //         return val.id == value.id ? true : false
-    //     });
-
-    //     if (checkProductExist.length > 0) {
-    //         checkProductExist[0].soLuongSP += 1;
-    //     } else {
-    //         value.soLuongSP = 1;
-    //         setProdData((prev) => [...prev, value]);
-    //     }
-    //     setShowTable(!showTable)
-    // };
-
-
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
     let month = new Date().toLocaleString("vi-VN", { month: "long" });
     let year = new Date().getFullYear();
-
 
     return (
         <>
@@ -539,6 +592,18 @@ function Index() {
                                         <tr>
                                             <td></td>
                                             <td></td>
+                                            <td>Tạm tính: </td>
+                                            <td>{viewPx && viewPx.discount !== 0 ? formatMoney(viewPx?.tongTien / (1 - viewPx?.discount / 100)) : formatMoney(viewPx?.tongTien)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Giảm giá: </td>
+                                            <td>{viewPx && viewPx.discount}%</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td className='fw-semibold'>Tổng tiền: </td>
                                             <td>{formatMoney(viewPx && viewPx.tongTien)}</td>
                                         </tr>
@@ -562,13 +627,14 @@ function Index() {
                         </B.ModalBody>
                     </div>
                     <B.ModalFooter>
-                        <B.Button
-                            variant="outline-primary"
-                            className="mt-2 me-2 rounded-0"
-                            onClick={handlePrint}
-                        >
-                            In hóa đơn
-                        </B.Button>
+                        {viewPx && viewPx.status > 0 && viewPx.status < 5 ?
+                            <B.Button
+                                variant="outline-primary"
+                                className="mt-2 me-2 rounded-0"
+                                onClick={handlePrint}
+                            >
+                                In hóa đơn
+                            </B.Button> : null}
                         <B.Button
                             variant="outline-primary"
                             className="mt-2 rounded-0"
@@ -594,9 +660,6 @@ function Index() {
                                     items={pxsearchList}
                                     onSearch={handleOnPxSearch}
                                     onClear={handleOnPxClear}
-                                    // fuseOptions={{ keys: ["id", "tenKH", "sdt"] }}
-                                    // resultStringKeyName="tenKH"
-                                    // formatResult={formatResult}
                                     placeholder='Tìm kiếm phiếu xuất'
                                     maxResults={10}
                                     showNoResults={false}
@@ -609,39 +672,29 @@ function Index() {
                                         hoverBackgroundColor: "#d19c97",
                                         color: "black",
                                         fontSize: "15px",
-                                        // fontFamily: "Courier",
                                         iconColor: "black",
                                         lineColor: "#d19c97",
-                                        // placeholderColor: "black",
                                         clearIconMargin: "3px 8px 0 0",
                                         zIndex: '2',
                                     }}
                                 />
                             </B.Col>
                             <B.Col lg={8}>
-                                <div className='d-flex justify-content-end'>
-                                    <B.Button variant='outline-primary' className='rounded-0 mb-2 me-2' onClick={() => setSubmitting(true)}>Bỏ sắp xếp</B.Button>
-                                    <B.FormGroup className='mb-2 me-2'>
-                                        <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
-                                            <option>Sắp xếp trạng thái</option>
-                                            <option value={0}>Chờ xác nhận</option>
-                                            <option value={1}>Đã xác nhận</option>
-                                            <option value={2}>Đang đóng gói</option>
-                                            <option value={3}>Đang vận chuyển</option>
-                                            <option value={4}>Giao hàng thành công</option>
-                                            <option value={5}>Đơn hàng đã hủy</option>
-                                            <option value={6}>Đã xuất kho</option>
-                                        </B.FormSelect>
-                                    </B.FormGroup>
-                                    <B.FormGroup className='mb-2'>
-                                        <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortPTTT(e.target.value)}>
-                                            <option>Sắp xếp PT thanh toán</option>
-                                            <option value='COD'>COD</option>
-                                            <option value='PayPal'>Paypal</option>
-                                            <option value='Tại quầy'>Tại quầy</option>
-                                        </B.FormSelect>
-                                    </B.FormGroup>
-                                </div>
+                                <B.FormGroup className='mb-2 pull-right'>
+                                    <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
+                                        <option value=''>Sắp xếp</option>
+                                        <option value='h-l'>Giá cao-thấp</option>
+                                        <option value='l-h'>Giá thấp-cao</option>
+                                        <option value='1'>Đã xác nhận</option>
+                                        <option value='2'>Đang đóng gói</option>
+                                        <option value='3'>Đang vận chuyển</option>
+                                        <option value='4'>Giao hàng thành công</option>
+                                        <option value='5'>Đơn hàng đã hủy</option>
+                                        <option value='COD'>COD</option>
+                                        <option value='PayPal'>Paypal</option>
+                                        <option value='Tại quầy'>Tại quầy</option>
+                                    </B.FormSelect>
+                                </B.FormGroup>
                             </B.Col>
                         </B.Row>
                         <B.Row className='px-xl-3'>
@@ -654,6 +707,7 @@ function Index() {
                                             <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
                                             <th>Phương thức thanh toán</th>
+                                            <th>Giảm giá</th>
                                             <th>Tổng tiền</th>
                                             <th>Trạng thái</th>
                                             <th>Thao tác</th>
@@ -669,8 +723,8 @@ function Index() {
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
-                                                        <td>{px.tongTien}</td>
-                                                        {/* <td className='text-success fw-semibold'>{test(px.status)}</td> */}
+                                                        <td>{px.discount}%</td>
+                                                        <td>{formatMoney(px.tongTien)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
                                                                 {checkStatus.map((val) => (
@@ -698,17 +752,18 @@ function Index() {
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
+                                                        <td>{px.discount}%</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
                                                         <td className='text-success fw-semibold'>{test(px.status)}</td>
-                                                        {/* <td>
-                                                                    <B.DropdownButton variant='success' className='me-2' title={test(px.status)}>
-                                                                        {checkStatus.map((val) => (
-                                                                            <B.Dropdown.Item key={val.id}
-                                                                                onClick={() => handleUpdateStatus(val, px)}
-                                                                                eventKey={ekey}>{val.name}</B.Dropdown.Item>
-                                                                        ))}
-                                                                    </B.DropdownButton>
-                                                                </td> */}
+                                                        <td>
+                                                            <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
+                                                                {checkStatus.map((val) => (
+                                                                    <B.Dropdown.Item key={val.id}
+                                                                        onClick={() => handleUpdateStatus(val, px)}
+                                                                    >{val.name}</B.Dropdown.Item>
+                                                                ))}
+                                                            </B.DropdownButton>
+                                                        </td>
                                                         <td className='d-flex'>
                                                             <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
                                                             <FcPrint className='fs-3' onClick={() => handleShowPrint(px)} />
@@ -755,6 +810,10 @@ function Index() {
                                     <B.FormGroup className='d-flex'>
                                         <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
                                         <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.pt_ThanhToan}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Giảm giá:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.discount}%</B.FormLabel>
                                     </B.FormGroup>
                                     <B.FormGroup className='d-flex'>
                                         <B.FormLabel className='fs-6'>Đơn giá:</B.FormLabel>
@@ -1000,10 +1059,12 @@ function Index() {
 
                     <B.Tab eventKey={4} title='Lịch sử xuất hàng' className='border border-top-0 py-3 px-3'>
                         <B.Row className='px-xl-3 mb-3'>
-                            <B.Col lg={6}>
+                            <B.Col lg={9}>
                                 <B.FormGroup className='d-flex'>
-                                    <B.FormControl type='date' className='rounded-0 me-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
-                                    <B.FormControl type='date' className='rounded-0 me-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
+                                    <B.FormLabel className='fs-5'>Từ</B.FormLabel>
+                                    <B.FormControl type='date' className='rounded-0 ms-2 me-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
+                                    <B.FormLabel className='fs-5'>Đến</B.FormLabel>
+                                    <B.FormControl type='date' className='rounded-0 ms-2 me-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
                                     <B.Button variant='outline-primary' className='rounded-0' onClick={xemLichSuXuatHang}>Xem</B.Button>
                                 </B.FormGroup>
                             </B.Col>

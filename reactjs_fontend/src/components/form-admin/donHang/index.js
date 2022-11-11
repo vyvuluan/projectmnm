@@ -3,7 +3,7 @@ import * as B from 'react-bootstrap'
 import axios from "axios";
 import Pagination from '../../form/pagination/index'
 import swal from "sweetalert";
-import { FcPrint } from 'react-icons/fc'
+import { FaRegEye } from 'react-icons/fa'
 import { useReactToPrint } from 'react-to-print';
 import { RiRefreshLine } from 'react-icons/ri'
 
@@ -72,13 +72,62 @@ const DonHang = () => {
     const data = {
       status: value.id,
     }
-    axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
-      if (res.data.status === 200) {
-        setSubmitting(true);
-      } else if (res.data.status === 400) {
-        swal('Cảnh báo', res.data.message, 'warning')
-      }
-    })
+    if (value.id === 1 && order.status < 2 && order.status !== 1) {
+      swal({
+        text: 'Xác nhận đơn hàng bạn sẽ không thể thay đổi thông tin!',
+        title: 'Bạn chắc chứ?',
+        icon: 'warning',
+        buttons: {
+          cancel: "Hủy bỏ",
+          yes: {
+            text: "Xác nhận đơn hàng",
+            value: "yes",
+          },
+        }
+      }).then((value) => {
+        if (value === 'yes') {
+          axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
+            if (res.data.status === 200) {
+              setSubmitting(true);
+            } else if (res.data.status === 400) {
+              swal('Cảnh báo', res.data.message, 'warning')
+            }
+          })
+        }
+      })
+    } else if (value.id === 5 && order.status !== 5 && order.status !== 1) {
+      swal({
+        text: 'Khi hủy đơn bạn sẽ không thể xuất hay thay đổi phiếu!',
+        title: 'Bạn chắc chứ?',
+        icon: 'warning',
+        buttons: {
+          cancel: "Hủy bỏ",
+          yes: {
+            text: "Hủy phiếu",
+            value: "yes",
+          },
+        }
+      }).then((value) => {
+        if (value === 'yes') {
+          axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
+            if (res.data.status === 200) {
+              setSubmitting(true);
+            } else if (res.data.status === 400) {
+              swal('Cảnh báo', res.data.message, 'warning')
+            }
+          })
+        }
+      })
+    }
+    else {
+      axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
+        if (res.data.status === 200) {
+          setSubmitting(true);
+        } else if (res.data.status === 400) {
+          swal('Cảnh báo', res.data.message, 'warning')
+        }
+      })
+    }
   }
 
   const test = (status) => {
@@ -229,6 +278,18 @@ const DonHang = () => {
                   <tr>
                     <td></td>
                     <td></td>
+                    <td>Tạm tính: </td>
+                    <td>{viewOrder && viewOrder.discount !== 0 ? formatMoney(viewOrder?.tongTien / (1 - viewOrder?.discount / 100)) : formatMoney(viewOrder?.tongTien)}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Giảm giá: </td>
+                    <td>{viewOrder && viewOrder.discount}%</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
                     <td className='fw-semibold'>Tổng tiền: </td>
                     <td>{formatMoney(viewOrder && viewOrder.tongTien)}</td>
                   </tr>
@@ -252,13 +313,14 @@ const DonHang = () => {
           </B.ModalBody>
         </div>
         <B.ModalFooter>
-          <B.Button
-            variant="outline-primary"
-            className="mt-2 me-2 rounded-0"
-            onClick={handlePrint}
-          >
-            In hóa đơn
-          </B.Button>
+          {viewOrder && viewOrder.status > 0 && viewOrder.status < 5 ?
+            <B.Button
+              variant="outline-primary"
+              className="mt-2 me-2 rounded-0"
+              onClick={handlePrint}
+            >
+              In hóa đơn
+            </B.Button> : null}
           <B.Button
             variant="outline-primary"
             className="mt-2 rounded-0"
@@ -283,6 +345,8 @@ const DonHang = () => {
                 <th>Họ và tên khách hàng</th>
                 <th>Số điện thoại</th>
                 <th>Địa chỉ</th>
+                <th>Giảm giá</th>
+                <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th className="text-center">Thao tác</th>
               </tr>
@@ -294,6 +358,8 @@ const DonHang = () => {
                   <td>{item.tenKH}</td>
                   <td>{item.sdt}</td>
                   <td>{item.diaChi}</td>
+                  <td>{item.discount}%</td>
+                  <td>{formatMoney(item.tongTien)}</td>
                   <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
                     {checkStatus.map((val) => (
                       <B.Dropdown.Item key={val.id}
@@ -303,7 +369,7 @@ const DonHang = () => {
                   </B.DropdownButton>
                   </td>
                   <td className='text-center'>
-                    <FcPrint className='fs-3' onClick={() => handleShowPrint(item)} />
+                    <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />
                   </td>
                 </tr>
               ))}

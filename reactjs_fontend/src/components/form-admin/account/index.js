@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as B from "react-bootstrap";
 import { AiFillEye } from "react-icons/ai";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
@@ -8,17 +8,17 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import ViewAccount from "./viewAccount";
 import swal from "sweetalert";
+import Pagination from "../../form/pagination";
 const Account = () => {
   const cookies = new Cookies();
   const [user, setUser] = useState([]);
   const [viewAcc, setViewAcc] = useState();
 
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow((prev) => !prev);
   const handleShow = (item) => {
     // console.log(item);
-    setViewAcc(item)
+    setViewAcc(item);
     setShow(true);
   };
   const [addAccount, setAddAccount] = useState({
@@ -28,16 +28,32 @@ const Account = () => {
     role_id: "",
   });
 
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [perPage, setPerPage] = useState();
+  const [currentPage, setCurrentPage] = useState();
+  const handlePerPage = (page) => {
+    setPage(page);
+  };
+
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+    pageNumbers.push(i);
+  }
   //   hiển thị ds user
 
   useEffect(() => {
     // const controller = new AbortController();
     if (cookies.get("role_id") == 2) {
       axios
-        .get("/api/admin/manageUser")
+        .get(`/api/admin/manageUser?page=${page}`)
         .then((res) => {
-          // console.log(res.data.users.data);
+          // console.log(res);
           setUser(res.data.users.data);
+          setTotalPage(res.data.users.total);
+          setPerPage(res.data.users.per_page);
+          setCurrentPage(res.data.users.current_page);
         })
         .catch(function (error) {
           // handle error
@@ -56,10 +72,33 @@ const Account = () => {
           console.log(error);
         });
     }
-  }, []);
+  }, [page]);
+  const [submitting, setSubmitting] = useState(true);
+
+  const refresh = useCallback(async () => {
+    if (cookies.get("role_id") == 2) {
+      
+      const res = await axios.get(`/api/admin/manageUser?page=${page}`);
+      setUser(res.data.users.data);
+      setTotalPage(res.data.users.total);
+      setPerPage(res.data.users.per_page);
+      setCurrentPage(res.data.users.current_page);
+    }
+    else if(cookies.get("role_id") == 4){
+      const res = await axios.get(`/api/nhanvien/manageUser?page=${page}`);
+      setUser(res.data.users.data);
+      setTotalPage(res.data.users.total);
+      setPerPage(res.data.users.per_page);
+      setCurrentPage(res.data.users.current_page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    refresh().then(() => setSubmitting(false));
+  }, [submitting, refresh]);
 
   const handleDeleteAccount = (item) => {
-    console.log(item);
+    // console.log(item.id);
     const id = item.id;
     swal("Chắc chưa", {
       buttons: {
@@ -75,33 +114,62 @@ const Account = () => {
     }).then((value) => {
       switch (value) {
         case "catch":
-          axios
-          .delete(`/api/admin/manageUser/${id}`)
-          .then((res) => {
-            // console.log(res.data.product.data);
-            if (res.data.status === 200) {
-              // setDataSPganhet(res.data.product.data);
-            }
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-          });
+          if (cookies.get("role_id") == 2) {
+            axios
+              .delete(`/api/admin/manageUser/${id}`)
+              .then((res) => {
+                // console.log(res.data);
+                if (res.data.status === 200) {
+                  swal({
+                    title: res.data.message,
+                    icon: "success",
+                    button: "đóng",
+                  });
+                  setSubmitting(true);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          } else if (cookies.get("role_id") == 4) {
+            axios
+              .delete(`/api/nhanvien/manageUser/${id}`)
+              .then((res) => {
+                // console.log(res.data);
+                if (res.data.status === 200) {
+                  swal({
+                    title: res.data.message,
+                    icon: "success",
+                    button: "đóng",
+                  });
+                  setSubmitting(true);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          }
           break;
       }
     });
-    
   };
 
   var htmlRole;
+  var htmlStatus;
   return (
     <>
-    <B.Modal show={show} onHide={handleClose}>
+      <B.Modal show={show} onHide={handleClose}>
         <B.ModalHeader closeButton className="bg-secondary">
           <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
-          <ViewAccount viewAcc={viewAcc} showModal={handleClose} />
+          <ViewAccount
+            viewAcc={viewAcc}
+            showModal={handleClose}
+            setSubmitting={setSubmitting}
+          />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
           <B.Button
@@ -115,14 +183,14 @@ const Account = () => {
       </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
-          <B.Col lg={4}>
+          <B.Col lg={6}>
             <h1 className="fw-bold text-primary mb-4 text-capitalize">
               QUẢN LÝ TÀI KHOẢN
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          <B.Col lg={6}>
-            <B.Form>
+          <B.Col lg={4}>
+            {/* <B.Form>
               <B.FormGroup>
                 <B.InputGroup>
                   <B.FormControl
@@ -157,14 +225,14 @@ const Account = () => {
                   <option>Nhân viên</option>
                 </B.FormSelect>
               </B.FormGroup>
-            </B.Form>
+            </B.Form> */}
           </B.Col>
         </B.Row>
 
         {/* table hien thi tai khoan */}
         <B.Row className="pe-xl-5">
           <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+            {/* <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
               <B.FormSelect
                 className="rounded-0 shadow-none"
                 style={{ width: "200px" }}
@@ -174,14 +242,13 @@ const Account = () => {
                 <option>Theo ID</option>
                 <option>Theo quyền</option>
               </B.FormSelect>
-            </B.FormGroup>
+            </B.FormGroup> */}
             <B.Table className="table-borderless border border-secondary text-center mb-0">
               <thead
                 className="text-dark"
                 style={{ backgroundColor: "#edf1ff" }}
               >
                 <tr>
-                  
                   <th>ID</th>
                   <th>Username</th>
                   <th>Email</th>
@@ -221,21 +288,37 @@ const Account = () => {
                       </td>
                     );
                   }
+                  if (item.status == 1) {
+                    htmlStatus = (
+                      <>
+                        <td
+                          className="align-middle fw-bold"
+                          style={{ color: "#379237" }}
+                        >
+                          ON
+                        </td>
+                      </>
+                    );
+                  } else {
+                    htmlStatus = (
+                      <>
+                        <td
+                          className="align-middle fw-bold"
+                          style={{ color: "#cecece" }}
+                        >
+                          OFF
+                        </td>
+                      </>
+                    );
+                  }
                   return (
-                    <tr key={index}>
-                      
+                    <tr key={item.id}>
                       <td className="align-middle">{item.id}</td>
                       <td className="align-middle">{item.username}</td>
                       <td className="align-middle">{item.email}</td>
 
                       {htmlRole}
-                      <td
-                        className="align-middle fw-bold"
-                        style={{ color: "#379237" }}
-                      >
-                        ON
-                      </td>
-                      {/* <td className="align-middle fw-bold" style={{color:"#cecece"}}>OFF</td> */}
+                      {htmlStatus}
 
                       <td className="align-middle fs-5 text-primary">
                         <AiFillEye
@@ -246,14 +329,12 @@ const Account = () => {
                           style={{ marginRight: "15px" }}
                           onClick={() => handleShow(item)}
                         />
-                        
+
                         <MdDeleteForever
                           type="button"
                           data-toggle="tooltip"
                           data-placement="bottom"
                           title="Xóa tài khoản"
-
-                          
                           onClick={() => handleDeleteAccount(item)}
                         />
                       </td>
@@ -264,6 +345,11 @@ const Account = () => {
             </B.Table>
           </B.Col>
         </B.Row>
+        <Pagination
+          currentPage={currentPage}
+          totalPage={pageNumbers}
+          handlePerPage={handlePerPage}
+        />
       </B.Container>
     </>
   );

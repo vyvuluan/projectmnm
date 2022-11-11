@@ -5,12 +5,15 @@ import swal from "sweetalert";
 import { Link, useNavigate } from "react-router-dom";
 import { MdPayments } from "react-icons/md";
 import { BsFillBagCheckFill, BsPaypal } from "react-icons/bs";
-import { BiEdit } from "react-icons/bi";
+import { TiTimesOutline } from "react-icons/ti";
 import LoaderIcon from "../../layouts/Loading/index";
 import * as B from "react-bootstrap";
+import './style.css'
 
 function Checkout() {
     const navigate = useNavigate();
+    const [discountInput, setDiscountInput] = useState();
+    const [discount, setDiscount] = useState();
     const [loading, setLoading] = useState(true);
     const [checkoutInput, setCheckoutInput] = useState({
         fullname: "",
@@ -24,6 +27,22 @@ function Checkout() {
     var totalCartPrice = 0;
 
     const handleClose = () => setShow(false);
+
+    const handleGetDiscount = () => {
+        axios.get(`/api/check-discount?discount=${discountInput}&tongTien=${totalCartPrice}`).then(res => {
+            if (res.data.status === 200) {
+                setDiscount(res.data.discount);
+            } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.message, 'warning');
+                setDiscountInput('')
+            }
+        })
+    }
+
+    const handleDeleteDiscount = () => {
+        setDiscount();
+        setDiscountInput('');
+    }
 
     if (!localStorage.getItem("auth_token")) {
         navigate("/");
@@ -66,7 +85,7 @@ function Checkout() {
         tenKH: checkoutInput.fullname,
         sdt: checkoutInput.phonenumber,
         diaChi: checkoutInput.address,
-        discount: checkoutInput.discount,
+        discount: discountInput,
         payment_mode: "PayPal",
         payment_id: "",
     };
@@ -75,17 +94,21 @@ function Checkout() {
         React,
         ReactDOM,
     });
+
+    var money = 0;
+
     const createOrder = (data, actions) => {
         return actions.order.create({
             purchase_units: [
                 {
                     amount: {
-                        value: totalCartPrice,
+                        value: (discount ? totalCartPrice * (1 - discount / 100) / 25000 : totalCartPrice / 25000),
                     },
                 },
             ],
         });
     };
+    console.log(totalCartPrice);
 
     const onApprove = (data, actions) => {
         return actions.order.capture().then(function (details) {
@@ -111,7 +134,7 @@ function Checkout() {
             tenKH: checkoutInput.fullname,
             sdt: checkoutInput.phonenumber,
             diaChi: checkoutInput.address,
-            discount: checkoutInput.discount,
+            discount: discountInput,
             payment_mode: payment_mode,
             payment_id: "",
         };
@@ -123,8 +146,12 @@ function Checkout() {
                         setError([]);
                         axios.post(`http://localhost:8000/api/dathang`, data).then((resp) => {
                             if (resp.data.status === 200) {
-                                swal("Success", resp.data.message, "success");
+                                swal("Thành công", resp.data.message, "success");
                                 navigate("/");
+                            } else if (resp.data.status === 401) {
+                                swal("Đăng nhập", resp.data.message, "error");
+                            } else if (resp.data.status === 400) {
+                                swal("Xin lỗi", resp.data.message, "error");
                             }
                         });
                     } else if (res.data.status === 422) {
@@ -203,7 +230,7 @@ function Checkout() {
                             </B.Card.Header>
                             <B.Card.Body>
                                 <B.Row>
-                                    <B.Col md={4}>
+                                    <B.Col md={6}>
                                         <B.FormGroup className="mb-3">
                                             <B.FormLabel>Họ và tên</B.FormLabel>
                                             <B.FormControl
@@ -216,7 +243,7 @@ function Checkout() {
                                             <small className="text-danger">{error.tenKH}</small>
                                         </B.FormGroup>
                                     </B.Col>
-                                    <B.Col md={4}>
+                                    <B.Col md={6}>
                                         <B.FormGroup className="mb-3">
                                             <B.FormLabel>Số điện thoại</B.FormLabel>
                                             <B.FormControl
@@ -227,19 +254,6 @@ function Checkout() {
                                                 className="rounded-0 shadow-none"
                                             ></B.FormControl>
                                             <small className="text-danger">{error.sdt}</small>
-                                        </B.FormGroup>
-                                    </B.Col>
-                                    <B.Col md={4}>
-                                        <B.FormGroup className="mb-3">
-                                            <B.FormLabel>Mã giảm giá</B.FormLabel>
-                                            <B.FormControl
-                                                type="text"
-                                                name="discount"
-                                                onChange={handleInput}
-                                                value={checkoutInput.discount}
-                                                className="rounded-0 shadow-none"
-                                            ></B.FormControl>
-                                            <small className="text-danger">{error.discount}</small>
                                         </B.FormGroup>
                                     </B.Col>
                                     <B.Col md={12}>
@@ -280,9 +294,25 @@ function Checkout() {
                             </B.Card.Footer>
                         </B.Card>
                     </B.Col>
-
-                    <B.Col md={5} className="d-grd gap-2 mx-auto table-responsive mb-5">
-                        <B.Table className="table-bordered border border-secondary text-center mb-0">
+                    <B.Col md={5} className="mx-auto mb-5">
+                        <B.Row>
+                            <B.Col className="col-10">
+                                <B.FormGroup className="mb-3">
+                                    <B.FormControl
+                                        type="text"
+                                        onChange={(e) => setDiscountInput(e.target.value)}
+                                        value={discountInput}
+                                        className="rounded-0 shadow-none"
+                                        placeholder="Thêm mã giảm giá"
+                                    ></B.FormControl>
+                                    <small className="text-danger">{error.discount}</small>
+                                </B.FormGroup>
+                            </B.Col>
+                            <B.Col className="col-2">
+                                <B.Button variant="primary" className="rounded-0 w-100" onClick={handleGetDiscount}>Thêm mã</B.Button>
+                            </B.Col>
+                        </B.Row>
+                        <B.Table responsive className="table-bordered border border-secondary text-center mb-0">
                             <thead
                                 className="text-dark fs-5"
                                 style={{ backgroundColor: "#edf1ff" }}
@@ -311,11 +341,19 @@ function Checkout() {
                                     );
                                 })}
                                 <tr>
-                                    <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        Thuế
+                                    <td colSpan={2} className="text-end fs-5">
+                                        Tạm tính
                                     </td>
                                     <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        10%
+                                        {formatMoney(totalCartPrice)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={2} className="text-end fs-5">
+                                        Mã giảm giá
+                                    </td>
+                                    <td colSpan={2} className="text-end fw-semibold fs-5">
+                                        {discount && discount !== null ? discount : '0'}%<TiTimesOutline className="ms-4 fs-4 customclosebtn" onClick={handleDeleteDiscount} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -323,7 +361,7 @@ function Checkout() {
                                         Tổng tiền
                                     </td>
                                     <td colSpan={2} className="text-end fw-semibold fs-5">
-                                        {formatMoney(totalCartPrice * 1.1)}
+                                        {discount ? formatMoney(totalCartPrice * (1 - discount / 100)) : formatMoney(totalCartPrice)}
                                     </td>
                                 </tr>
                             </tbody>
@@ -384,7 +422,7 @@ function Checkout() {
                 </div>
             </B.Container>
 
-            <B.Container fluid pt={5}>
+            <B.Container fluid pt={5} className="mb-5">
                 <B.Form>{checkout_HTML}</B.Form>
             </B.Container>
         </>

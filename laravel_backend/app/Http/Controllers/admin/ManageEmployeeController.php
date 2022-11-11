@@ -18,7 +18,7 @@ class ManageEmployeeController extends Controller
      */
     public function index()
     {
-        $emp = Employee::paginate(5);
+        $emp = Employee::orderBy('id', 'desc')->paginate(5);
         return response()->json([
             'status' => 200,
             'emloyee' =>  $emp,

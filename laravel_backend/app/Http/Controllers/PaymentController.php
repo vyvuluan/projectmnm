@@ -57,15 +57,31 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
-            $date = Carbon::today();
-            $discount = Discount::where('discount_id', $request->discount)
-                ->where('start', '<', $date)
-                ->where('end', '>', $date)
-                ->first();
-            if (!empty($discount)) {
-                $payment->discount = $request->discount;
-                $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
+            if (isset($request->discount)) {
+                $date = Carbon::today();
+                $discount = Discount::where('discount_id', $request->discount)
+                    ->where('start', '<', $date)
+                    ->where('end', '>', $date)
+                    ->first();
+                if (!empty($discount)) {
+                    if ($discount->dieukien <= $tongTien) {
+                        $payment->discount = $discount->phantram;
+                        $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
+                    } else {
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Không có mã giảm giá bạn vừa nhập',
+                    ]);
+                }
             }
+
+
             $payment->save();
             $payment->pxct()->createMany($pxChiTiet);
             Cart::destroy($cart);

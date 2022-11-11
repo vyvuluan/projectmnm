@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { SectionTitle, Product, Pagination, Filter } from "../../form/index.js";
+import * as Bt from "react-bootstrap";
+
+import {
+  SectionTitle,
+  Product,
+  Pagination,
+  Filter,
+  SortProduct,
+} from "../../form/index.js";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -9,6 +17,7 @@ import LoadingPage from "../../layouts/Loading/index.js";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
   // const [firstPage,setFirstPage] = useState();
+
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
   const [perPage, setPerPage] = useState();
@@ -24,14 +33,13 @@ const PageProducts = () => {
   };
 
   const pageNumbers = [];
-  
+
   for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
     pageNumbers.push(i);
   }
 
   const [searchParam, setSearchParam] = useSearchParams();
   useEffect(() => {
-    console.log(searchParam.get("category"));
     const controller = new AbortController();
 
     if (searchParam.get("category")) {
@@ -39,15 +47,12 @@ const PageProducts = () => {
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
         .then(function (response) {
           // handle success
-          console.log(response.data.Loaisp);
-          // console.log("hello"+[...searchParam][0][1]);
+          console.log(response);
 
-          // setListProduct(response.data.Loaisp);
           setListProduct(response.data.Loaisp.data);
-
           setTotalPage(response.data.Loaisp.total);
           setPerPage(response.data.Loaisp.per_page);
-          setCurrentPage(response.data.Loaisp.current_page)
+          setCurrentPage(response.data.Loaisp.current_page);
           // console.log(response.data.Loaisp.length);
           // if(response.data.Loaisp.length)
           setLoading(false);
@@ -61,17 +66,85 @@ const PageProducts = () => {
         });
       //clear function
       return () => controller.abort();
+    } else if (searchParam.get("key") == 1) {
+      // console.log("thanhf coong");
+      axios
+        .get(`/api/sortProduct?key=1&page=${page}`)
+        .then((response) => {
+          // handle success
+          console.log(response);
+          setListProduct(response.data.product.data);
+          setTotalPage(response.data.product.total);
+          setPerPage(response.data.product.per_page);
+          setCurrentPage(response.data.product.current_page);
+          setLoading(false);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    } else if (searchParam.get("key") == 2) {
+      // console.log("thanhf coong");
+      axios
+        .get(`/api/sortProduct?key=2&page=${page}`)
+        .then((response) => {
+          // handle success
+          console.log(response);
+          setListProduct(response.data.product.data);
+          setTotalPage(response.data.product.total);
+          setPerPage(response.data.product.per_page);
+          setCurrentPage(response.data.product.current_page);
+          setLoading(false);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    } else if (searchParam.get("key") == 3) {
+      // console.log("thanhf coong");
+      axios
+        .get(`/api/sortProduct?key=3&page=${page}`)
+        .then((response) => {
+          // handle success
+          console.log(response);
+          setListProduct(response.data.product.data);
+          setTotalPage(response.data.product.total);
+          setPerPage(response.data.product.per_page);
+          setCurrentPage(response.data.product.current_page);
+          setLoading(false);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    } else if (searchParam.get("key") == 4) {
+      // console.log("thanhf coong");
+      axios
+        .get(`/api/sortProduct?key=4&page=${page}`)
+        .then((response) => {
+          // handle success
+          console.log(response);
+          setListProduct(response.data.product.data);
+          setTotalPage(response.data.product.total);
+          setPerPage(response.data.product.per_page);
+          setCurrentPage(response.data.product.current_page);
+          setLoading(false);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
     } else {
       const controller = new AbortController();
       axios
         .get(`/api/products/view?page=${page}`)
         .then(function (response) {
           // handle success
-          // console.log(response.data.total);
+
+          setListProduct(response.data.data);
           setTotalPage(response.data.total);
           setPerPage(response.data.per_page);
-          setListProduct(response.data.data);
-          setCurrentPage(response.data.current_page)
+          setCurrentPage(response.data.current_page);
           setLoading(false);
         })
         .catch(function (error) {
@@ -105,14 +178,22 @@ const PageProducts = () => {
       );
     }
   }
+
   return (
     <>
       <Container fluid className="mt-5">
         <Row>
-          <Col >
-            <SectionTitle title="Sản phẩm"  />
+          <Col>
+            <SectionTitle title="Sản phẩm" />
+
+            {/* sort */}
+            <SortProduct />
             {product_HTML}
-            <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
+            <Pagination
+              currentPage={currentPage}
+              totalPage={pageNumbers}
+              handlePerPage={handlePerPage}
+            />
           </Col>
         </Row>
         {/* <div>{search}</div> */}

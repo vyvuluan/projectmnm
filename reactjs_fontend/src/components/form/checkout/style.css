@@ -1,0 +1,6 @@
+.customclosebtn:hover {
+    background-color: #d19c97;
+    color: white !important;
+    border-radius: 50%;
+    transition: 0.1s;
+}
