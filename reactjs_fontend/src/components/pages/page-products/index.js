@@ -47,7 +47,7 @@ const PageProducts = () => {
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
         .then(function (response) {
           // handle success
-          console.log(response);
+          // console.log(response);
 
           setListProduct(response.data.Loaisp.data);
           setTotalPage(response.data.Loaisp.total);
@@ -157,7 +157,7 @@ const PageProducts = () => {
       //clear function
       return () => controller.abort();
     }
-  }, [page]);
+  }, [page,searchParam]);
   if (loading) {
     return (
       <>

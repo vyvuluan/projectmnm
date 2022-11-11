@@ -9,10 +9,11 @@ import ContactAdmin from "../contact-admin";
 import DropDownMenuAdmin from "../dropdownMenuAdmin";
 import swal from "sweetalert";
 import axios from "axios";
-
+import Cookies from "universal-cookie";
 const NavBarAdmin = () => {
   const [nameUserAdmin, setNameUserAdmin] = useState();
   const history = useNavigate();
+  const cookies = new Cookies();
 
   const logoutSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ const NavBarAdmin = () => {
           // console.log(res);
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_name");
+          cookies.remove("role_id");
           swal({
             title: res.data.message,
             icon: "success",

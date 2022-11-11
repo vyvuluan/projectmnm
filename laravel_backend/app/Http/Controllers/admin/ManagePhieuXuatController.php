@@ -262,17 +262,12 @@ class ManagePhieuXuatController extends Controller
                 'status' => 400,
                 'message' => 'Phiếu Xuất đã qua bước xác nhận không thể chỉnh sửa ',
             ]);
-        } else if ($px->status == 6 && $request->status < 6) {
+        } else if ($px->status == 5 && $request->status <= 5) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Đơn hàng đã Xuất không thể chỉnh sửa',
+                'message' => 'Đơn hàng đã huỷ không thể chỉnh sửa',
             ]);
-        } else if ($px->status == 5 && $request->status < 5) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
-            ]);
-        } else if ($px->status == 4 && $request->status < 4) {
+        } else if ($px->status == 4 && $request->status <= 4) {
             return response()->json([
                 'status' => 400,
                 'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
@@ -296,6 +291,16 @@ class ManagePhieuXuatController extends Controller
         $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
+        if ($px->status = 5) {
+            $pxcts = $px->pxct;
+            foreach ($pxcts as $pxct) {
+                $product = Product::find($pxct->product_id);
+                if ($product) {
+                    $product->soLuongSP += $pxct->soluong;
+                    $product->save();
+                }
+            }
+        }
         return response()->json([
             'status' => 200,
             'message' => 'Cập nhật phiếu thành công ',
@@ -307,9 +312,22 @@ class ManagePhieuXuatController extends Controller
             $maKH = auth('sanctum')->user()->customer->id;
             $px = PhieuXuat::find($id);
             if ($maKH == $px->customer_id) {
-
+                if ($px->status == 5 || $px->status == 4) {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Đơn hàng của bạn đã bị huỷ hoặc đã được giao',
+                    ]);
+                }
                 $px->status = 5;
                 $px->save();
+                $pxcts = $px->pxct;
+                foreach ($pxcts as $pxct) {
+                    $product = Product::find($pxct->product_id);
+                    if ($product) {
+                        $product->soLuongSP += $pxct->soluong;
+                        $product->save();
+                    }
+                }
                 return response()->json([
                     'status' => 200,
                     'message' => 'Huỷ đơn hàng thành công ',
@@ -327,40 +345,6 @@ class ManagePhieuXuatController extends Controller
             ]);
         }
     }
-    // public function checkstatus($stusinput, $stuspx)
-    // {
-    //     if ($stuspx == 1 && $stusinput < 1) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
-    //         ]);
-    //     } else if ($stuspx == 6 && $stusinput < 6) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Đơn hàng đã Xuất không thể chỉnh sửa',
-    //         ]);
-    //     } else if ($stuspx == 5 && $stusinput < 5) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
-    //         ]);
-    //     } else if ($stuspx == 4 && $stusinput < 4) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
-    //         ]);
-    //     } else if ($stuspx == 3 && $stusinput < 3) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Đơn hàng đang vận chuyển không thể về bước trước',
-    //         ]);
-    //     } else if ($stuspx == 2 && $stusinput < 2) {
-    //         return response()->json([
-    //             'status' => 400,
-    //             'message' => 'Đơn hàng đang đóng gói không thể quay về bước trước',
-    //         ]);
-    //     }
-    // }
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -389,33 +373,17 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-                // if ($px->status >= 1 && $request->status = 0) {
-                //     return response()->json([
-                //         'status' => 400,
-                //         'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
-                //     ]);
-                // } else if ($px->status = 6) {
-                //     return response()->json([
-                //         'status' => 400,
-                //         'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
-                //     ]);
-                // }
                 if ($px->status == 1 && $request->status < 1) {
                     return response()->json([
                         'status' => 400,
                         'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
                     ]);
-                } else if ($px->status == 6 && $request->status < 6) {
+                } else if ($px->status == 5 && $request->status <= 5) {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Đơn hàng đã Xuất không thể chỉnh sửa',
+                        'message' => 'Đơn hàng đã được huỷ không thể chỉnh sửa',
                     ]);
-                } else if ($px->status == 5 && $request->status < 5) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
-                    ]);
-                } else if ($px->status == 4 && $request->status < 4) {
+                } else if ($px->status == 4 && $request->status <= 4) {
                     return response()->json([
                         'status' => 400,
                         'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
@@ -430,12 +398,13 @@ class ManagePhieuXuatController extends Controller
                         'status' => 400,
                         'message' => 'Đơn hàng đang đóng gói không thể quay về bước trước',
                     ]);
-                } else if ($px->status == 5 && $request->status == 6) {
+                } else if ($px->status == 4 && $request->status == 5) {
                     return response()->json([
                         'status' => 400,
-                        'message' => 'Đơn hàng đã hủy không thể chỉnh sửa',
+                        'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
                     ]);
                 }
+
                 $px->customer_id = $request->customer_id;
                 $px->status = $request->status;
                 $px->pt_ThanhToan = $request->pt_ThanhToan;
@@ -444,6 +413,16 @@ class ManagePhieuXuatController extends Controller
                 $px->sdt = $request->sdt;
                 // $px->tongTien = $request->tongTien;
                 $px->save();
+                if ($px->status = 5) {
+                    $pxcts = $px->pxct;
+                    foreach ($pxcts as $pxct) {
+                        $product = Product::find($pxct->product_id);
+                        if ($product) {
+                            $product->soLuongSP += $pxct->soluong;
+                            $product->save();
+                        }
+                    }
+                }
                 return response()->json([
                     'status' => 200,
                     'message' => 'Cập nhật phiếu thành công ',

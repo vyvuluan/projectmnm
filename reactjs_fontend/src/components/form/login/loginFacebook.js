@@ -9,7 +9,8 @@ const LoginFaceBook = (props) => {
         color="primary"
         className="p-1 border m-1 btnCus shadow-sm rounded"
         style={{ textDecoration: "none", textAlign: "center" }}
-        onClick={props.loginFB}
+        // onClick={props.loginFB}
+        href={props.loginFB}
       >
         <img
           width="20px"
