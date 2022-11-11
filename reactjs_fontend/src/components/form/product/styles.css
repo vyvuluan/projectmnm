@@ -92,3 +92,13 @@
 .icon-cart:before {
   content: "🛒";
 }
+.hoverCSS {
+  transition: 0.5s ease;
+}
+.hoverCSS:hover {
+  box-shadow: 1px 1px #d19c97, 2px 2px #d19c97, 3px 3px #d19c97, 4px 4px #d19c97,
+    5px 5px #d19c97, 6px 6px #d19c97;
+  -webkit-transform: translateX(-3px);
+  transform: translateX(-3px);
+  transition: 0.5s ease;
+}

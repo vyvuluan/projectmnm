@@ -137,8 +137,7 @@ const ViewAccount = ({ viewAcc, showModal, setSubmitting }) => {
           {cookies.get("role_id") == 2 ? (
             <Bt.FormSelect
               name="role_id"
-              // value={updateAccount.role_id}
-
+              
               onChange={handleChangeRole}
               className="rounded-0 shadow-none mb-3 text-muted"
               defaultValue={updateAccount.role_id}

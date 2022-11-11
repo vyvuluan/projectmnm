@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import * as B from "react-bootstrap";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
@@ -98,6 +98,7 @@ const Employees = () => {
         // handle error
         console.log(error);
       });
+
     // return () => controller.abort();
   }, [page]);
 
@@ -206,16 +207,60 @@ const Employees = () => {
     setSubmitting(true);
   };
   const refreshNV = useCallback(async () => {
-    const res = await axios.get(`/api/admin/manageEmployee?page=${page}`)
-      setUser(res.data.emloyee.data);
-      setTotalPage(res.data.emloyee.total);
-      setPerPage(res.data.emloyee.per_page);
-      setCurrentPage(res.data.emloyee.current_page);
-    
-}, [page]);
-useEffect(() => {
-  refreshNV().then(() => setSubmitting(false));
-}, [submitting, refreshNV]);
+    const res = await axios.get(`/api/admin/manageEmployee?page=${page}`);
+    setUser(res.data.emloyee.data);
+    setTotalPage(res.data.emloyee.total);
+    setPerPage(res.data.emloyee.per_page);
+    setCurrentPage(res.data.emloyee.current_page);
+  }, [page]);
+  useEffect(() => {
+    refreshNV().then(() => setSubmitting(false));
+  }, [submitting, refreshNV]);
+
+  const handleChange = (event) => {
+    // console.log(event.target.value);
+
+    if (event.target.value == 1) {
+      axios
+        .get("/api/locTenNvAZ")
+        .then((res) => {
+          console.log(res);
+          if (res.data.status == 200) {
+            setUser(res.data.emp.data);
+            setTotalPage(res.data.emp.total);
+            setPerPage(res.data.emp.per_page);
+            setCurrentPage(res.data.emp.current_page);
+
+            // swal("Success", res.data.message, "success");
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+          // swal("Warning", "vui lòng kiểm tra lại thông tin vừa nhập ", "warning");
+        });
+    } else if (event.target.value == 2) {
+      axios
+        .get("/api/locTenNvZA")
+        .then((res) => {
+          console.log(res);
+          if (res.data.status == 200) {
+            setUser(res.data.emp.data);
+            setTotalPage(res.data.emp.total);
+            setPerPage(res.data.emp.per_page);
+            setCurrentPage(res.data.emp.current_page);
+
+            // swal("Success", res.data.message, "success");
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+          // swal("Warning", "vui lòng kiểm tra lại thông tin vừa nhập ", "warning");
+        });
+    }
+  };
+
   return (
     <>
       <B.Modal show={show} onHide={handleClose}>
@@ -275,7 +320,7 @@ useEffect(() => {
                     onSelect={handleOnSelect}
                     fuseOptions={{ keys: ["id", "ten"] }}
                     resultStringKeyName="ten"
-                    showIcon={false}
+                    // showIcon={false}
                     formatResult={formatResult}
                     styling={{
                       height: "36px",
@@ -380,15 +425,17 @@ useEffect(() => {
         <B.Row className="pe-xl-5">
           <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
             <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
-              {/* <B.FormSelect
+              <B.FormSelect
+                onChange={handleChange}
                 className="rounded-0 shadow-none"
                 style={{ width: "200px" }}
               >
-                <option>Sắp xếp</option>
-                <option>Từ A-Z</option>
-                <option>Theo ID</option>
-                <option>Theo quyền</option>
-              </B.FormSelect> */}
+                <option disabled selected>
+                  Sắp xếp
+                </option>
+                <option value={1}>Từ A-Z</option>
+                <option value={2}>Từ Z-A</option>
+              </B.FormSelect>
             </B.FormGroup>
             <B.Table className="table-borderless border border-secondary text-center mb-0">
               <thead
