@@ -11,8 +11,10 @@ const Ctpn = ({
     handleShowUpdateCtPN,
     viewPn,
     handleCloseTab,
-    handleReloadShowCTPNtab3
+    // handleReloadShowCTPNtab3,
+    
 }) => {
+  // console.log(handleShowUpdateCtPN);
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -31,7 +33,7 @@ const Ctpn = ({
             data-placement="bottom"
             title="làm mới"
             className="fs-3 customborder"
-            onClick={handleReloadShowCTPNtab3}
+            // onClick={handleReloadShowCTPNtab3}
           />
 
           <FaTimes
@@ -56,10 +58,10 @@ const Ctpn = ({
           </thead>
           <tbody className="align-middle">
             {viewPn.pnct.map((item1, index) => {
-            //   console.log(item1);
+              console.log(item1);
               return (
                 <>
-                  <tr key={index}>
+                  <tr key={item1.pn_id}>
                     <td className="align-middle">{index + 1}</td>
                     <td className="align-middle">{item1.product.tenSP}</td>
                     <td className="align-middle">{item1.soluong}</td>

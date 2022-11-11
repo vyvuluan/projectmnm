@@ -7,6 +7,7 @@ const SortProduct = () => {
           <Bt.Col sm={9}></Bt.Col>
           <Bt.Col sm={3}>
             <Bt.Dropdown
+            
               style={{
                 width: "158px",
                 right: "0",

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
+import './styles.css'
 import * as Icon from "react-bootstrap-icons";
 import {
   FaSearch,
@@ -57,7 +58,7 @@ export default function Header() {
   if (!localStorage.getItem("auth_token")) {
     AuthButton = (
       <Bt.NavLink className="fs-5 fw-normal  text-end mt-2">
-        <Link className="text-decoration-none" to="/login">
+        <Link className="text-decoration-none aEffect" to="/login">
           Login
         </Link>
       </Bt.NavLink>
@@ -256,18 +257,18 @@ export default function Header() {
                 className="d-flex justify-content-between"
               >
                 <Bt.Nav className="me-auto py-2">
-                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
-                    <Link className="text-decoration-none" to="/">
+                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2 effect-box">
+                    <Link className="text-decoration-none aEffect  " to="/">
                       Home
                     </Link>
                   </Bt.NavLink>
-                  <Bt.NavLink className="fs-5 fw-normal me-2">
-                    <Link className="text-decoration-none" to="/contact">
+                  <Bt.NavLink className="fs-5 fw-normal me-2 ">
+                    <Link className="text-decoration-none aEffect" to="/contact">
                       Liên hệ
                     </Link>
                   </Bt.NavLink>
-                  <Bt.NavLink className="fs-5 fw-normal me-2">
-                    <Link className="text-decoration-none" to="/pageproducts">
+                  <Bt.NavLink className="fs-5 fw-normal me-2 ">
+                    <Link className="text-decoration-none aEffect" to="/pageproducts">
                       Sản phẩm
                     </Link>
                   </Bt.NavLink>

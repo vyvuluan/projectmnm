@@ -16,9 +16,10 @@ const UpdateCtPN = ({
   gia,
   soLuong,
   test,
+  dataShowPN,
 }) => {
   const [idProduct, setIdProduct] = useState();
-
+  console.log(dataShowPN);
   const [CTPN, setCTPN] = useState({
     soluong: soLuong,
     gia: gia,
@@ -40,7 +41,7 @@ const UpdateCtPN = ({
     const data = {
       soluong: CTPN.soluong,
       gia: CTPN.gia,
-      product_id: idProduct,
+      product_id: idSP,
     };
     // console.log(e.target.value);
     // console.log(ngaySinh);
@@ -56,6 +57,14 @@ const UpdateCtPN = ({
             button: "đóng",
           });
           showModal(false);
+          let data1;
+          dataShowPN.filter((item, index) => {
+            return item.id == idPN
+              ? dataShowPN[index].pnct.filter((item1, index1) => {
+                  return item1.product_id == idSP ? (data1 = item1) : null;
+                })
+              : null;
+          });
           // const data1 = {
           //   created_at: "2022-11-08T12:48:06.000000Z",
           //   gia: CTPN.gia,
@@ -81,7 +90,12 @@ const UpdateCtPN = ({
           //   soluong: CTPN.soluong,
           //   updated_at: "2022-11-08T13:30:26.000000Z",
           // };
-          // test(data1);
+          console.log(data1);
+          data1.gia = CTPN.gia;
+          data1.soluong = CTPN.soluong;
+          if (data1) {
+            test(data1);
+          }
         }
         if (res.data.status == 400) {
           swal({
@@ -102,7 +116,7 @@ const UpdateCtPN = ({
       <Bt.Form onSubmit={handleUpdate}>
         <Bt.FormLabel className="fw-semibold fs-4">Sản phẩm</Bt.FormLabel>
 
-        <div className="w-100 me-2">
+        <div className="w-100 me-2" style={{ pointerEvents: "none" }}>
           <ReactSearchAutocomplete
             placeholder="sản phẩm"
             items={listProduct}
@@ -113,7 +127,6 @@ const UpdateCtPN = ({
             formatResult={formatResult}
             showIcon={false}
             inputSearchString={tenSP}
-            onFocus
             styling={{
               height: "36px",
               border: "1px solid lightgray",

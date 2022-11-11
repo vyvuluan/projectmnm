@@ -84,7 +84,7 @@ const PhieuNhap = () => {
   // }
 
   const handleView = (item) => {
-    console.log(item);
+    // console.log(item);
     setShowTab(true);
     setTabKey(3);
     setViewPn(item);
@@ -92,29 +92,29 @@ const PhieuNhap = () => {
     setIdPN(item.id);
   };
 
-  // const test = (value) => {
-  //   console.log(value);
-  //   const d = dataShowPN.filter((item, index) => {
-  //     return item.id == value.pn_id
-  //       ? dataShowPN[index].pnct.filter((item1, index1) => {
-  //           // return console.log(index1);
-  //           return item1.pn_id == value.pn_id &&
-  //             item1.product_id == value.product_id
-  //             ? setDataShowPN((prev) => [
-  //                 ...prev,
-  //                 (prev[index].pnct[index1] = value),
-  //               ])
-  //             : null;
-  //         })
-  //       : null;
-  //   });
-  //   console.log(d);
+  const test = (value) => {
+    console.log(value.product_id);
+    var index, index1;
+    const d = dataShowPN.filter((item, i) => {
+      return item.id === value.pn_id ? (index = i) : null;
+    });
+    const d1 = dataShowPN[index].pnct.filter((item1, i1) => {
+      return item1.product_id == value.product_id ? (index1 = i1) : null;
+    });
     // setDataShowPN((prev) => [
-    //   ...prev, (dataShowPN.splice(dataShowPN.length - 1, 1)
-    // )])
-  // };
+    //   ...prev,
+    //   (prev[index].pnct[i1] = value),
+    // ])
+    let newData = [...dataShowPN];
+    console.log(index + " " + index1);
+    console.log(newData[index].pnct[index1]);
+    newData[index].pnct[index1] = value;
 
-  // console.log(dataShowPN);
+    console.log(newData);
+    setDataShowPN(newData)
+  };
+
+  console.log(dataShowPN);
   const handleCloseTab = () => {
     setShowTab(false);
     setTabKey(2);
@@ -172,7 +172,8 @@ const PhieuNhap = () => {
   const [gia, setGia] = useState();
 
   const handleShowUpdateCtPN = (item) => {
-    // console.log(item.gia);
+    console.log({ tab3: item });
+    
     setIdProduct(item?.product_id);
     setNameProduct(item?.product.tenSP);
     setSoLuong(item?.soluong);
@@ -663,7 +664,8 @@ const PhieuNhap = () => {
             handleOnSelectSp={handleOnSelectSp}
             formatResult={formatResult}
             showModal={handleCloseUpdateCtPN}
-            // test={test}
+            test={test}
+            dataShowPN={dataShowPN}
           />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
@@ -965,17 +967,6 @@ const PhieuNhap = () => {
                 title="Xem danh sách phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
               >
-                {/* <Ctpn
-                  SortMoney={SortMoney}
-                  handleReload={handleReload}
-                  dataShowPN={dataShowPN}
-                  currentPage={currentPage}
-                  pageNumbers={pageNumbers}
-                  handlePerPage={handlePerPage}
-                  Pagination={Pagination}
-                  handleView={handleView}
-                  handleDeletePN={handleDeletePN}
-                ></Ctpn> */}
                 <B.Form style={{ marginBottom: "40px" }}>
                   <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                     <B.FormSelect
@@ -1087,6 +1078,7 @@ const PhieuNhap = () => {
                     handleShowUpdateCtPN={handleShowUpdateCtPN}
                     viewPn={viewPn}
                     handleCloseTab={handleCloseTab}
+
                     // handleReloadShowCTPNtab3={handleReloadShowCTPNtab3}
                   ></Ctpn>
                   {/* <B.Row className="px-xl-3 mb-3">
