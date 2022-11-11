@@ -413,7 +413,7 @@ useEffect(() => {
                     // if (user_id == null) {
                     // }
                     return (
-                      <tr key={index}>
+                      <tr key={item.id}>
                         <td className="align-middle">{item.id}</td>
                         <td className="align-middle">{item.ten}</td>
                         {/* <td className="align-middle">{item.email}</td> */}

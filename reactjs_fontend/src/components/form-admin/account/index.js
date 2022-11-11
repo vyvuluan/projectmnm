@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as B from "react-bootstrap";
 import { AiFillEye } from "react-icons/ai";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
@@ -76,11 +76,21 @@ const Account = () => {
   const [submitting, setSubmitting] = useState(true);
 
   const refresh = useCallback(async () => {
-    const res = await axios.get(`/api/admin/manageUser?page=${page}`);
-    setUser(res.data.users.data);
-    setTotalPage(res.data.users.total);
-    setPerPage(res.data.users.per_page);
-    setCurrentPage(res.data.users.current_page);
+    if (cookies.get("role_id") == 2) {
+      
+      const res = await axios.get(`/api/admin/manageUser?page=${page}`);
+      setUser(res.data.users.data);
+      setTotalPage(res.data.users.total);
+      setPerPage(res.data.users.per_page);
+      setCurrentPage(res.data.users.current_page);
+    }
+    else if(cookies.get("role_id") == 4){
+      const res = await axios.get(`/api/nhanvien/manageUser?page=${page}`);
+      setUser(res.data.users.data);
+      setTotalPage(res.data.users.total);
+      setPerPage(res.data.users.per_page);
+      setCurrentPage(res.data.users.current_page);
+    }
   }, [page]);
 
   useEffect(() => {
@@ -104,23 +114,43 @@ const Account = () => {
     }).then((value) => {
       switch (value) {
         case "catch":
-          axios
-            .delete(`/api/admin/manageUser/${id}`)
-            .then((res) => {
-              // console.log(res.data);
-              if (res.data.status === 200) {
-                swal({
-                  title: res.data.message,
-                  icon: "success",
-                  button: "đóng",
-                });
-                setSubmitting(true)
-              }
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
+          if (cookies.get("role_id") == 2) {
+            axios
+              .delete(`/api/admin/manageUser/${id}`)
+              .then((res) => {
+                // console.log(res.data);
+                if (res.data.status === 200) {
+                  swal({
+                    title: res.data.message,
+                    icon: "success",
+                    button: "đóng",
+                  });
+                  setSubmitting(true);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          } else if (cookies.get("role_id") == 4) {
+            axios
+              .delete(`/api/nhanvien/manageUser/${id}`)
+              .then((res) => {
+                // console.log(res.data);
+                if (res.data.status === 200) {
+                  swal({
+                    title: res.data.message,
+                    icon: "success",
+                    button: "đóng",
+                  });
+                  setSubmitting(true);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          }
           break;
       }
     });
@@ -135,7 +165,11 @@ const Account = () => {
           <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
-          <ViewAccount viewAcc={viewAcc} showModal={handleClose} setSubmitting={setSubmitting}  />
+          <ViewAccount
+            viewAcc={viewAcc}
+            showModal={handleClose}
+            setSubmitting={setSubmitting}
+          />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
           <B.Button
@@ -149,14 +183,14 @@ const Account = () => {
       </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
-          <B.Col lg={4}>
+          <B.Col lg={6}>
             <h1 className="fw-bold text-primary mb-4 text-capitalize">
               QUẢN LÝ TÀI KHOẢN
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          <B.Col lg={6}>
-            <B.Form>
+          <B.Col lg={4}>
+            {/* <B.Form>
               <B.FormGroup>
                 <B.InputGroup>
                   <B.FormControl
@@ -191,14 +225,14 @@ const Account = () => {
                   <option>Nhân viên</option>
                 </B.FormSelect>
               </B.FormGroup>
-            </B.Form>
+            </B.Form> */}
           </B.Col>
         </B.Row>
 
         {/* table hien thi tai khoan */}
         <B.Row className="pe-xl-5">
           <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+            {/* <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
               <B.FormSelect
                 className="rounded-0 shadow-none"
                 style={{ width: "200px" }}
@@ -208,7 +242,7 @@ const Account = () => {
                 <option>Theo ID</option>
                 <option>Theo quyền</option>
               </B.FormSelect>
-            </B.FormGroup>
+            </B.FormGroup> */}
             <B.Table className="table-borderless border border-secondary text-center mb-0">
               <thead
                 className="text-dark"
@@ -278,7 +312,7 @@ const Account = () => {
                     );
                   }
                   return (
-                    <tr key={index}>
+                    <tr key={item.id}>
                       <td className="align-middle">{item.id}</td>
                       <td className="align-middle">{item.username}</td>
                       <td className="align-middle">{item.email}</td>

@@ -2,9 +2,13 @@ import * as Bt from "react-bootstrap";
 import axios from "axios";
 import { useState } from "react";
 import swal from "sweetalert";
-const ViewAccount = ({ viewAcc, showModal,setSubmitting }) => {
+import Cookies from "universal-cookie";
+
+const ViewAccount = ({ viewAcc, showModal, setSubmitting }) => {
   // console.log(viewAcc.status);
   const id = viewAcc.id;
+  const cookies = new Cookies();
+
   const [valueRole, setValueRole] = useState(viewAcc?.role_id);
   const [valueStatus, setValueStatus] = useState(viewAcc?.status);
   const [errorUser, setErrorUser] = useState();
@@ -35,43 +39,69 @@ const ViewAccount = ({ viewAcc, showModal,setSubmitting }) => {
   const handleUpdateAccount = (e) => {
     // console.log(id);
     e.preventDefault();
-
     const data = {
       email: updateAccount.email,
       // username: updateAccount.username,
       role_id: valueRole,
       status: valueStatus,
     };
+    if (cookies.get("role_id") == 2) {
+      axios
+        .put(`/api/admin/manageUser/${id}`, data)
+        .then((res) => {
+          // console.log(res);
+          if (res.data.status === 200) {
+            swal({
+              title: res.data.message,
+              icon: "success",
+              button: "đóng",
+            });
+            showModal(false);
+            setSubmitting(true);
+          }
+          if (res.data.status === 400) {
+            setErrorEmail(res.data.error?.email);
+            // setErrorUser(res.data.error?.username);
 
-    axios
-      .put(`/api/admin/manageUser/${id}`, data)
-      .then((res) => {
-        // console.log(res);
-        if (res.data.status === 200) {
-          swal({
-            title: res.data.message,
-            icon: "success",
-            button: "đóng",
-          });
-          showModal(false);
-          setSubmitting(true)
-          
-        }
-        if (res.data.status === 400) {
-          setErrorEmail(res.data.error?.email);
-          // setErrorUser(res.data.error?.username);
+            setErrorRole(res.data.error?.role_id);
 
-          setErrorRole(res.data.error?.role_id);
+            setErrorStatus(res.data.error?.status);
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    } else if (cookies.get("role_id") == 4) {
+      axios
+        .put(`/api/nhanvien/manageUser/${id}`, data)
+        .then((res) => {
+          // console.log(res);
+          if (res.data.status === 200) {
+            swal({
+              title: res.data.message,
+              icon: "success",
+              button: "đóng",
+            });
+            showModal(false);
+            setSubmitting(true);
+          }
+          if (res.data.status === 400) {
+            setErrorEmail(res.data.error?.email);
+            // setErrorUser(res.data.error?.username);
 
-          setErrorStatus(res.data.error?.status);
-        }
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
+            setErrorRole(res.data.error?.role_id);
+
+            setErrorStatus(res.data.error?.status);
+          }
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+    }
   };
-  console.log(updateAccount.status);
+  // console.log(updateAccount.status);
   return (
     <>
       <Bt.Form onSubmit={handleUpdateAccount}>
@@ -103,20 +133,33 @@ const ViewAccount = ({ viewAcc, showModal,setSubmitting }) => {
         </Bt.FormGroup> */}
         <Bt.FormLabel className="fw-semibold fs-6">Quyền</Bt.FormLabel>
         <span className="text-danger ms-2">{errorRole}</span>
-
         <Bt.FormGroup>
-          <Bt.FormSelect
-            name="role_id"
-            // value={updateAccount.role_id}
+          {cookies.get("role_id") == 2 ? (
+            <Bt.FormSelect
+              name="role_id"
+              // value={updateAccount.role_id}
 
-            onChange={handleChangeRole}
-            className="rounded-0 shadow-none mb-3 text-muted"
-            defaultValue={updateAccount.role_id}
-          >
-            <option value={2}>admin</option>
-            <option value={3}>kho</option>
-            <option value={4}>nhân viên</option>
-          </Bt.FormSelect>
+              onChange={handleChangeRole}
+              className="rounded-0 shadow-none mb-3 text-muted"
+              defaultValue={updateAccount.role_id}
+            >
+              <option value={2}>admin</option>
+              <option value={3}>kho</option>
+              <option value={4}>nhân viên</option>
+            </Bt.FormSelect>
+          ) : (
+            <Bt.FormSelect
+              name="role_id"
+              // value={updateAccount.role_id}
+              disabled
+              // onChange={handleChangeRole}
+              className="rounded-0 shadow-none mb-3 text-muted"
+              // defaultValue={updateAccount.role_id}
+            >
+              <option value={1}>Khách hàng</option>
+              
+            </Bt.FormSelect>
+          )}
         </Bt.FormGroup>
         <Bt.FormLabel className="fw-semibold fs-6">Trạng thái</Bt.FormLabel>
         <span className="text-danger ms-2">{errorStatus}</span>

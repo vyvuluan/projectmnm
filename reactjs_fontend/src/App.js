@@ -5,7 +5,11 @@ import axios from "axios";
 import { PublicRouter, PublicRouter_Admin, PrivateRoute } from "./Router";
 import { ProductCate } from "./components/form/index.js";
 import PrivateRoutes from "./Router/AdminPrivateRoute";
-import { EmptyCart, NotFoundPage } from "./components";
+import { EmptyCart, NotFoundPage, PageAdmin } from "./components";
+import Cookies from "universal-cookie";
+import swal from "sweetalert";
+
+import { icons } from "react-icons/lib";
 // import TestTable from "./components/form-admin/TestTable";
 // import { DropDownMenu } from "./components/form";
 // import HomePage from "./components/pages/home/index.js"
@@ -22,29 +26,33 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 function App() {
+  const cookies = new Cookies();
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          {PublicRouter.map((item) => {
+          {PublicRouter.map((item, index) => {
             let Page = <item.component />;
             if (item.layout !== null) {
               const Layout = <item.layout children={Page} />;
               Page = Layout;
             }
-            return <Route path={item.path} element={Page} />;
+            return <Route key={index} path={item.path} element={Page} />;
           })}
-          
-          {PublicRouter_Admin.map((item) => {
+
+          {PublicRouter_Admin.map((item, index) => {
             let Page = <item.component />;
             const Layout = <item.layout children={Page} />;
             Page = Layout;
-            return <Route element={<PrivateRoutes />}><Route path={item.path} element={Page} /></Route>;
+            return (
+              <Route key={index} element={<PrivateRoutes />}>
+                <Route path={item.path} element={Page} />
+              </Route>
+            );
           })}
-          
+
           <Route path="*" element={<NotFoundPage />} />
-          {/* <Route path="/test" element={<EmptyCart />} /> */}
-          
         </Routes>
       </BrowserRouter>
     </>
