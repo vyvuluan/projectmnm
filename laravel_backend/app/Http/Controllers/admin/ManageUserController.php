@@ -56,7 +56,7 @@ class ManageUserController extends Controller
         $user = User::where('email', $request->email)->first();
         if (empty($user)) {
             return response()->json([
-                'status' => 401,
+                'status' => 400,
                 'error' => 'không tồn tại tài khoản',
             ]);
         } else {
@@ -64,8 +64,8 @@ class ManageUserController extends Controller
 
 
                 return response()->json([
-                    'status' => 401,
-                    'message' => 'Tài khoản hoặc mật khẩu không chính xác',
+                    'status' => 400,
+                    'error' => 'Tài khoản hoặc mật khẩu không chính xác',
                 ]);
             } else {
                 if ($user->status == 1) {
@@ -103,13 +103,13 @@ class ManageUserController extends Controller
                         return response()->json([
 
                             'error' => 'Bạn không có quyền đăng nhập vào chức năng này',
-                            'status' => 404,
+                            'status' => 401,
                         ]);
                     }
                 } else {
                     return response()->json([
-                        'status' => 402,
-                        'message' => 'Tài khoản đã bị khóa',
+                        'status' => 401,
+                        'error' => 'Tài khoản đã bị khóa',
                     ]);
                 }
 
