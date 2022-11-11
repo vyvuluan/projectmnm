@@ -300,12 +300,13 @@ function Index() {
                   <div className="prev-container mb-4">
                     {previewIMG && <img src={previewIMG.preview} alt=""></img>}
                   </div>
-                  <B.FormGroup className="">
+                  <B.FormGroup className="file_wrap">
                     <B.FormControl
+                      size="md"
                       type="file"
                       name="image"
                       onChange={handleImage}
-                      className="rounded-0 shadow-none mb-3"
+                      className="rounded-0 shadow-none mb-3 w-50"
                     ></B.FormControl>
                     <small className="text-danger">{errorlist.image}</small>
                   </B.FormGroup>
@@ -446,7 +447,7 @@ function Index() {
           >
             <B.Row>
               <B.Col lg={4}>
-                <label className="ms-1 fs-5 fw-semibold text-uppercase text-primary">
+                <label className="ps-3 ms-1 fs-5 fw-semibold text-uppercase border border-5 border-top-0 border-bottom-0 border-end-0 border-primary">
                   Chi tiết sản phẩm
                 </label>
                 <Editor
@@ -484,7 +485,7 @@ function Index() {
                 />
               </B.Col>
               <B.Col lg={8}>
-                <label className="ms-1 fs-5 fw-semibold text-uppercase text-primary">
+                <label className="ps-3 ms-1 fs-5 fw-semibold text-uppercase border border-5 border-top-0 border-bottom-0 border-end-0 border-primary">
                   Mô tả sản phẩm
                 </label>
                 <Editor
