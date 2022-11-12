@@ -35,18 +35,11 @@ export default function Header() {
   const getCount = useCallback(async () => {
     await setCount(localStorage.getItem("count"));
   }, []);
+
   useEffect(() => {
     getCount();
     setInterval(getCount, 1000);
   }, [getCount]);
-  // useEffect(() => {
-  //   axios.get(`http://localhost:8000/api/cart`).then(res => {
-
-  //     if (res.data.status === 200) {
-  //       setCount(res.data.count)
-  //     }
-  //   });
-  // }, [count]);
 
   const logoutSubmit = (e) => {
     e.preventDefault();
@@ -251,10 +244,10 @@ export default function Header() {
             >
               <Bt.Button
                 onClick={() => setOpen(!open)}
-                variant="dark"
+                variant="primary"
                 aria-controls="collapse-categories"
                 aria-expanded={open}
-                className="rounded-0 w-100 fw-semibold fs-5 shadow-none text-start"
+                className="rounded-0 w-100 fw-semibold fs-5 shadow-none text-start btnclick"
                 style={{ height: "63px", marginTop: "-1px", padding: "0 25px" }}
               >
                 Danh mục

@@ -40,6 +40,14 @@
   }
 }
 
+.btnclick {
+  background-color: #d70018 !important;
+}
+
+.btnclick::after {
+  background-color: #d70018 !important;
+}
+
 /* * {
   -ms-overflow-style: none;
 } */
