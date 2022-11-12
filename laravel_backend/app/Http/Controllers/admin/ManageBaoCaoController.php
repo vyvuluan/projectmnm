@@ -87,7 +87,7 @@ class ManageBaoCaoController extends Controller
 
         $contact_count = Contact::where('status', 0)->count();
 
-        $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')->get();
+        $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')->first();
         return response()->json([
             'status' => 200,
             'total_px' => $total_px,
