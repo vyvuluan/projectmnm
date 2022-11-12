@@ -292,13 +292,17 @@ class ManageBaoCaoController extends Controller
         }
         $contact_count = Contact::where('status', 0)->count();
 
-        $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')->where('employee_id', auth()->user()->employee->id)->first();
+        $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')
+            ->where('employee_id', auth()->user()->employee->id)->first();
+        $tongTien = PhieuXuat::selectRaw('sum(tongTien) as tongTien')
+            ->where('employee_id', auth()->user()->employee->id)->first();
         return response()->json([
             'status' => 200,
             'total_sl' => $total_sl,
             'total_px' => $total_px,
             'contact_count' => $contact_count,
             'soluongban' => $soluongban,
+            'tongTien' => $tongTien,
         ]);
     }
 }
