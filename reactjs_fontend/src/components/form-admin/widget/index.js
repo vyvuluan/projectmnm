@@ -7,10 +7,13 @@ import {
 import { BiDollar, BiTask } from "react-icons/bi";
 const Widget = ({ dataWidget }) => {
   // const { dataWidget } = props;
-  // console.log(dataWidget);
+  console.log(dataWidget);
 
   const [doanhthu, setDoanhThu] = useState();
   const [chiTieu, setChiTieu] = useState();
+  const [contact, setContact] = useState();
+  const [SLBan, setSLBan] = useState();
+
   const [terms, setTerms] = useState(true);
   if (chiTieu == null) {
     setChiTieu(0);
@@ -21,15 +24,17 @@ const Widget = ({ dataWidget }) => {
 
   useEffect(() => {
     if (dataWidget && terms) {
-      setTerms(false)
+      setTerms(false);
       setDoanhThu(dataWidget?.doanhthu?.tongTien);
       setChiTieu(dataWidget?.chitieu?.tongTien);
+      setContact(dataWidget?.contact_count);
+      setSLBan(dataWidget?.soluongban.soluongban);
     }
     // console.log(dataWidget?.doanhthu?.tongTien);
   });
   // console.log(doanhthu);
   // console.log(chiTieu)
-
+  // console.log(contact);
   return (
     <>
       <div className="row">
@@ -87,9 +92,12 @@ const Widget = ({ dataWidget }) => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs  pl-3 font-weight-bold text-info text-uppercase mb-1">
-                    Tasks
+                    Tổng số lượng đã bán
                   </div>
-                  <div className="row no-gutters align-items-center">
+                  <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
+                    {SLBan}
+                  </div>
+                  {/* <div className="row no-gutters align-items-center">
                     <div className="col-auto">
                       <div className="h5 pl-4 mb-0 mr-3 font-weight-bold text-gray-800">
                         50%
@@ -107,7 +115,7 @@ const Widget = ({ dataWidget }) => {
                         ></div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-auto">
                   {/* <i className="fas fa-clipboard-list fa-2x text-gray-300"></i> */}
@@ -125,10 +133,10 @@ const Widget = ({ dataWidget }) => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs pl-3 font-weight-bold text-warning text-uppercase mb-1">
-                    Pending Requests
+                    Tin nhắn chưa đọc
                   </div>
                   <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
-                    18
+                    {contact}
                   </div>
                 </div>
                 <div className="col-auto">

@@ -111,7 +111,7 @@ const PhieuNhap = () => {
     newData[index].pnct[index1] = value;
 
     console.log(newData);
-    setDataShowPN(newData)
+    setDataShowPN(newData);
   };
 
   console.log(dataShowPN);
@@ -173,7 +173,7 @@ const PhieuNhap = () => {
 
   const handleShowUpdateCtPN = (item) => {
     console.log({ tab3: item });
-    
+
     setIdProduct(item?.product_id);
     setNameProduct(item?.product.tenSP);
     setSoLuong(item?.soluong);
@@ -928,7 +928,7 @@ const PhieuNhap = () => {
                                   {item.product.tenSP}
                                 </td>
                                 <td className="align-middle">{item.soluong}</td>
-                                <td className="align-middle">{item.gia}</td>
+                                <td className="align-middle">{formatMoney(item.gia)}</td>
 
                                 <td className="align-middle fs-5 text-primary">
                                   <FiTool
@@ -1017,6 +1017,7 @@ const PhieuNhap = () => {
                                     style={{
                                       backgroundColor: "green",
                                       border: "none",
+                                      color: "white",
                                     }}
                                     onClick={() => changeStatus(item)}
                                   >

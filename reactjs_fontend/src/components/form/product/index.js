@@ -23,11 +23,11 @@ const Product = (props) => {
           {item.map((item, index) => {
             for (let i = 0; i <= index; i++) {
               return (
-                <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1 hoverCSS">
+                <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1 ">
                   <div className="card product-item border-0 mb-4">
-                    <div className="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                    <div className=" card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                       <img
-                        className="img-fluid w-100"
+                        className="img-fluid w-100 hoverCSS"
                         src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                         alt="img product"
                       ></img>
