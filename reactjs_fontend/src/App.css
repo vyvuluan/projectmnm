@@ -40,6 +40,14 @@
   }
 }
 
+.btnclick {
+  background-color: #d70018 !important;
+}
+
+.btnclick:hover {
+  background-color: #af1729 !important;
+}
+
 /* * {
   -ms-overflow-style: none;
 } */

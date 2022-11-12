@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 import { Button } from "react-bootstrap";
@@ -45,7 +45,9 @@ const Login = () => {
           localStorage.setItem("auth_token", res.data.token);
           localStorage.setItem("auth_name", res.data.username);
           localStorage.setItem("auth_fullname", res.data.fullname);
-          
+          axios.get(`http://localhost:8000/api/cart`).then(resp => {
+            localStorage.setItem('count', resp.data.count);
+          })
           swal({
             title: "Đăng nhập thành công",
             icon: "success",
@@ -89,18 +91,18 @@ const Login = () => {
         },
       })
       .then(function (response) {
-  
+
         if (response.status === 200) {
-       
+
           setLoginGoogle(response.data.url);
-        
+
         }
       })
       .catch(function (error) {
         // handle error
         console.log(error);
       })
-      .finally(function () {});
+      .finally(function () { });
   }, []);
 
   useEffect(() => {
@@ -123,7 +125,7 @@ const Login = () => {
         // handle error
         console.log(error);
       })
-      .finally(function () {});
+      .finally(function () { });
   }, []);
   return (
     <>

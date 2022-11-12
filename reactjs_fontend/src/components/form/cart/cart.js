@@ -89,7 +89,7 @@ export default function Cart() {
       .then((res) => {
         if (res.data.status === 200) {
           swal("Success", res.data.message, "success");
-          localStorage.setItem("count", localStorage.getItem("count") - 1 )
+          localStorage.setItem("count", localStorage.getItem("count") - 1)
           setSubmitting(true);
         } else if (res.data.status === 404) {
           swal("Error", res.data.message, "error");
@@ -162,7 +162,7 @@ export default function Cart() {
                       <td>
                         <Bt.InputGroup className="quantity mx-auto">
                           <Bt.Button
-                            className="btn-sm rounded-0"
+                            className="btn-sm rounded-0 shadow-none btnclick"
                             variant="primary"
                             type="button"
                             onClick={() => handleDecrement(item.id)}
@@ -173,7 +173,7 @@ export default function Cart() {
                             {item.soLuongSP}
                           </Bt.InputGroup.Text>
                           <Bt.Button
-                            className="btn-sm rounded-0"
+                            className="btn-sm rounded-0 shadow-none btnclick"
                             variant="primary"
                             type="button"
                             onClick={() => handleIncrement(item.id)}
