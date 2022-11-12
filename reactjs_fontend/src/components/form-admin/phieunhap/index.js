@@ -998,8 +998,8 @@ const PhieuNhap = () => {
                     </thead>
                     <tbody className="align-middle">
                       {dataShowPN.map((item, index) => {
-                        // let chuoi = item.created_at;
-                        // let tachChuoi = chuoi.slice(0, 10);
+                        let chuoi = item.created_at;
+                        let tachChuoi = chuoi.slice(0, 10);
 
                         return (
                           <>
@@ -1008,8 +1008,8 @@ const PhieuNhap = () => {
                               <td className="align-middle">
                                 {item?.ncc?.tenNCC}
                               </td>
-                              <td className="align-middle">{item.tongTien}</td>
-                              <td className="align-middle">1255252</td>
+                              <td className="align-middle">{formatMoney(item.tongTien)}</td>
+                              <td className="align-middle">{tachChuoi}</td>
                               <td className="align-middle">
                                 {item.status == 1 ? (
                                   <B.Button

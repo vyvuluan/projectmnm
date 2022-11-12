@@ -144,7 +144,7 @@ const Chart = ({ data1, dataKho, dataKho2, dataNV }) => {
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
-      label: "Tổng tiền số lượng phiếu xuất",
+      label: "Số lượng sản phẩm bán",
       data: dataTongSLNV,
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },

@@ -5,7 +5,7 @@ import CircelChart from "../circelChart";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import * as Bt from "react-bootstrap";
-import { BsArrowUpRightCircleFill } from 'react-icons/bs'
+import { BsArrowUpRightCircleFill } from "react-icons/bs";
 
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -66,7 +66,7 @@ const DashBoard = () => {
       axios
         .get("/api/nhanvien/doanhThuNhanVien")
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           if (res.data.status === 200) {
             setDataNV(res.data);
           }
@@ -103,11 +103,7 @@ const DashBoard = () => {
 
       <div className="row" style={{ justifyContent: "center" }}>
         <div className="col-xl-10 col-lg-7">
-          <Tabs
-            activeKey={tabkey}
-            onSelect={(k) => setTabKey(k)}
-
-          >
+          <Tabs activeKey={tabkey} onSelect={(k) => setTabKey(k)}>
             <Tab eventKey={1} title="Thống kê">
               <Chart dataKho={dataKho} dataKho2={dataKho2} />
             </Tab>
@@ -133,7 +129,11 @@ const DashBoard = () => {
                           <td>{item.tenSP}</td>
                           <td className="text-danger">{item.soLuongSP}</td>
                           <td>{item.gia}</td>
-                          <td><BsArrowUpRightCircleFill onClick={() => navigate('/phieunhap')} /></td>
+                          <td>
+                            <BsArrowUpRightCircleFill
+                              onClick={() => navigate("/phieunhap")}
+                            />
+                          </td>
                         </tr>
                       </>
                     );
@@ -141,7 +141,6 @@ const DashBoard = () => {
                 </tbody>
               </Table>
             </Tab>
-
           </Tabs>
         </div>
       </div>
@@ -149,13 +148,10 @@ const DashBoard = () => {
   );
   var UINV = (
     <>
-      <Widget dataWidget={data} />
+      <Widget dataWidget={dataNV} />
       <div className="row">
-        <div className="col-xl-8 col-lg-7">
+        <div style={{ height: "500px" }}>
           <Chart dataNV={dataNV} />
-        </div>
-        <div className="col-xl-4 col-lg-5">
-          <CircelChart data2={data} />
         </div>
       </div>
     </>
@@ -179,10 +175,10 @@ const DashBoard = () => {
       {cookies.get("role_id") == 3
         ? UIkho
         : cookies.get("role_id") == 4
-          ? UINV
-          : cookies.get("role_id") == 2
-            ? UIAdmin
-            : null}
+        ? UINV
+        : cookies.get("role_id") == 2
+        ? UIAdmin
+        : null}
       {/* <Widget dataWidget={data} />
       <div className="row">
         <div className="col-xl-8 col-lg-7">
