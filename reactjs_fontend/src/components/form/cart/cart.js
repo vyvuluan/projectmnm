@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as Bt from "react-bootstrap";
 import emptycart from "../../../img/emptycart.png";
 
@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoaderIcon from "../../layouts/Loading/index";
 
 export default function Cart() {
+  const [submitting, setSubmitting] = useState(true);
   const navaigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
@@ -28,25 +29,20 @@ export default function Cart() {
     }).format(money);
   }
 
+  const getCart = useCallback(async () => {
+    const res = await axios.get(`http://localhost:8000/api/cart`);
+    if (res.data.status === 200) {
+      setCart(res.data.cart);
+      setLoading(false);
+    } else if (res.data.status === 401) {
+      navaigate("/");
+      swal("Warning", res.data.message, "error");
+    }
+  }, [])
+
   useEffect(() => {
-    let isMounted = true;
-
-    axios.get(`http://localhost:8000/api/cart`).then((res) => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setCart(res.data.cart);
-          setLoading(false);
-        } else if (res.data.status === 401) {
-          navaigate("/");
-          swal("Warning", res.data.message, "error");
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [cart, navaigate]);
+    getCart().then(() => setSubmitting(false));
+  }, [submitting, getCart]);
 
   const handleDecrement = (id_cart) => {
     setCart((cart) =>
@@ -93,6 +89,7 @@ export default function Cart() {
       .then((res) => {
         if (res.data.status === 200) {
           swal("Success", res.data.message, "success");
+          setSubmitting(true);
         } else if (res.data.status === 404) {
           swal("Error", res.data.message, "error");
         }
