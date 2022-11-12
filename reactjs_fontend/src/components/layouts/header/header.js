@@ -217,6 +217,7 @@ export default function Header() {
 
               <Bt.Button
                 onClick={() => setOpen(!open)}
+                variant='dark'
                 aria-controls="collapse-categories"
                 aria-expanded={open}
                 className='rounded-0 w-100 fw-semibold fs-5 shadow-none text-start'
@@ -258,7 +259,7 @@ export default function Header() {
               >
                 <Bt.Nav className="me-auto py-2">
                   <Bt.NavLink href="#" className="fs-5 fw-normal me-2 effect-box">
-                    <Link className="text-decoration-none aEffect  " to="/">
+                    <Link className="text-decoration-none aEffect " to="/">
                       Home
                     </Link>
                   </Bt.NavLink>

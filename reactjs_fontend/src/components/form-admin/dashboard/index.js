@@ -5,11 +5,14 @@ import CircelChart from "../circelChart";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import * as Bt from "react-bootstrap";
+import { BsArrowUpRightCircleFill } from 'react-icons/bs'
 
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Table from "react-bootstrap/Table";
+import { useNavigate } from "react-router-dom";
 const DashBoard = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState();
   const [tabkey, setTabKey] = useState(1);
   const [dataKho, setDataKho] = useState();
@@ -103,12 +106,12 @@ const DashBoard = () => {
           <Tabs
             activeKey={tabkey}
             onSelect={(k) => setTabKey(k)}
-          
+
           >
             <Tab eventKey={1} title="Thống kê">
               <Chart dataKho={dataKho} dataKho2={dataKho2} />
             </Tab>
-            
+
             <Tab eventKey={3} title="Sản phẩm gần hết">
               <h2>Sản phẩm gần hết</h2>
               <Table>
@@ -118,6 +121,7 @@ const DashBoard = () => {
                     <th>Tên sản phẩm </th>
                     <th>Số lượng</th>
                     <th>Giá</th>
+                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -129,6 +133,7 @@ const DashBoard = () => {
                           <td>{item.tenSP}</td>
                           <td className="text-danger">{item.soLuongSP}</td>
                           <td>{item.gia}</td>
+                          <td><BsArrowUpRightCircleFill onClick={() => navigate('/phieunhap')} /></td>
                         </tr>
                       </>
                     );
@@ -136,7 +141,7 @@ const DashBoard = () => {
                 </tbody>
               </Table>
             </Tab>
-            
+
           </Tabs>
         </div>
       </div>
