@@ -5,10 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Validator;
-use App\Models\loaisp;
-//use App\Http\Resources\ProductResource;
-use App\Models\Product as ModelsProduct;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -21,12 +18,10 @@ class ManageProductController extends Controller
      */
     public function index()
     {
-        //$product= new Product ;
-        //return $product::all(Product::paginate(2));
+
 
         $prd = Product::paginate();
         return $prd;
-        //return ProductResource::collection(Product::paginate(2));
     }
     public function ctsp($product)
     {
@@ -123,8 +118,6 @@ class ManageProductController extends Controller
      */
     public function show(Product $product)
     {
-
-        return new ProductResource($product);
     }
 
     /**

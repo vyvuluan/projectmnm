@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
-use App\Models\CtPhieuXuat;
 use App\Models\Discount;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
