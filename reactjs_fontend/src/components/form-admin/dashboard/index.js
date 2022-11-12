@@ -19,7 +19,7 @@ const DashBoard = () => {
   const [dataKho2, setDataKho2] = useState();
   const [dataNV, setDataNV] = useState();
   const [dataSPganhet, setDataSPganhet] = useState([]);
-
+  
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const DashBoard = () => {
           if (res.data.status === 200) {
             // console.log(res.data);
             setDataKho(res.data);
+            
           }
         })
         .catch(function (error) {
@@ -131,6 +132,9 @@ const DashBoard = () => {
                           <td>{item.gia}</td>
                           <td>
                             <BsArrowUpRightCircleFill
+                               data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="Nhập sản phẩm"
                               onClick={() => navigate("/phieunhap")}
                             />
                           </td>

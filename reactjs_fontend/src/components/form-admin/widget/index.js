@@ -29,6 +29,12 @@ const Widget = ({ dataWidget }) => {
   if (doanhthu == null) {
     setDoanhThu(0);
   }
+  if (contact == null) {
+    setContact(0);
+  }
+  if (SLBan == null) {
+    setSLBan(0);
+  }
 
   useEffect(() => {
     if (dataWidget && terms) {
@@ -37,7 +43,7 @@ const Widget = ({ dataWidget }) => {
       setChiTieu(dataWidget?.chitieu?.tongTien);
       setContact(dataWidget?.contact_count);
       setSLBan(dataWidget?.soluongban.soluongban);
-      setTongtienNV(dataWidget?.tongTien.tongTien);
+      setTongtienNV(dataWidget?.tongTien?.tongTien);
     }
     // console.log(dataWidget?.doanhthu?.tongTien);
   });

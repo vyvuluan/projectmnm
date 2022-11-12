@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 
 import axios from "axios";
-const UpdateNV = ({ username }) => {
+const UpdateNV = ({ username,setSubmitting }) => {
   //   console.log(username);
   const [valueGT, setValueGT] = useState();
   const [valueCV, setValueCV] = useState();
@@ -45,6 +45,7 @@ const UpdateNV = ({ username }) => {
         console.log(res.data);
         if (res.data.status == 200) {
           swal("Success", res.data.message, "success");
+          setSubmitting(true)
         }
       })
       .catch(function (error) {
