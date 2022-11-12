@@ -25,12 +25,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //$product= new Product ;
-        //return $product::all(Product::paginate(2));
 
         $prd = Product::paginate(8);
         return $prd;
-        //return ProductResource::collection(Product::paginate(2));
     }
     public function ctsp($product)
     {
@@ -216,7 +213,7 @@ class ProductController extends Controller
                     $name = time() . '_' . $hinh->getClientOriginalName();
                     Storage::disk('../public')->put($name, File::get($hinh));
                     $product->hinh = $name;
-                } 
+                }
                 $product->save();
                 return response()->json([
                     'status' => 200,
@@ -277,7 +274,7 @@ class ProductController extends Controller
     {
         switch ($request->key) {
             case 1: { //tên A - Z
-                
+
                     $product = Product::orderBy('tenSP',    'asc')->paginate(10);
                     return response()->json([
                         'status' => 200,
