@@ -80,4 +80,5 @@ class ContactContrller extends Controller
             ]);
         }
     }
+    
 }

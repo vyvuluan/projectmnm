@@ -52,7 +52,7 @@ Route::get('/searchEmp', [ManageEmployeeController::class, 'searchEmp']);
 Route::get('/locTenNvAZ', [ManageEmployeeController::class, 'locTenAZ']);
 Route::get('/locTenNvZA', [ManageEmployeeController::class, 'locTenZA']);
 //api check discount
-Route::get('check-discount',[DiscountController::class,'check_discount'] );
+Route::get('check-discount', [DiscountController::class, 'check_discount']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
@@ -97,6 +97,8 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class, 'createUser']);
     //api báo cáo thống kê
     Route::get('baocao', [ManageBaoCaoController::class, 'thongKeDoanhThuThang']);
+    //api tính số contact chưa đọc
+
 });
 
 

@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\PhieuXuat;
 use App\Models\CtPhieuXuat;
+use App\Models\Loaisp;
 use App\Models\Product;
 use App\Models\PhieuNhap;
+use App\Models\Contact;
 
 class ManageBaoCaoController extends Controller
 {
@@ -63,6 +65,7 @@ class ManageBaoCaoController extends Controller
         $ctpxs = CtPhieuXuat::selectRaw('sum(soluong) as soluong,  maLoai')
             ->join('products', 'ct_phieu_xuats.product_id', '=', 'products.id')
             ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
+
             ->groupBy('maLoai')
             ->get();
         $tongPhanTram = 0;
@@ -72,7 +75,7 @@ class ManageBaoCaoController extends Controller
         $phanTramLoai = array();
 
         foreach ($ctpxs as $ctpx) {
-            $phanTramLoai[$ctpx->maLoai] = ($ctpx->soluong * 100) / $tongPhanTram;
+            $phanTramLoai[Loaisp::find($ctpx->maLoai)->tenLoai] = ($ctpx->soluong * 100) / $tongPhanTram;
         }
 
         $doanhthu = PhieuXuat::selectRaw('sum(tongTien) as tongTien')->where('status', 4)
@@ -80,6 +83,11 @@ class ManageBaoCaoController extends Controller
 
         $chitieu = PhieuNhap::selectRaw('sum(tongTien) as tongTien')->where('status', 1)
             ->first();
+
+
+        $contact_count = Contact::where('status', 0)->count();
+
+        $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')->get();
         return response()->json([
             'status' => 200,
             'total_px' => $total_px,
@@ -87,6 +95,8 @@ class ManageBaoCaoController extends Controller
             'loai' => $phanTramLoai,
             'doanhthu' => $doanhthu,
             'chitieu' => $chitieu,
+            'contact_count' => $contact_count,
+            'soluongban' => $soluongban
         ]);
     }
     public function spGanHet()
