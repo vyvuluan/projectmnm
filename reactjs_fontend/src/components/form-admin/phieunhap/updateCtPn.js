@@ -147,7 +147,7 @@ const UpdateCtPN = ({
         <Bt.FormGroup className="mb-3" controlId="formName">
           <Bt.FormLabel className="fw-semibold fs-4">Số lượng</Bt.FormLabel>
           <Bt.FormControl
-            type="text"
+            type="number"
             name="soluong"
             placeholder="Số lượng"
             className="rounded-0"
@@ -160,7 +160,7 @@ const UpdateCtPN = ({
         <Bt.FormGroup className="mb-3" controlId="formAddress">
           <Bt.FormLabel className="fw-semibold fs-4">Giá</Bt.FormLabel>
           <Bt.FormControl
-            type="text"
+            type="number"
             placeholder="Giá"
             className="rounded-0"
             name="gia"

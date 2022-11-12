@@ -714,7 +714,7 @@ const PhieuNhap = () => {
             <B.Tabs activeKey={tabkey} onSelect={(k) => setTabKey(k)}>
               <B.Tab
                 eventKey={1}
-                title="thêm phiếu nhập"
+                title="Thêm phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
               >
                 <B.Row>
