@@ -251,7 +251,7 @@ export default function Header() {
             >
               <Bt.Button
                 onClick={() => setOpen(!open)}
-                variant="dark"
+                variant="primary"
                 aria-controls="collapse-categories"
                 aria-expanded={open}
                 className="rounded-0 w-100 fw-semibold fs-5 shadow-none text-start"

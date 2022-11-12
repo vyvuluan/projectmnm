@@ -140,7 +140,6 @@ const PageProducts = () => {
         .get(`/api/products/view?page=${page}`)
         .then(function (response) {
           // handle success
-
           setListProduct(response.data.data);
           setTotalPage(response.data.total);
           setPerPage(response.data.per_page);
@@ -161,7 +160,7 @@ const PageProducts = () => {
   if (loading) {
     return (
       <>
-        <LoadingPage />
+        <LoadingPage/>
       </>
     );
   } else {
