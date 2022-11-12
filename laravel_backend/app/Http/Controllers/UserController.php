@@ -217,11 +217,12 @@ class UserController extends Controller
         if (empty($check)) {
             $customer = new Customer();
             $customer->user_id = $userCreated->id;
+            $customer->ten = $user->getName();
             $customer->save();
         }
 
 
-        return Redirect::to('http://localhost:3000?token=' . $token . '&email=' . $user->email);
+        return Redirect::to('http://localhost:3000?token=' . $token . '&email=' . $user->email . '&fullname=' . $user->getName());
         // return response()->json([
         // 'status' => 200,
         // 'message' => 'Đăng nhập thành công',
