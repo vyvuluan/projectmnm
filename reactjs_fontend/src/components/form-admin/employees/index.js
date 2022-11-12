@@ -109,7 +109,7 @@ const Employees = () => {
     const data = {
       ten: addNV.ten,
       sdt: addNV.sdt,
-      ngaySinh:addNV.ngaySinh,
+      ngaySinh: addNV.ngaySinh,
       diaChi: addNV.diaChi,
       gioiTinh: valueGT,
       cv_id: valueCV,
@@ -124,7 +124,6 @@ const Employees = () => {
         }
         if (res.data.status == 400) {
           swal("Warning", res.data.message, "error");
-          
         }
       })
       .catch(function (error) {
@@ -162,7 +161,6 @@ const Employees = () => {
                   icon: "success",
                   button: "đóng",
                 });
-                
               } else if (res.status == 200) {
                 swal({
                   title: res.data.message,
@@ -321,7 +319,11 @@ const Employees = () => {
           <B.ModalTitle>Cập nhật nhân viên</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
-          <UpdateNV username={username} showModal={handleClose} setSubmitting={setSubmitting} />
+          <UpdateNV
+            username={username}
+            showModal={handleClose}
+            setSubmitting={setSubmitting}
+          />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
           <B.Button
@@ -412,35 +414,35 @@ const Employees = () => {
                 ></B.FormControl>
               </B.FormGroup>
               <B.Row>
-              <B.Col>
-
-              <B.FormGroup>
-                <B.FormSelect
-                  name="gioiTinh"
-                  // value={addNV.gioiTinh}
-                  onChange={handleChangeGT}
-                  className="rounded-0 shadow-none mb-3 text-muted"
-                  required
-                >
-                  <option selected disabled>Giới tính</option>
-                  <option value={1}>Nam</option>
-                  <option value={0}>Nữ</option>
-                </B.FormSelect>
-              </B.FormGroup>
-              </B.Col>
-              <B.Col>
-              <B.FormGroup>
-              <B.FormControl
-                  type="date"
-                  name="ngaySinh"
-                  className="rounded-0 shadow-none mb-3"
-                  onChange={handleInput}
-                  value={addNV.ngaySinh}
-                  required
-                ></B.FormControl>
-              </B.FormGroup>
-
-              </B.Col>
+                <B.Col>
+                  <B.FormGroup>
+                    <B.FormSelect
+                      name="gioiTinh"
+                      // value={addNV.gioiTinh}
+                      onChange={handleChangeGT}
+                      className="rounded-0 shadow-none mb-3 text-muted"
+                      required
+                    >
+                      <option selected disabled>
+                        Giới tính
+                      </option>
+                      <option value={1}>Nam</option>
+                      <option value={0}>Nữ</option>
+                    </B.FormSelect>
+                  </B.FormGroup>
+                </B.Col>
+                <B.Col>
+                  <B.FormGroup>
+                    <B.FormControl
+                      type="date"
+                      name="ngaySinh"
+                      className="rounded-0 shadow-none mb-3"
+                      onChange={handleInput}
+                      value={addNV.ngaySinh}
+                      required
+                    ></B.FormControl>
+                  </B.FormGroup>
+                </B.Col>
               </B.Row>
               <B.FormGroup>
                 <B.FormControl
@@ -474,7 +476,9 @@ const Employees = () => {
                   onChange={handleChangeCV}
                   className="rounded-0 shadow-none mb-3 text-muted"
                 >
-                  <option selected disabled>Chức vụ</option>
+                  <option selected disabled>
+                    Chức vụ
+                  </option>
                   <option value={1}>admin</option>
                   <option value={2}>kho</option>
                   <option value={3}>nhân viên</option>

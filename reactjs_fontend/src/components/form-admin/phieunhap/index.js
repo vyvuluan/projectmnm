@@ -928,7 +928,9 @@ const PhieuNhap = () => {
                                   {item.product.tenSP}
                                 </td>
                                 <td className="align-middle">{item.soluong}</td>
-                                <td className="align-middle">{formatMoney(item.gia)}</td>
+                                <td className="align-middle">
+                                  {formatMoney(item.gia)}
+                                </td>
 
                                 <td className="align-middle fs-5 text-primary">
                                   <FiTool
@@ -1008,7 +1010,9 @@ const PhieuNhap = () => {
                               <td className="align-middle">
                                 {item?.ncc?.tenNCC}
                               </td>
-                              <td className="align-middle">{formatMoney(item.tongTien)}</td>
+                              <td className="align-middle">
+                                {formatMoney(item.tongTien)}
+                              </td>
                               <td className="align-middle">{tachChuoi}</td>
                               <td className="align-middle">
                                 {item.status == 1 ? (

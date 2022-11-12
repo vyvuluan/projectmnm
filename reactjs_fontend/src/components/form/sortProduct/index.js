@@ -1,4 +1,5 @@
 import * as Bt from "react-bootstrap";
+import { Link } from "react-router-dom";
 const SortProduct = () => {
   return (
     <>
@@ -7,7 +8,6 @@ const SortProduct = () => {
           <Bt.Col sm={9}></Bt.Col>
           <Bt.Col sm={3}>
             <Bt.Dropdown
-            
               style={{
                 width: "158px",
                 right: "0",
@@ -20,17 +20,38 @@ const SortProduct = () => {
                 Sắp xếp
               </Bt.Dropdown.Toggle>
               <Bt.Dropdown.Menu>
-                <Bt.Dropdown.Item href={"/pageproducts?key=1"}>
-                  Tên A - Z
+                <Bt.Dropdown.Item>
+                  <Link
+                    className="text-decoration-none"
+                    to={"/pageproducts?key=1"}
+                  >
+                    Tên A - Z
+                  </Link>
                 </Bt.Dropdown.Item>
-                <Bt.Dropdown.Item href={"/pageproducts?key=2"}>
-                  Tên Z - A
+
+                <Bt.Dropdown.Item>
+                  <Link
+                    className="text-decoration-none"
+                    to={"/pageproducts?key=2"}
+                  >
+                    Tên Z - A
+                  </Link>
                 </Bt.Dropdown.Item>
-                <Bt.Dropdown.Item href={"/pageproducts?key=3"}>
-                  Giá cao ➡️ thấp
+                <Bt.Dropdown.Item>
+                  <Link
+                    className="text-decoration-none"
+                    to={"/pageproducts?key=3"}
+                  >
+                    Giá cao ➡️ thấp
+                  </Link>
                 </Bt.Dropdown.Item>
-                <Bt.Dropdown.Item href={"/pageproducts?key=4"}>
-                  Giá thấp ➡️ cao
+                <Bt.Dropdown.Item>
+                  <Link
+                    className="text-decoration-none"
+                    to={"/pageproducts?key=4"}
+                  >
+                    Giá thấp ➡️ cao
+                  </Link>
                 </Bt.Dropdown.Item>
               </Bt.Dropdown.Menu>
             </Bt.Dropdown>

@@ -40,8 +40,8 @@ const PageProducts = () => {
 
   const [searchParam, setSearchParam] = useSearchParams();
   useEffect(() => {
-    const controller = new AbortController();
-
+    // const controller = new AbortController();
+    console.log(...searchParam);
     if (searchParam.get("category")) {
       axios
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
@@ -65,65 +65,13 @@ const PageProducts = () => {
           // always executed
         });
       //clear function
-      return () => controller.abort();
-    } else if (searchParam.get("key") == 1) {
+    } else if (searchParam.get("key")) {
       // console.log("thanhf coong");
       axios
-        .get(`/api/sortProduct?key=1&page=${page}`)
+        .get(`/api/sortProduct?key=${[...searchParam][0][1]}`)
         .then((response) => {
           // handle success
-          console.log(response);
-          setListProduct(response.data.product.data);
-          setTotalPage(response.data.product.total);
-          setPerPage(response.data.product.per_page);
-          setCurrentPage(response.data.product.current_page);
-          setLoading(false);
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        });
-    } else if (searchParam.get("key") == 2) {
-      // console.log("thanhf coong");
-      axios
-        .get(`/api/sortProduct?key=2&page=${page}`)
-        .then((response) => {
-          // handle success
-          console.log(response);
-          setListProduct(response.data.product.data);
-          setTotalPage(response.data.product.total);
-          setPerPage(response.data.product.per_page);
-          setCurrentPage(response.data.product.current_page);
-          setLoading(false);
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        });
-    } else if (searchParam.get("key") == 3) {
-      // console.log("thanhf coong");
-      axios
-        .get(`/api/sortProduct?key=3&page=${page}`)
-        .then((response) => {
-          // handle success
-          console.log(response);
-          setListProduct(response.data.product.data);
-          setTotalPage(response.data.product.total);
-          setPerPage(response.data.product.per_page);
-          setCurrentPage(response.data.product.current_page);
-          setLoading(false);
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        });
-    } else if (searchParam.get("key") == 4) {
-      // console.log("thanhf coong");
-      axios
-        .get(`/api/sortProduct?key=4&page=${page}`)
-        .then((response) => {
-          // handle success
-          console.log(response);
+          // console.log(response);
           setListProduct(response.data.product.data);
           setTotalPage(response.data.product.total);
           setPerPage(response.data.product.per_page);
@@ -156,11 +104,11 @@ const PageProducts = () => {
       //clear function
       return () => controller.abort();
     }
-  }, [page,searchParam]);
+  }, [page, searchParam]);
   if (loading) {
     return (
       <>
-        <LoadingPage/>
+        <LoadingPage />
       </>
     );
   } else {
