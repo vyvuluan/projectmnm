@@ -89,13 +89,11 @@ const Login = () => {
         },
       })
       .then(function (response) {
+  
         if (response.status === 200) {
-          // setLoginGoogle(window.location.replace(response.data.url))
-
-          // console.log(response.data.url)
+       
           setLoginGoogle(response.data.url);
-          // window.location.replace(response.da  ta.url);
-          // console.log(loginGoogle);
+        
         }
       })
       .catch(function (error) {
@@ -115,8 +113,10 @@ const Login = () => {
         },
       })
       .then(function (response) {
+        console.log(response);
         if (response.status === 200) {
           setLoginFaceBook(response.data.url);
+
         }
       })
       .catch(function (error) {

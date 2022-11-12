@@ -16,6 +16,9 @@ const axios = require("axios").default;
 const HomePage = () => {
   const [paramToken, setParamToken] = useSearchParams()
   const [paramEmail, setParamEmail] = useSearchParams()
+  const [paramFullname, setParamFullname] = useSearchParams()
+
+  
   const history = useNavigate();
 
   const [listProductNew, setListProductNew] = useState([]);
@@ -24,9 +27,11 @@ const HomePage = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    if (paramToken.get('token') && paramEmail.get('email')) {
+    if (paramToken.get('token') && paramEmail.get('email') && paramFullname.get('fullname')) {
       localStorage.setItem('auth_token', paramToken.get('token'))
       localStorage.setItem('auth_name', paramEmail.get('email'))
+      localStorage.setItem('auth_fullname', paramEmail.get('fullname'))
+
       swal({
         title: "Đăng nhập thành công",
         icon: "success",
