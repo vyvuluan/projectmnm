@@ -81,6 +81,9 @@ const DetailProduct = (props) => {
 
     axios.post(`/api/addtocart`, data).then((res) => {
       if (res.data.status === 201) {
+        // console.log(res);
+        localStorage.setItem("count", res.data.count)
+        
         swal("Success", res.data.message, "success");
       } else if (res.data.status === 409) {
         swal("Warning", res.data.message, "warning");

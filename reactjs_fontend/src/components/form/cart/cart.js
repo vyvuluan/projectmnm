@@ -89,6 +89,7 @@ export default function Cart() {
       .then((res) => {
         if (res.data.status === 200) {
           swal("Success", res.data.message, "success");
+          localStorage.setItem("count", localStorage.getItem("count") - 1 )
           setSubmitting(true);
         } else if (res.data.status === 404) {
           swal("Error", res.data.message, "error");

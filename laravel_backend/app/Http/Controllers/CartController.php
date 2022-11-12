@@ -56,12 +56,14 @@ class CartController extends Controller
                     $cartItem = Cart::where('maSP', $maSP)->where('maKH', $maKH)->first();
                     //$cartItem = Cart::where('id', $id_cart)->where('maKH', $maKH)->first();
                     if ($cartItem) {
-
+                       
                         $cartItem->soLuongSP += $soLuongSP;
                         $cartItem->save();
+                        $count = $cartItem->count();
                         return response()->json([
                             'status' => 201,
                             'message' => 'Đã thêm vào giỏ hàng',
+                            'count' => $count,
                         ]);
                         // return response()->json([
                         //     'status'=>409 ,
@@ -73,9 +75,11 @@ class CartController extends Controller
                         $cartItem->maSP = $maSP;
                         $cartItem->soLuongSP = $soLuongSP;
                         $cartItem->save();
+                        $count = $cartItem->count();
                         return response()->json([
                             'status' => 201,
                             'message' => 'Đã thêm vào giỏ hàng',
+                            'count' => $count,
                         ]);
                     }
                 } else {
