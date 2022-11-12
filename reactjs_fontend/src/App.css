@@ -44,8 +44,8 @@
   background-color: #d70018 !important;
 }
 
-.btnclick::after {
-  background-color: #d70018 !important;
+.btnclick:hover {
+  background-color: #af1729 !important;
 }
 
 /* * {

@@ -76,6 +76,17 @@ function Checkout() {
         };
     }, [navigate]);
 
+    const [rate, setRate] = useState();
+
+    useEffect(() => {
+        fetch(`https://api.exchangerate.host/convert?from=USD&to=VND`).then(res => {
+            return res.json();
+        }).then(data => {
+            setRate(data.info.rate);
+        })
+    }, []);
+
+
     const handleInput = (e) => {
         e.persist();
         setCheckoutInput({ ...checkoutInput, [e.target.name]: e.target.value });
@@ -90,25 +101,23 @@ function Checkout() {
         payment_id: "",
     };
 
+
     const PayPalButton = window.paypal.Buttons.driver("react", {
         React,
         ReactDOM,
     });
-
-    var money = 0;
 
     const createOrder = (data, actions) => {
         return actions.order.create({
             purchase_units: [
                 {
                     amount: {
-                        value: (discount ? totalCartPrice * (1 - discount / 100) / 25000 : totalCartPrice / 25000),
+                        value: discount ? parseInt((totalCartPrice * (1 - discount / 100)) / rate) : parseInt(totalCartPrice / rate),
                     },
                 },
             ],
         });
     };
-    console.log(totalCartPrice);
 
     const onApprove = (data, actions) => {
         return actions.order.capture().then(function (details) {
@@ -275,7 +284,7 @@ function Checkout() {
                             <B.Card.Footer className="border-secondary bg-transparent text-end">
                                 <B.FormGroup>
                                     <B.Button
-                                        className="rounded-0 my-3 me-2 py-2"
+                                        className="rounded-0 my-3 me-2 py-2 btnclick shadow-none"
                                         variant="primary"
                                         onClick={(e) => submitOrder(e, "COD")}
                                     >
@@ -283,7 +292,7 @@ function Checkout() {
                                         Thanh toán COD
                                     </B.Button>
                                     <B.Button
-                                        className="rounded-0 py-2 me-2 text-lightgray"
+                                        className="rounded-0 py-2 me-2 text-lightgray btnclick shadow-none"
                                         variant="primary"
                                         onClick={(e) => submitOrder(e, "payonline")}
                                     >
@@ -309,7 +318,7 @@ function Checkout() {
                                 </B.FormGroup>
                             </B.Col>
                             <B.Col className="col-2">
-                                <B.Button variant="primary" className="rounded-0 w-100" onClick={handleGetDiscount}>Thêm mã</B.Button>
+                                <B.Button variant="primary" className="rounded-0 w-100 btnclick shadow-none" onClick={handleGetDiscount}>Thêm mã</B.Button>
                             </B.Col>
                         </B.Row>
                         <B.Table responsive className="table-bordered border border-secondary text-center mb-0">
