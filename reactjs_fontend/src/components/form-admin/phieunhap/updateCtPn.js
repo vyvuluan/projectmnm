@@ -43,9 +43,6 @@ const UpdateCtPN = ({
       gia: CTPN.gia,
       product_id: idSP,
     };
-    // console.log(e.target.value);
-    // console.log(ngaySinh);
-
     axios
       .put(`api/kho/updateCtPN/${idPN}/${idSP}`, data)
       .then((res) => {

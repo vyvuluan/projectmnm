@@ -2,38 +2,36 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 
-function valuetext(value) {
-  console.log(value);
 
-  return value;
-}
-function formatMoney(money) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(money);
-}
-export default function RangeSlider() {
-  const [value, setValue] = React.useState(50000000);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
+const MinimumDistanceSlider=({value1,handleChange1,valuetext})=> {
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
+  // console.log({min: value1[0],max: value1[1]});
   return (
-    <Box width={300}>
-      <span>0 Đ</span>
-      <span style={{ float: "right" }}>{formatMoney(value)}</span>
-
-      <Slider
-        onChange={handleChange}
-        getAriaValueText={valuetext}
-        min={0}
-        max={50000000}
-        step={1000000}
-        defaultValue={50000000}
-        aria-label="Default"
-        valueLabelDisplay="auto"
-      />
-    </Box>
+    <>
+      {/* <div></div>
+      <div>{value1[1]}</div> */}
+      <Box sx={{ width: 300 }}>
+        <span>{formatMoney(value1[0])}</span>
+        <span style={{ float: "right" }}>{formatMoney(value1[1])} </span>
+        <Slider
+          getAriaLabel={() => "Minimum distance"}
+          value={value1}
+          max={50000000}
+          min={0}
+          step={100000}
+          onChange={handleChange1}
+          valueLabelDisplay="auto"
+          getAriaValueText={valuetext}
+          disableSwap
+        />
+      </Box>
+    </>
   );
 }
+export default MinimumDistanceSlider;
