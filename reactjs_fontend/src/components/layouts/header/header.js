@@ -288,6 +288,7 @@ export default function Header() {
                   backgroundColor: "#fff",
                   width: "100%",
                 }}
+                
               >
                 <Bt.Collapse in={open} className={`w-100`}>
                   <div id="collapse-categories">

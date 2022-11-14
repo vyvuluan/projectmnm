@@ -326,6 +326,17 @@ class ProductController extends Controller
             'message' => 'kết quả',
         ]);
     }
+    public function sort_chitiet_minmax(Request $request)
+    {
+        $product =  Product::whereIn('maNsx', $request->nsx_id)
+            ->where('gia', '>', $request->giaMin)
+            ->where('gia', '<=', $request->giaMax)
+            ->paginate(8);
+        return response()->json([
+            'data' => $product,
+            'message' => 'kết quả',
+        ]);
+    }
     public function product_max()
     {
         $product =  Product::selectRaw('max(gia) as gia')

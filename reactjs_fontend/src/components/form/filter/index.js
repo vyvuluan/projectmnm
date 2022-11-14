@@ -1,94 +1,85 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import RangeSlider from "./rangePrice";
+
 import "./style.css";
 const Filter = () => {
+  const [viewNSX, setViewNSX] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`/api/nsx`)
+      .then((res) => {
+        if (res.data.status == 200) {
+          // console.log(res.data.Nsx);
+          setViewNSX(res.data.Nsx);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+  // console.log(viewNSX);
+  var NSX_HTML = (
+    <>
+    <div className="border-bottom mb-4 pb-4">
+      <h5 className="pl-3">Nhà sản xuất</h5>
+      <form>
+        <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+          <input
+            type="checkbox"
+            className="custom-control-input"
+            defaultChecked
+            id="price-all"
+            // value={item.id}
+          ></input>
+          <label className="custom-control-label" htmlFor="price-all">
+            Tất cả
+          </label>
+        </div>
+        {viewNSX.map((item) => {
+          return (
+            <>
+              <div
+                key={item.id}
+                className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+              >
+                <input
+                  type="checkbox"
+                  className="custom-control-input"
+                  // defaultChecked
+                  id={item.id}
+                  // name={item.tenNSX}
+                  // value={item.id}
+                ></input>
+                <label className="custom-control-label" htmlFor={item.id}>
+                  {item.tenNSX}
+                </label>
+              </div>
+            </>
+          );
+        })}
+      </form>
+      </div>
+    </>
+  );
+  var Price_HTML = (
+    <>
+      <div className="border-bottom mb-4 pb-4">
+        <h5 className="pl-3">Mức giá</h5>
+        <form>
+          <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+            <RangeSlider/>
+
+          </div>
+          
+        </form>
+      </div>
+    </>
+  );
   return (
     <>
-      
-        <div className="border-bottom mb-4 pb-4">
-          <h5 className="pl-3">Filter by price</h5>
-          <form>
-            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                defaultChecked
-                id="price-all"
-              ></input>
-              <label className="custom-control-label" htmlFor="price-all">
-                All Price
-              </label>
-              <span className="badge border font-weight-normal text-dark">
-                1000
-              </span>
-            </div>
-            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="price-1"
-              ></input>
-              <label className="custom-control-label" htmlFor="price-1">
-                $0 - $100
-              </label>
-              <span className="badge border font-weight-normal text-dark">
-                150
-              </span>
-            </div>
-            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="price-2"
-              ></input>
-              <label className="custom-control-label" htmlFor="price-2">
-                $100 - $200
-              </label>
-              <span className="badge border font-weight-normal text-dark">
-                295
-              </span>
-            </div>
-            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="price-3"
-              ></input>
-              <label className="custom-control-label" htmlFor="price-3">
-                $200 - $300
-              </label>
-              <span className="badge border font-weight-normal text-dark">
-                246
-              </span>
-            </div>
-            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="price-4"
-              ></input>
-              <label className="custom-control-label" htmlFor="price-4">
-                $300 - $400
-              </label>
-              <span className="badge border font-weight-normal text-dark">
-                145
-              </span>
-            </div>
-            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="price-5"
-              ></input>
-              <label className="custom-control-label" htmlFor="price-5">
-                $400 - $500
-              </label>
-              <span className="badge border font-weight-normal text-dark">
-                168
-              </span>
-            </div>
-          </form>
-        </div>
-      
+      {NSX_HTML}
+      {Price_HTML}
     </>
   );
 };

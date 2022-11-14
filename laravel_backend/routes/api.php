@@ -176,6 +176,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::post('products/update/{id}', [ManageProductController::class, 'update']);
 });
 
+    Route::get('nsx', [ManageNsxController::class, 'nsxall']);
+
 //nhân viên
 Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(function () {
 
@@ -242,6 +244,9 @@ Route::get('/sortProduct', [ProductController::class, 'sortProduct']);
 Route::get('/giaMax', [ProductController::class, 'product_max']);
 
 Route::get('/sort-chitiet', [ProductController::class, 'sort_chitiet']);
+
+
+Route::get('/sort-chitiet-minmax', [ProductController::class, 'sort_chitiet_minmax']);
 
 
 // Route::resource('products/add', ProductController::class)->only('store');
