@@ -130,12 +130,19 @@ const PageProducts = () => {
     <>
       <Container fluid className="mt-5">
         <Row>
-          <Col>
             <SectionTitle title="Sản phẩm" />
+            <Col sm ={2}>
+              <Filter/>
+              
+
+            </Col>
+            <Col sm={10}>
 
             {/* sort */}
             <SortProduct />
+            
             {product_HTML}
+
             <Pagination
               currentPage={currentPage}
               totalPage={pageNumbers}

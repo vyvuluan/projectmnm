@@ -176,6 +176,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::post('products/update/{id}', [ManageProductController::class, 'update']);
 });
 
+    Route::get('nsx', [ManageNsxController::class, 'nsxall']);
+
 //nhân viên
 Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(function () {
 

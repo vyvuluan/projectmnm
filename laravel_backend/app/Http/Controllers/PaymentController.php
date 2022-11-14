@@ -487,7 +487,7 @@ class PaymentController extends Controller
     public function getDH_maKH()
     {
 
-        $px = PhieuXuat::where('customer_id', auth('sanctum')->user()->customer->id)->orderBy('id', 'desc')->paginate(10);
+        $px = PhieuXuat::where('customer_id', auth('sanctum')->user()->customer->id)->orderBy('id', 'desc')->paginate(5);
         // $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
             'donHang' => $px,
