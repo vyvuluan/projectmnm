@@ -456,7 +456,7 @@ function Index() {
                     key = 1;
                     break;
                 }
-            case 'COD': case 'PayPal': case 'Tại quầy':
+            case 'COD': case 'PayPal': case 'Tại quầy': case 'VnPay':
                 {
                     key = 2;
                     break;
@@ -811,6 +811,7 @@ function Index() {
                                         <option value='5'>Đơn hàng đã hủy</option>
                                         <option value='COD'>COD</option>
                                         <option value='PayPal'>Paypal</option>
+                                        <option value='VnPay'>VNPay</option>
                                         <option value='Tại quầy'>Tại quầy</option>
                                     </B.FormSelect>
                                 </B.FormGroup>
