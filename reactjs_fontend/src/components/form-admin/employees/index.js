@@ -3,7 +3,7 @@ import * as B from "react-bootstrap";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-
+import Swal from "sweetalert2";
 import { BiEdit } from "react-icons/bi";
 import { BsPersonPlus } from "react-icons/bs";
 import swal from "sweetalert";
@@ -105,7 +105,8 @@ const Employees = () => {
     // return () => controller.abort();
   }, [page]);
 
-  const handleThemNV = () => {
+  const handleThemNV = (e) => {
+    e.preventDefault();
     const data = {
       ten: addNV.ten,
       sdt: addNV.sdt,
@@ -135,47 +136,82 @@ const Employees = () => {
   const handleDeleteNV = (id) => {
     // console.log(id);
     // e.preventDefault();
-    swal("Chắc chắn xóa", {
-      buttons: {
-        catch: {
-          text: "Chắc",
-          value: "catch",
-        },
-        no: {
-          text: "Chưa",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "catch":
-          axios
-            .delete(`/api/admin/manageEmployee/${id}`)
-            .then((res) => {
-              console.log(res);
-              if (res.data.status == 200) {
-                setSubmitting(true);
-
-                swal({
-                  title: res.data.message,
-                  icon: "success",
-                  button: "đóng",
-                });
-              } else if (res.status == 200) {
-                swal({
-                  title: res.data.message,
-                  icon: "warning",
-                  button: "đóng",
-                });
-              }
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
-          break;
+    Swal.fire({
+      title: "Xóa?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/api/admin/manageEmployee/${id}`)
+          .then((res) => {
+            console.log(res);
+            if (res.data.status == 200) {
+              setSubmitting(true);
+              swal({
+                title: res.data.message,
+                icon: "success",
+                button: "đóng",
+              });
+            } else if (res.status == 200) {
+              swal({
+                title: res.data.message,
+                icon: "warning",
+                button: "đóng",
+              });
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
       }
     });
+    // swal("Chắc chắn xóa", {
+    //   buttons: {
+    //     catch: {
+    //       text: "Chắc",
+    //       value: "catch",
+    //     },
+    //     no: {
+    //       text: "Chưa",
+    //       value: "no",
+    //     },
+    //   },
+    // }).then((value) => {
+    //   switch (value) {
+    //     case "catch":
+    //       axios
+    //         .delete(`/api/admin/manageEmployee/${id}`)
+    //         .then((res) => {
+    //           console.log(res);
+    //           if (res.data.status == 200) {
+    //             setSubmitting(true);
+
+    //             swal({
+    //               title: res.data.message,
+    //               icon: "success",
+    //               button: "đóng",
+    //             });
+    //           } else if (res.status == 200) {
+    //             swal({
+    //               title: res.data.message,
+    //               icon: "warning",
+    //               button: "đóng",
+    //             });
+    //           }
+    //         })
+    //         .catch(function (error) {
+    //           // handle error
+    //           console.log(error);
+    //         });
+    //       break;
+    //   }
+    // });
   };
   const handleOnSearch = (key) => {
     axios.get(`/api/admin/manageEmployee?key=${key}`).then((res) => {
@@ -399,7 +435,7 @@ const Employees = () => {
           </B.Col>
         </B.Row>
 
-        <B.Form className="mt-2">
+        <B.Form className="mt-2" onSubmit={handleThemNV}>
           <B.Row className="pe-xl-5 mb-5">
             <B.Col lg={6}>
               <B.FormGroup>
@@ -472,9 +508,10 @@ const Employees = () => {
                 <B.FormSelect
                   name="cv_id"
                   // value={addNV.cv_id}
+
                   required
                   onChange={handleChangeCV}
-                  className="rounded-0 shadow-none mb-3 text-muted"
+                  className="form-select rounded-0 shadow-none mb-3 text-muted"
                 >
                   <option selected disabled>
                     Chức vụ
@@ -485,9 +522,10 @@ const Employees = () => {
                 </B.FormSelect>
               </B.FormGroup>
               <B.Button
+                type="submit"
                 variant="outline-primary"
                 className="rounded-0 py-2 mb-2 w-100"
-                onClick={handleThemNV}
+                // onClick={handleThemNV}
               >
                 <BsPersonPlusFill className="me-2" />
                 Thêm nhân viên

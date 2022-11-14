@@ -49,7 +49,7 @@ const Ctpn = ({
           </thead>
           <tbody className="align-middle">
             {viewPn.pnct.map((item1, index) => {
-              console.log(item1);
+              
               return (
                 <>
                   <tr key={item1.pn_id}>

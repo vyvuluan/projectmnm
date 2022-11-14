@@ -25,6 +25,7 @@ export default function Header() {
   const [cart, setCart] = useState();
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("pageproducts?search=" + search);
+  const [none, setNone] = useState("d-none");
 
   useEffect(() => {
     if (localStorage.getItem("auth_fullname")) {
@@ -238,26 +239,35 @@ export default function Header() {
             <div
               style={{
                 position: "absolute",
-                backgroundColor: "#fff",
+
                 width: "100%",
               }}
             >
               <Bt.Button
-                onClick={() => setOpen(!open)}
+                onMouseEnter={() => setOpen(!open)}
                 variant="primary"
                 aria-controls="collapse-categories"
                 aria-expanded={open}
-                className="rounded-0 w-100 fw-semibold fs-5 shadow-none text-start btnclick"
+                className="rounded-0 w-100 fw-semibold fs-5 shadow-none text-start "
                 style={{ height: "63px", marginTop: "-1px", padding: "0 25px" }}
               >
                 Danh mục
                 <MdOutlineKeyboardArrowDown className="pull-right mt-2" />
               </Bt.Button>
-              <Bt.Collapse in={open} className="w-100">
-                <div id="collapse-categories">
-                  <Category />
-                </div>
-              </Bt.Collapse>
+              <div
+                onMouseLeave={() => setOpen(false)}
+                style={{
+                  position: "absolute",
+                  backgroundColor: "#fff",
+                  width: "100%",
+                }}
+              >
+                <Bt.Collapse in={open} className={`w-100`}>
+                  <div id="collapse-categories">
+                    <Category />
+                  </div>
+                </Bt.Collapse>
+              </div>
             </div>
           </Bt.Col>
           <Bt.Col lg className="ms-5">
