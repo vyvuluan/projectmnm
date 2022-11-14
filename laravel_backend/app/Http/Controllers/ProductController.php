@@ -328,7 +328,9 @@ class ProductController extends Controller
     }
     public function sort_chitiet_minmax(Request $request)
     {
-        $product =  Product::whereIn('maNsx', $request->nsx_id)
+        $array_nsx = array_map('intval', explode(',', $request->nsx_id));
+
+        $product =  Product::whereIn('maNsx', $array_nsx)
             ->where('gia', '>', $request->giaMin)
             ->where('gia', '<=', $request->giaMax)
             ->paginate(8);
