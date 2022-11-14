@@ -63,12 +63,28 @@ function Index() {
 
     const handleAbortOrder = (data) => {
         const id = data;
-        axios.put(`/api/huyDH/${id}`).then(res => {
-            if (res.data.status === 200) {
-                setSubmitting(true);
-                swal('Thành công', res.data.message, 'success')
-            } else if (res.data.status === 400) {
-                swal('Thất bại', res.data.message, 'warning')
+
+        swal({
+            title: 'Hủy đơn hàng sẽ không thể hoàn tác',
+            text: 'Bạn chắc chứ?',
+            icon: 'warning',
+            buttons: {
+                cancel: "Hủy bỏ",
+                abort: {
+                    text: "Hủy đơn hàng",
+                    value: "abort",
+                },
+            }
+        }).then((value) => {
+            if (value === 'abort') {
+                axios.put(`/api/huyDH/${id}`).then(res => {
+                    if (res.data.status === 200) {
+                        setSubmitting(true);
+                        swal('Thành công', res.data.message, 'success')
+                    } else if (res.data.status === 400) {
+                        swal('Thất bại', res.data.message, 'warning')
+                    }
+                })
             }
         })
     }
@@ -132,11 +148,13 @@ function Index() {
                                         }
                                     </div>
                                     <div>
-                                        {order.status === 5 ? <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem chi tiết đơn hàng</B.Button></Link>
-                                            : <div>
+                                        {order.status === 0 || order.status === 1 ?
+                                            <div>
                                                 <B.Button variant='outline-primary' className='rounded-0 pull-right' onClick={() => handleAbortOrder(order.id)}>Hủy đơn hàng</B.Button>
                                                 <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem chi tiết đơn hàng</B.Button></Link>
                                             </div>
+                                            : <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right'>Xem chi tiết đơn hàng</B.Button></Link>
+
                                         }
                                     </div>
                                 </B.Row>

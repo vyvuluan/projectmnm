@@ -64,7 +64,7 @@ export default function Cart() {
         id_cart === item.id
           ? {
             ...item,
-            soLuongSP: item.soLuongSP + (item.soLuongSP < 10 ? 1 : 0),
+            soLuongSP: item.soLuongSP + (item.soLuongSP < 4 ? 1 : 0),
           }
           : item
       )
@@ -76,7 +76,19 @@ export default function Cart() {
     axios
       .put(`http://localhost:8000/api/cart-updatequantity/${id_cart}/${scope}`)
       .then((res) => {
-        if (res.data.status === 200) {
+        if (res.data.status === 400) {
+          setCart((cart) =>
+            cart.map((item) =>
+              id_cart === item.id
+                ? {
+                  ...item,
+                  soLuongSP: item.soLuongSP - 1,
+                }
+                : item
+            )
+          );
+          updateCartQuantity(id_cart, "dec");
+          swal('Thất bại', res.data.message, 'error')
         }
       });
   }
@@ -131,8 +143,8 @@ export default function Cart() {
     cart_HTML = (
       <div>
         <Bt.Row className="px-xl-5">
-          <Bt.Col lg={8} className="table-responsive mb-5">
-            <Bt.Table className="table-borderless border border-secondary text-center mb-0">
+          <Bt.Col lg={8} className="mb-5">
+            <Bt.Table responsive className="table-borderless border border-secondary text-center mb-0">
               <thead
                 className="text-dark"
                 style={{ backgroundColor: "#edf1ff" }}

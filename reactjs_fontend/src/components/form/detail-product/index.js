@@ -66,7 +66,7 @@ const DetailProduct = (props) => {
     }
   };
   const handleIncrement = () => {
-    if (quantity < 10) {
+    if (quantity < product.soLuongSP) {
       setQuantity((prevCount) => prevCount + 1);
     }
   };
@@ -83,7 +83,7 @@ const DetailProduct = (props) => {
       if (res.data.status === 201) {
         // console.log(res);
         localStorage.setItem("count", res.data.count)
-        
+
         swal("Success", res.data.message, "success");
       } else if (res.data.status === 409) {
         swal("Warning", res.data.message, "warning");
@@ -147,7 +147,7 @@ const DetailProduct = (props) => {
             <div className="input-group-btn">
               <button
                 type="button"
-                className="btn btn-primary btn-minus rounded-0"
+                className="btn btn-primary btn-minus rounded-0 btnclick shadow-none"
                 onClick={handleDecrement}
               >
                 <AiFillMinusCircle />
@@ -161,7 +161,7 @@ const DetailProduct = (props) => {
             <div className="input-group-btn">
               <button
                 type="button"
-                className="btn btn-primary btn-plus rounded-0"
+                className="btn btn-primary btn-plus rounded-0 btnclick shadow-none"
                 onClick={handleIncrement}
               >
                 <AiFillPlusCircle />
@@ -170,17 +170,17 @@ const DetailProduct = (props) => {
           </div>
           <button
             type="button"
-            className="btn btn-primary px-3 rounded-0"
+            className="btn btn-primary px-3 rounded-0 btnclick shadow-none"
             onClick={submitAddtocart}
           >
-            <AiOutlineShoppingCart /> Add To Cart
+            <AiOutlineShoppingCart /> Thêm vào giỏ hàng
           </button>
         </div>
       );
     } else {
       avail_stock = (
-        <button className="btn btn-primary px-3 rounded-0">
-          <AiOutlineShoppingCart /> Out of stock
+        <button className="btn btn-primary px-3 rounded-0 shadow-none">
+          <AiOutlineShoppingCart /> Hết hàng
         </button>
       );
     }
