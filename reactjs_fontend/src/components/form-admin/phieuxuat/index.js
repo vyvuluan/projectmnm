@@ -326,6 +326,7 @@ function Index() {
     }
 
     const handleAddCtpxProd = (value) => {
+
         const data = {
             px_id: viewPx.id,
             product_id: value.id,
@@ -541,9 +542,17 @@ function Index() {
 
         axios.put(`/api/kho/updatectpx/${pxid}/${product_id}`, data).then(res => {
             if (res.data.status === 200) {
+                swal('Thành công', res.data.message, 'success');
                 setShowEProd(false);
                 setSubmitting(true);
-                swal('Thành công', res.data.message, 'success');
+                let data1;
+                viewPx.pxct.filter((item, index) => {
+                    return item.product_id === product_id ? (data1 = item) : null;
+                });
+                data1.soluong = prodQuantity;
+                if (data1) {
+                    updateState(data1);
+                }
             } else if (res.data.status === 400) {
                 swal('Thất bại', res.data.error, 'error');
             } else if (res.data.status === 401) {
@@ -555,6 +564,13 @@ function Index() {
             }
         })
     }
+
+    const updateState = (value) => {
+        var index;
+        let newData = [...viewPx];
+        newData.pxct[index] = value;
+        setViewPx(newData);
+    };
 
 
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
@@ -855,7 +871,8 @@ function Index() {
                                                             </B.DropdownButton>
                                                         </td>
                                                         <td className='d-flex'>
-                                                            <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
+                                                            <BiEdit className='fs-3 me-2 text-primary' onClick={() => handleShow(px)} />
+                                                            <FaRegEye className='fs-3 text-info me-2' onClick={() => handleView(px)} />
                                                             <FcPrint className='fs-3' onClick={() => handleShowPrint(px)} />
                                                         </td>
                                                     </tr>
@@ -885,7 +902,8 @@ function Index() {
                                                             </B.DropdownButton>
                                                         </td>
                                                         <td className='d-flex'>
-                                                            <FaRegEye className='fs-3 text-info me-3' onClick={() => handleView(px)} />
+                                                            <BiEdit className='fs-3 me-2 text-primary' onClick={() => handleShow(px)} />
+                                                            <FaRegEye className='fs-3 text-info me-2' onClick={() => handleView(px)} />
                                                             <FcPrint className='fs-3' onClick={() => handleShowPrint(px)} />
                                                         </td>
                                                     </tr>
@@ -909,9 +927,6 @@ function Index() {
                                     <h5 className='text-primary mb-3'>Chi tiết phiếu xuất</h5>
                                 </B.Col>
                                 <B.Col lg={4} xs={4} className='text-end'>
-                                    {viewPx.status === 0 ?
-                                        <BiEdit className='fs-3 customborder' onClick={() => handleShow(viewPx)} />
-                                        : null}
                                     <FaTimes className='fs-3 customborder' onClick={handleCloseTab} />
                                 </B.Col>
                             </B.Row>
@@ -971,9 +986,9 @@ function Index() {
                                                     }}
                                                 />
                                                 <div className='pull-left mt-1'>
-                                                    <small className='text-danger ms-2 d-block'>{error.px_id}</small>
-                                                    <small className='text-danger ms-2 d-block'>{error.product_id}</small>
-                                                    <small className='text-danger ms-2 d-block'>{error.soluong}</small>
+                                                    <small className='text-danger ms-2 d-block'>{error?.px_id}</small>
+                                                    <small className='text-danger ms-2 d-block'>{error?.product_id}</small>
+                                                    <small className='text-danger ms-2 d-block'>{error?.soluong}</small>
                                                 </div>
                                                 <B.Button variant='outline-info' className='rounded-0 my-3 pull-right' onClick={() => handleAddCtpxProd(prodData)} >Thêm sản phẩm</B.Button>
                                             </B.Col>
@@ -1075,7 +1090,7 @@ function Index() {
                                     <B.Col lg={4}>
                                         <B.FormGroup>
                                             <B.FormLabel className='fs-5'>Họ và tên</B.FormLabel>
-                                            <small className='text-danger ms-2'>{error.tenKH}</small>
+                                            <small className='text-danger ms-2'>{error?.tenKH}</small>
                                             <B.FormControl type='text' name='tenKH' placeholder='Nhập vào họ và tên' className='rounded-0 shadow-none mb-3'
                                                 value={pxinput.tenKH} onChange={handlePxInput}></B.FormControl>
                                         </B.FormGroup>
@@ -1083,7 +1098,7 @@ function Index() {
                                     <B.Col lg={4}>
                                         <B.FormGroup>
                                             <B.FormLabel className='fs-5'>Số điện thoại</B.FormLabel>
-                                            <small className='text-danger ms-2'>{error.sdt}</small>
+                                            <small className='text-danger ms-2'>{error?.sdt}</small>
                                             <B.FormControl type='text' name='sdtKH' placeholder='Nhập vào số điện thoại' className='rounded-0 shadow-none mb-3' maxLength='10'
                                                 value={pxinput.sdtKH} onChange={handlePxInput}></B.FormControl>
                                         </B.FormGroup>
@@ -1091,7 +1106,7 @@ function Index() {
                                     <B.Col lg={4}>
                                         <B.FormGroup>
                                             <B.FormLabel className='fs-5'>Địa chỉ</B.FormLabel>
-                                            <small className='text-danger ms-2'>{error.diaChi}</small>
+                                            <small className='text-danger ms-2'>{error?.diaChi}</small>
                                             <B.FormControl as='textarea' rows={1} name='diachiKH' placeholder='Nhập vào địa chỉ' className='rounded-0 shadow-none mb-3'
                                                 value={pxinput.diachiKH} onChange={handlePxInput}></B.FormControl>
                                         </B.FormGroup>
@@ -1133,9 +1148,9 @@ function Index() {
                                             />
                                             <B.Button type='submit' variant='primary' className='rounded-0 my-2'>Thêm chi tiết phiếu xuất</B.Button>
                                             <div>
-                                                <small className='text-danger ms-2 d-block'>{error.px_id}</small>
-                                                <small className='text-danger ms-2 d-block'>{error.product_id}</small>
-                                                <small className='text-danger ms-2 d-block'>{error.soluong}</small>
+                                                <small className='text-danger ms-2 d-block'>{error?.px_id}</small>
+                                                <small className='text-danger ms-2 d-block'>{error?.product_id}</small>
+                                                <small className='text-danger ms-2 d-block'>{error?.soluong}</small>
                                             </div>
                                         </B.Col>
                                         <B.Col lg={8} className='mx-auto table-responsive mb-3' style={{ zIndex: '1' }}>

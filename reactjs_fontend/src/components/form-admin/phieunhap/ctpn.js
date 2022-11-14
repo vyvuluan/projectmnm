@@ -13,7 +13,7 @@ const Ctpn = ({
   handleCloseTab,
   // handleReloadShowCTPNtab3,
 }) => {
-  // console.log(handleShowUpdateCtPN);
+  const status = viewPn.status;
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -44,12 +44,15 @@ const Ctpn = ({
               <th>Tên sản phẩm</th>
               <th>Số lượng</th>
               <th>Giá</th>
-              <th>Thao tác</th>
+              {status == 1 ? null : (
+                <>
+                  <th>Thao tác</th>
+                </>
+              )}
             </tr>
           </thead>
           <tbody className="align-middle">
             {viewPn.pnct.map((item1, index) => {
-              
               return (
                 <>
                   <tr key={item1.pn_id}>
@@ -58,25 +61,29 @@ const Ctpn = ({
                     <td className="align-middle">{item1.soluong}</td>
                     <td className="align-middle">{item1.gia}</td>
 
-                    <td className="align-middle fs-5 text-primary">
-                      <FiTool
-                        type="button"
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Sửa chi tiết phiếu nhập"
-                        style={{ marginRight: "15px" }}
-                        onClick={() => handleShowUpdateCtPN(item1)}
-                      />
-                      <MdDeleteForever
-                        type="button"
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Xóa chi tiết phiếu nhập"
-                        onClick={() =>
-                          handleDelete(item1.pn_id, item1.product_id)
-                        }
-                      />
-                    </td>
+                    {status == 1 ? null : (
+                      <>
+                        <td className="align-middle fs-5 text-primary">
+                          <FiTool
+                            type="button"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="Sửa chi tiết phiếu nhập"
+                            style={{ marginRight: "15px" }}
+                            onClick={() => handleShowUpdateCtPN(item1)}
+                          />
+                          <MdDeleteForever
+                            type="button"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="Xóa chi tiết phiếu nhập"
+                            onClick={() =>
+                              handleDelete(item1.pn_id, item1.product_id)
+                            }
+                          />
+                        </td>
+                      </>
+                    )}
                   </tr>
                 </>
               );
