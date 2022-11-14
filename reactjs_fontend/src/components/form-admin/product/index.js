@@ -452,7 +452,7 @@ function Index() {
                 </label>
                 <Editor
                   key={editorKey}
-                  apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                  apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                   onEditorChange={handleCTSPInput}
                   onInit={(evt, editor) => {
                     editorRef.current = editor;
@@ -490,7 +490,7 @@ function Index() {
                 </label>
                 <Editor
                   key={editorKey}
-                  apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                  apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                   onEditorChange={handleMotaInput}
                   onInit={(evt, editor) => {
                     editorRef.current = editor;

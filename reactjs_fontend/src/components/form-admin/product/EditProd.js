@@ -41,11 +41,11 @@ const Prodedit = ({ product, showModal }) => {
     };
 
     const handleMotaChange = (value) => {
-        setMota(value);
+        setMota({ value });
     }
 
     const handleCTSPChange = (value) => {
-        setCtsp(value)
+        setCtsp({ value })
     }
 
     const handleProductChange = (e) => {
@@ -131,7 +131,7 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
                 <B.Tab eventKey={2} title="Mô tả sản phẩm" className=" border border-top-0 py-3 px-3">
                     <Editor
-                        apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                        apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleMotaChange}
                         onInit={(evt, editor) => {
                             editorRef.current = editor
@@ -195,7 +195,7 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
                 <B.Tab eventKey={3} title="Chi tiết sản phẩm" className=" border border-top-0 py-3 px-3">
                     <Editor
-                        apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                        apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleCTSPChange}
                         onInit={(evt, editor) => {
                             editorRef.current = editor
