@@ -6,12 +6,12 @@ import { Editor } from "@tinymce/tinymce-react";
 
 const Prodedit = ({ product, showModal }) => {
 
-    const editorRef = useRef(null);
     const [picture, setPicture] = useState([]);
     const [previewIMG, setPreviewIMG] = useState();
     const [mota, setMota] = useState(product.moTa);
     const [ctsp, setCtsp] = useState(product.ctSanPham);
     const [tabkey, setTabKey] = useState(1);
+    const editorRef = useRef(product.moTa);
 
     const id = product.id;
     const [prodEdit, setProdEdit] = useState({
@@ -133,9 +133,9 @@ const Prodedit = ({ product, showModal }) => {
                     <Editor
                         apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleMotaChange}
-                        onInit={(evt, editor) => {
-                            editorRef.current = editor
-                        }}
+                        // onInit={mota}
+                        // onInit={(editor) => { editorRef.current = editor }}
+
                         initialValue={mota}
                         init={{
                             height: 500,
