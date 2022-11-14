@@ -35,7 +35,6 @@ function Index() {
   const [productInput, setProduct] = useState({
     loaisp_id: "",
     tenSP: "",
-    soLuong: "",
     gia: "",
     ncc_id: "",
     nsx_id: "",
@@ -174,20 +173,6 @@ function Index() {
     formData.append("ctSanPham", ctsp.ctSanPham);
     const newKey = editorKey * 43;
 
-    // const data = {
-    //   hinh: pricture.image,
-    //   maLoai: productInput.loaisp_id,
-    //   tenSP: productInput.tenSP,
-    //   soLuongSP: productInput.soLuong,
-    //   gia: productInput.gia,
-    //   maNCC: nccData,
-    //   maNSX: nsxData,
-    //   baoHanh: productInput.baohanh,
-    //   moTa: mota.moTa,
-    //   ctSanPham: ctsp.ctSanPham,
-    // }
-
-    // console.log(data);
     axios
       .post(`http://localhost:8000/api/kho/products`, formData)
       .then((res) => {
@@ -197,7 +182,6 @@ function Index() {
             ...productInput,
             loaisp_id: "",
             tenSP: "",
-            soLuong: "",
             gia: "",
             ncc_id: "",
             nsx_id: "",
@@ -346,17 +330,7 @@ function Index() {
                         {errorlist.loaisp_id}
                       </small>
                     </B.FormGroup>
-                    <B.FormGroup className="me-2 w-100">
-                      <B.FormControl
-                        type="number"
-                        name="soLuong"
-                        className="rounded-0 shadow-none mb-3"
-                        placeholder="Số lượng"
-                        onChange={handleProductInput}
-                        value={productInput.soLuong}
-                      ></B.FormControl>
-                    </B.FormGroup>
-                    <B.FormGroup className="w-100">
+                    <B.FormGroup className="w-100 me-2">
                       <B.FormControl
                         type="text"
                         name="gia"
@@ -367,9 +341,7 @@ function Index() {
                       ></B.FormControl>
                       <small className="text-danger">{errorlist.gia}</small>
                     </B.FormGroup>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <B.FormGroup className="w-100 me-2">
+                    <B.FormGroup className="w-100">
                       <B.FormControl
                         type="text"
                         name="baohanh"
@@ -380,6 +352,8 @@ function Index() {
                       ></B.FormControl>
                       <small className="text-danger">{errorlist.baohanh}</small>
                     </B.FormGroup>
+                  </div>
+                  <div className="d-flex justify-content-between">
                     <div className="w-100 me-2">
                       <ReactSearchAutocomplete
                         items={ncclist}
@@ -430,7 +404,7 @@ function Index() {
                   <B.Button
                     type="submit"
                     variant="outline-primary"
-                    className="rounded-0 py-2 mb-2"
+                    className="rounded-0 py-2 mb-2 mt-3"
                   >
                     <BsPersonPlusFill className="me-2" />
                     Thêm sản phẩm
