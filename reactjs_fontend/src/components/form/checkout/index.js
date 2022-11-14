@@ -8,6 +8,7 @@ import { BsFillBagCheckFill, BsPaypal } from "react-icons/bs";
 import { TiTimesOutline } from "react-icons/ti";
 import LoaderIcon from "../../layouts/Loading/index";
 import * as B from "react-bootstrap";
+import vnpaylogo from "../../../img/vnpaylogo.png"
 import './style.css'
 
 function Checkout() {
@@ -158,9 +159,9 @@ function Checkout() {
                                 swal("Thành công", resp.data.message, "success");
                                 navigate("/");
                             } else if (resp.data.status === 401) {
-                                swal("Đăng nhập", resp.data.message, "error");
+                                swal("Thất bại", resp.data.message, "error");
                             } else if (resp.data.status === 400) {
-                                swal("Xin lỗi", resp.data.message, "error");
+                                swal("Thất bại", resp.data.message, "error");
                             }
                         });
                     } else if (res.data.status === 422) {
@@ -169,7 +170,6 @@ function Checkout() {
                     }
                 });
                 break;
-
             case "payonline":
                 axios.post(`http://localhost:8000/api/validate-order`, data).then((res) => {
                     if (res.data.status === 200) {
@@ -181,7 +181,26 @@ function Checkout() {
                     }
                 });
                 break;
-
+            case "VnPay":
+                axios.post(`http://localhost:8000/api/validate-order`, data).then((res) => {
+                    if (res.data.status === 200) {
+                        setError([]);
+                        axios.post(`http://localhost:8000/api/pay`, data).then((resp) => {
+                            if (resp.data.code === '00') {
+                                window.location.replace(resp.data.data);
+                                localStorage.removeItem("count");
+                            } else if (resp.data.status === 401) {
+                                swal("Thất bại", resp.data.message, "error");
+                            } else if (resp.data.status === 400) {
+                                swal("Thất bại", resp.data.message, "error");
+                            }
+                        });
+                    } else if (res.data.status === 422) {
+                        swal("Vui lòng điều đầy đủ vào các mục", "", "error");
+                        setError(res.data.errors);
+                    }
+                });
+                break;
             default:
                 break;
         }
@@ -284,7 +303,7 @@ function Checkout() {
                             <B.Card.Footer className="border-secondary bg-transparent text-end">
                                 <B.FormGroup>
                                     <B.Button
-                                        className="rounded-0 my-3 me-2 py-2 btnclick shadow-none"
+                                        className="rounded-0 my-3 py-2 btnclick shadow-none"
                                         variant="primary"
                                         onClick={(e) => submitOrder(e, "COD")}
                                     >
@@ -292,12 +311,20 @@ function Checkout() {
                                         Thanh toán COD
                                     </B.Button>
                                     <B.Button
-                                        className="rounded-0 py-2 me-2 text-lightgray btnclick shadow-none"
+                                        className="rounded-0 py-2 my-3 ms-2 text-lightgray btnclick shadow-none"
                                         variant="primary"
                                         onClick={(e) => submitOrder(e, "payonline")}
                                     >
                                         <BsPaypal className="me-2 fs-4" />
                                         Thanh toán qua Paypal
+                                    </B.Button>
+                                    <B.Button
+                                        className="rounded-0 ms-2 py-2 text-lightgray shadow-none"
+                                        variant="outline-primary"
+                                        onClick={(e) => submitOrder(e, "VnPay")}
+                                    >
+                                        <img src={vnpaylogo} style={{ width: '30px' }} alt='' className="me-2" />
+                                        Thanh toán qua VNPay
                                     </B.Button>
                                 </B.FormGroup>
                             </B.Card.Footer>
@@ -305,7 +332,7 @@ function Checkout() {
                     </B.Col>
                     <B.Col md={5} className="mx-auto mb-5">
                         <B.Row>
-                            <B.Col className="col-10">
+                            <B.Col className="col-md-9">
                                 <B.FormGroup className="mb-3">
                                     <B.FormControl
                                         type="text"
@@ -317,7 +344,7 @@ function Checkout() {
                                     <small className="text-danger">{error.discount}</small>
                                 </B.FormGroup>
                             </B.Col>
-                            <B.Col className="col-2">
+                            <B.Col className="col-md-3">
                                 <B.Button variant="primary" className="rounded-0 w-100 btnclick shadow-none" onClick={handleGetDiscount}>Thêm mã</B.Button>
                             </B.Col>
                         </B.Row>

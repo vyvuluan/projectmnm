@@ -25,6 +25,7 @@ import {
   Accountinfo,
   NewPass,
   MyOrder,
+  PaymentReturn,
 
 } from "../components/form";
 import {
@@ -144,6 +145,11 @@ export const PublicRouter = [
   {
     path: "/sortProduct",
     component: PageProducts,
+    layout: _Layout,
+  },
+  {
+    path: "/paymentreturn",
+    component: PaymentReturn,
     layout: _Layout,
   },
 ];
