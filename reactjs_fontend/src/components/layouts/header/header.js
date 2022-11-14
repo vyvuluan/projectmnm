@@ -77,19 +77,21 @@ export default function Header() {
     // console.log(localStorage.getItem("auth_name"));
     AuthButton = (
       <>
-        <div className="row ">
+        {/* <div className="row ">
           <div className="col-sm-9 text-center m-auto badge text-wrap">
-            <span className="text-danger  ">Chào, {nameUser}</span>
+            <span className="text-danger">Chào, {nameUser}</span>
           </div>
           <div className="col-3 btn  rounded-0  " style={{ width: "51px" }}>
             <DropDownMenu logout={logoutSubmit} />
           </div>
-          {/* <Bt.NavLink  className="fs-5 fw-normal me-2"> */}
-          {/* <Link className="text-decoration-none" to="/login"> */}
-          {/* Logout */}
-          {/* </Link> */}
-
-          {/* </Bt.NavLink> */}
+        </div> */}
+        <div className="row">
+          <div className="col-lg-9 d-none d-md-block text-center m-auto badge text-wrap">
+            <span className="text-danger">Chào, {nameUser}</span>
+          </div>
+          <div className="col-lg-3 btn rounded-0" style={{ width: "51px" }}>
+            <DropDownMenu logout={logoutSubmit} />
+          </div>
         </div>
       </>
     );
@@ -126,6 +128,7 @@ export default function Header() {
 
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
+
 
   return (
     <>
@@ -167,7 +170,7 @@ export default function Header() {
             </div>
           </Bt.Col>
         </Bt.Row>
-        <Bt.Row className="align-items-center py-3 px-xl-5">
+        <Bt.Row className="py-3 px-xl-5">
           <Bt.Col lg={3} className="d-none d-lg-block">
             <Link to={"/"} className="text-decoration-none">
               <h1 className="text-dark m-0 display-5 fw-semibold">
@@ -178,7 +181,7 @@ export default function Header() {
               </h1>
             </Link>
           </Bt.Col>
-          <Bt.Col lg={6} className="col-6 text-start">
+          <Bt.Col className="col-lg-6 col-6 text-start">
             <Bt.Form>
               <Bt.Form.Group>
                 <Bt.InputGroup>
@@ -200,9 +203,9 @@ export default function Header() {
               </Bt.Form.Group>
             </Bt.Form>
           </Bt.Col>
-          <Bt.Col lg={3} className="col-6">
-            <div className="row">
-              <div className="col-sm-9">{AuthButton}</div>
+          <Bt.Col className="col-lg-3 col-6">
+            {/* <div className="row">
+              <div className="col-9">{AuthButton}</div>
               <div className="col-3 text-end">
                 <Link to={`/Cart`} className="btn rounded-0">
                   <FaShoppingCart
@@ -223,7 +226,31 @@ export default function Header() {
                   </Bt.Badge>
                 </Link>
               </div>
-            </div>
+            </div> */}
+            <Bt.Row>
+              <Bt.Col className="col-md-9 col-6">
+                {AuthButton}
+              </Bt.Col>
+              <Bt.Col className="col-md-3 col-6">
+                <Link to={`/Cart`} className="btn rounded-0">
+                  <FaShoppingCart
+                    style={{ width: "auto", height: "25px" }}
+                    className="text-primary"
+                  />
+                  <Bt.Badge
+                    bg="secondary"
+                    text="danger"
+                    style={{
+                      position: "absolute",
+                      marginTop: "-1px",
+                      borderRadius: "50%",
+                    }}
+                  >
+                    {count}
+                  </Bt.Badge>
+                </Link>
+              </Bt.Col>
+            </Bt.Row>
           </Bt.Col>
         </Bt.Row>
         {/* TopBar-end */}
@@ -271,7 +298,7 @@ export default function Header() {
               </div>
             </div>
           </Bt.Col>
-          <Bt.Col lg className="ms-5">
+          <Bt.Col className="">
             <Bt.Navbar
               collapseOnSelect
               expand="lg"
@@ -288,38 +315,44 @@ export default function Header() {
                 </Link>
               </Bt.NavbarBrand>
               <Bt.Navbar.Toggle
-                aria-controls="responsive-navbar-nav"
                 className="text-primary rounded-0"
-              ></Bt.Navbar.Toggle>
+                aria-controls="responsive-navbar-nav"
+              />
               <Bt.Navbar.Collapse
-                id="responsive-navbar-nav"
                 className="d-flex justify-content-between"
+                id="responsive-navbar-nav"
               >
-                <Bt.Nav className="me-auto py-2">
-                  <Bt.NavLink
-                    href="#"
-                    className="fs-5 fw-normal me-2 effect-box"
-                  >
-                    <Link className="text-decoration-none aEffect " to="/">
-                      Home
-                    </Link>
-                  </Bt.NavLink>
-                  <Bt.NavLink className="fs-5 fw-normal me-2 ">
-                    <Link
-                      className="text-decoration-none aEffect"
-                      to="/contact"
+                <Bt.Nav className="me-auto py-2 ms-md-5 ms-2">
+                  <Bt.NavItem>
+                    <Bt.NavLink
+                      eventKey={1}
+                      className="fs-5 fw-normal me-2 effect-box"
                     >
-                      Liên hệ
-                    </Link>
-                  </Bt.NavLink>
-                  <Bt.NavLink className="fs-5 fw-normal me-2 ">
-                    <Link
-                      className="text-decoration-none aEffect"
-                      to="/pageproducts"
-                    >
-                      Sản phẩm
-                    </Link>
-                  </Bt.NavLink>
+                      <Link className="text-decoration-none aEffect " to="/">
+                        Home
+                      </Link>
+                    </Bt.NavLink>
+                  </Bt.NavItem>
+                  <Bt.NavItem>
+                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={2}>
+                      <Link
+                        className="text-decoration-none aEffect"
+                        to="/contact"
+                      >
+                        Liên hệ
+                      </Link>
+                    </Bt.NavLink>
+                  </Bt.NavItem>
+                  <Bt.NavItem>
+                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={3}>
+                      <Link
+                        className="text-decoration-none aEffect"
+                        to="/pageproducts"
+                      >
+                        Sản phẩm
+                      </Link>
+                    </Bt.NavLink>
+                  </Bt.NavItem>
                 </Bt.Nav>
 
                 {/* <Bt.Nav className="ms-auto py-2">

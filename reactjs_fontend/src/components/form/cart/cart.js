@@ -199,7 +199,7 @@ export default function Cart() {
                       </td>
                       <td>
                         <Bt.Button
-                          className="btn-sm rounded-0"
+                          className="btn-sm rounded-0 shadow-none btnclick"
                           type="button"
                           onClick={(e) => deleteCartItem(e, item.id)}
                         >

@@ -241,7 +241,9 @@ Route::get('saveorder', [PaymentController::class, 'saveorder']); // api này fr
 //lọc sản phẩm
 Route::get('/sortProduct', [ProductController::class, 'sortProduct']);
 
+Route::get('/giaMax', [ProductController::class, 'product_max']);
 
+Route::get('/sort-chitiet', [ProductController::class, 'sort_chitiet']);
 
 
 // Route::resource('products/add', ProductController::class)->only('store');
