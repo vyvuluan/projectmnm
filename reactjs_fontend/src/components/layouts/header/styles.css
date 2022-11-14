@@ -1,12 +1,21 @@
 .aEffect {
-  box-shadow: inset 0 0 0 0 #d19c97;
-  color: #d19c97;
+  box-shadow: inset 0 0 0 0 #d70018;
+  color: #d70018;
   margin: 0 -.25rem;
   padding: 0 .25rem;
   transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
 }
+
 .aEffect:hover {
-  box-shadow: inset 100px 0 0 0 #d19c97;
+  box-shadow: inset 100px 0 0 0 #d70018;
   color: white;
-  
+
 }
+
+/* .btnclick {
+  background-color: #d70018 !important;
+}
+
+.btnclick::after {
+  background-color: #d70018 !important;
+} */

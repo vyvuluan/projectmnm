@@ -26,7 +26,7 @@ class PaymentController extends Controller
         if (auth('sanctum')->check()) {
             $maKH = auth('sanctum')->user()->customer->id;
             if ($request->payment_id != null) {
-                $stus = 4;
+                $stus = 0;
             } else {
                 $stus = 0;
             }
@@ -197,9 +197,7 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
-            $payment->save();
-            $payment->pxct()->createMany($pxChiTiet);
-            Cart::destroy($cart);
+
 
             $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
             $partnerCode = 'MOMOBKUN20180529';
@@ -209,7 +207,7 @@ class PaymentController extends Controller
             $amount = $tongTien;
             //$amount = 100000;
 
-            $redirectUrl = "http://localhost:3000/";
+            $redirectUrl = "http://localhost:3000/paymentreturn";
             $ipnUrl = "http://localhost:8000/api/dathang";
             $extraData = "";
             // $extraData = $_POST["extraData"];
@@ -236,8 +234,11 @@ class PaymentController extends Controller
             );
 
             $result = $this->execPostRequest($endpoint, json_encode($data));
-            var_dump($result);
-            $jsonResult = json_decode($result, true);  // decode json
+            $jsonResult = json_decode($result, true);  // decode json // xác nhận thành công
+            // Lưu vào database
+            $payment->save();
+            $payment->pxct()->createMany($pxChiTiet);
+            Cart::destroy($cart);
             return redirect()->to($jsonResult['payUrl']);
         } else {
             return response()->json([
@@ -413,8 +414,8 @@ class PaymentController extends Controller
 
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
-            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '3']);
-            return Redirect::to('http://localhost:3000?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
+            return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
         }
         // }
         // else
@@ -485,7 +486,8 @@ class PaymentController extends Controller
     }
     public function getDH_maKH()
     {
-        $px = PhieuXuat::where('customer_id', auth('sanctum')->user()->customer->id)->paginate(5);
+
+        $px = PhieuXuat::where('customer_id', auth('sanctum')->user()->customer->id)->orderBy('id', 'desc')->paginate(10);
         // $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
             'donHang' => $px,

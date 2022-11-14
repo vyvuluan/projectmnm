@@ -19,7 +19,7 @@ const UpdateCtPN = ({
   dataShowPN,
 }) => {
   const [idProduct, setIdProduct] = useState();
-  console.log(dataShowPN);
+  // console.log(dataShowPN);
   const [CTPN, setCTPN] = useState({
     soluong: soLuong,
     gia: gia,
@@ -49,7 +49,7 @@ const UpdateCtPN = ({
     axios
       .put(`api/kho/updateCtPN/${idPN}/${idSP}`, data)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.status == 200) {
           swal({
             title: res.data.message,
@@ -65,34 +65,8 @@ const UpdateCtPN = ({
                 })
               : null;
           });
-          // const data1 = {
-          //   created_at: "2022-11-08T12:48:06.000000Z",
-          //   gia: CTPN.gia,
-          //   pn_id: idPN,
-          //   product: {
-          //     baoHanh: 12,
-          //     created_at: null,
-          //     ctSanPham: "12",
-          //     gia: 1200000,
-
-          //     hinh: "12",
-          //     id: idProduct,
-          //     maLoai: 2,
-          //     maNCC: 2,
-          //     maNSX: 2,
-          //     moTa: "12",
-          //     soLuongSP: 286,
-          //     tenSP: "laptop dell vip",
-          //     updated_at: "2022-11-08T13:30:26.000000Z",
-          //   },
-
-          //   product_id: idProduct,
-          //   soluong: CTPN.soluong,
-          //   updated_at: "2022-11-08T13:30:26.000000Z",
-          // };
-          console.log(data1);
-          data1.gia = CTPN.gia;
-          data1.soluong = CTPN.soluong;
+          data1.gia = CTPN?.gia;
+          data1.soluong = CTPN?.soluong;
           if (data1) {
             test(data1);
           }
@@ -107,7 +81,7 @@ const UpdateCtPN = ({
       })
       .catch(function (error) {
         // handle error
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -115,8 +89,14 @@ const UpdateCtPN = ({
     <>
       <Bt.Form onSubmit={handleUpdate}>
         <Bt.FormLabel className="fw-semibold fs-4">Sản phẩm</Bt.FormLabel>
-
-        <div className="w-100 me-2" style={{ pointerEvents: "none" }}>
+        <Bt.FormControl
+          type="text"
+          name="tenSP"
+          className="rounded-0"
+          value={tenSP}
+          disabled
+        ></Bt.FormControl>
+        {/* <div className="w-100 me-2" style={{ pointerEvents: "none" }}>
           <ReactSearchAutocomplete
             placeholder="sản phẩm"
             items={listProduct}
@@ -143,11 +123,11 @@ const UpdateCtPN = ({
               clearIconMargin: "3px 8px 0 0",
             }}
           />
-        </div>
+        </div> */}
         <Bt.FormGroup className="mb-3" controlId="formName">
           <Bt.FormLabel className="fw-semibold fs-4">Số lượng</Bt.FormLabel>
           <Bt.FormControl
-            type="text"
+            type="number"
             name="soluong"
             placeholder="Số lượng"
             className="rounded-0"
@@ -160,7 +140,7 @@ const UpdateCtPN = ({
         <Bt.FormGroup className="mb-3" controlId="formAddress">
           <Bt.FormLabel className="fw-semibold fs-4">Giá</Bt.FormLabel>
           <Bt.FormControl
-            type="text"
+            type="number"
             placeholder="Giá"
             className="rounded-0"
             name="gia"

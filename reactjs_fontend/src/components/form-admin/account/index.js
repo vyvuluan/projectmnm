@@ -9,10 +9,12 @@ import Cookies from "universal-cookie";
 import ViewAccount from "./viewAccount";
 import swal from "sweetalert";
 import Pagination from "../../form/pagination";
+import LoadingPage from "../../layouts/Loading";
 const Account = () => {
   const cookies = new Cookies();
   const [user, setUser] = useState([]);
   const [viewAcc, setViewAcc] = useState();
+  const [loading, setLoading] = useState(true);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow((prev) => !prev);
@@ -54,6 +56,7 @@ const Account = () => {
           setTotalPage(res.data.users.total);
           setPerPage(res.data.users.per_page);
           setCurrentPage(res.data.users.current_page);
+          setLoading(false)
         })
         .catch(function (error) {
           // handle error
@@ -66,6 +69,8 @@ const Account = () => {
         .then((res) => {
           // console.log(res.data.users.data);
           setUser(res.data.users.data);
+          setLoading(false)
+
         })
         .catch(function (error) {
           // handle error
@@ -343,6 +348,7 @@ const Account = () => {
                 })}
               </tbody>
             </B.Table>
+          {loading ? <LoadingPage/> : null}
           </B.Col>
         </B.Row>
         <Pagination

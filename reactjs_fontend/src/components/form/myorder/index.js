@@ -3,11 +3,26 @@ import { Link } from "react-router-dom";
 import * as B from 'react-bootstrap'
 import imgage from '../../../img/user.jpg'
 import axios from 'axios'
+import Pagination from '../../form/pagination/index'
 import swal from 'sweetalert'
 
 function Index() {
     const [orderlist, setOrderlist] = useState([]);
     const [submitting, setSubmitting] = useState(true);
+
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [perPage, setPerPage] = useState();
+    const [currentPage, setCurrentPage] = useState();
+    const handlePerPage = (page) => {
+        setPage(page);
+    };
+
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+        pageNumbers.push(i);
+    }
 
     function formatMoney(money) {
         return new Intl.NumberFormat("vi-VN", {
@@ -17,11 +32,14 @@ function Index() {
     }
 
     const getOrderData = useCallback(async () => {
-        const res = await axios.get(`/api/danh-sach-don-hang-khach-hang`)
+        const res = await axios.get(`/api/danh-sach-don-hang-khach-hang?page=${page}`)
         if (res.status === 200) {
             setOrderlist(res.data.donHang.data);
+            setTotalPage(res.data.donHang.total);
+            setPerPage(res.data.donHang.per_page);
+            setCurrentPage(res.data.donHang.current_page)
         }
-    }, []);
+    }, [page]);
 
     useEffect(() => {
         getOrderData().then(() => setSubmitting(false))
@@ -63,12 +81,28 @@ function Index() {
 
     const handleAbortOrder = (data) => {
         const id = data;
-        axios.put(`/api/huyDH/${id}`).then(res => {
-            if (res.data.status === 200) {
-                setSubmitting(true);
-                swal('Thành công', res.data.message, 'success')
-            } else if (res.data.status === 400) {
-                swal('Thất bại', res.data.message, 'warning')
+
+        swal({
+            title: 'Hủy đơn hàng sẽ không thể hoàn tác',
+            text: 'Bạn chắc chứ?',
+            icon: 'warning',
+            buttons: {
+                cancel: "Hủy bỏ",
+                abort: {
+                    text: "Hủy đơn hàng",
+                    value: "abort",
+                },
+            }
+        }).then((value) => {
+            if (value === 'abort') {
+                axios.put(`/api/huyDH/${id}`).then(res => {
+                    if (res.data.status === 200) {
+                        setSubmitting(true);
+                        swal('Thành công', res.data.message, 'success')
+                    } else if (res.data.status === 400) {
+                        swal('Thất bại', res.data.message, 'warning')
+                    }
+                })
             }
         })
     }
@@ -96,7 +130,6 @@ function Index() {
             <B.Container className='px-lg-5 pb-lg-5'>
                 <B.Row>
                     <B.Col lg className='d-none d-lg-block'>
-                        <label className='fs-5'>Đơn hàng của bạn</label>
                         <label className='fs-5'>Hỗ trợ 24/7 các ngày trong tuần</label>
                         <label className='fs-5'>Nếu không thể hủy đơn hàng liên hệ bên dưới</label>
                         <label className='fs-5 fst-italic fw-normal'>Hotline: 0123498765</label>
@@ -114,7 +147,7 @@ function Index() {
                                         return (
                                             <div className='d-flex border-bottom mb-2'>
                                                 <B.Col lg={2}>
-                                                    <img src={imgage} alt='' className='border py-1 px-1 me-2 mb-2'></img>
+                                                    <img src={`http://localhost:8000/uploadhinh/${prod.product.hinh}`} alt='' className='border py-1 px-1 me-2 mb-2' style={{ width: '100%' }}></img>
                                                 </B.Col>
                                                 <B.Col lg={6}>
                                                     <h4>{prod.product.tenSP}</h4>
@@ -127,21 +160,29 @@ function Index() {
                                         )
                                     })}
                                     <div className='text-end mb-2'>
-                                        {order.pt_ThanhToan === 'COD' ? <h6>Tổng tiền: <span className='fs-5'>{formatMoney(order.tongTien)}</span></h6>
+                                        {order.pt_ThanhToan === 'COD' ?
+                                            <>
+                                                <h6>Giảm giá: <span className='fs-5'>{order.discount}%</span></h6>
+                                                <h6>Tổng tiền: <span className='fs-5'>{formatMoney(order.tongTien)}</span></h6>
+                                            </>
                                             : <h5 className='text-primary'>Đã thanh toán</h5>
                                         }
                                     </div>
                                     <div>
-                                        {order.status === 5 ? <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem chi tiết đơn hàng</B.Button></Link>
-                                            : <div>
+                                        {order.status === 0 || order.status === 1 ?
+                                            <div>
                                                 <B.Button variant='outline-primary' className='rounded-0 pull-right' onClick={() => handleAbortOrder(order.id)}>Hủy đơn hàng</B.Button>
-                                                <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem chi tiết đơn hàng</B.Button></Link>
+                                                <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right me-2'>Xem tình trạng</B.Button></Link>
                                             </div>
+                                            : <Link to={`/myorder/checkorder/${order.id}`}><B.Button variant='primary' className='rounded-0 pull-right'>Xem tình trạng</B.Button></Link>
                                         }
                                     </div>
                                 </B.Row>
                             )
                         })}
+                        <div className='mt-5'>
+                            <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
+                        </div>
                     </B.Col>
                 </B.Row>
             </B.Container>

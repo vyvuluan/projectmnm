@@ -3,6 +3,7 @@ import "./style.css";
 import OrderDetail from "../order-detail";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import * as B from 'react-bootstrap'
 
 const checkStatus = [
   { id: 0, name: 'Đơn hàng chờ xác nhận', icon: 'pe-7s-cart' },
@@ -10,6 +11,7 @@ const checkStatus = [
   { id: 2, name: 'Đang đóng gói', icon: 'pe-7s-medal' },
   { id: 3, name: 'Đang vận chuyển', icon: 'pe-7s-car' },
   { id: 4, name: 'Giao hàng thành công', icon: 'pe-7s-home' },
+  { id: 5, name: 'Đơn hàng đã hủy', icon: 'pe-7s-close-circle' },
 ];
 
 const CheckOrder = () => {
@@ -52,6 +54,10 @@ const CheckOrder = () => {
         x = 'Giao hàng thành công';
         break;
       }
+      case 5: {
+        x = 'Đơn hàng đã hủy';
+        break;
+      }
       default: {
         break;
       }
@@ -61,6 +67,30 @@ const CheckOrder = () => {
 
   return (
     <>
+      <B.Container fluid className="bg-secondary mb-5">
+        <div
+          className="d-flex flex-column align-items-center justify-content-center"
+          style={{ minHeight: "300px" }}
+        >
+          <h1 className="fw-semibold text-uppercase mb-3">Tình trạng đơn hàng</h1>
+          <div className="d-inline-flex">
+            <p className="m-0">
+              <Link to={"/"} className="text-decoration-none" variant="primary">
+                Home
+              </Link>
+            </p>
+            <p className="m-0 px-2">-</p>
+            <p className="m-0">
+              <Link to={"/myorder"} className="text-decoration-none" variant="primary">
+                Đơn hàng
+              </Link>
+            </p>
+            <p className="m-0 px-2">-</p>
+            <p className="m-0 text-muted">Tình trạng đơn hàng</p>
+          </div>
+        </div>
+      </B.Container>
+
       <div className="container padding-bottom-3x mb-5 mt-5">
         <form action="">
           <div className="card mb-3">
@@ -100,12 +130,12 @@ const CheckOrder = () => {
                 Thông báo cho tôi khi đơn hàng được giao
               </label> */}
             </div>
-            <div className="text-left text-sm-right">
+            {/* <div className="text-left text-sm-right">
               <Link className="btn btn-outline-primary btn-rounded btn-sm " to={`/OrderDetail`}>
                 Xem chi tiết đơn hàng
               </Link>
 
-            </div>
+            </div> */}
           </div>
         </form>
       </div>

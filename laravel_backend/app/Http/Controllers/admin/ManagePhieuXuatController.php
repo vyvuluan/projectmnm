@@ -493,7 +493,7 @@ class ManagePhieuXuatController extends Controller
 
                             return response()->json([
                                 'status' => 200,
-                                'message' => 'Cập nhật Chi tiết phiếu Xuất thành công ',
+                                'message' => 'Cập nhật số lượng sản phẩm thành công ',
                             ]);
                         } else {
                             return response()->json([

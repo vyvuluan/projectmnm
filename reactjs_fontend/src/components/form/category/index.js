@@ -10,7 +10,7 @@ const Category = () => {
   const [getID, setGetID] = useState();
   const [listCategory, setListCategory] = useState([]);
   const [linkCate, setLinkcate] = useState("");
-
+  
   useEffect(() => {
     const controller = new AbortController();
     axios

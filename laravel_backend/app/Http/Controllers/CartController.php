@@ -58,10 +58,18 @@ class CartController extends Controller
                     if ($cartItem) {
 
                         $cartItem->soLuongSP += $soLuongSP;
+                        if ($cartItem->soLuongSP > $spCheck->soLuongSP) {
+                            return response()->json([
+                                'status' => 400,
+                                'message' => 'Kho chỉ còn : ' . $spCheck->soLuongSP . ' sản phẩm',
+                            ]);
+                        }
                         $cartItem->save();
+                        $count = $cartItem->count();
                         return response()->json([
                             'status' => 201,
                             'message' => 'Đã thêm vào giỏ hàng',
+                            'count' => $count,
                         ]);
                         // return response()->json([
                         //     'status'=>409 ,
@@ -72,10 +80,18 @@ class CartController extends Controller
                         $cartItem->maKH = $maKH;
                         $cartItem->maSP = $maSP;
                         $cartItem->soLuongSP = $soLuongSP;
+                        if ($cartItem->soLuongSP > $spCheck->soLuongSP) {
+                            return response()->json([
+                                'status' => 400,
+                                'message' => 'Kho chỉ còn : ' . $spCheck->soLuongSP . ' sản phẩm',
+                            ]);
+                        }
                         $cartItem->save();
+                        $count = $cartItem->count();
                         return response()->json([
                             'status' => 201,
                             'message' => 'Đã thêm vào giỏ hàng',
+                            'count' => $count,
                         ]);
                     }
                 } else {
@@ -104,8 +120,15 @@ class CartController extends Controller
         if (auth('sanctum')->check()) {
             $maKH = auth('sanctum')->user()->customer->id;
             $cartItem = Cart::where('id', $id_cart)->where('maKH', $maKH)->first();
+            $spCheck = Product::find($cartItem->maSP);
             if ($scope == "inc") {
                 $cartItem->soLuongSP += 1;
+                if ($cartItem->soLuongSP > $spCheck->soLuongSP) {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Kho chỉ còn : ' . $spCheck->soLuongSP . ' sản phẩm',
+                    ]);
+                }
             } else if ($scope == "dec") {
                 $cartItem->soLuongSP -= 1;
             }

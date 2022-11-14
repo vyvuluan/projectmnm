@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
-import './styles.css'
+import "./styles.css";
 import * as Icon from "react-bootstrap-icons";
 import {
   FaSearch,
@@ -8,7 +8,7 @@ import {
   FaUser,
   FaShoppingBag,
 } from "react-icons/fa";
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { Link, NavLink, Route, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
@@ -17,20 +17,30 @@ import HomePage from "../../pages/home";
 import { Category, DropDownMenu, Slideshow } from "../../form";
 
 export default function Header() {
+  const [count, setCount] = useState();
   const history = useNavigate();
   const [open, setOpen] = useState(false);
   const [nameUser, setNameUser] = useState(null);
   const [product, setProduct] = useState([]);
   const [cart, setCart] = useState();
-  const [search, setSearch] = useState('');
-  const [query, setQuery] = useState('pageproducts?search=' + search);
-
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("pageproducts?search=" + search);
+  const [none, setNone] = useState("d-none");
 
   useEffect(() => {
     if (localStorage.getItem("auth_fullname")) {
       setNameUser(localStorage.getItem("auth_fullname"));
     }
   }, []);
+
+  const getCount = useCallback(async () => {
+    await setCount(localStorage.getItem("count"));
+  }, []);
+
+  useEffect(() => {
+    getCount();
+    setInterval(getCount, 1000);
+  }, [getCount]);
 
   const logoutSubmit = (e) => {
     e.preventDefault();
@@ -41,7 +51,7 @@ export default function Header() {
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_name");
           localStorage.removeItem("auth_fullname");
-
+          localStorage.removeItem("count");
           swal({
             title: res.data.message,
             icon: "success",
@@ -71,10 +81,7 @@ export default function Header() {
           <div className="col-sm-9 text-center m-auto badge text-wrap">
             <span className="text-danger  ">Chào, {nameUser}</span>
           </div>
-          <div
-            className="col-3 btn  rounded-0 border "
-            style={{ width: "51px" }}
-          >
+          <div className="col-3 btn  rounded-0  " style={{ width: "51px" }}>
             <DropDownMenu logout={logoutSubmit} />
           </div>
           {/* <Bt.NavLink  className="fs-5 fw-normal me-2"> */}
@@ -197,11 +204,23 @@ export default function Header() {
             <div className="row">
               <div className="col-sm-9">{AuthButton}</div>
               <div className="col-3 text-end">
-                <Link to={`/Cart`} className="btn border rounded-0">
+                <Link to={`/Cart`} className="btn rounded-0">
                   <FaShoppingCart
                     style={{ width: "auto", height: "25px" }}
                     className="text-primary"
                   />
+                  <Bt.Badge
+                    bg="secondary"
+                    text="danger"
+                    style={{
+                      position: "absolute",
+                      marginTop: "-1px",
+                      right: "7px",
+                      borderRadius: "50%",
+                    }}
+                  >
+                    {count}
+                  </Bt.Badge>
                 </Link>
               </div>
             </div>
@@ -212,25 +231,43 @@ export default function Header() {
 
       <Bt.Container fluid mb={5}>
         <Bt.Row className="border-top border-secondary px-xl-5">
-          <Bt.Col lg={3} className='d-none d-lg-block' style={{ position: "relative", zIndex: "10" }}>
-            <div style={{ position: "absolute", backgroundColor: "#fff", width: "100%" }}>
+          <Bt.Col
+            lg={3}
+            className="d-none d-lg-block"
+            style={{ position: "relative", zIndex: "10" }}
+          >
+            <div
+              style={{
+                position: "absolute",
 
+                width: "100%",
+              }}
+            >
               <Bt.Button
-                onClick={() => setOpen(!open)}
-                variant='dark'
+                onMouseEnter={() => setOpen(!open)}
+                variant="primary"
                 aria-controls="collapse-categories"
                 aria-expanded={open}
-                className='rounded-0 w-100 fw-semibold fs-5 shadow-none text-start'
-                style={{ height: '63px', marginTop: '-1px', padding: '0 25px' }}
+                className="rounded-0 w-100 fw-semibold fs-5 shadow-none text-start "
+                style={{ height: "63px", marginTop: "-1px", padding: "0 25px" }}
               >
                 Danh mục
-                <MdOutlineKeyboardArrowDown className='pull-right mt-2' />
+                <MdOutlineKeyboardArrowDown className="pull-right mt-2" />
               </Bt.Button>
-              <Bt.Collapse in={open} className="w-100">
-                <div id="collapse-categories">
-                  <Category />
-                </div>
-              </Bt.Collapse>
+              <div
+                onMouseLeave={() => setOpen(false)}
+                style={{
+                  position: "absolute",
+                  backgroundColor: "#fff",
+                  width: "100%",
+                }}
+              >
+                <Bt.Collapse in={open} className={`w-100`}>
+                  <div id="collapse-categories">
+                    <Category />
+                  </div>
+                </Bt.Collapse>
+              </div>
             </div>
           </Bt.Col>
           <Bt.Col lg className="ms-5">
@@ -240,7 +277,7 @@ export default function Header() {
               className="py-3 py-lg-0 px-0"
             >
               <Bt.NavbarBrand className="d-block d-lg-none">
-                <Link to='/' className="text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   <h1 className="text-dark m-0 display-5 fw-semibold">
                     <span className="fw-bold border px-3 me-1 text-primary">
                       L3M
@@ -258,18 +295,27 @@ export default function Header() {
                 className="d-flex justify-content-between"
               >
                 <Bt.Nav className="me-auto py-2">
-                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2 effect-box">
+                  <Bt.NavLink
+                    href="#"
+                    className="fs-5 fw-normal me-2 effect-box"
+                  >
                     <Link className="text-decoration-none aEffect " to="/">
                       Home
                     </Link>
                   </Bt.NavLink>
                   <Bt.NavLink className="fs-5 fw-normal me-2 ">
-                    <Link className="text-decoration-none aEffect" to="/contact">
+                    <Link
+                      className="text-decoration-none aEffect"
+                      to="/contact"
+                    >
                       Liên hệ
                     </Link>
                   </Bt.NavLink>
                   <Bt.NavLink className="fs-5 fw-normal me-2 ">
-                    <Link className="text-decoration-none aEffect" to="/pageproducts">
+                    <Link
+                      className="text-decoration-none aEffect"
+                      to="/pageproducts"
+                    >
                       Sản phẩm
                     </Link>
                   </Bt.NavLink>
@@ -296,9 +342,9 @@ export default function Header() {
               </Bt.Navbar.Collapse>
             </Bt.Navbar>
             {/* <Slideshow /> */}
-          </Bt.Col >
-        </Bt.Row >
-      </Bt.Container >
+          </Bt.Col>
+        </Bt.Row>
+      </Bt.Container>
     </>
   );
 }

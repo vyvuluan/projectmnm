@@ -45,6 +45,9 @@ function Index() {
     const [showSearchTable, setShowSearchTable] = useState(false);
     const tableRef = useRef(null);
     const [showExport, setShowExp] = useState(false);
+    const [editProd, setEditProd] = useState();
+    const [showEditProd, setShowEProd] = useState(false);
+    const [prodQuantity, setProdQuantity] = useState();
     const handleClose = () => {
         setSubmitting(true);
         setShow(prev => !prev)
@@ -52,6 +55,16 @@ function Index() {
     const handleShow = (ctpx) => {
         setShow(true);
         setEditPx(ctpx);
+    }
+    const handleEditProdClose = () => {
+        setSubmitting(true);
+        setShowEProd(prev => !prev)
+    };
+    const handleEditProdShow = (prod) => {
+        console.log(prod);
+        setShowEProd(true);
+        setProdQuantity(prod.soluong)
+        setEditProd(prod);
     }
     const handleClosePrint = () => setShowPrint(prev => !prev);
     const handleShowPrint = (px) => {
@@ -326,6 +339,7 @@ function Index() {
                 setProdData([]);
                 setError([]);
             } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.message, 'error')
                 setError(res.data.error);
             } else if (res.data.status === 401) {
                 swal('Error', res.data.message, 'error')
@@ -503,6 +517,45 @@ function Index() {
             sheet: 'Phiếu xuất'
         })
 
+    const handleProdDecrement = () => {
+        if (prodQuantity > 1) {
+            setProdQuantity((prevCount) => prevCount - 1);
+        }
+    };
+
+    const handleProdIncrement = () => {
+        if (prodQuantity < 10) {
+            setProdQuantity((prevCount) => prevCount + 1);
+        }
+    };
+
+    const UpdateProdCtpx = (e) => {
+        e.preventDefault();
+
+        const pxid = editProd.px_id;
+        const product_id = editProd.product_id;
+        const data = {
+            product_id: editProd.product_id,
+            soluong: prodQuantity,
+        }
+
+        axios.put(`/api/kho/updatectpx/${pxid}/${product_id}`, data).then(res => {
+            if (res.data.status === 200) {
+                setShowEProd(false);
+                setSubmitting(true);
+                swal('Thành công', res.data.message, 'success');
+            } else if (res.data.status === 400) {
+                swal('Thất bại', res.data.error, 'error');
+            } else if (res.data.status === 401) {
+                swal('Thất bại', res.data.message, 'warning');
+            } else if (res.data.status === 402) {
+                swal('Thất bại', res.data.message, 'warning');
+            } else if (res.data.status === 403) {
+                swal('Thất bại', res.data.message, 'warning');
+            }
+        })
+    }
+
 
     let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
     let month = new Date().toLocaleString("vi-VN", { month: "long" });
@@ -656,7 +709,62 @@ function Index() {
                     </B.ModalFooter>
                 </B.Modal>
 
-                <B.Row className='pe-xl-5 mb-4'>
+                <B.Modal centered show={showEditProd} onHide={handleEditProdClose}>
+                    <B.ModalBody>
+                        <B.Form>
+                            <B.FormGroup className='mb-2'>
+                                <B.FormLabel className='fs-5 mb-0'>Tên sản phẩm</B.FormLabel>
+                                <B.FormText className='text-success fs-4'>{editProd?.product.tenSP}</B.FormText>
+                            </B.FormGroup>
+                            <B.FormGroup className='mb-2'>
+                                <B.FormLabel className='fs-5'>Số lượng sản phẩm</B.FormLabel>
+                                <B.InputGroup className="quantity mx-auto">
+                                    <B.Button
+                                        className="btn-sm rounded-0 shadow-none btnclick"
+                                        variant="primary"
+                                        type="button"
+                                        onClick={handleProdDecrement}
+                                    >
+                                        <FaMinus />
+                                    </B.Button>
+                                    <B.InputGroup.Text className="form-control-sm text-center">
+                                        {prodQuantity}
+                                    </B.InputGroup.Text>
+                                    <B.Button
+                                        className="btn-sm rounded-0 shadow-none btnclick"
+                                        variant="primary"
+                                        type="button"
+                                        onClick={handleProdIncrement}
+                                    >
+                                        <FaPlus />
+                                    </B.Button>
+                                </B.InputGroup>
+                            </B.FormGroup>
+                            <B.FormGroup className='mb-2'>
+                                <B.FormLabel className='fs-5 mb-0'>Giá</B.FormLabel>
+                                <B.FormText className='text-success fs-4'>{formatMoney(editProd?.product.gia)}</B.FormText>
+                            </B.FormGroup>
+                        </B.Form>
+                        <div className='d-flex justify-content-end'>
+                            <B.Button
+                                variant="outline-primary"
+                                className="mt-2 rounded-0 me-2"
+                                onClick={UpdateProdCtpx}
+                            >
+                                Lưu thay đổi
+                            </B.Button>
+                            <B.Button
+                                variant="outline-primary"
+                                className="mt-2 rounded-0"
+                                onClick={handleEditProdClose}
+                            >
+                                Hủy bỏ
+                            </B.Button>
+                        </div>
+                    </B.ModalBody >
+                </B.Modal >
+
+                <B.Row className='pe-xl-5 mb-4' >
                     <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1>
                 </B.Row>
 
@@ -800,7 +908,9 @@ function Index() {
                                     <h5 className='text-primary mb-3'>Chi tiết phiếu xuất</h5>
                                 </B.Col>
                                 <B.Col lg={4} xs={4} className='text-end'>
-                                    <BiEdit className='fs-3 customborder' onClick={() => handleShow(viewPx)} />
+                                    {viewPx.status === 0 ?
+                                        <BiEdit className='fs-3 customborder' onClick={() => handleShow(viewPx)} />
+                                        : null}
                                     <FaTimes className='fs-3 customborder' onClick={handleCloseTab} />
                                 </B.Col>
                             </B.Row>
@@ -832,92 +942,95 @@ function Index() {
                                     </B.FormGroup>
                                 </B.Col>
                                 <B.Col lg={7}>
-                                    <B.Row>
-                                        <B.Col lg={6}>
-                                            <ReactSearchAutocomplete
-                                                items={searchList}
-                                                onSearch={handleOnProdSearch}
-                                                onSelect={handleOnProdSelect}
-                                                fuseOptions={{ keys: ["id", "tenSP"] }}
-                                                resultStringKeyName="tenSP"
-                                                formatResult={formatResult}
-                                                placeholder='Tìm kiếm sản phẩm'
-                                                maxResults={5}
-                                                styling={{
-                                                    height: "36px",
-                                                    border: "1px solid lightgray",
-                                                    borderRadius: "0",
-                                                    backgroundColor: "white",
-                                                    boxShadow: "none",
-                                                    hoverBackgroundColor: "#d19c97",
-                                                    color: "black",
-                                                    fontSize: "15px",
-                                                    iconColor: "black",
-                                                    lineColor: "#d19c97",
-                                                    clearIconMargin: "3px 8px 0 0",
-                                                    zIndex: '2',
-                                                }}
-                                            />
-                                            <div className='pull-left mt-1'>
-                                                <small className='text-danger ms-2 d-block'>{error.px_id}</small>
-                                                <small className='text-danger ms-2 d-block'>{error.product_id}</small>
-                                                <small className='text-danger ms-2 d-block'>{error.soluong}</small>
-                                            </div>
-                                            <B.Button variant='outline-info' className='rounded-0 my-3 pull-right' onClick={() => handleAddCtpxProd(prodData)} >Thêm sản phẩm</B.Button>
-                                        </B.Col>
-                                        <B.Col lg={6}>
-                                            <B.Table className='table-borderless border border-secondary mb-3'>
-                                                <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
-                                                    <tr>
-                                                        <th>Tên sản phẩm</th>
-                                                        <th>Số lượng</th>
-                                                        <th className='text-center'>Giá</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><img
-                                                            src={`http://localhost:8000/uploadhinh/${prodData.hinh}`}
-                                                            style={{ height: '60px' }}
-                                                            alt=''
-                                                        /> {prodData.tenSP}</td>
-                                                        <td style={{ width: '130px' }}>
-                                                            <B.InputGroup className="quantity mx-auto">
-                                                                <B.Button
-                                                                    className="btn-sm rounded-0"
-                                                                    variant="primary"
-                                                                    type="button"
-                                                                    onClick={handleDecrement}
-                                                                >
-                                                                    <FaMinus />
-                                                                </B.Button>
-                                                                <B.InputGroup.Text className="form-control-sm text-center">
-                                                                    {quantity}
-                                                                </B.InputGroup.Text>
-                                                                <B.Button
-                                                                    className="btn-sm rounded-0"
-                                                                    variant="primary"
-                                                                    type="button"
-                                                                    onClick={handleIncrement}
-                                                                >
-                                                                    <FaPlus />
-                                                                </B.Button>
-                                                            </B.InputGroup>
-                                                        </td>
-                                                        <td className='text-center'>{formatMoney(prodData.gia * quantity)}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </B.Table>
-                                        </B.Col>
-                                    </B.Row>
-                                    <B.Table className='table-borderless border border-secondary mb-0'>
+                                    {viewPx.status === 0 ?
+                                        <B.Row>
+                                            <B.Col lg={6}>
+                                                <ReactSearchAutocomplete
+                                                    items={searchList}
+                                                    onSearch={handleOnProdSearch}
+                                                    onSelect={handleOnProdSelect}
+                                                    fuseOptions={{ keys: ["id", "tenSP"] }}
+                                                    resultStringKeyName="tenSP"
+                                                    formatResult={formatResult}
+                                                    placeholder='Tìm kiếm sản phẩm'
+                                                    maxResults={5}
+                                                    styling={{
+                                                        height: "36px",
+                                                        border: "1px solid lightgray",
+                                                        borderRadius: "0",
+                                                        backgroundColor: "white",
+                                                        boxShadow: "none",
+                                                        hoverBackgroundColor: "#d19c97",
+                                                        color: "black",
+                                                        fontSize: "15px",
+                                                        iconColor: "black",
+                                                        lineColor: "#d19c97",
+                                                        clearIconMargin: "3px 8px 0 0",
+                                                        zIndex: '2',
+                                                    }}
+                                                />
+                                                <div className='pull-left mt-1'>
+                                                    <small className='text-danger ms-2 d-block'>{error.px_id}</small>
+                                                    <small className='text-danger ms-2 d-block'>{error.product_id}</small>
+                                                    <small className='text-danger ms-2 d-block'>{error.soluong}</small>
+                                                </div>
+                                                <B.Button variant='outline-info' className='rounded-0 my-3 pull-right' onClick={() => handleAddCtpxProd(prodData)} >Thêm sản phẩm</B.Button>
+                                            </B.Col>
+                                            <B.Col lg={6}>
+                                                <B.Table className='table-borderless border border-secondary mb-3'>
+                                                    <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                                                        <tr>
+                                                            <th>Tên sản phẩm</th>
+                                                            <th>Số lượng</th>
+                                                            <th className='text-center'>Giá</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><img
+                                                                src={`http://localhost:8000/uploadhinh/${prodData.hinh}`}
+                                                                style={{ height: '60px' }}
+                                                                alt=''
+                                                            /> {prodData.tenSP}</td>
+                                                            <td style={{ width: '130px' }}>
+                                                                <B.InputGroup className="quantity mx-auto">
+                                                                    <B.Button
+                                                                        className="btn-sm rounded-0 shadow-none btnclick"
+                                                                        variant="primary"
+                                                                        type="button"
+                                                                        onClick={handleDecrement}
+                                                                    >
+                                                                        <FaMinus />
+                                                                    </B.Button>
+                                                                    <B.InputGroup.Text className="form-control-sm text-center">
+                                                                        {quantity}
+                                                                    </B.InputGroup.Text>
+                                                                    <B.Button
+                                                                        className="btn-sm rounded-0 shadow-none btnclick"
+                                                                        variant="primary"
+                                                                        type="button"
+                                                                        onClick={handleIncrement}
+                                                                    >
+                                                                        <FaPlus />
+                                                                    </B.Button>
+                                                                </B.InputGroup>
+                                                            </td>
+                                                            <td className='text-center'>{formatMoney(prodData.gia * quantity)}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </B.Table>
+                                            </B.Col>
+                                        </B.Row> : null}
+                                    <B.Table responsive className='table-borderless border border-secondary mb-0'>
                                         <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                             <tr>
                                                 <th>Mã sản phẩm</th>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Số lượng</th>
                                                 <th>Giá</th>
-                                                <th>Thao tác</th>
+                                                {viewPx.status === 0 ?
+                                                    <th className='text-center'>Thao tác</th>
+                                                    : null}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -925,10 +1038,19 @@ function Index() {
                                                 return (
                                                     <tr key={prod.product.id}>
                                                         <td>{prod.product.id}</td>
-                                                        <td>{prod.product.tenSP}</td>
+                                                        <td><img
+                                                            src={`http://localhost:8000/uploadhinh/${prod.product.hinh}`}
+                                                            style={{ height: '60px' }}
+                                                            alt=''
+                                                        /> {prod.product.tenSP}</td>
                                                         <td>{prod.soluong}</td>
                                                         <td>{formatMoney(prod.product.gia)}</td>
-                                                        <td className='text-center'><TbTrashX className='fs-4 text-primary' onClick={() => handleDelete(prod)} /></td>
+                                                        {viewPx.status === 0 ?
+                                                            <td className='d-flex justify-content-center'>
+                                                                <BiEdit className='fs-4 text-primary me-2' onClick={() => handleEditProdShow(prod)} />
+                                                                <TbTrashX className='fs-4 text-primary' onClick={() => handleDelete(prod)} />
+                                                            </td>
+                                                            : null}
                                                     </tr>
                                                 )
                                             })}
@@ -1123,7 +1245,7 @@ function Index() {
                     </B.Tab>
 
                 </B.Tabs>
-            </B.Container>
+            </B.Container >
         </>
     )
 }

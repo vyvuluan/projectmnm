@@ -3,15 +3,11 @@ import * as B from "react-bootstrap";
 import axios, { Axios } from "axios";
 import swal from "sweetalert";
 import { BsPersonPlusFill } from "react-icons/bs";
-
+import Swal from "sweetalert2";
 import { AiOutlineFileAdd, AiFillEye } from "react-icons/ai";
 import { FiTool } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
 import { BiReset, BiEdit } from "react-icons/bi";
-import { FaTimes } from "react-icons/fa";
-
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
@@ -114,7 +110,7 @@ const PhieuNhap = () => {
     setDataShowPN(newData);
   };
 
-  console.log(dataShowPN);
+  // console.log(dataShowPN);
   const handleCloseTab = () => {
     setShowTab(false);
     setTabKey(2);
@@ -172,8 +168,6 @@ const PhieuNhap = () => {
   const [gia, setGia] = useState();
 
   const handleShowUpdateCtPN = (item) => {
-    console.log({ tab3: item });
-
     setIdProduct(item?.product_id);
     setNameProduct(item?.product.tenSP);
     setSoLuong(item?.soluong);
@@ -348,7 +342,7 @@ const PhieuNhap = () => {
               console.log(error);
             });
         } else if (res.data.status === 400) {
-          console.log(res.data);
+          // console.log(res.data);
           setStatus(res.data.status);
           setErrorSL(res.data.message.soluong);
           setErrorGia(res.data.message.gia);
@@ -372,41 +366,31 @@ const PhieuNhap = () => {
 
   //delete Ctpn
   const handleDelete = (idPN1, idProduct1) => {
-    // console.log(idProduct1);
-    // e.preventDefault();
-    swal("Chắc chưa", {
-      buttons: {
-        catch: {
-          text: "Chắc",
-          value: "catch",
-        },
-        no: {
-          text: "chưa",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "catch":
-          axios
-            .delete(`/api/kho/deleteCtPN/${idPN1}/${idProduct1}`)
-            .then((res) => {
-              console.log(res);
-              if (res.data.status == 200) {
-                setSubmitting(true);
-
-                swal({
-                  title: res.data.message,
-                  icon: "success",
-                  button: "đóng",
-                });
-              }
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
-          break;
+    Swal.fire({
+      title: "Xóa?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/api/kho/deleteCtPN/${idPN1}/${idProduct1}`)
+          .then((res) => {
+            console.log(res);
+            if (res.data.status == 200) {
+              Swal.fire("Đã xóa!", "Bạn đã xóa chi tiết phiếu nhập", "success");
+              setShowTab(true);
+              setTabKey(2);
+              setSubmitting(true);
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
       }
     });
   };
@@ -453,8 +437,6 @@ const PhieuNhap = () => {
 
   //Sắp xếp theo tổng tiền
   const SortMoney = (e) => {
-    // console.log(e);
-    // setInc(e)
     if (e == "inc") {
       axios.get(`api/kho/loc-pn-thap-cao?page=${page}`).then((res) => {
         console.log(res.data);
@@ -480,47 +462,82 @@ const PhieuNhap = () => {
   const handleDeletePN = (id) => {
     // console.log(id);
     // e.preventDefault();
-    swal("Chắc chắn xóa", {
-      buttons: {
-        catch: {
-          text: "Chắc",
-          value: "catch",
-        },
-        no: {
-          text: "Chưa",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "catch":
-          axios
-            .delete(`/api/kho/deletePN/${id}`)
-            .then((res) => {
-              console.log(res);
-              if (res.data.status == 200) {
-                setSubmitting(true);
-
-                swal({
-                  title: res.data.message,
-                  icon: "success",
-                  button: "đóng",
-                });
-              } else if (res.status == 200) {
-                swal({
-                  title: res.data.message,
-                  icon: "warning",
-                  button: "đóng",
-                });
-              }
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
-          break;
+    Swal.fire({
+      title: "Xóa?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/api/kho/deletePN/${id}`)
+          .then((res) => {
+            // console.log(res);
+            if (res.data.status == 200) {
+              swal({
+                title: res.data.message,
+                icon: "success",
+                button: "đóng",
+              });
+              setSubmitting(true);
+            } else if (res.status == 200) {
+              swal({
+                title: res.data.message,
+                icon: "warning",
+                button: "đóng",
+              });
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
       }
     });
+    // swal("Chắc chắn xóa", {
+    //   buttons: {
+    //     catch: {
+    //       text: "Chắc",
+    //       value: "catch",
+    //     },
+    //     no: {
+    //       text: "Chưa",
+    //       value: "no",
+    //     },
+    //   },
+    // }).then((value) => {
+    //   switch (value) {
+    //     case "catch":
+    //       axios
+    //         .delete(`/api/kho/deletePN/${id}`)
+    //         .then((res) => {
+    //           console.log(res);
+    //           if (res.data.status == 200) {
+    //             setSubmitting(true);
+
+    //             swal({
+    //               title: res.data.message,
+    //               icon: "success",
+    //               button: "đóng",
+    //             });
+    //           } else if (res.status == 200) {
+    //             swal({
+    //               title: res.data.message,
+    //               icon: "warning",
+    //               button: "đóng",
+    //             });
+    //           }
+    //         })
+    //         .catch(function (error) {
+    //           // handle error
+    //           console.log(error);
+    //         });
+    //       break;
+    //   }
+    // });
   };
   //tab 2
   const handleReload = () => {
@@ -529,9 +546,7 @@ const PhieuNhap = () => {
     axios.get(`api/kho/getAllPN-new?page=${page}`).then((res) => {
       if (res.data.status === 200) {
         setDataShowPN(res.data.pns.data);
-        // setIdShowPn(res.data.pns);
-        // setTongtienPN(res.data.pns.data.tongTien)
-        // setIdPN()
+
         setTotalPage(res.data.pns.total);
         setPerPage(res.data.pns.per_page);
         setCurrentPage(res.data.pns.current_page);
@@ -714,7 +729,7 @@ const PhieuNhap = () => {
             <B.Tabs activeKey={tabkey} onSelect={(k) => setTabKey(k)}>
               <B.Tab
                 eventKey={1}
-                title="thêm phiếu nhập"
+                title="Thêm phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
               >
                 <B.Row>
@@ -928,7 +943,9 @@ const PhieuNhap = () => {
                                   {item.product.tenSP}
                                 </td>
                                 <td className="align-middle">{item.soluong}</td>
-                                <td className="align-middle">{formatMoney(item.gia)}</td>
+                                <td className="align-middle">
+                                  {formatMoney(item.gia)}
+                                </td>
 
                                 <td className="align-middle fs-5 text-primary">
                                   <FiTool
@@ -998,8 +1015,8 @@ const PhieuNhap = () => {
                     </thead>
                     <tbody className="align-middle">
                       {dataShowPN.map((item, index) => {
-                        // let chuoi = item.created_at;
-                        // let tachChuoi = chuoi.slice(0, 10);
+                        let chuoi = item.created_at;
+                        let tachChuoi = chuoi.slice(0, 10);
 
                         return (
                           <>
@@ -1008,8 +1025,10 @@ const PhieuNhap = () => {
                               <td className="align-middle">
                                 {item?.ncc?.tenNCC}
                               </td>
-                              <td className="align-middle">{item.tongTien}</td>
-                              <td className="align-middle">1255252</td>
+                              <td className="align-middle">
+                                {formatMoney(item.tongTien)}
+                              </td>
+                              <td className="align-middle">{tachChuoi}</td>
                               <td className="align-middle">
                                 {item.status == 1 ? (
                                   <B.Button
@@ -1079,92 +1098,7 @@ const PhieuNhap = () => {
                     handleShowUpdateCtPN={handleShowUpdateCtPN}
                     viewPn={viewPn}
                     handleCloseTab={handleCloseTab}
-
-                    // handleReloadShowCTPNtab3={handleReloadShowCTPNtab3}
                   ></Ctpn>
-                  {/* <B.Row className="px-xl-3 mb-3">
-                    <B.Col lg={8} xs={8}>
-                      <h5 className="text-primary mb-3">Chi tiết phiếu nhập</h5>
-                    </B.Col>
-                    <B.Col lg={4} xs={4} className="text-end">
-                      <BiReset
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="làm mới"
-                        className="fs-3 customborder"
-                        onClick={handleReloadShowCTPNtab3}
-                      />
-
-                      <FaTimes
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Đóng"
-                        className="fs-3 customborder"
-                        onClick={handleCloseTab}
-                      />
-                    </B.Col>
-                  </B.Row>
-                  <B.Form>
-                    <B.Table className=" text-right table-borderless border border-secondary text-center mb-0">
-                      <thead
-                        className="text-dark"
-                        style={{ backgroundColor: "#edf1ff" }}
-                      >
-                        <tr>
-                          <th>STT</th>
-                          <th>Tên sản phẩm</th>
-                          <th>Số lượng</th>
-                          <th>Giá</th>
-                          <th>Thao tác</th>
-                        </tr>
-                      </thead>
-                      <tbody className="align-middle">
-                        {viewPn.pnct.map((item1, index) => {
-                          console.log(item1);
-                          return (
-                            <>
-                              <tr key={index}>
-                                <td className="align-middle">{index + 1}</td>
-                                <td className="align-middle">
-                                  {item1.product.tenSP}
-                                </td>
-                                <td className="align-middle">
-                                  {item1.soluong}
-                                </td>
-                                <td className="align-middle">{item1.gia}</td>
-
-                                <td className="align-middle fs-5 text-primary">
-                                  <FiTool
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="bottom"
-                                    title="Sửa chi tiết phiếu nhập"
-                                    style={{ marginRight: "15px" }}
-                                    onClick={() => handleShowUpdateCtPN(item1)}
-                                  />
-                                  <MdDeleteForever
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="bottom"
-                                    title="Xóa chi tiết phiếu nhập"
-                                    onClick={() =>
-                                      handleDelete(
-                                        item1.pn_id,
-                                        item1.product_id
-                                      )
-                                    }
-                                  />
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
-                      </tbody>
-                    </B.Table>
-                    <h5 className="text-right mt-2 text-primary">
-                      Tổng tiền: {tongTienPN} VNĐ
-                    </h5>
-                  </B.Form> */}
                 </B.Tab>
               )}
               <B.Tab eventKey={4} title="Lịch sử nhập hàng">

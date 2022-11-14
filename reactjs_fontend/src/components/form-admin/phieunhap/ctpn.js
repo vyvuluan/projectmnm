@@ -6,13 +6,12 @@ import { FaTimes } from "react-icons/fa";
 import { BiReset, BiEdit } from "react-icons/bi";
 
 const Ctpn = ({
-    tongTienPN,
-    handleDelete,
-    handleShowUpdateCtPN,
-    viewPn,
-    handleCloseTab,
-    // handleReloadShowCTPNtab3,
-    
+  tongTienPN,
+  handleDelete,
+  handleShowUpdateCtPN,
+  viewPn,
+  handleCloseTab,
+  // handleReloadShowCTPNtab3,
 }) => {
   // console.log(handleShowUpdateCtPN);
   function formatMoney(money) {
@@ -28,14 +27,6 @@ const Ctpn = ({
           <h5 className="text-primary mb-3">Chi tiết phiếu nhập</h5>
         </B.Col>
         <B.Col lg={4} xs={4} className="text-end">
-          <BiReset
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="làm mới"
-            className="fs-3 customborder"
-            // onClick={handleReloadShowCTPNtab3}
-          />
-
           <FaTimes
             data-toggle="tooltip"
             data-placement="bottom"
@@ -58,7 +49,7 @@ const Ctpn = ({
           </thead>
           <tbody className="align-middle">
             {viewPn.pnct.map((item1, index) => {
-              console.log(item1);
+              
               return (
                 <>
                   <tr key={item1.pn_id}>

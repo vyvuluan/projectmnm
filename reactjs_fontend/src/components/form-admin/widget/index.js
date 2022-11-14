@@ -4,22 +4,36 @@ import {
   BsFillCalendarWeekFill,
   BsFillChatSquareQuoteFill,
 } from "react-icons/bs";
+import Cookies from "universal-cookie";
+
 import { BiDollar, BiTask } from "react-icons/bi";
 const Widget = ({ dataWidget }) => {
   // const { dataWidget } = props;
   console.log(dataWidget);
-
+  const cookies = new Cookies();
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
   const [doanhthu, setDoanhThu] = useState();
   const [chiTieu, setChiTieu] = useState();
   const [contact, setContact] = useState();
   const [SLBan, setSLBan] = useState();
-
+  const [tongTienNV, setTongtienNV] = useState();
   const [terms, setTerms] = useState(true);
   if (chiTieu == null) {
     setChiTieu(0);
   }
   if (doanhthu == null) {
     setDoanhThu(0);
+  }
+  if (contact == null) {
+    setContact(0);
+  }
+  if (SLBan == null) {
+    setSLBan(0);
   }
 
   useEffect(() => {
@@ -29,6 +43,7 @@ const Widget = ({ dataWidget }) => {
       setChiTieu(dataWidget?.chitieu?.tongTien);
       setContact(dataWidget?.contact_count);
       setSLBan(dataWidget?.soluongban.soluongban);
+      setTongtienNV(dataWidget?.tongTien?.tongTien);
     }
     // console.log(dataWidget?.doanhthu?.tongTien);
   });
@@ -69,12 +84,26 @@ const Widget = ({ dataWidget }) => {
             <div className="card-body">
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
-                  <div className="text-xs pl-3 font-weight-bold text-success text-uppercase mb-1">
-                    Doanh thu
-                  </div>
-                  <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
-                    {doanhthu}
-                  </div>
+                  {cookies.get("role_id") == 4 ? (
+                    <>
+                      <div className="text-xs pl-3 font-weight-bold text-success text-uppercase mb-1">
+                        Tổng tiền phiếu xuất
+                      </div>
+                      <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
+                        {formatMoney(tongTienNV)}
+                      </div>
+                    </>
+                  ) : cookies.get("role_id") == 2 ? (
+                    <>
+                      <div className="text-xs pl-3 font-weight-bold text-success text-uppercase mb-1">
+                        Doanh thu
+                      </div>
+                      <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
+                      {formatMoney(doanhthu)}
+
+                      </div>
+                    </>
+                  ) : null}
                 </div>
                 <div className="col-auto">
                   <i className="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -92,7 +121,7 @@ const Widget = ({ dataWidget }) => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs  pl-3 font-weight-bold text-info text-uppercase mb-1">
-                    Tổng số lượng đã bán
+                    Tổng số đơn hàng
                   </div>
                   <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
                     {SLBan}
