@@ -414,7 +414,7 @@ class PaymentController extends Controller
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
-            return Redirect::to('http://localhost:3000?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
         }
         // }
         // else
