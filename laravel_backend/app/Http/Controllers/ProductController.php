@@ -316,4 +316,23 @@ class ProductController extends Controller
                 ]);
         }
     }
+
+    public function sort_chitiet(Request $request)
+    {
+        $product =  Product::whereIn('maNsx', $request->nsx_id)
+            ->where('gia', '<=', $request->gia)->paginate(8);
+        return response()->json([
+            'data' => $product,
+            'message' => 'kết quả',
+        ]);
+    }
+    public function product_max()
+    {
+        $product =  Product::selectRaw('max(gia) as gia')
+            ->first();
+        return response()->json([
+            'data' => $product,
+            'message' => 'kết quả',
+        ]);
+    }
 }
