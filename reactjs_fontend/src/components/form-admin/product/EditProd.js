@@ -6,12 +6,12 @@ import { Editor } from "@tinymce/tinymce-react";
 
 const Prodedit = ({ product, showModal }) => {
 
-    const editorRef = useRef(null);
     const [picture, setPicture] = useState([]);
     const [previewIMG, setPreviewIMG] = useState();
     const [mota, setMota] = useState(product.moTa);
     const [ctsp, setCtsp] = useState(product.ctSanPham);
     const [tabkey, setTabKey] = useState(1);
+    const editorRef = useRef(product.moTa);
 
     const id = product.id;
     const [prodEdit, setProdEdit] = useState({
@@ -41,11 +41,11 @@ const Prodedit = ({ product, showModal }) => {
     };
 
     const handleMotaChange = (value) => {
-        setMota(value);
+        setMota({ value });
     }
 
     const handleCTSPChange = (value) => {
-        setCtsp(value)
+        setCtsp({ value })
     }
 
     const handleProductChange = (e) => {
@@ -131,11 +131,11 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
                 <B.Tab eventKey={2} title="Mô tả sản phẩm" className=" border border-top-0 py-3 px-3">
                     <Editor
-                        apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                        apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleMotaChange}
-                        onInit={(evt, editor) => {
-                            editorRef.current = editor
-                        }}
+                        // onInit={mota}
+                        // onInit={(editor) => { editorRef.current = editor }}
+
                         initialValue={mota}
                         init={{
                             height: 500,
@@ -195,7 +195,7 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
                 <B.Tab eventKey={3} title="Chi tiết sản phẩm" className=" border border-top-0 py-3 px-3">
                     <Editor
-                        apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                        apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleCTSPChange}
                         onInit={(evt, editor) => {
                             editorRef.current = editor

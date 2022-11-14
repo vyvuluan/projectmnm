@@ -58,8 +58,8 @@ const UpdateCtPN = ({
           dataShowPN.filter((item, index) => {
             return item.id == idPN
               ? dataShowPN[index].pnct.filter((item1, index1) => {
-                  return item1.product_id == idSP ? (data1 = item1) : null;
-                })
+                return item1.product_id == idSP ? (data1 = item1) : null;
+              })
               : null;
           });
           data1.gia = CTPN?.gia;
@@ -152,7 +152,7 @@ const UpdateCtPN = ({
           variant="primary"
           type="submit"
           className="rounded-0 py-2 mt-3"
-          //   onClick={showModal}
+        //   onClick={showModal}
         >
           Chỉnh sửa
         </Bt.Button>
