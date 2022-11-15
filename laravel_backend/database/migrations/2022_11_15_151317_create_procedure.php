@@ -18,7 +18,7 @@ return new class extends Migration
             '
             CREATE PROCEDURE get_allcomment(IN id INT(15))
             BEGIN
-                select * from comments where product_id = id;
+                select product_id,customer_id,comment,comments.created_at,ten from comments,customers where comments.product_id = id and customers.id=comments.customer_id;
             END
            '
         );
