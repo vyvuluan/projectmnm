@@ -21,7 +21,7 @@ class Product extends Model
         'ctSanPham',
         'moTa'
     ];
-    
+    protected $with = ['comments'];
     public function loaisp()
     {
         return $this->belongsTo(loaisp::class, 'maLoai', 'id');
