@@ -334,8 +334,9 @@ const DetailProduct = (props) => {
                   {comment && comment.map((com, index) => {
                     return (
                       <B.FormGroup key={index} className="border border-2 px-3 py-2 mb-3">
-                        <B.FormLabel className="fs-6">{com.customer.ten}</B.FormLabel>
+                        <B.FormLabel className="fs-6">{com.ten}</B.FormLabel>
                         <B.FormText>{com.comment}</B.FormText>
+                        <B.FormText>{com.created_at}</B.FormText>
                       </B.FormGroup>
                     )
                   })}
