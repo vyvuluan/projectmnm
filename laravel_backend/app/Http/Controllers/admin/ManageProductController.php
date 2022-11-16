@@ -99,8 +99,6 @@ class ManageProductController extends Controller
                 $name = time() . '_' . $hinh->getClientOriginalName();
                 Storage::disk('public')->put($name, File::get($hinh));
                 $product->hinh = $name;
-            } else {
-                $product->hinh = 'default.jpg';
             }
             $product->save();
             return response()->json([
@@ -193,8 +191,6 @@ class ManageProductController extends Controller
                     $name = time() . '_' . $hinh->getClientOriginalName();
                     Storage::disk('public')->put($name, File::get($hinh));
                     $product->hinh = $name;
-                } else {
-                    $product->hinh = 'default.jpg';
                 }
                 $product->update();
                 return response()->json([
