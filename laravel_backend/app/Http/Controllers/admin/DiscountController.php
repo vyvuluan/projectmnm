@@ -215,7 +215,7 @@ class DiscountController extends Controller
         $date = Carbon::today();
         $discount = Discount::where('start', '<', $date)
             ->where('end', '>', $date)
-            ->first();
+            ->get();
             return response()->json([
                 'status' => 200,
                 'discount' => $discount,

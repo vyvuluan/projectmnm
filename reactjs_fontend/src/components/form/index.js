@@ -23,6 +23,7 @@ export { default as NewPass } from "./newPassword/index.js";
 export { default as MyOrder } from "./myorder/index.js";
 export { default as SortProduct } from "./sortProduct/index.js";
 export { default as PaymentReturn } from "./payment/payment-return";
+export { default as Discount } from "./khuyenmai/index";
 
 
 

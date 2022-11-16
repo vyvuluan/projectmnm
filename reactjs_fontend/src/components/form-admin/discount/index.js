@@ -71,7 +71,7 @@ function Index() {
         e.preventDefault();
 
         const data = {
-            discount_id: discInput.discount,
+            discount_id: discInput.discount.toUpperCase(),
             phantram: discInput.percent,
             start: start,
             end: end,

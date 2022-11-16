@@ -7,6 +7,7 @@ import {
   Features,
   SectionTitle,
   Product,
+  Discount,
 } from "../../form/index.js";
 import swal from "sweetalert";
 const axios = require("axios").default;
@@ -18,7 +19,7 @@ const HomePage = () => {
   const [paramEmail, setParamEmail] = useSearchParams()
   const [paramFullname, setParamFullname] = useSearchParams()
 
-  
+
   const history = useNavigate();
 
   const [listProductNew, setListProductNew] = useState([]);
@@ -67,11 +68,12 @@ const HomePage = () => {
 
   return (
     <>
-    <Bt.Container fluid mb={5}>
-    <Bt.Row className=" px-xl-5">
-      <Slideshow />
-      </Bt.Row>
-    </Bt.Container>
+      <Bt.Container fluid mb={5}>
+        <Bt.Row className=" px-xl-5">
+          <Slideshow />
+        </Bt.Row>
+      </Bt.Container>
+      <Discount />
       {/* <SectionTitle title="Service" /> */}
       <Features />
       <SectionTitle title="Sản phẩm mới" />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
 
 import {
@@ -18,6 +18,8 @@ const PageProducts = () => {
   const [loading, setLoading] = useState(true);
   // const [firstPage,setFirstPage] = useState();
   const [gia, setGia] = useState();
+  const [b, setB] = useState([]);
+
   const [value1, setValue1] = useState([0, gia]);
   const [Checked, setChecked] = useState([]);
   const [CheckedALL, setCheckedALL] = useState([]);
@@ -33,6 +35,15 @@ const PageProducts = () => {
   // const [search, setSearch] = useSearchParams(
   //   search.get('search')
   // );
+  let dataIDNSX = [];
+  let idNSX1 = viewNSX.map((item) => {
+
+    return dataIDNSX.push(item.id);
+  });
+    
+ 
+  
+
   const handlePerPage = (page) => {
     // console.log(page);
     setPage(page);
@@ -55,7 +66,6 @@ const PageProducts = () => {
         console.log(error);
       })
       .finally(function () {
-        console.log(gia);
         setValue1([0, gia1]);
       });
   }, []);
@@ -162,15 +172,11 @@ const PageProducts = () => {
   }
 
   // const [dataFilter, setDataFilter] = useState();
-  let dataIDNSX = [];
-  let idNSX1 = viewNSX.map((item) => {
-    return dataIDNSX.push(item.id);
-  });
-  var b;
+
   const handleChange = (e) => {
     // console.log([e.target.value]);
     var a = e.target.value;
-    b = a.split(",").map(Number);
+    setB(a.split(",").map(Number));
   };
 
   const minDistance = 10;
@@ -200,7 +206,7 @@ const PageProducts = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
+    setB(null);
     setChecked(newChecked);
   };
   const handleFilter = () => {
