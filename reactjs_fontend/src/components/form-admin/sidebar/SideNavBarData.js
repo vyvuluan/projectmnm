@@ -41,7 +41,7 @@ export const SideNavBarData = [
     path: "/products",
     icon: <FaI.FaBoxOpen />,
     link: `/Products`,
-    id_role: [3]
+    id_role: [3, 4]
   },
   {
     title: "Loại Sản Phẩm",
@@ -105,17 +105,17 @@ export const SideNavBarData = [
 
   },
   {
-    title: "Phiếu xuất",
-    path: "/phieuxuat",
-    icon: <MdOutlineRequestPage />,
-    link: "/Phieuxuat",
-    id_role: [3]
-  },
-  {
     title: "Đơn hàng",
     path: "/donhang",
-    icon: <FaProductHunt />,
-    link: "/donhang",
+    icon: <MdOutlineRequestPage />,
+    link: "/Donhang",
     id_role: [4]
+  },
+  {
+    title: "Phiếu xuất",
+    path: "/phieuxuat",
+    icon: <FaProductHunt />,
+    link: "/Phieuxuat",
+    id_role: [3]
   },
 ];
