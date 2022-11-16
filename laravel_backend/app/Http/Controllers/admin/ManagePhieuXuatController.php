@@ -99,6 +99,43 @@ class ManagePhieuXuatController extends Controller
                 ]);
         }
     }
+    public function locPx_kho(Request $request)
+    {
+        $key = $request->key;
+        $value = $request->value;
+        switch ($key) {
+            case 1; // Lọc theo tình trạng
+                $px = PhieuXuat::where('status', $value)->where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+                if ($px) {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $px,
+                    ]);
+                }
+            case 2; // Lọc theo Pt Thanh toán
+                $px = PhieuXuat::where('pt_ThanhToan', $value)->paginate(10);
+                if ($px) {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $px,
+                    ]);
+                }
+            case 3; // Lọc theo giá thấp đến cao
+                $px = PhieuXuat::orderBy('tongTien', 'asc')->where('pt_ThanhToan', 'Tại quầy')->paginate(10);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $px,
+
+                ]);
+            case 4; // Lọc theo giá cao đến thấp
+                $px = PhieuXuat::orderBy('tongTien', 'desc')->where('pt_ThanhToan', 'Tại quầy')->paginate(10);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $px,
+
+                ]);
+        }
+    }
 
 
     /**
@@ -639,9 +676,12 @@ class ManagePhieuXuatController extends Controller
         $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
             ->where('pt_ThanhToan', 'Tại quầy')
             ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
             ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
-            ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
             ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+
             // ->paginate(10);
             ->get();
         $px = $px_query;

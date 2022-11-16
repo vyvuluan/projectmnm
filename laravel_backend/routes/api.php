@@ -147,11 +147,13 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
 
 
     //Api Quản lý  Phiếu Xuất
-    Route::get('dspx', [ManagePhieuXuatController::class, 'dspx_kho']); // Danh sách các phiếu xuất đã xác nhận
-    Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
-    Route::get('search_kho', [ManagePhieuXuatController::class, 'search_kho']); // Tìm Kiếm Phiếu Xuất
+    Route::get('dspx', [ManagePhieuXuatController::class, 'dspx_kho']); // Danh sách các phiếu xuất đã xác nhận dùng ở quản lý kho
+    //Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất dùng ở nhân viên
+    Route::get('search_kho', [ManagePhieuXuatController::class, 'search_kho']); // Tìm Kiếm Phiếu Xuất dùng ở kho
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class, 'xemctpx']);
+    Route::get('locpx_kho', [ManagePhieuXuatController::class, 'locPx_kho']); // Lọc Phiếu xuất key và value
+    Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
 
     // Api quản lý ncc , nsx
     Route::resource('ncc', ManageNccController::class);
@@ -169,7 +171,6 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('products/chitiet/{id}', [ManageProductController::class, 'ctsp']);
     // Cập nhật sản phẩm
     Route::post('products/update/{id}', [ManageProductController::class, 'update']);
-    Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
 });
 
 Route::get('nsx', [ManageNsxController::class, 'nsxall']);
@@ -198,9 +199,9 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
     //discount
     Route::resource('discount', DiscountController::class);
-    Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
-    Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
+
     //Api Quản lý  Phiếu Xuất
+    Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
     Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
@@ -213,7 +214,6 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     Route::post('addctpx', [ManagePhieuXuatController::class, 'addctpx']);          // Thêm ct phiếu xuất
     Route::delete('deletectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'deletectpx']);  // Xoá ct phiếu xuất
     Route::get('lichSuXuatHang', [ManageBaoCaoController::class, 'lichSuXuatHang']);
-    
 });
 
 
