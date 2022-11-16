@@ -24,6 +24,7 @@ return new class extends Migration
             $table->bigInteger('cv_id')->unsigned();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('cv_id')->references('id')->on('chuc_vus')->onDelete('cascade');
         });
     }
 

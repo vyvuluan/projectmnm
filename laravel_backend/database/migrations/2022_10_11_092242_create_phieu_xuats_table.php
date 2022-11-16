@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('employee_id')->nullable()->unsigned();
             $table->bigInteger('customer_id')->nullable()->unsigned();
-            $table->integer('status');
+            $table->integer('status',1);
             $table->string('pt_ThanhToan');
             $table->string('tenKH');
-            $table->string('sdt');
+            $table->string('sdt',10);
             $table->string('diaChi');
             $table->string('payment_id')->nullable();
             $table->integer('discount')->default(0);

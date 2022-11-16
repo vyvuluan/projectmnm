@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('tenSP');
             $table->integer('gia');
-            $table->integer('soLuongSP');
+            $table->integer('soLuongSP')->default(0);
             $table->longText('moTa');
             $table->string('ctSanPham');
             $table->string('hinh');

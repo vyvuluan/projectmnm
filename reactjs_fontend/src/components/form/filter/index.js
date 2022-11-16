@@ -51,7 +51,6 @@ const Filter = ({
               id="all"
               name="all"
               onClick={handleChangeAll}
-              defaultValue={idNSX2}
               value={idNSX1}
               onChange={handleChange}
             ></input>
