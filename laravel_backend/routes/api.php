@@ -143,6 +143,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('thongKeChiTieuSoLuong', [ManageBaoCaoController::class, 'thongKeChiTieuSoLuong']);
     //Api Thống kê của phiếu xuất
     Route::get('thongKeDoanhThuSoLuong', [ManageBaoCaoController::class, 'thongKeDoanhThuSoLuong']);
+    Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
+
 
     //Api Quản lý  Phiếu Xuất
     Route::get('dspx', [ManagePhieuXuatController::class, 'dspx_kho']); // Danh sách các phiếu xuất đã xác nhận

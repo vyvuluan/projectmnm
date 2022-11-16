@@ -71,7 +71,7 @@ const DonHang = () => {
   });
 
   const getOrderData = useCallback(async () => {
-    const res = await axios.get(`/api/kho/px?page=${page}`)
+    const res = await axios.get(`/api/kho/dspx?page=${page}`)
     if (res.data.status === 200) {
       setOrderList(res.data.data.data);
       setTotalPage(res.data.data.total);
@@ -166,7 +166,7 @@ const DonHang = () => {
         break;
       }
       case 4: {
-        x = 'Giao hàng thành công';
+        x = 'Đã xuất kho';
         break;
       }
       case 5: {
@@ -216,7 +216,7 @@ const DonHang = () => {
 
   const handleOnSearch = (key) => {
     if (key !== "") {
-      axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+      axios.get(`http://localhost:8000/api/kho/search_kho?key=${key}`).then(res => {
         if (res.status === 200) {
           setSearchlist(res.data.data)
           // setTotalPage(res.data.total);
@@ -429,7 +429,8 @@ const DonHang = () => {
               onClick={handlePrint}
             >
               In hóa đơn
-            </B.Button> : null}
+            </B.Button>
+            : null}
           <B.Button
             variant="outline-primary"
             className="mt-2 rounded-0"
@@ -438,6 +439,10 @@ const DonHang = () => {
             Hủy bỏ
           </B.Button>
         </B.ModalFooter>
+      </B.Modal>
+
+      <B.Modal size='lg'>
+
       </B.Modal>
 
       <B.Container fluid>
@@ -512,11 +517,17 @@ const DonHang = () => {
                           <td>{item.pt_ThanhToan}</td>
                           <td>{formatMoney(item.tongTien)}</td>
                           <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
-                            {checkStatus.map((val) => (
-                              <B.Dropdown.Item key={val.id}
-                                onClick={() => handleUpdateStatus(val, item)}
-                              >{val.name}</B.Dropdown.Item>
-                            ))}
+                            {checkStatus.map((val) => {
+                              return (
+                                <>
+                                  {item.status > 1 && item.status < 4 ? (
+                                    null
+                                  ) : <B.Dropdown.Item key={val.id}
+                                    onClick={() => handleUpdateStatus(val, item)}
+                                  >{val.name}</B.Dropdown.Item>}
+                                </>
+                              )
+                            })}
                           </B.DropdownButton>
                           </td>
                           <td className='text-center'>
