@@ -450,7 +450,7 @@ const DonHang = () => {
           onSelect={(k) => setTabkey(k)}>
           <B.Tab eventKey={1} title="Danh sách phiếu xuất" className=" border border-top-0 py-3 px-3">
             <B.Row className='pe-xl-5 mb-3'>
-              <B.Col lg={4}>
+              <B.Col lg={4} className='mt-2'>
                 <ReactSearchAutocomplete
                   items={searchList}
                   onSearch={handleOnSearch}
@@ -474,8 +474,8 @@ const DonHang = () => {
                   }}
                 />
               </B.Col>
-              <B.Col lg={8}>
-                <B.FormGroup className='mb-2 pull-right'>
+              <B.Col lg={8} className='mb-2 mt-2'>
+                <B.FormGroup className='pull-right'>
                   <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
                     {sort.map((item, index) => (
                       <option value={item.value}>{item.name}</option>

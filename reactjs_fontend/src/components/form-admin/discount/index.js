@@ -216,7 +216,7 @@ function Index() {
                                     <th className='text-center'>STT</th>
                                     <th>Mã khuyến mại</th>
                                     <th>Phần trăm giảm</th>
-                                    <th>CHi tiêu tối thiểu</th>
+                                    <th>Chi tiêu tối thiểu</th>
                                     <th>Ngày bắt đầu</th>
                                     <th>Ngày kết thúc</th>
                                     <th className='text-center'>Thao tác</th>
