@@ -45,7 +45,7 @@ const Product = (props) => {
                         ></img>
                       </div>
                       <div className="text-center   p-0 pt-4 pb-3 ">
-                        <h6 className="mb-3 hovertext ">{item.tenSP}</h6>
+                        <h6 className="mb-3 hovertext text-uppercase">{item.tenSP}</h6>
                         <div className="d-flex justify-content-center">
                           <h6 className="text-danger">
                             {formatMoney(item.gia)}
