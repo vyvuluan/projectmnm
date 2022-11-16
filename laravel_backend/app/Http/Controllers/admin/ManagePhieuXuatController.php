@@ -25,6 +25,14 @@ class ManagePhieuXuatController extends Controller
             'data' => $px,
         ]);
     }
+    public function dspx_kho()
+    {
+        $px = PhieuXuat::where('status', 1)::orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'data' => $px,
+        ]);
+    }
     public function xemctpx($id)
     {
         $ctpx = PhieuXuat::find($id)->pxct;

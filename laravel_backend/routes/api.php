@@ -146,6 +146,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('thongKeDoanhThuSoLuong', [ManageBaoCaoController::class, 'thongKeDoanhThuSoLuong']);
 
     //Api Quản lý  Phiếu Xuất
+    Route::get('dspx', [ManagePhieuXuatController::class, 'dspx_kho']); // Danh sách các phiếu xuất đã xác nhận
     Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
@@ -176,7 +177,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::post('products/update/{id}', [ManageProductController::class, 'update']);
 });
 
-    Route::get('nsx', [ManageNsxController::class, 'nsxall']);
+Route::get('nsx', [ManageNsxController::class, 'nsxall']);
 
 //nhân viên
 Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(function () {
