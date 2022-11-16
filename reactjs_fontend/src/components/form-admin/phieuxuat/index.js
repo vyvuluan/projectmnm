@@ -15,10 +15,28 @@ import './style.css'
 
 const checkStatus = [
     { id: 0, name: 'Chờ xác nhận' },
-    { id: 4, name: 'Đã xuất kho' },
+    { id: 1, name: 'Đã xác nhận' },
+    { id: 2, name: 'Đang đóng gói' },
+    { id: 3, name: 'Đang vận chuyển' },
+    { id: 4, name: 'Giao hàng thành công' },
     { id: 5, name: 'Hủy đơn hàng' },
 ];
 
+const sort = [
+    { value: '', name: 'Sắp xếp' },
+    { value: 'h-l', name: 'Giá cao-thấp' },
+    { value: 'l-h', name: 'Giá thấp-cao' },
+    { value: '0', name: 'Chờ xác nhận' },
+    { value: '1', name: 'Đã xác nhận' },
+    { value: '2', name: 'Đang đóng gói' },
+    { value: '3', name: 'Đang vận chuyển' },
+    { value: '4', name: 'Giao hàng thành công' },
+    { value: '5', name: 'Đơn hàng đã hủy' },
+    { value: 'COD', name: 'Thanh toán COD' },
+    { value: 'PayPal', name: 'Thanh toán Paypal' },
+    { value: 'VnPay', name: 'Thanh toán VNPay' },
+    { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
+]
 
 function Index() {
     const [pxlist, setPxlist] = useState();
@@ -73,6 +91,7 @@ function Index() {
     }
 
     const componentRef = useRef();
+    const componentRefPx = useRef();
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
     const [perPage, setPerPage] = useState();
@@ -83,6 +102,10 @@ function Index() {
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
+    });
+
+    const handlePrintPx = useReactToPrint({
+        content: () => componentRefPx.current,
     });
 
     function formatMoney(money) {
@@ -113,7 +136,7 @@ function Index() {
             pt_ThanhToan: 'Tại quầy',
         }
 
-        axios.post(`/api/kho/px`, data).then(res => {
+        axios.post(`/api/nhanvien/px`, data).then(res => {
             if (res.data.status === 200) {
                 swal('Success', res.data.message, 'success')
                 setPXid(res.data.px_id);
@@ -142,7 +165,7 @@ function Index() {
             gia: prodData.gia * quantity,
         }
 
-        axios.post(`/api/kho/addctpx`, data).then(res => {
+        axios.post(`/api/nhanvien/addctpx`, data).then(res => {
             if (res.data.status === 200) {
                 swal('Success', res.data.message, 'success');
                 setProdData([]);
@@ -169,7 +192,7 @@ function Index() {
 
     // Fetch data phiếu xuất
     const getAllPx = useCallback(async () => {
-        const res = await axios.get(`/api/kho/px?page=${page}`)
+        const res = await axios.get(`/api/nhanvien/px?page=${page}`)
         if (res.data.status === 200) {
             setPxlist(res.data.data.data);
             setTotalPage(res.data.data.total);
@@ -205,7 +228,7 @@ function Index() {
                 }
             }).then((value) => {
                 if (value === 'yes') {
-                    axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                    axios.put(`/api/nhanvien/px/${px.id}`, data).then(res => {
                         if (res.data.status === 200) {
                             setSubmitting(true);
                         } else if (res.data.status === 400) {
@@ -228,7 +251,7 @@ function Index() {
                 }
             }).then((value) => {
                 if (value === 'yes') {
-                    axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+                    axios.put(`/api/nhanvien/px/${px.id}`, data).then(res => {
                         if (res.data.status === 200) {
                             setSubmitting(true);
                         } else if (res.data.status === 400) {
@@ -238,7 +261,7 @@ function Index() {
                 }
             })
         } else {
-            axios.put(`/api/kho/px/${px.id}`, data).then(res => {
+            axios.put(`/api/nhanvien/px/${px.id}`, data).then(res => {
                 if (res.data.status === 200) {
                     setSubmitting(true);
                 } else if (res.data.status === 400) {
@@ -293,7 +316,7 @@ function Index() {
 
     const handleOnPxSearch = (key) => {
         if (key !== "") {
-            axios.get(`http://localhost:8000/api/kho/px-search?key=${key}`).then(res => {
+            axios.get(`http://localhost:8000/api/nhanvien/px-search?key=${key}`).then(res => {
                 if (res.status === 200) {
                     setPxSearchlist(res.data.data)
                     // setTotalPage(res.data.total);
@@ -333,7 +356,7 @@ function Index() {
             soluong: quantity,
         }
 
-        axios.post(`/api/kho/addctpx`, data).then(res => {
+        axios.post(`/api/nhanvien/addctpx`, data).then(res => {
             if (res.data.status === 200) {
                 swal('Success', res.data.message, 'success');
                 setQuantity(1);
@@ -370,7 +393,7 @@ function Index() {
             }
         }).then((value) => {
             if (value) {
-                axios.delete(`/api/kho/deletectpx/${px_id}/${product_id}`).then(res => {
+                axios.delete(`/api/nhanvien/deletectpx/${px_id}/${product_id}`).then(res => {
                     if (res.data.status === 200) {
                         swal('Thành công', res.data.message, 'success');
                     } else if (res.data.status === 400) {
@@ -401,7 +424,7 @@ function Index() {
                 break;
             }
             case 4: {
-                x = 'Đã xuất kho';
+                x = 'Giao hàng thành công';
                 break;
             }
             case 5: {
@@ -423,7 +446,7 @@ function Index() {
                 break;
             }
             case 1: {
-                x = 'primary';
+                x = 'secondary';
                 break;
             }
             case 2: {
@@ -483,7 +506,7 @@ function Index() {
                 }
         }
         if (key !== '') {
-            axios.get(`/api/kho/locpx?key=${key}&value=${e}`).then(res => {
+            axios.get(`/api/nhanvien/locpx?key=${key}&value=${e}`).then(res => {
                 if (res.data.status === 200) {
                     setPxlist(res.data.data.data);
                     setTotalPage(res.data.data.total);
@@ -503,7 +526,7 @@ function Index() {
     const xemLichSuXuatHang = (e) => {
         e.preventDefault();
 
-        axios.get(`/api/kho/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
+        axios.get(`/api/nhanvien/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
             if (res.data.status === 200) {
                 setXemXuat(res.data.px.data);
                 setShowExp(true);
@@ -577,12 +600,14 @@ function Index() {
     let month = new Date().toLocaleString("vi-VN", { month: "long" });
     let year = new Date().getFullYear();
 
+    const [pxtab, setpxtab] = useState(1);
+
     return (
         <>
             <B.Container fluid>
                 <B.Modal size='lg' show={show} onHide={handleClose}>
                     <B.ModalHeader closeButton className="bg-secondary">
-                        <B.ModalTitle>Sửa Phiếu xuất</B.ModalTitle>
+                        <B.ModalTitle>Sửa thông tin khách hàng</B.ModalTitle>
                     </B.ModalHeader>
                     <B.ModalBody>
                         <EditPx px={editPx} showModal={handleClose} />
@@ -599,122 +624,218 @@ function Index() {
                 </B.Modal>
 
                 <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
-                    <div ref={componentRef}>
-                        <B.ModalHeader>
-                            <B.ModalTitle>
-                                <div className='text-primary fw-bold'>
-                                    L3M
-                                    <span className='text-dark'>SHOP</span>
-                                    <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewPx && viewPx.id}</p>
-                                </div>
-                            </B.ModalTitle>
-                            <B.ModalTitle>
-                                <div>
-                                    Hóa đơn bán hàng
-                                    <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
-                                </div>
-                            </B.ModalTitle>
-                        </B.ModalHeader>
-                        <B.Row className='px-3 mt-2'>
-                            <div className='fs-6'>Công ty TNHH thương mại L3M</div>
-                            <div className='fs-6'>Địa chỉ: 273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</div>
-                            <div className='fst-italic fs-6'>Hotline: 0123498765<span className='ms-5'>Email: l3mstore@gmail.com</span></div>
-                        </B.Row>
-                        <hr />
-                        <B.ModalBody>
-                            <B.Row>
-                                <B.FormGroup className='d-flex justify-content-between'>
-                                    <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
-                                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.tenKH}</B.FormLabel>
-                                </B.FormGroup>
-                                <B.FormGroup className='d-flex justify-content-between'>
-                                    <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
-                                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.sdt}</B.FormLabel>
-                                </B.FormGroup>
-                                <B.FormGroup className='d-flex justify-content-between'>
-                                    <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
-                                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewPx && viewPx.diaChi}</B.FormLabel>
-                                </B.FormGroup>
-                                <B.FormGroup className='d-flex justify-content-between'>
-                                    <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
-                                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.pt_ThanhToan}</B.FormLabel>
-                                </B.FormGroup>
-                            </B.Row>
-                            <hr />
-                            <B.Row>
-                                <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
-                                    <thead className='text-dark'>
-                                        <tr>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Số lượng</th>
-                                            <th>Bảo hành</th>
-                                            <th>Giá</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {viewPx && viewPx.pxct.map((prod) => {
-                                            return (
-                                                <>
-                                                    <tr key={prod.product.id}>
-                                                        <td>{prod.product.tenSP}</td>
-                                                        <td>{prod.soluong}</td>
-                                                        <td>{prod.product.baoHanh} tháng</td>
-                                                        <td>{formatMoney(prod.product.gia)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                    </tr>
-                                                </>
-                                            )
-                                        })}
-                                    </tbody>
-                                    <tfoot className='border-top'>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Tạm tính: </td>
-                                            <td>{viewPx && viewPx.discount !== 0 ? formatMoney(viewPx?.tongTien / (1 - viewPx?.discount / 100)) : formatMoney(viewPx?.tongTien)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Giảm giá: </td>
-                                            <td>{viewPx && viewPx.discount}%</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td className='fw-semibold'>Tổng tiền: </td>
-                                            <td>{formatMoney(viewPx && viewPx.tongTien)}</td>
-                                        </tr>
-                                    </tfoot>
-                                </B.Table>
-                            </B.Row>
-                            <B.Row className='px-3 mt-2'>
-                                <B.Row className='mb-5'>
-                                    <B.Col>
-                                        <p>Khách hàng
-                                            <p className='fst-italic ms-3'>Ký tên</p>
-                                        </p>
-                                    </B.Col>
-                                    <B.Col className='text-end'>
-                                        <p>Nhân viên bán hàng
-                                            <p className='fst-italic me-5'>Ký tên</p></p>
-                                    </B.Col>
+                    <B.Tabs activeKey={pxtab} onSelect={(k) => setpxtab(k)}>
+                        <B.Tab eventKey={1} title="Hóa đơn">
+                            <div ref={componentRef}>
+                                <B.ModalHeader>
+                                    <B.ModalTitle>
+                                        <div className='text-primary fw-bold'>
+                                            L3M
+                                            <span className='text-dark'>SHOP</span>
+                                            <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewPx && viewPx.id}</p>
+                                        </div>
+                                    </B.ModalTitle>
+                                    <B.ModalTitle>
+                                        <div>
+                                            Hóa đơn bán hàng
+                                            <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
+                                        </div>
+                                    </B.ModalTitle>
+                                </B.ModalHeader>
+                                <B.Row className='px-3 mt-2'>
+                                    <div className='fs-6'>Công ty TNHH thương mại L3M</div>
+                                    <div className='fs-6'>Địa chỉ: 273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</div>
+                                    <div className='fst-italic fs-6'>Hotline: 0123498765<span className='ms-5'>Email: l3mstore@gmail.com</span></div>
                                 </B.Row>
-                                <div className='fst-italic mt-5'>Vui lòng giữ lại hóa đơn trong vòng 1 tháng sau khi mua hàng</div>
-                            </B.Row>
-                        </B.ModalBody>
-                    </div>
+                                <hr />
+                                <B.ModalBody>
+                                    <B.Row>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.tenKH}</B.FormLabel>
+                                        </B.FormGroup>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.sdt}</B.FormLabel>
+                                        </B.FormGroup>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewPx && viewPx.diaChi}</B.FormLabel>
+                                        </B.FormGroup>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.pt_ThanhToan}</B.FormLabel>
+                                        </B.FormGroup>
+                                    </B.Row>
+                                    <hr />
+                                    <B.Row>
+                                        <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
+                                            <thead className='text-dark'>
+                                                <tr>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Bảo hành</th>
+                                                    <th>Giá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {viewPx && viewPx.pxct.map((prod) => {
+                                                    return (
+                                                        <>
+                                                            <tr key={prod.product.id}>
+                                                                <td>{prod.product.tenSP}</td>
+                                                                <td>{prod.soluong}</td>
+                                                                <td>{prod.product.baoHanh} tháng</td>
+                                                                <td>{formatMoney(prod.product.gia)}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                            </tr>
+                                                        </>
+                                                    )
+                                                })}
+                                            </tbody>
+                                            <tfoot className='border-top'>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>Tạm tính: </td>
+                                                    <td>{viewPx && viewPx.discount !== 0 ? formatMoney(viewPx?.tongTien / (1 - viewPx?.discount / 100)) : formatMoney(viewPx?.tongTien)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>Giảm giá: </td>
+                                                    <td>{viewPx && viewPx.discount}%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td className='fw-semibold'>Tổng tiền: </td>
+                                                    <td>{formatMoney(viewPx && viewPx.tongTien)}</td>
+                                                </tr>
+                                            </tfoot>
+                                        </B.Table>
+                                    </B.Row>
+                                    <B.Row className='px-3 mt-2'>
+                                        <B.Row className='mb-5'>
+                                            <B.Col>
+                                                <p>Khách hàng
+                                                    <p className='fst-italic ms-3'>Ký tên</p>
+                                                </p>
+                                            </B.Col>
+                                            <B.Col className='text-end'>
+                                                <p>Nhân viên bán hàng
+                                                    <p className='fst-italic me-5'>Ký tên</p></p>
+                                            </B.Col>
+                                        </B.Row>
+                                        <div className='fst-italic mt-5'>Vui lòng giữ lại hóa đơn trong vòng 1 tháng sau khi mua hàng</div>
+                                    </B.Row>
+                                </B.ModalBody>
+                            </div>
+                        </B.Tab>
+                        <B.Tab eventKey={2} title="Phiếu xuất kho">
+                            <div ref={componentRefPx}>
+                                <B.ModalHeader>
+                                    <B.ModalTitle>
+                                        <div className='text-primary fw-bold'>
+                                            L3M
+                                            <span className='text-dark'>SHOP</span>
+                                            <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewPx && viewPx.id}</p>
+                                        </div>
+                                    </B.ModalTitle>
+                                    <B.ModalTitle>
+                                        <div>
+                                            Phiếu yêu cầu xuất kho
+                                            <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
+                                        </div>
+                                    </B.ModalTitle>
+                                </B.ModalHeader>
+                                <B.ModalBody>
+                                    <B.Row>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.tenKH}</B.FormLabel>
+                                        </B.FormGroup>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.sdt}</B.FormLabel>
+                                        </B.FormGroup>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewPx && viewPx.diaChi}</B.FormLabel>
+                                        </B.FormGroup>
+                                        <B.FormGroup className='d-flex justify-content-between'>
+                                            <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
+                                            <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.pt_ThanhToan}</B.FormLabel>
+                                        </B.FormGroup>
+                                    </B.Row>
+                                    <hr />
+                                    <B.Row>
+                                        <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
+                                            <thead className='text-dark'>
+                                                <tr>
+                                                    <th>Mã sản phẩm</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {viewPx && viewPx.pxct.map((prod) => {
+                                                    return (
+                                                        <>
+                                                            <tr key={prod.product.id}>
+                                                                <td>{prod.product.id}</td>
+                                                                <td>{prod.product.tenSP}</td>
+                                                                <td>{prod.soluong}</td>
+                                                                <td>{formatMoney(prod.product.gia)}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                            </tr>
+                                                        </>
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </B.Table>
+                                    </B.Row>
+                                    <B.Row className='px-3 mt-2'>
+                                        <B.Row className='mb-5'>
+                                            <B.Col>
+                                                <p>Nhân viên kho
+                                                    <p className='fst-italic ms-4'>Ký tên</p>
+                                                </p>
+                                            </B.Col>
+                                            <B.Col className='text-end'>
+                                                <p>Nhân viên bán hàng
+                                                    <p className='fst-italic me-5'>Ký tên</p></p>
+                                            </B.Col>
+                                        </B.Row>
+                                        <div className='fst-italic mt-5'>Nhân viên kho giữ lại phiếu sau khi xuất kho</div>
+                                    </B.Row>
+                                </B.ModalBody>
+                            </div>
+                        </B.Tab>
+                    </B.Tabs>
                     <B.ModalFooter>
                         {viewPx && viewPx.status > 0 && viewPx.status < 5 ?
-                            <B.Button
-                                variant="outline-primary"
-                                className="mt-2 me-2 rounded-0"
-                                onClick={handlePrint}
-                            >
-                                In hóa đơn
-                            </B.Button> : null}
+                            <>
+                                <B.Button
+                                    variant="outline-success"
+                                    className="mt-2 me-2 rounded-0"
+                                    onClick={handlePrintPx}
+                                >
+                                    In phiếu yêu cầu xuất kho
+                                </B.Button>
+                                <B.Button
+                                    variant="outline-primary"
+                                    className="mt-2 me-2 rounded-0"
+                                    onClick={handlePrint}
+                                >
+                                    In hóa đơn
+                                </B.Button>
+                            </> : null}
                         <B.Button
                             variant="outline-primary"
                             className="mt-2 rounded-0"
@@ -724,6 +845,88 @@ function Index() {
                         </B.Button>
                     </B.ModalFooter>
                 </B.Modal>
+
+                {/* <B.Modal size='lg' ref={componentRefPx}>
+                    <B.ModalHeader>
+                        <B.ModalTitle>
+                            <div className='text-primary fw-bold'>
+                                L3M
+                                <span className='text-dark'>SHOP</span>
+                                <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewPx && viewPx.id}</p>
+                            </div>
+                        </B.ModalTitle>
+                        <B.ModalTitle>
+                            <div>
+                                Phiếu yêu cầu xuất kho
+                                <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
+                            </div>
+                        </B.ModalTitle>
+                    </B.ModalHeader>
+                    <B.ModalBody>
+                        <B.Row>
+                            <B.FormGroup className='d-flex justify-content-between'>
+                                <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
+                                <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.tenKH}</B.FormLabel>
+                            </B.FormGroup>
+                            <B.FormGroup className='d-flex justify-content-between'>
+                                <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
+                                <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.sdt}</B.FormLabel>
+                            </B.FormGroup>
+                            <B.FormGroup className='d-flex justify-content-between'>
+                                <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
+                                <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewPx && viewPx.diaChi}</B.FormLabel>
+                            </B.FormGroup>
+                            <B.FormGroup className='d-flex justify-content-between'>
+                                <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
+                                <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx && viewPx.pt_ThanhToan}</B.FormLabel>
+                            </B.FormGroup>
+                        </B.Row>
+                        <hr />
+                        <B.Row>
+                            <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
+                                <thead className='text-dark'>
+                                    <tr>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {viewPx && viewPx.pxct.map((prod) => {
+                                        return (
+                                            <>
+                                                <tr key={prod.product.id}>
+                                                    <td>{prod.product.id}</td>
+                                                    <td>{prod.product.tenSP}</td>
+                                                    <td>{prod.soluong}</td>
+                                                    <td>{formatMoney(prod.product.gia)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                </tr>
+                                            </>
+                                        )
+                                    })}
+                                </tbody>
+                            </B.Table>
+                        </B.Row>
+                        <B.Row className='px-3 mt-2'>
+                            <B.Row className='mb-5'>
+                                <B.Col>
+                                    <p>Nhân viên kho
+                                        <p className='fst-italic ms-4'>Ký tên</p>
+                                    </p>
+                                </B.Col>
+                                <B.Col className='text-end'>
+                                    <p>Nhân viên bán hàng
+                                        <p className='fst-italic me-5'>Ký tên</p></p>
+                                </B.Col>
+                            </B.Row>
+                            <div className='fst-italic mt-5'>Nhân viên kho giữ lại phiếu sau khi xuất kho</div>
+                        </B.Row>
+                    </B.ModalBody>
+                </B.Modal> */}
 
                 <B.Modal centered show={showEditProd} onHide={handleEditProdClose}>
                     <B.ModalBody>
@@ -781,21 +984,21 @@ function Index() {
                 </B.Modal >
 
                 <B.Row className='pe-xl-5 mb-4' >
-                    <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1>
+                    <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ ĐƠN HÀNG</h1>
                 </B.Row>
 
                 <B.Tabs activeKey={tabkey}
                     onSelect={(k) => setTabkey(k)}>
 
                     {/* Hien thi phieu xuat */}
-                    <B.Tab eventKey={1} title="Danh sách phiếu xuất" className=" border border-top-0 py-3 px-3">
+                    <B.Tab eventKey={1} title="Danh sách đơn hàng" className=" border border-top-0 py-3 px-3">
                         <B.Row className='px-xl-3 mb-3'>
                             <B.Col lg={4}>
                                 <ReactSearchAutocomplete
                                     items={pxsearchList}
                                     onSearch={handleOnPxSearch}
                                     onClear={handleOnPxClear}
-                                    placeholder='Tìm kiếm phiếu xuất'
+                                    placeholder='Tìm kiếm đơn hàng'
                                     maxResults={10}
                                     showNoResults={false}
                                     styling={{
@@ -817,18 +1020,9 @@ function Index() {
                             <B.Col lg={8}>
                                 <B.FormGroup className='mb-2 pull-right'>
                                     <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
-                                        <option value=''>Sắp xếp</option>
-                                        <option value='h-l'>Giá cao-thấp</option>
-                                        <option value='l-h'>Giá thấp-cao</option>
-                                        <option value='1'>Đã xác nhận</option>
-                                        <option value='2'>Đang đóng gói</option>
-                                        <option value='3'>Đang vận chuyển</option>
-                                        <option value='4'>Giao hàng thành công</option>
-                                        <option value='5'>Đơn hàng đã hủy</option>
-                                        <option value='COD'>COD</option>
-                                        <option value='PayPal'>Paypal</option>
-                                        <option value='VnPay'>VNPay</option>
-                                        <option value='Tại quầy'>Tại quầy</option>
+                                        {sort.map((item, index) => (
+                                            <option value={item.value}>{item.name}</option>
+                                        ))}
                                     </B.FormSelect>
                                 </B.FormGroup>
                             </B.Col>
@@ -921,10 +1115,10 @@ function Index() {
 
                     {/* Xem va sua PX */}
                     {showTab && (
-                        <B.Tab eventKey={3} title="Xem chi tiết phiếu xuất" className=" border border-top-0 py-3 px-3">
+                        <B.Tab eventKey={3} title="Xem chi tiết đơn hàng" className=" border border-top-0 py-3 px-3">
                             <B.Row className='px-xl-3 mb-3'>
                                 <B.Col lg={8} xs={8}>
-                                    <h5 className='text-primary mb-3'>Chi tiết phiếu xuất</h5>
+                                    <h5 className='text-primary mb-3'>Chi tiết đơn hàng</h5>
                                 </B.Col>
                                 <B.Col lg={4} xs={4} className='text-end'>
                                     <FaTimes className='fs-3 customborder' onClick={handleCloseTab} />
@@ -1082,7 +1276,7 @@ function Index() {
                     {/* Xem va sua PX */}
 
                     {/* Form them phieu xuat */}
-                    <B.Tab eventKey={2} title="Thêm phiếu xuất" className=" border border-top-0 py-3 px-3">
+                    <B.Tab eventKey={2} title="Thêm đơn hàng" className=" border border-top-0 py-3 px-3">
                         <B.Row className='px-xl-3 mb-3'>
                             <B.Form onSubmit={handleSubmitPx}>
                                 <h4 className='text-primary mb-3'>Thông tin cơ bản của khách hàng</h4>
@@ -1112,13 +1306,13 @@ function Index() {
                                         </B.FormGroup>
                                     </B.Col>
                                 </B.Row>
-                                <B.Button type='submit' variant='primary' className='rounded-0 mb-3'>Thêm phiếu xuất</B.Button>
+                                <B.Button type='submit' variant='primary' className='rounded-0 mb-3'>Thêm đơn hàng</B.Button>
                             </B.Form>
                         </B.Row>
                         {showCtpx && (
                             <B.Row className='px-xl-3 mb-3'>
                                 <B.Form onSubmit={submitAddCtpx}>
-                                    <h4 className='text-primary mb-3'>Chi tiết phiếu xuất</h4>
+                                    <h4 className='text-primary mb-3'>Chi tiết đơn hàng</h4>
                                     <label className='fs-5'>Thêm sản phẩm</label>
                                     <B.Row className='mt-2' >
                                         <B.Col lg={4}>
@@ -1146,7 +1340,7 @@ function Index() {
                                                     zIndex: '2',
                                                 }}
                                             />
-                                            <B.Button type='submit' variant='primary' className='rounded-0 my-2'>Thêm chi tiết phiếu xuất</B.Button>
+                                            <B.Button type='submit' variant='primary' className='rounded-0 my-2'>Thêm chi tiết đơn hàng</B.Button>
                                             <div>
                                                 <small className='text-danger ms-2 d-block'>{error?.px_id}</small>
                                                 <small className='text-danger ms-2 d-block'>{error?.product_id}</small>
@@ -1259,7 +1453,6 @@ function Index() {
                             </B.Table>
                         </B.Row>
                     </B.Tab>
-
                 </B.Tabs>
             </B.Container >
         </>

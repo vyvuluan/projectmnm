@@ -13,6 +13,8 @@ const Filter = ({
   Checked,
   viewNSX,
   handleChange,
+  idNSX1,
+  gia,
 }) => {
   // const [viewNSX, setViewNSX] = useState([]);
   const [idNSX, setIdNSX] = useState([]);
@@ -24,9 +26,9 @@ const Filter = ({
   };
   const clearClickHandlerAll = () => setUncheckAll(false);
 
-  let dataIDNSX = [];
-  let idNSX1 = viewNSX.map((item) => {
-    return dataIDNSX.push(item.id);
+  let dataIDNSX1 = [];
+  let idNSX2 = viewNSX.map((item) => {
+    return dataIDNSX1.push(item.id);
   });
   const handleChangeAll = (e) => {
     if (e.target.name === "all") {
@@ -49,6 +51,7 @@ const Filter = ({
               id="all"
               name="all"
               onClick={handleChangeAll}
+              defaultValue={idNSX2}
               value={idNSX1}
               onChange={handleChange}
             ></input>
@@ -91,6 +94,7 @@ const Filter = ({
         <form>
           <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
             <MinimumDistanceSlider
+              gia={gia}
               value1={value1}
               handleChange1={handleChange1}
               valuetext={valuetext}

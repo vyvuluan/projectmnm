@@ -6,22 +6,33 @@ import swal from "sweetalert";
 import { FaRegEye } from 'react-icons/fa'
 import { useReactToPrint } from 'react-to-print';
 import { RiRefreshLine } from 'react-icons/ri'
+import { useDownloadExcel } from 'react-export-table-to-excel';
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 const checkStatus = [
-  { id: 0, name: 'Chờ xác nhận' },
-  { id: 1, name: 'Đã xác nhận' },
-  { id: 2, name: 'Đang đóng gói' },
-  { id: 3, name: 'Đang vận chuyển' },
-  { id: 4, name: 'Giao hàng thành công' },
+  { id: 4, name: 'Đã xuất kho' },
   { id: 5, name: 'Hủy đơn hàng' },
 ];
 
+const sort = [
+  { value: '', name: 'Sắp xếp' },
+  { value: 'h-l', name: 'Giá cao-thấp' },
+  { value: 'l-h', name: 'Giá thấp-cao' },
+  { value: '0', name: 'Chờ xác nhận' },
+  { value: '1', name: 'Đã xác nhận' },
+  { value: '4', name: 'Đã xuất kho' },
+  { value: '5', name: 'Đơn hàng đã hủy' },
+  { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
+]
+
 const DonHang = () => {
-  const [order, setOrder] = useState();
+  const [searchList, setSearchlist] = useState([]);
+  const [showSearchTable, setShowSearchTable] = useState(false);
   const [orderList, setOrderList] = useState([]);
   const [submitting, setSubmitting] = useState(true);
   const [showPrint, setShowPrint] = useState(false);
   const [viewOrder, setViewOrder] = useState();
+  const [tabkey, setTabkey] = useState(1);
 
   const componentRef = useRef();
   const [page, setPage] = useState(1);
@@ -55,7 +66,7 @@ const DonHang = () => {
   });
 
   const getOrderData = useCallback(async () => {
-    const res = await axios.get(`/api/nhanvien/px?page=${page}`)
+    const res = await axios.get(`/api/kho/dspx?page=${page}`)
     if (res.data.status === 200) {
       setOrderList(res.data.data.data);
       setTotalPage(res.data.data.total);
@@ -86,7 +97,7 @@ const DonHang = () => {
         }
       }).then((value) => {
         if (value === 'yes') {
-          axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
+          axios.put(`/api/kho/setstatusDH/${order.id}`, data).then(res => {
             if (res.data.status === 200) {
               setSubmitting(true);
             } else if (res.data.status === 400) {
@@ -109,7 +120,7 @@ const DonHang = () => {
         }
       }).then((value) => {
         if (value === 'yes') {
-          axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
+          axios.put(`/api/kho/setstatusDH/${order.id}`, data).then(res => {
             if (res.data.status === 200) {
               setSubmitting(true);
             } else if (res.data.status === 400) {
@@ -120,7 +131,7 @@ const DonHang = () => {
       })
     }
     else {
-      axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
+      axios.put(`/api/kho/setstatusDH/${order.id}`, data).then(res => {
         if (res.data.status === 200) {
           setSubmitting(true);
         } else if (res.data.status === 400) {
@@ -150,7 +161,7 @@ const DonHang = () => {
         break;
       }
       case 4: {
-        x = 'Giao hàng thành công';
+        x = 'Đã xuất kho';
         break;
       }
       case 5: {
@@ -172,7 +183,7 @@ const DonHang = () => {
         break;
       }
       case 1: {
-        x = 'primary';
+        x = 'secondary';
         break;
       }
       case 2: {
@@ -198,9 +209,102 @@ const DonHang = () => {
     return x;
   }
 
+  const handleOnSearch = (key) => {
+    if (key !== "") {
+      axios.get(`http://localhost:8000/api/kho/search_kho?key=${key}`).then(res => {
+        if (res.status === 200) {
+          setSearchlist(res.data.data)
+          // setTotalPage(res.data.total);
+          // setPerPage(res.data.per_page);
+          // setCurrentPage(res.data.current_page)
+          setShowSearchTable(true);
+        }
+        else {
+          setShowSearchTable(false);
+        }
+      })
+    }
+  }
+
+  const handleOnClear = () => {
+    setShowSearchTable(false);
+    setSearchlist([]);
+  }
+
   let date = new Date().toLocaleString("vi-VN", { day: '2-digit' });
   let month = new Date().toLocaleString("vi-VN", { month: "long" });
   let year = new Date().getFullYear();
+
+  const SortStt = (e) => {
+    var key = '';
+    switch (e) {
+      case '0': case '1': case '4': case '5':
+        {
+          key = 1;
+          break;
+        }
+      case 'Tại quầy':
+        {
+          key = 2;
+          break;
+        }
+      case 'h-l':
+        {
+          key = 4;
+          break;
+        }
+      case 'l-h':
+        {
+          key = 3;
+          break;
+        }
+      case '':
+        {
+          key = '';
+          break;
+        }
+      default:
+        {
+          break;
+        }
+    }
+    if (key !== '') {
+      axios.get(`/api/kho/locpx?key=${key}&value=${e}`).then(res => {
+        if (res.data.status === 200) {
+          setOrderList(res.data.data.data);
+          setTotalPage(res.data.data.total);
+          setPerPage(res.data.data.per_page);
+          setCurrentPage(res.data.data.current_page);
+        }
+      })
+    } else if (key === '') {
+      setSubmitting(true);
+    }
+  }
+
+  const [dayStart, setDayStart] = useState();
+  const [dayEnd, setDayEnd] = useState();
+  const [xemXuat, setXemXuat] = useState([]);
+  const [showExport, setShowExp] = useState(false);
+  const tableRef = useRef(null);
+
+  const xemLichSuXuatHang = (e) => {
+    e.preventDefault();
+
+    axios.get(`/api/kho/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
+      if (res.data.status === 200) {
+        setXemXuat(res.data.px.data);
+        setShowExp(true);
+      }
+    });
+  }
+
+  const { onDownload } =
+    useDownloadExcel({
+      currentTableRef: tableRef.current,
+      filename: 'Lich su xuat hang',
+      sheet: 'Phiếu xuất'
+    })
 
   return (
     <>
@@ -320,7 +424,8 @@ const DonHang = () => {
               onClick={handlePrint}
             >
               In hóa đơn
-            </B.Button> : null}
+            </B.Button>
+            : null}
           <B.Button
             variant="outline-primary"
             className="mt-2 rounded-0"
@@ -331,52 +436,206 @@ const DonHang = () => {
         </B.ModalFooter>
       </B.Modal>
 
+      <B.Modal size='lg'>
+
+      </B.Modal>
+
       <B.Container fluid>
         <B.Row className='pe-xl-5 mb-4'>
-          <B.Col lg={10}><h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ ĐƠN HÀNG</h1></B.Col>
+          <B.Col lg={10}><h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1></B.Col>
           <B.Col lg={2} className='mt-lg-3 text-end'><RiRefreshLine className='fs-3 customborder' onClick={() => setSubmitting(true)} /></B.Col>
         </B.Row>
 
-        <B.Row className='pe-xl-5 mb-5'>
-          <B.Table responsive='lg' className='table-borderless border border-secondary mb-0'>
-            <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
-              <tr>
-                <th>STT</th>
-                <th>Họ và tên khách hàng</th>
-                <th>Số điện thoại</th>
-                <th>Địa chỉ</th>
-                <th>Giảm giá</th>
-                <th>Tổng tiền</th>
-                <th>Trạng thái</th>
-                <th className="text-center">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderList && orderList.map((item, index) => (
-                <tr key={item.id}>
-                  <td>{index + 1}</td>
-                  <td>{item.tenKH}</td>
-                  <td>{item.sdt}</td>
-                  <td>{item.diaChi}</td>
-                  <td>{item.discount}%</td>
-                  <td>{formatMoney(item.tongTien)}</td>
-                  <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
-                    {checkStatus.map((val) => (
-                      <B.Dropdown.Item key={val.id}
-                        onClick={() => handleUpdateStatus(val, item)}
-                      >{val.name}</B.Dropdown.Item>
+        <B.Tabs activeKey={tabkey}
+          onSelect={(k) => setTabkey(k)}>
+          <B.Tab eventKey={1} title="Danh sách phiếu xuất" className=" border border-top-0 py-3 px-3">
+            <B.Row className='pe-xl-5 mb-3'>
+              <B.Col lg={4} className='mt-2'>
+                <ReactSearchAutocomplete
+                  items={searchList}
+                  onSearch={handleOnSearch}
+                  onClear={handleOnClear}
+                  placeholder='Tìm kiếm phiếu xuất'
+                  maxResults={10}
+                  showNoResults={false}
+                  styling={{
+                    height: "34px",
+                    border: "1px solid lightgray",
+                    borderRadius: "0",
+                    backgroundColor: "white",
+                    boxShadow: "none",
+                    hoverBackgroundColor: "#d19c97",
+                    color: "black",
+                    fontSize: "15px",
+                    iconColor: "black",
+                    lineColor: "#d19c97",
+                    clearIconMargin: "3px 8px 0 0",
+                    zIndex: '2',
+                  }}
+                />
+              </B.Col>
+              <B.Col lg={8} className='mb-2 mt-2'>
+                <B.FormGroup className='pull-right'>
+                  <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
+                    {sort.map((item, index) => (
+                      <option value={item.value}>{item.name}</option>
                     ))}
-                  </B.DropdownButton>
-                  </td>
-                  <td className='text-center'>
-                    <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </B.Table>
-        </B.Row>
-        <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
+                  </B.FormSelect>
+                </B.FormGroup>
+              </B.Col>
+            </B.Row>
+            <B.Row className='pe-xl-5 mb-5'>
+              {!showSearchTable && (
+                <B.Table responsive='lg' className='table-borderless border border-secondary mb-0'>
+                  <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                    <tr>
+                      <th>STT</th>
+                      <th>Họ và tên khách hàng</th>
+                      <th>Số điện thoại</th>
+                      <th>Địa chỉ</th>
+                      <th>Giảm giá</th>
+                      <th>Phương thức thanh toán</th>
+                      <th>Tổng tiền</th>
+                      <th>Trạng thái</th>
+                      <th className="text-center">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderList && orderList.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td>{item.tenKH}</td>
+                          <td>{item.sdt}</td>
+                          <td>{item.diaChi}</td>
+                          <td>{item.discount}%</td>
+                          <td>{item.pt_ThanhToan}</td>
+                          <td>{formatMoney(item.tongTien)}</td>
+                          <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
+                            {checkStatus.map((val) => {
+                              return (
+                                <>
+                                  {item.status > 1 && item.status < 4 ? (
+                                    null
+                                  ) : <B.Dropdown.Item key={val.id}
+                                    onClick={() => handleUpdateStatus(val, item)}
+                                  >{val.name}</B.Dropdown.Item>}
+                                </>
+                              )
+                            })}
+                          </B.DropdownButton>
+                          </td>
+                          <td className='text-center'>
+                            <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </B.Table>
+              )}
+
+              {showSearchTable && (
+                <B.Table responsive='lg' className='table-borderless border border-secondary mb-0'>
+                  <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                    <tr>
+                      <th>STT</th>
+                      <th>Họ và tên khách hàng</th>
+                      <th>Số điện thoại</th>
+                      <th>Địa chỉ</th>
+                      <th>Giảm giá</th>
+                      <th>Phương thức thanh toán</th>
+                      <th>Tổng tiền</th>
+                      <th>Trạng thái</th>
+                      <th className="text-center">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {searchList && searchList.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td>{item.tenKH}</td>
+                          <td>{item.sdt}</td>
+                          <td>{item.diaChi}</td>
+                          <td>{item.discount}%</td>
+                          <td>{item.pt_ThanhToan}</td>
+                          <td>{formatMoney(item.tongTien)}</td>
+                          <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
+                            {checkStatus.map((val) => (
+                              <B.Dropdown.Item key={val.id}
+                                onClick={() => handleUpdateStatus(val, item)}
+                              >{val.name}</B.Dropdown.Item>
+                            ))}
+                          </B.DropdownButton>
+                          </td>
+                          <td className='text-center'>
+                            <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </B.Table>
+              )}
+            </B.Row>
+            <Pagination currentPage={currentPage} totalPage={pageNumbers} handlePerPage={handlePerPage} />
+          </B.Tab>
+
+          <B.Tab eventKey={2} title='Lịch sử xuất hàng' className='border border-top-0 py-3 px-3'>
+            <B.Row className='px-xl-3 mb-3'>
+              <B.Col lg={4}>
+                <B.FormGroup className='d-flex'>
+                  <B.FormLabel className='fs-5'>Từ</B.FormLabel>
+                  <B.FormControl type='date' className='rounded-0 ms-2 mb-2' value={dayStart} onChange={(e) => setDayStart(e.target.value)}></B.FormControl>
+                </B.FormGroup>
+              </B.Col>
+              <B.Col lg={4}>
+                <B.FormGroup className='d-flex'>
+                  <B.FormLabel className='fs-5'>Đến</B.FormLabel>
+                  <B.FormControl type='date' className='rounded-0 ms-2 mb-2' value={dayEnd} onChange={(e) => setDayEnd(e.target.value)}></B.FormControl>
+                </B.FormGroup>
+              </B.Col>
+              <B.Col lg={1}>
+                <B.Button variant='outline-primary' className='rounded-0' onClick={xemLichSuXuatHang}>Xem</B.Button>
+
+              </B.Col>
+              <B.Col lg={3}>
+                {showExport ? <B.Button variant='outline-success' className='rounded-0 pull-right' onClick={onDownload}>Xuất ra Excel</B.Button> : null}
+              </B.Col>
+            </B.Row>
+            <B.Row className='px-xl-3 mb-3'>
+              <B.Table ref={tableRef} responsive className='table-borderless border border-secondary mb-0'>
+                <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên Khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Phương thức thanh toán</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {xemXuat && xemXuat.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item.tenKH}</td>
+                        <td>{item.sdt}</td>
+                        <td>{item.diaChi}</td>
+                        <td>{item.pt_ThanhToan}</td>
+                        <td>{formatMoney(item.tongTien)}</td>
+                        <td>{test(item.status)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </B.Table>
+            </B.Row>
+          </B.Tab>
+        </B.Tabs>
       </B.Container>
     </>
   );

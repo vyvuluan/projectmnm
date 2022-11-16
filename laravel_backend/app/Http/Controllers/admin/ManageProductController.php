@@ -18,9 +18,7 @@ class ManageProductController extends Controller
      */
     public function index()
     {
-
-
-        $prd = Product::paginate();
+        $prd = Product::orderBy('id', 'desc')->paginate(10);
         return $prd;
     }
     public function ctsp($product)
@@ -53,7 +51,7 @@ class ManageProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'tenSP' => 'required',
-            'soLuongSP' => 'required|numeric',
+            //'soLuongSP' => 'required|numeric',
             'maNSX' => 'required|max:10',
             'maNCC' => 'required|max:10',
             'gia' => 'required|numeric',
@@ -64,8 +62,8 @@ class ManageProductController extends Controller
         ], [
 
             'tenSP.required' => 'Ô tên sản phẩm không được bỏ trống',
-            'soLuongSP.numeric' => 'Ô số lượng phải là số',
-            'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
+            //'soLuongSP.numeric' => 'Ô số lượng phải là số',
+            //'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
             'maNSX.required' => 'Ô maNSX không được bỏ trống',
             'maNCC.required' => 'Ô maNCC không được bỏ trống',
             'gia.numeric' => 'Ô giá phải là số',
@@ -85,7 +83,7 @@ class ManageProductController extends Controller
             $product = new Product();
             //$product->maSP = $request->maSP;
             $product->tenSP = $request->tenSP;
-            $product->soLuongSP = $request->soLuongSP;
+            //$product->soLuongSP = $request->soLuongSP;
             $product->maLoai = $request->maLoai;
             $product->maNSX = $request->maNSX;
             $product->maNCC = $request->maNCC;
@@ -99,8 +97,6 @@ class ManageProductController extends Controller
                 $name = time() . '_' . $hinh->getClientOriginalName();
                 Storage::disk('public')->put($name, File::get($hinh));
                 $product->hinh = $name;
-            } else {
-                $product->hinh = 'default.jpg';
             }
             $product->save();
             return response()->json([
@@ -146,7 +142,7 @@ class ManageProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'tenSP' => 'required',
-            'soLuongSP' => 'required|numeric',
+            //'soLuongSP' => 'required|numeric',
             'maNSX' => 'required|max:10',
             'maNCC' => 'required|max:10',
             'gia' => 'required|numeric',
@@ -157,8 +153,8 @@ class ManageProductController extends Controller
         ], [
 
             'tenSP.required' => 'Ô tên sản phẩm không được bỏ trống',
-            'soLuongSP.numeric' => 'Ô số lượng phải là số',
-            'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
+            //'soLuongSP.numeric' => 'Ô số lượng phải là số',
+            //'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
             'maNSX.required' => 'Ô maNSX không được bỏ trống',
             'maNCC.required' => 'Ô maNCC không được bỏ trống',
             'gia.numeric' => 'Ô giá phải là số',
@@ -178,7 +174,7 @@ class ManageProductController extends Controller
             $product =  Product::find($product);
             if ($product) {
                 $product->tenSP = $request->tenSP;
-                $product->soLuongSP = $request->soLuongSP;
+                //$product->soLuongSP = $request->soLuongSP;
                 $product->maLoai = $request->maLoai;
                 $product->maNSX = $request->maNSX;
                 $product->maNCC = $request->maNCC;
@@ -186,8 +182,6 @@ class ManageProductController extends Controller
                 $product->baoHanh = $request->baoHanh;
                 $product->moTa = $request->moTa;
                 $product->ctSanPham = $request->ctSanPham;
-                // var_dump($request->hasFile('hinh'));
-                // exit;
                 if ($request->hasFile('hinh')) {
                     //unlink('public/uploadhinh/' . $product->hinh);
                     $hinh = $request->file('hinh');
@@ -195,8 +189,6 @@ class ManageProductController extends Controller
                     $name = time() . '_' . $hinh->getClientOriginalName();
                     Storage::disk('public')->put($name, File::get($hinh));
                     $product->hinh = $name;
-                } else {
-                    $product->hinh = 'default.jpg';
                 }
                 $product->update();
                 return response()->json([

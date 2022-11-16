@@ -25,6 +25,14 @@ class ManagePhieuXuatController extends Controller
             'data' => $px,
         ]);
     }
+    public function dspx_kho()
+    {
+        $px = PhieuXuat::where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'data' => $px,
+        ]);
+    }
     public function xemctpx($id)
     {
         $ctpx = PhieuXuat::find($id)->pxct;
@@ -84,6 +92,43 @@ class ManagePhieuXuatController extends Controller
                 ]);
             case 4; // Lọc theo giá cao đến thấp
                 $px = PhieuXuat::orderBy('tongTien', 'desc')->paginate(10);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $px,
+
+                ]);
+        }
+    }
+    public function locPx_kho(Request $request)
+    {
+        $key = $request->key;
+        $value = $request->value;
+        switch ($key) {
+            case 1; // Lọc theo tình trạng
+                $px = PhieuXuat::where('status', $value)->where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+                if ($px) {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $px,
+                    ]);
+                }
+            case 2; // Lọc theo Pt Thanh toán
+                $px = PhieuXuat::where('pt_ThanhToan', $value)->paginate(10);
+                if ($px) {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $px,
+                    ]);
+                }
+            case 3; // Lọc theo giá thấp đến cao
+                $px = PhieuXuat::orderBy('tongTien', 'asc')->where('pt_ThanhToan', 'Tại quầy')->paginate(10);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $px,
+
+                ]);
+            case 4; // Lọc theo giá cao đến thấp
+                $px = PhieuXuat::orderBy('tongTien', 'desc')->where('pt_ThanhToan', 'Tại quầy')->paginate(10);
                 return response()->json([
                     'status' => 200,
                     'data' => $px,
@@ -616,6 +661,27 @@ class ManagePhieuXuatController extends Controller
             ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
             ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
             ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            // ->paginate(10);
+            ->get();
+        $px = $px_query;
+        return response()->json([
+            'status' => 200,
+            'data' => $px,
+            'message' => 'kết quả',
+        ]);
+    }
+    public function search_kho(Request $request)
+    {
+        $key = $request->key;
+        $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+            ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+            ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+            ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+
             // ->paginate(10);
             ->get();
         $px = $px_query;

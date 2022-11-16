@@ -16,7 +16,6 @@ const Prodedit = ({ product, showModal }) => {
     const id = product.id;
     const [prodEdit, setProdEdit] = useState({
         tenSP: product.tenSP,
-        sl: product.soLuongSP,
         gia: product.gia,
         loaisp: product.maLoai,
         baohanh: product.baoHanh,
@@ -57,10 +56,11 @@ const Prodedit = ({ product, showModal }) => {
         e.preventDefault();
 
         const formData = new FormData();
+        // if (previewIMG !== null) {
         formData.set("hinh", picture.image);
+        // }
         formData.set("maLoai", prodEdit.loaisp);
         formData.set("tenSP", prodEdit.tenSP);
-        formData.set("soLuongSP", prodEdit.sl);
         formData.set("gia", prodEdit.gia);
         formData.set("maNCC", prodEdit.ncc);
         formData.set("maNSX", prodEdit.nsx);
@@ -108,11 +108,6 @@ const Prodedit = ({ product, showModal }) => {
                                     <B.FormLabel>Tên sản phẩm</B.FormLabel>
                                     <B.FormControl type='text' name='tenSP' className='rounded-0 shadow-none mb-3 w-100' placeholder='Tên sản phẩm'
                                         value={prodEdit.tenSP} onChange={handleProductChange}></B.FormControl>
-                                </B.FormGroup>
-                                <B.FormGroup>
-                                    <B.FormLabel>Số Lượng</B.FormLabel>
-                                    <B.FormControl type='text' name='sl' className='rounded-0 shadow-none mb-3' placeholder='Số Lượng'
-                                        value={prodEdit.sl} onChange={handleProductChange}></B.FormControl>
                                 </B.FormGroup>
                                 <B.FormGroup>
                                     <B.FormLabel>Giá</B.FormLabel>
