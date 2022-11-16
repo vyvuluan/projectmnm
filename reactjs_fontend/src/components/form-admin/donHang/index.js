@@ -20,14 +20,9 @@ const sort = [
   { value: 'l-h', name: 'Giá thấp-cao' },
   { value: '0', name: 'Chờ xác nhận' },
   { value: '1', name: 'Đã xác nhận' },
-  { value: '2', name: 'Đang đóng gói' },
-  { value: '3', name: 'Đang vận chuyển' },
-  { value: '4', name: 'Giao hàng thành công' },
+  { value: '4', name: 'Đã xuất kho' },
   { value: '5', name: 'Đơn hàng đã hủy' },
-  { value: 'COD', name: 'COD' },
-  { value: 'PayPal', name: 'Paypal' },
-  { value: 'VnPay', name: 'VNPay' },
-  { value: 'Tại quầy', name: 'Tại quầy' },
+  { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
 ]
 
 const DonHang = () => {
@@ -243,12 +238,12 @@ const DonHang = () => {
   const SortStt = (e) => {
     var key = '';
     switch (e) {
-      case '0': case '1': case '2': case '3': case '4': case '5':
+      case '0': case '1': case '4': case '5':
         {
           key = 1;
           break;
         }
-      case 'COD': case 'PayPal': case 'Tại quầy': case 'VnPay':
+      case 'Tại quầy':
         {
           key = 2;
           break;
@@ -274,7 +269,7 @@ const DonHang = () => {
         }
     }
     if (key !== '') {
-      axios.get(`/api/nhanvien/locpx?key=${key}&value=${e}`).then(res => {
+      axios.get(`/api/kho/locpx?key=${key}&value=${e}`).then(res => {
         if (res.data.status === 200) {
           setOrderList(res.data.data.data);
           setTotalPage(res.data.data.total);

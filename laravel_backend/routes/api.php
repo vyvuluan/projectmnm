@@ -169,6 +169,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('products/chitiet/{id}', [ManageProductController::class, 'ctsp']);
     // Cập nhật sản phẩm
     Route::post('products/update/{id}', [ManageProductController::class, 'update']);
+    Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
 });
 
 Route::get('nsx', [ManageNsxController::class, 'nsxall']);

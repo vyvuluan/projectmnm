@@ -32,10 +32,10 @@ const sort = [
     { value: '3', name: 'Đang vận chuyển' },
     { value: '4', name: 'Giao hàng thành công' },
     { value: '5', name: 'Đơn hàng đã hủy' },
-    { value: 'COD', name: 'COD' },
-    { value: 'PayPal', name: 'Paypal' },
-    { value: 'VnPay', name: 'VNPay' },
-    { value: 'Tại quầy', name: 'Tại quầy' },
+    { value: 'COD', name: 'Thanh toán COD' },
+    { value: 'PayPal', name: 'Thanh toán Paypal' },
+    { value: 'VnPay', name: 'Thanh toán VNPay' },
+    { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
 ]
 
 function Index() {
