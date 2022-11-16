@@ -6,7 +6,7 @@
   color: inherit;
   background: none;
   cursor: pointer;
-
+  width: 100%;
   display: inline-block;
 
   text-transform: uppercase;
@@ -54,10 +54,10 @@
 
 /* Button 2 */
 .btn21 {
-  height: 50px;
-  width: 250px;
+  height: 100%;
+  width: 100%;
   /* height: 50px; */
-  background: #d19c97;
+  background: #dd0018;
   color: #fff;
 }
 

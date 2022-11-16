@@ -15,7 +15,12 @@ const Product = (props) => {
   //   arrayID.find(e=>e.id == id)
   //   // console.log(typeof array D);
   // }
-
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
   return (
     <>
       <div className="container-fluid pt-5">
@@ -35,14 +40,12 @@ const Product = (props) => {
                     <div className="text-center border-end border-start p-0 pt-4 pb-3 ">
                       <h6 className="mb-3">{item.tenSP}</h6>
                       <div className="d-flex justify-content-center">
-                        <h6>{item.gia}</h6>
-                        <h6 className="text-muted ms-2">
-                          <del>{item.gia}</del>
-                        </h6>
+                        <h6>{formatMoney(item.gia)}</h6>
+                        
                       </div>
                     </div>
                     <div className="card-footer d-flex text-center bg-light border">
-                      <div className="m-auto">
+                      <div className="w-100">
                         {/* <AiFillEye className="me-1 mb-1"></AiFillEye> */}
 
                         <Link
