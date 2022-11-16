@@ -17,6 +17,11 @@ import LoadingPage from "../../layouts/Loading/index.js";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
   // const [firstPage,setFirstPage] = useState();
+  const [value1, setValue1] = useState([0, 50000000]);
+  const [Checked, setChecked] = useState([]);
+  const [CheckedALL, setCheckedALL] = useState([]);
+
+  const [viewNSX, setViewNSX] = useState([]);
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
@@ -40,8 +45,22 @@ const PageProducts = () => {
 
   const [searchParam, setSearchParam] = useSearchParams();
   useEffect(() => {
+    axios
+      .get(`/api/nsx`)
+      .then((res) => {
+        if (res.data.status == 200) {
+          // console.log(res.data.Nsx.id);
+          setViewNSX(res.data.Nsx);
+          // setIdNSX(res.data.Nsx.id);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+  useEffect(() => {
     // const controller = new AbortController();
-    console.log(...searchParam);
+    // console.log(...searchParam);
     if (searchParam.get("category")) {
       axios
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
@@ -126,21 +145,88 @@ const PageProducts = () => {
     }
   }
 
+  // const [dataFilter, setDataFilter] = useState();
+  var b;
+  const handleChange = (e) => {
+    // console.log([e.target.value]);
+    var a = e.target.value;
+    b = a.split(",").map(Number);
+  };
+
+  const minDistance = 10;
+  function valuetext(value) {
+    // console.log(value);
+    return value;
+  }
+
+  const handleChange1 = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
+    } else {
+      setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
+    }
+  };
+
+  const handleToggle = (value) => {
+    const currentIndex = Checked.indexOf(value);
+    const newChecked = [...Checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+  const handleFilter = () => {
+    // console.log(Checked);
+    axios
+      .get(
+        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${
+          value1[0]
+        }&giaMax=${value1[1]}&page=${page}`
+      )
+      .then(
+        (res) => {
+          // console.log(res.data.data);
+          setListProduct(res.data.data.data);
+          setTotalPage(res.data.data.total);
+          setPerPage(res.data.data.per_page);
+          setCurrentPage(res.data.data.current_page);
+        },
+        [page]
+      )
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <Container fluid className="mt-5">
         <Row>
-            <SectionTitle title="Sản phẩm" />
-            <Col sm ={2}>
-              <Filter/>
-              
-
-            </Col>
-            <Col sm={10}>
-
+          <SectionTitle title="Sản phẩm" />
+          <Col sm={2}>
+            <Filter
+              handleFilter={handleFilter}
+              handleToggle={handleToggle}
+              value1={value1}
+              handleChange1={handleChange1}
+              valuetext={valuetext}
+              Checked={Checked}
+              viewNSX={viewNSX}
+              handleChange={handleChange}
+            />
+          </Col>
+          <Col sm={10}>
             {/* sort */}
             <SortProduct />
-            
+
             {product_HTML}
 
             <Pagination

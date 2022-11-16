@@ -89,7 +89,7 @@ const PhieuNhap = () => {
   };
 
   const test = (value) => {
-    console.log(value.product_id);
+    // console.log(value.product_id);
     var index, index1;
     const d = dataShowPN.filter((item, i) => {
       return item.id === value.pn_id ? (index = i) : null;
@@ -102,11 +102,11 @@ const PhieuNhap = () => {
     //   (prev[index].pnct[i1] = value),
     // ])
     let newData = [...dataShowPN];
-    console.log(index + " " + index1);
-    console.log(newData[index].pnct[index1]);
+    // console.log(index + " " + index1);
+    // console.log(newData[index].pnct[index1]);
     newData[index].pnct[index1] = value;
 
-    console.log(newData);
+    // console.log(newData);
     setDataShowPN(newData);
   };
 

@@ -42,7 +42,8 @@ class ProductController extends Controller
     }
     public function allcomment($product_id)
     {
-        $comment = Product::find($product_id)->comments;
+        // $comment = Product::find($product_id)->comments;
+        $comment = DB::select("CALL get_allcomment($product_id)");
         return response()->json([
             'status' => 200,
             'comment' => $comment,
@@ -56,15 +57,13 @@ class ProductController extends Controller
 
             $maKH = auth('sanctum')->user()->customer->id;
             $spcheck = Product::find($request->product_id);
-            //return  $request->product_id;
             if ($spcheck) {
-                // DB::insert('insert into comments (product_id,customer_id,comment)
-                // values (' .  $product_id . ',' . $maKH . ',' .   $comment  . ')');
-                $comment = new Comment();
-                $comment->product_id =  $request->product_id;
-                $comment->customer_id = $maKH;
-                $comment->comment =  $request->comment;
-                $comment->save();
+                DB::select("CALL add_comment($request->product_id,$maKH,'$request->comment')");
+                // $comment = new Comment();
+                // $comment->product_id =  $request->product_id;
+                // $comment->customer_id = $maKH;
+                // $comment->comment =  $request->comment;
+                // $comment->save();
                 return response()->json([
                     'status' => 200,
                     'message' => 'Đăng commnent thành công',
@@ -328,7 +327,9 @@ class ProductController extends Controller
     }
     public function sort_chitiet_minmax(Request $request)
     {
-        $product =  Product::whereIn('maNsx', $request->nsx_id)
+        $array_nsx = array_map('intval', explode(',', $request->nsx_id));
+
+        $product =  Product::whereIn('maNsx', $array_nsx)
             ->where('gia', '>', $request->giaMin)
             ->where('gia', '<=', $request->giaMax)
             ->paginate(8);
