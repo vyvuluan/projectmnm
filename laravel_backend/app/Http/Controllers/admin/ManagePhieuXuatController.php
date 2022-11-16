@@ -25,6 +25,14 @@ class ManagePhieuXuatController extends Controller
             'data' => $px,
         ]);
     }
+    public function dspx_kho()
+    {
+        $px = PhieuXuat::where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'data' => $px,
+        ]);
+    }
     public function xemctpx($id)
     {
         $ctpx = PhieuXuat::find($id)->pxct;
@@ -612,6 +620,24 @@ class ManagePhieuXuatController extends Controller
     {
         $key = $request->key;
         $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
+            ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
+            ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
+            ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            // ->paginate(10);
+            ->get();
+        $px = $px_query;
+        return response()->json([
+            'status' => 200,
+            'data' => $px,
+            'message' => 'kết quả',
+        ]);
+    }
+    public function search_kho(Request $request)
+    {
+        $key = $request->key;
+        $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
             ->orwhere('sdt', 'LIKE', '%' . $key . '%')
             ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
             ->orwhere('pt_ThanhToan', 'LIKE', '%' . $key . '%')
