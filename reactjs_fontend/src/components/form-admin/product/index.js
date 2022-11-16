@@ -617,7 +617,7 @@ function Index() {
                     style={{ backgroundColor: "#edf1ff" }}
                   >
                     <tr>
-                      <th>ID</th>
+                      <th>STT</th>
                       <th>Tên sản phẩm</th>
                       <th>Loại</th>
                       <th>Giá</th>
@@ -627,11 +627,11 @@ function Index() {
                   </thead>
                   {!showTable && (
                     <tbody>
-                      {viewProd.map((item) => {
+                      {viewProd.map((item, index) => {
                         return (
                           <>
                             <tr key={item.id}>
-                              <td>{item.id}</td>
+                              <td>{index + 1}</td>
                               <td><img
                                 src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                                 width="50px"
@@ -654,11 +654,11 @@ function Index() {
                   )}
                   {showTable && (
                     <tbody>
-                      {prodSearchlist && prodSearchlist.map((item) => {
+                      {prodSearchlist && prodSearchlist.map((item, index) => {
                         return (
                           <>
                             <tr key={item.id}>
-                              <td>{item.id}</td>
+                              <td>{index + 1}</td>
                               <td><img
                                 src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                                 width="50px"
@@ -743,7 +743,7 @@ function Index() {
                   style={{ backgroundColor: "#edf1ff" }}
                 >
                   <tr>
-                    <th>ID</th>
+                    <th>STT</th>
                     <th>Tên sản phẩm</th>
                     <th>Loại</th>
                     <th>Giá</th>
@@ -753,11 +753,11 @@ function Index() {
                 </thead>
                 {!showTable && (
                   <tbody>
-                    {viewProd.map((item) => {
+                    {viewProd.map((item, index) => {
                       return (
                         <>
                           <tr key={item.id}>
-                            <td>{item.id}</td>
+                            <td>{index + 1}</td>
                             <td><img
                               src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                               width="50px"
@@ -780,11 +780,11 @@ function Index() {
                 )}
                 {showTable && (
                   <tbody>
-                    {prodSearchlist && prodSearchlist.map((item) => {
+                    {prodSearchlist && prodSearchlist.map((item, index) => {
                       return (
                         <>
                           <tr key={item.id}>
-                            <td>{item.id}</td>
+                            <td>{index + 1}</td>
                             <td><img
                               src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                               width="50px"

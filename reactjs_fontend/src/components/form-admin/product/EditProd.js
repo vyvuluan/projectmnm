@@ -56,9 +56,9 @@ const Prodedit = ({ product, showModal }) => {
         e.preventDefault();
 
         const formData = new FormData();
-        if (previewIMG !== null) {
-            formData.set("hinh", picture.image);
-        }
+        // if (previewIMG !== null) {
+        formData.set("hinh", picture.image);
+        // }
         formData.set("maLoai", prodEdit.loaisp);
         formData.set("tenSP", prodEdit.tenSP);
         formData.set("gia", prodEdit.gia);
