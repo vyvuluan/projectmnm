@@ -17,7 +17,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discount = Discount::orderBy('id', 'desc')->paginate(10);
+        $discount = Discount::orderBy('created_at', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'discount' =>  $discount,
@@ -209,5 +209,16 @@ class DiscountController extends Controller
                 ]);
             }
         }
+    }
+    public function ds_discount_tontai()
+    {
+        $date = Carbon::today();
+        $discount = Discount::where('start', '<', $date)
+            ->where('end', '>', $date)
+            ->first();
+            return response()->json([
+                'status' => 200,
+                'discount' => $discount,
+            ]);
     }
 }

@@ -145,6 +145,8 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('thongKeDoanhThuSoLuong', [ManageBaoCaoController::class, 'thongKeDoanhThuSoLuong']);
 
     //Api Quản lý  Phiếu Xuất
+    Route::get('dspx', [ManagePhieuXuatController::class, 'dspx_kho']); // Danh sách các phiếu xuất đã xác nhận
+    Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
     Route::resource('px', ManagePhieuXuatController::class);
     Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class, 'xemctpx']);
 
@@ -166,7 +168,7 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::post('products/update/{id}', [ManageProductController::class, 'update']);
 });
 
-    Route::get('nsx', [ManageNsxController::class, 'nsxall']);
+Route::get('nsx', [ManageNsxController::class, 'nsxall']);
 
 //nhân viên
 Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(function () {
@@ -250,6 +252,7 @@ Route::get('/sort-chitiet', [ProductController::class, 'sort_chitiet']);
 
 Route::get('/sort-chitiet-minmax', [ProductController::class, 'sort_chitiet_minmax']);
 
+Route::get('/ds_discount_tontai', [DiscountController::class, 'ds_discount_tontai']);
 
 // Route::resource('products/add', ProductController::class)->only('store');
 // Route::delete('products/delete/{id}', [ProductController::class,'destroy']);
