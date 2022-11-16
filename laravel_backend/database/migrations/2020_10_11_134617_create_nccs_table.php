@@ -18,7 +18,7 @@ return new class extends Migration
             // $table->bigInteger('maNSX');
             $table->string('tenNCC');
             $table->string('diaChi');
-            $table->string('sdt');
+            $table->string('sdt',10);
           
             $table->timestamps();
         });
