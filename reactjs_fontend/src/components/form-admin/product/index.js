@@ -44,7 +44,6 @@ function Index() {
   });
 
   const [editorKey, setEditorKey] = React.useState(4);
-
   const [show, setShow] = useState(false);
   const [prodData, setProdData] = useState();
   const handleClose = () => {

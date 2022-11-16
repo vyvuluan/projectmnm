@@ -17,7 +17,8 @@ import LoadingPage from "../../layouts/Loading/index.js";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
   // const [firstPage,setFirstPage] = useState();
-  const [value1, setValue1] = useState([0, 50000000]);
+  const [gia, setGia] = useState();
+  const [value1, setValue1] = useState([0, gia]);
   const [Checked, setChecked] = useState([]);
   const [CheckedALL, setCheckedALL] = useState([]);
 
@@ -42,7 +43,22 @@ const PageProducts = () => {
   for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
     pageNumbers.push(i);
   }
-
+  let gia1;
+  useEffect(() => {
+    axios
+      .get(`/api/giaMax`)
+      .then((res) => {
+        setGia(res.data.data.gia);
+        gia1 = res.data.data.gia;
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        console.log(gia);
+        setValue1([0, gia1]);
+      });
+  }, []);
   const [searchParam, setSearchParam] = useSearchParams();
   useEffect(() => {
     axios
@@ -146,6 +162,10 @@ const PageProducts = () => {
   }
 
   // const [dataFilter, setDataFilter] = useState();
+  let dataIDNSX = [];
+  let idNSX1 = viewNSX.map((item) => {
+    return dataIDNSX.push(item.id);
+  });
   var b;
   const handleChange = (e) => {
     // console.log([e.target.value]);
@@ -221,6 +241,8 @@ const PageProducts = () => {
               Checked={Checked}
               viewNSX={viewNSX}
               handleChange={handleChange}
+              idNSX1={idNSX1}
+              gia={gia}
             />
           </Col>
           <Col sm={10}>
