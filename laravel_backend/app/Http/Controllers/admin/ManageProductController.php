@@ -18,9 +18,7 @@ class ManageProductController extends Controller
      */
     public function index()
     {
-
-
-        $prd = Product::paginate();
+        $prd = Product::orderBy('id', 'desc')->paginate(10);
         return $prd;
     }
     public function ctsp($product)
