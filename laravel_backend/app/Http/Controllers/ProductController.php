@@ -330,7 +330,7 @@ class ProductController extends Controller
         $array_nsx = array_map('intval', explode(',', $request->nsx_id));
 
         $product =  Product::whereIn('maNsx', $array_nsx)
-            ->where('gia', '>', $request->giaMin)
+            ->where('gia', '>=', $request->giaMin)
             ->where('gia', '<=', $request->giaMax)
             ->paginate(8);
         return response()->json([

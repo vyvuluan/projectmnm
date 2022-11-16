@@ -249,6 +249,7 @@ Route::get('/sort-chitiet', [ProductController::class, 'sort_chitiet']);
 
 Route::get('/sort-chitiet-minmax', [ProductController::class, 'sort_chitiet_minmax']);
 
+Route::get('/ds_discount_tontai', [DiscountController::class, 'ds_discount_tontai']);
 
 // Route::resource('products/add', ProductController::class)->only('store');
 // Route::delete('products/delete/{id}', [ProductController::class,'destroy']);
