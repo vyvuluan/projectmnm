@@ -208,7 +208,7 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     //Api Quản lý  Đơn Hàng (Phiếu xuất)
     Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
     Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
-    Route::resource('px', ManagePhieuXuatController::class);
+    Route::resource('px', ManagePhieuXuatController::class)->only('index');
     Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
 
     //Api Quản lý chi tiết phiếu xuất
