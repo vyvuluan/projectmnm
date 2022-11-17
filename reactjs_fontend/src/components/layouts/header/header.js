@@ -9,7 +9,7 @@ import {
   FaShoppingBag,
 } from "react-icons/fa";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { Link, NavLink, Route, useLocation } from "react-router-dom";
+import { Link, Navigate, NavLink, Route, useLocation, useParams, useSearchParams } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -18,13 +18,13 @@ import { Category, DropDownMenu, Slideshow } from "../../form";
 
 export default function Header() {
   const [count, setCount] = useState();
+  const location = useLocation();
   const history = useNavigate();
   const [open, setOpen] = useState(false);
   const [nameUser, setNameUser] = useState(null);
   const [product, setProduct] = useState([]);
   const [cart, setCart] = useState();
   const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("pageproducts?search=" + search);
   const [none, setNone] = useState("d-none");
 
   useEffect(() => {
@@ -120,13 +120,18 @@ export default function Header() {
 
   const getValueSearch = (e) => {
     setSearch(e.target.value);
-    setQuery("pageproducts?search=" + search);
   };
 
-  function useQuery() {
-    const { search } = useLocation();
+  const OnSearch = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(location.search);
 
-    return React.useMemo(() => new URLSearchParams(search), [search]);
+    if (params.has('search')) {
+      params.delete('search')
+      history(`?search=${search}`)
+    } else {
+      history(`/pageproducts?search=${search}`);
+    }
   }
 
 
@@ -182,22 +187,24 @@ export default function Header() {
             </Link>
           </Bt.Col>
           <Bt.Col className="col-lg-6 col-6 text-start">
-            <Bt.Form>
+            <Bt.Form onSubmit={OnSearch}>
               <Bt.Form.Group>
                 <Bt.InputGroup>
                   <Bt.Form.Control
                     type="text"
                     placeholder="Search"
                     onChange={getValueSearch}
+
                     className="rounded-0 shadow-none focus-outline-none fw-semibold"
                   ></Bt.Form.Control>
                   <Bt.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <Link to={query}>
-                      <FaSearch
-                        variant="primary"
-                        style={{ cursor: "pointer" }}
-                      />
-                    </Link>
+                    {/* <Link to={query}> */}
+                    <FaSearch
+                      variant="primary"
+                      style={{ cursor: "pointer" }}
+                      onClick={OnSearch}
+                    />
+                    {/* </Link> */}
                   </Bt.InputGroup.Text>
                 </Bt.InputGroup>
               </Bt.Form.Group>
@@ -288,7 +295,7 @@ export default function Header() {
                   backgroundColor: "#fff",
                   width: "100%",
                 }}
-                
+
               >
                 <Bt.Collapse in={open} className={`w-100`}>
                   <div id="collapse-categories">

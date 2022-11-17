@@ -12,14 +12,13 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import LoadingPage from "../../layouts/Loading/index.js";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
   // const [firstPage,setFirstPage] = useState();
   const [gia, setGia] = useState();
   const [b, setB] = useState([]);
-
   const [value1, setValue1] = useState([0, gia]);
   const [Checked, setChecked] = useState([]);
   const [CheckedALL, setCheckedALL] = useState([]);
@@ -40,9 +39,11 @@ const PageProducts = () => {
 
     return dataIDNSX.push(item.id);
   });
-    
- 
-  
+
+  useEffect(() => {
+
+  })
+
 
   const handlePerPage = (page) => {
     // console.log(page);
@@ -87,7 +88,14 @@ const PageProducts = () => {
   useEffect(() => {
     // const controller = new AbortController();
     // console.log(...searchParam);
-    if (searchParam.get("category")) {
+    if (searchParam.has('search')) {
+      axios.get(`/api/searchProduct?key=${searchParam.get('search')}`).then(res => {
+        if (res.status === 200) {
+          setListProduct(res.data.product);
+          setLoading(false);
+        }
+      })
+    } else if (searchParam.get("category")) {
       axios
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
         .then(function (response) {
@@ -171,6 +179,8 @@ const PageProducts = () => {
     }
   }
 
+  console.log(listProduct);
+
   // const [dataFilter, setDataFilter] = useState();
 
   const handleChange = (e) => {
@@ -213,8 +223,7 @@ const PageProducts = () => {
     // console.log(Checked);
     axios
       .get(
-        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${
-          value1[0]
+        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${value1[0]
         }&giaMax=${value1[1]}&page=${page}`
       )
       .then(
