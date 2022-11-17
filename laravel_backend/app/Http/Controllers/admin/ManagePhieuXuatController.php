@@ -27,7 +27,7 @@ class ManagePhieuXuatController extends Controller
     }
     public function dspx_kho()
     {
-        $px = PhieuXuat::where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+        $px = PhieuXuat::where('status', '>=', 1)->orwhere('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'data' => $px,
@@ -105,7 +105,7 @@ class ManagePhieuXuatController extends Controller
         $value = $request->value;
         switch ($key) {
             case 1; // Lọc theo tình trạng
-                $px = PhieuXuat::where('status', $value)->where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+                $px = PhieuXuat::where('status', $value)->orderBy('id', 'desc')->paginate(10);
                 if ($px) {
                     return response()->json([
                         'status' => 200,
@@ -113,7 +113,7 @@ class ManagePhieuXuatController extends Controller
                     ]);
                 }
             case 2; // Lọc theo Pt Thanh toán
-                $px = PhieuXuat::where('pt_ThanhToan', $value)->paginate(10);
+                $px = PhieuXuat::where('pt_ThanhToan', $value)->where('status', '>=', 1)->paginate(10);
                 if ($px) {
                     return response()->json([
                         'status' => 200,
@@ -121,14 +121,14 @@ class ManagePhieuXuatController extends Controller
                     ]);
                 }
             case 3; // Lọc theo giá thấp đến cao
-                $px = PhieuXuat::orderBy('tongTien', 'asc')->where('pt_ThanhToan', 'Tại quầy')->paginate(10);
+                $px = PhieuXuat::orderBy('tongTien', 'asc')->where('status', '>=', 1)->paginate(10);
                 return response()->json([
                     'status' => 200,
                     'data' => $px,
 
                 ]);
             case 4; // Lọc theo giá cao đến thấp
-                $px = PhieuXuat::orderBy('tongTien', 'desc')->where('pt_ThanhToan', 'Tại quầy')->paginate(10);
+                $px = PhieuXuat::orderBy('tongTien', 'desc')->where('status', '>=', 1)->paginate(10);
                 return response()->json([
                     'status' => 200,
                     'data' => $px,
@@ -390,6 +390,55 @@ class ManagePhieuXuatController extends Controller
             ]);
         }
     }
+    public function setstatusPX(Request $request, $id)
+    {
+
+        $maNV = auth('sanctum')->user()->employee->id;
+        $px = PhieuXuat::find($id);
+        if ($px->pt_ThanhToan != 'Tại quầy') {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Bạn không thể thay đổi tình trạng của đơn đặt hàng online',
+            ]);
+        } else if ($px->status == 1 && $request->status <= 1) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Phiếu Xuất đã qua bước xác nhận không thể chỉnh sửa ',
+            ]);
+        } else if ($px->status == 5 && $request->status <= 5) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã được huỷ không thể chỉnh sửa',
+            ]);
+        } else if ($px->status == 4 && $request->status <= 4) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
+            ]);
+        } else if ($px->status == 4 && $request->status == 5) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
+            ]);
+        }
+        $px->status = $request->status;
+        $px->employee_id = $maNV;
+        $px->save();
+        if ($px->status = 5) {
+            $pxcts = $px->pxct;
+            foreach ($pxcts as $pxct) {
+                $product = Product::find($pxct->product_id);
+                if ($product) {
+                    $product->soLuongSP += $pxct->soluong;
+                    $product->save();
+                }
+            }
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cập nhật phiếu thành công ',
+        ]);
+    }
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -418,38 +467,12 @@ class ManagePhieuXuatController extends Controller
         } else {
             $px = PhieuXuat::find($id);
             if ($px) {
-                if ($px->status == 1 && $request->status < 1) {
+                if ($px->status >= 1) {
                     return response()->json([
                         'status' => 400,
                         'message' => 'Phiếu Xuất đã qua bước  xác nhận không thể chỉnh sửa ',
                     ]);
-                } else if ($px->status == 5 && $request->status <= 5) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đã được huỷ không thể chỉnh sửa',
-                    ]);
-                } else if ($px->status == 4 && $request->status <= 4) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
-                    ]);
-                } else if ($px->status == 3 && $request->status < 3) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đang vận chuyển không thể về bước trước',
-                    ]);
-                } else if ($px->status == 2 && $request->status < 2) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đang đóng gói không thể quay về bước trước',
-                    ]);
-                } else if ($px->status == 4 && $request->status == 5) {
-                    return response()->json([
-                        'status' => 400,
-                        'message' => 'Đơn hàng đã giao không thể chỉnh sửa',
-                    ]);
                 }
-
                 $px->customer_id = $request->customer_id;
                 $px->status = $request->status;
                 $px->pt_ThanhToan = $request->pt_ThanhToan;
@@ -674,13 +697,14 @@ class ManagePhieuXuatController extends Controller
     {
         $key = $request->key;
         $px_query = PhieuXuat::where('tenKH', 'LIKE', '%' . $key . '%')
-            ->where('pt_ThanhToan', 'Tại quầy')
+            ->where('status', '>=', 1)
             ->orwhere('sdt', 'LIKE', '%' . $key . '%')
-            ->where('pt_ThanhToan', 'Tại quầy')
+            ->where('status', '>=', 1)
             ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
-            ->where('pt_ThanhToan', 'Tại quầy')
+            ->where('status', '>=', 1)
             ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
-            ->where('pt_ThanhToan', 'Tại quầy')
+            ->where('status', '>=', 1)
+            ->orwhere('pt_ThanhToan', 'Tại quầy')
 
             // ->paginate(10);
             ->get();
