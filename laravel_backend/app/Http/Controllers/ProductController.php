@@ -249,6 +249,7 @@ class ProductController extends Controller
             ]);
         }
     }
+    // Search tất cả sản phẩm
     public function search(Request $request)
     {
         $key = $request->key;
@@ -260,7 +261,7 @@ class ProductController extends Controller
             ->orwhereHas('loaisp', function ($query) use ($key) {
                 $query->where('tenLoai', 'LIKE', '%' . $key . '%');
             });
-        $product = $product_query->get();
+        $product = $product_query->paginate(10);
 
         return response()->json([
             'data' => $product,

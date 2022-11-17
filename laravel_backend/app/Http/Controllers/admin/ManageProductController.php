@@ -226,6 +226,7 @@ class ManageProductController extends Controller
             ]);
         }
     }
+    //search tất cả
     public function search(Request $request)
     {
         $key = $request->key;
@@ -237,7 +238,7 @@ class ManageProductController extends Controller
             ->orwhereHas('loaisp', function ($query) use ($key) {
                 $query->where('tenLoai', 'LIKE', '%' . $key . '%');
             });
-        $product = $product_query->get();
+        $product = $product_query->paginate(10);
 
         return response()->json([
             'data' => $product,

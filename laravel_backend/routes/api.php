@@ -221,7 +221,7 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
 Route::put('huyDH/{id}', [ManagePhieuXuatController::class, 'huyDH']); // Huỷ đơn hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
-Route::get('products-search', [ProductController::class, 'search']);
+Route::get('products-search', [ManageProductController::class, 'search']);
 Route::get('allcomment/{product_id}', [ProductController::class, 'allcomment']);
 Route::post('addcomment', [ProductController::class, 'addcomment']);
 
