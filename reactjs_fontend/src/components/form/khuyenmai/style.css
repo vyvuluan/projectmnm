@@ -1,3 +1,8 @@
+.marginCarosel {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
 .imgcontainer {
     width: 310px;
     height: 150px;
@@ -33,6 +38,10 @@
     left: 130px;
 }
 
+.iconsize {
+    font-size: 27px;
+}
+
 @media screen and (max-width: 464px) {
 
     .imgcontainer {
@@ -63,7 +72,17 @@
     .textimg-bottom2 {
         position: absolute;
         font-size: 7px;
-        top: 60px;
+        top: 53px;
         left: 71px;
+    }
+
+    .iconsize {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .iconsize {
+        font-size: 22px;
     }
 }

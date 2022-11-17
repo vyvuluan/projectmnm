@@ -3,6 +3,8 @@ import * as B from 'react-bootstrap'
 import magiamgia from './magiamgia.png'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { AiFillFire } from 'react-icons/ai'
+import { MdArrowForwardIos } from 'react-icons/md'
 import './style.css'
 import axios from 'axios';
 
@@ -32,7 +34,7 @@ const Index = () => {
                 setDisList(res.data.discount)
             }
         })
-    })
+    }, [])
 
     var discount_html = '';
     if (discountList.length > 0) {
@@ -42,14 +44,14 @@ const Index = () => {
                 removeArrowOnDeviceType={['mobile']}
                 autoPlay
                 autoPlaySpeed={3000}
-                centerMode={false}
+                centerMode={true}
                 containerClass="container-with-dots"
                 dotListClass=""
                 draggable={false}
                 focusOnSelect={false}
                 infinite
                 itemClass=""
-                keyBoardControl={false}
+                keyBoardControl={true}
                 pauseOnHover={true}
                 renderArrowsWhenDisabled={false}
                 renderButtonGroupOutside={false}
@@ -60,7 +62,7 @@ const Index = () => {
                             max: 3000,
                             min: 1024
                         },
-                        items: 5,
+                        items: 4,
                         partialVisibilityGutter: 100
                     },
                     desktopMd: {
@@ -76,7 +78,7 @@ const Index = () => {
                             max: 464,
                             min: 0
                         },
-                        items: 2,
+                        items: 1,
                         partialVisibilityGutter: 50
                     },
                     tablet: {
@@ -116,14 +118,14 @@ const Index = () => {
                 removeArrowOnDeviceType={['mobile']}
                 autoPlay
                 autoPlaySpeed={3000}
-                centerMode={false}
+                centerMode={true}
                 containerClass="container-with-dots"
                 dotListClass=""
                 draggable={false}
                 focusOnSelect={false}
                 infinite
                 itemClass=""
-                keyBoardControl={false}
+                keyBoardControl={true}
                 pauseOnHover={true}
                 renderArrowsWhenDisabled={false}
                 renderButtonGroupOutside={false}
@@ -134,7 +136,7 @@ const Index = () => {
                             max: 3000,
                             min: 1024
                         },
-                        items: 5,
+                        items: 4,
                         partialVisibilityGutter: 100
                     },
                     desktopMd: {
@@ -150,7 +152,7 @@ const Index = () => {
                             max: 464,
                             min: 0
                         },
-                        items: 2,
+                        items: 1,
                         partialVisibilityGutter: 50
                     },
                     tablet: {
@@ -185,7 +187,15 @@ const Index = () => {
     return (
         <>
             <B.Container fluid className='pt-5'>
-                <B.Row className='px-xl-5'>
+                <B.Row className='px-xl-5 mb-2'>
+                    <div className='d-flex'>
+                        {/* <div className='bordertext'></div> */}
+                        <AiFillFire className='fs-2 text-danger mt-1' />
+                        <MdArrowForwardIos className='iconsize mt-2' />
+                        <h2 className=''>Mã khuyến mại sốc</h2>
+                    </div>
+                </B.Row>
+                <B.Row className='px-xl-5 mx-0'>
                     {discount_html}
                 </B.Row>
             </B.Container>
