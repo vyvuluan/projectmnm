@@ -16,9 +16,9 @@ import { useParams, useSearchParams } from "react-router-dom";
 import LoadingPage from "../../layouts/Loading/index.js";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
+  const [b, setB] = useState([])
   // const [firstPage,setFirstPage] = useState();
   const [gia, setGia] = useState();
-  const [b, setB] = useState([]);
   const [value1, setValue1] = useState([0, gia]);
   const [Checked, setChecked] = useState([]);
   const [CheckedALL, setCheckedALL] = useState([]);
@@ -36,14 +36,10 @@ const PageProducts = () => {
   // );
   let dataIDNSX = [];
   let idNSX1 = viewNSX.map((item) => {
-
     return dataIDNSX.push(item.id);
   });
-
-  useEffect(() => {
-
-  })
-
+  
+   
 
   const handlePerPage = (page) => {
     // console.log(page);
@@ -76,25 +72,34 @@ const PageProducts = () => {
       .get(`/api/nsx`)
       .then((res) => {
         if (res.data.status == 200) {
-          // console.log(res.data.Nsx.id);
+          // console.log(res.data.Nsx);
           setViewNSX(res.data.Nsx);
           // setIdNSX(res.data.Nsx.id);
+          let dataNSXtest = []
+          res.data.Nsx.map((item) =>{
+            return dataNSXtest.push(item.id)
+          })
+          setB(dataNSXtest)
         }
       })
       .catch(function (error) {
         console.log(error);
       });
   }, []);
+
+
   useEffect(() => {
     // const controller = new AbortController();
     // console.log(...searchParam);
-    if (searchParam.has('search')) {
-      axios.get(`/api/searchProduct?key=${searchParam.get('search')}`).then(res => {
-        if (res.status === 200) {
-          setListProduct(res.data.product);
-          setLoading(false);
-        }
-      })
+    if (searchParam.has("search")) {
+      axios
+        .get(`/api/searchProduct?key=${searchParam.get("search")}`)
+        .then((res) => {
+          if (res.status === 200) {
+            setListProduct(res.data.product);
+            setLoading(false);
+          }
+        });
     } else if (searchParam.get("category")) {
       axios
         .get(`/api/cate/product/${[...searchParam][0][1]}`)
@@ -179,10 +184,10 @@ const PageProducts = () => {
     }
   }
 
-  console.log(listProduct);
+  // console.log(listProduct);
 
   // const [dataFilter, setDataFilter] = useState();
-
+  console.log(b);
   const handleChange = (e) => {
     // console.log([e.target.value]);
     var a = e.target.value;
@@ -208,6 +213,9 @@ const PageProducts = () => {
   };
 
   const handleToggle = (value) => {
+    // console.log("qqq");
+    idNSX1 = null;
+    // console.log(idNSX1);
     const currentIndex = Checked.indexOf(value);
     const newChecked = [...Checked];
 
@@ -219,12 +227,15 @@ const PageProducts = () => {
     setB(null);
     setChecked(newChecked);
   };
+
   const handleFilter = () => {
+    console.log(idNSX1);
     // console.log(Checked);
     axios
       .get(
-        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${value1[0]
-        }&giaMax=${value1[1]}&page=${page}`
+        `/api/sort-chitiet-minmax?nsx_id=${
+          b ? b : Checked
+        }&giaMin=${value1[0]}&giaMax=${value1[1]}&page=${page}`
       )
       .then(
         (res) => {

@@ -40,7 +40,7 @@ const sort = [
     { value: 'l-h', name: 'Giá thấp-cao' },
     { value: '0', name: 'Chờ xác nhận' },
     { value: '1', name: 'Đã xác nhận' },
-    { value: '4', name: 'Đã xuất nhanvien' },
+    { value: '4', name: 'Đã xuất kho' },
     { value: '5', name: 'Đơn hàng đã hủy' },
     { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
 ]

@@ -263,37 +263,6 @@ const DonHang = () => {
 
   const SortStt = (e) => {
     var key = '';
-    // switch (e) {
-    //   case '0': case '1': case '4': case '5':
-    //     {
-    //       key = 1;
-    //       break;
-    //     }
-    //   case 'Tại quầy':
-    //     {
-    //       key = 2;
-    //       break;
-    //     }
-    //   case 'h-l':
-    //     {
-    //       key = 4;
-    //       break;
-    //     }
-    //   case 'l-h':
-    //     {
-    //       key = 3;
-    //       break;
-    //     }
-    //   case '':
-    //     {
-    //       key = '';
-    //       break;
-    //     }
-    //   default:
-    //     {
-    //       break;
-    //     }
-    // }
     switch (e) {
       case '0': case '1': case '2': case '3': case '4': case '5':
         {
