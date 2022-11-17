@@ -217,12 +217,12 @@ export const PublicRouter_Admin = [
     layout: _LayoutAdmin,
   },
   {
-    path: "/Donhang",
+    path: "/Phieuxuat",
     component: PhieuXuat,
     layout: _LayoutAdmin,
   },
   {
-    path: "/Phieuxuat",
+    path: "/Donhang",
     component: DonHang,
     layout: _LayoutAdmin,
   },

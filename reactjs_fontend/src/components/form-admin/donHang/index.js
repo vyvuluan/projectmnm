@@ -10,9 +10,24 @@ import { useDownloadExcel } from 'react-export-table-to-excel';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 const checkStatus = [
-  { id: 4, name: 'Đã xuất kho' },
+  { id: 0, name: 'Chờ xác nhận' },
+  { id: 1, name: 'Đã xác nhận' },
+  { id: 2, name: 'Đang đóng gói' },
+  { id: 3, name: 'Đang vận chuyển' },
+  { id: 4, name: 'Giao hàng thành công' },
   { id: 5, name: 'Hủy đơn hàng' },
 ];
+
+// const sort = [
+//   { value: '', name: 'Sắp xếp' },
+//   { value: 'h-l', name: 'Giá cao-thấp' },
+//   { value: 'l-h', name: 'Giá thấp-cao' },
+//   { value: '0', name: 'Chờ xác nhận' },
+//   { value: '1', name: 'Đã xác nhận' },
+//   { value: '4', name: 'Đã xuất nhanvien' },
+//   { value: '5', name: 'Đơn hàng đã hủy' },
+//   { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
+// ]
 
 const sort = [
   { value: '', name: 'Sắp xếp' },
@@ -20,8 +35,13 @@ const sort = [
   { value: 'l-h', name: 'Giá thấp-cao' },
   { value: '0', name: 'Chờ xác nhận' },
   { value: '1', name: 'Đã xác nhận' },
-  { value: '4', name: 'Đã xuất kho' },
+  { value: '2', name: 'Đang đóng gói' },
+  { value: '3', name: 'Đang vận chuyển' },
+  { value: '4', name: 'Giao hàng thành công' },
   { value: '5', name: 'Đơn hàng đã hủy' },
+  { value: 'COD', name: 'Thanh toán COD' },
+  { value: 'PayPal', name: 'Thanh toán Paypal' },
+  { value: 'VnPay', name: 'Thanh toán VNPay' },
   { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
 ]
 
@@ -35,6 +55,8 @@ const DonHang = () => {
   const [tabkey, setTabkey] = useState(1);
 
   const componentRef = useRef();
+  const componentRefPx = useRef();
+  const [pxtab, setpxtab] = useState(1);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
   const [perPage, setPerPage] = useState();
@@ -59,6 +81,10 @@ const DonHang = () => {
     setViewOrder(order);
   }
 
+  const handlePrintPx = useReactToPrint({
+    content: () => componentRefPx.current,
+  });
+
   const handleClosePrint = () => setShowPrint(prev => !prev);
 
   const handlePrint = useReactToPrint({
@@ -66,7 +92,7 @@ const DonHang = () => {
   });
 
   const getOrderData = useCallback(async () => {
-    const res = await axios.get(`/api/kho/dspx?page=${page}`)
+    const res = await axios.get(`/api/nhanvien/px?page=${page}`)
     if (res.data.status === 200) {
       setOrderList(res.data.data.data);
       setTotalPage(res.data.data.total);
@@ -97,7 +123,7 @@ const DonHang = () => {
         }
       }).then((value) => {
         if (value === 'yes') {
-          axios.put(`/api/kho/setstatusDH/${order.id}`, data).then(res => {
+          axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
             if (res.data.status === 200) {
               setSubmitting(true);
             } else if (res.data.status === 400) {
@@ -120,7 +146,7 @@ const DonHang = () => {
         }
       }).then((value) => {
         if (value === 'yes') {
-          axios.put(`/api/kho/setstatusDH/${order.id}`, data).then(res => {
+          axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
             if (res.data.status === 200) {
               setSubmitting(true);
             } else if (res.data.status === 400) {
@@ -131,7 +157,7 @@ const DonHang = () => {
       })
     }
     else {
-      axios.put(`/api/kho/setstatusDH/${order.id}`, data).then(res => {
+      axios.put(`/api/nhanvien/setstatusDH/${order.id}`, data).then(res => {
         if (res.data.status === 200) {
           setSubmitting(true);
         } else if (res.data.status === 400) {
@@ -161,7 +187,7 @@ const DonHang = () => {
         break;
       }
       case 4: {
-        x = 'Đã xuất kho';
+        x = 'Đã giao hàng';
         break;
       }
       case 5: {
@@ -211,7 +237,7 @@ const DonHang = () => {
 
   const handleOnSearch = (key) => {
     if (key !== "") {
-      axios.get(`http://localhost:8000/api/kho/search_kho?key=${key}`).then(res => {
+      axios.get(`http://localhost:8000/api/nhanvien/px-search?key=${key}`).then(res => {
         if (res.status === 200) {
           setSearchlist(res.data.data)
           // setTotalPage(res.data.total);
@@ -237,13 +263,44 @@ const DonHang = () => {
 
   const SortStt = (e) => {
     var key = '';
+    // switch (e) {
+    //   case '0': case '1': case '4': case '5':
+    //     {
+    //       key = 1;
+    //       break;
+    //     }
+    //   case 'Tại quầy':
+    //     {
+    //       key = 2;
+    //       break;
+    //     }
+    //   case 'h-l':
+    //     {
+    //       key = 4;
+    //       break;
+    //     }
+    //   case 'l-h':
+    //     {
+    //       key = 3;
+    //       break;
+    //     }
+    //   case '':
+    //     {
+    //       key = '';
+    //       break;
+    //     }
+    //   default:
+    //     {
+    //       break;
+    //     }
+    // }
     switch (e) {
-      case '0': case '1': case '4': case '5':
+      case '0': case '1': case '2': case '3': case '4': case '5':
         {
           key = 1;
           break;
         }
-      case 'Tại quầy':
+      case 'COD': case 'PayPal': case 'Tại quầy': case 'VnPay':
         {
           key = 2;
           break;
@@ -269,7 +326,7 @@ const DonHang = () => {
         }
     }
     if (key !== '') {
-      axios.get(`/api/kho/locpx?key=${key}&value=${e}`).then(res => {
+      axios.get(`/api/nhanvien/locpx?key=${key}&value=${e}`).then(res => {
         if (res.data.status === 200) {
           setOrderList(res.data.data.data);
           setTotalPage(res.data.data.total);
@@ -291,7 +348,7 @@ const DonHang = () => {
   const xemLichSuXuatHang = (e) => {
     e.preventDefault();
 
-    axios.get(`/api/kho/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
+    axios.get(`/api/nhanvien/lichSuXuatHang?dateFrom=${dayStart}&dateTo=${dayEnd}`).then(res => {
       if (res.data.status === 200) {
         setXemXuat(res.data.px.data);
         setShowExp(true);
@@ -308,7 +365,7 @@ const DonHang = () => {
 
   return (
     <>
-      <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
+      {/* <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
         <div ref={componentRef}>
           <B.ModalHeader>
             <B.ModalTitle>
@@ -434,28 +491,247 @@ const DonHang = () => {
             Hủy bỏ
           </B.Button>
         </B.ModalFooter>
-      </B.Modal>
+      </B.Modal> */}
 
-      <B.Modal size='lg'>
-
+      <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
+        <B.Tabs activeKey={pxtab} onSelect={(k) => setpxtab(k)}>
+          <B.Tab eventKey={1} title="Hóa đơn">
+            <div ref={componentRef}>
+              <B.ModalHeader>
+                <B.ModalTitle>
+                  <div className='text-primary fw-bold'>
+                    L3M
+                    <span className='text-dark'>SHOP</span>
+                    <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewOrder && viewOrder.id}</p>
+                  </div>
+                </B.ModalTitle>
+                <B.ModalTitle>
+                  <div>
+                    Hóa đơn bán hàng
+                    <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
+                  </div>
+                </B.ModalTitle>
+              </B.ModalHeader>
+              <B.Row className='px-3 mt-2'>
+                <div className='fs-6'>Công ty TNHH thương mại L3M</div>
+                <div className='fs-6'>Địa chỉ: 273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</div>
+                <div className='fst-italic fs-6'>Hotline: 0123498765<span className='ms-5'>Email: l3mstore@gmail.com</span></div>
+              </B.Row>
+              <hr />
+              <B.ModalBody>
+                <B.Row>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.tenKH}</B.FormLabel>
+                  </B.FormGroup>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.sdt}</B.FormLabel>
+                  </B.FormGroup>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewOrder && viewOrder.diaChi}</B.FormLabel>
+                  </B.FormGroup>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.pt_ThanhToan}</B.FormLabel>
+                  </B.FormGroup>
+                </B.Row>
+                <hr />
+                <B.Row>
+                  <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
+                    <thead className='text-dark'>
+                      <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Bảo hành</th>
+                        <th>Giá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {viewOrder && viewOrder.pxct.map((prod) => {
+                        return (
+                          <>
+                            <tr key={prod.product.id}>
+                              <td>{prod.product.tenSP}</td>
+                              <td>{prod.soluong}</td>
+                              <td>{prod.product.baoHanh} tháng</td>
+                              <td>{formatMoney(prod.product.gia)}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                            </tr>
+                          </>
+                        )
+                      })}
+                    </tbody>
+                    <tfoot className='border-top'>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Tạm tính: </td>
+                        <td>{viewOrder && viewOrder.discount !== 0 ? formatMoney(viewOrder?.tongTien / (1 - viewOrder?.discount / 100)) : formatMoney(viewOrder?.tongTien)}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Giảm giá: </td>
+                        <td>{viewOrder && viewOrder.discount}%</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td className='fw-semibold'>Tổng tiền: </td>
+                        <td>{formatMoney(viewOrder && viewOrder.tongTien)}</td>
+                      </tr>
+                    </tfoot>
+                  </B.Table>
+                </B.Row>
+                <B.Row className='px-3 mt-2'>
+                  <B.Row className='mb-5'>
+                    <B.Col>
+                      <p>Khách hàng
+                        <p className='fst-italic ms-3'>Ký tên</p>
+                      </p>
+                    </B.Col>
+                    <B.Col className='text-end'>
+                      <p>Nhân viên bán hàng
+                        <p className='fst-italic me-5'>Ký tên</p></p>
+                    </B.Col>
+                  </B.Row>
+                  <div className='fst-italic mt-5'>Vui lòng giữ lại hóa đơn trong vòng 1 tháng sau khi mua hàng</div>
+                </B.Row>
+              </B.ModalBody>
+            </div>
+          </B.Tab>
+          <B.Tab eventKey={2} title="Phiếu xuất kho">
+            <div ref={componentRefPx}>
+              <B.ModalHeader>
+                <B.ModalTitle>
+                  <div className='text-primary fw-bold'>
+                    L3M
+                    <span className='text-dark'>SHOP</span>
+                    <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewOrder && viewOrder.id}</p>
+                  </div>
+                </B.ModalTitle>
+                <B.ModalTitle>
+                  <div>
+                    Phiếu yêu cầu xuất kho
+                    <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
+                  </div>
+                </B.ModalTitle>
+              </B.ModalHeader>
+              <B.ModalBody>
+                <B.Row>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.tenKH}</B.FormLabel>
+                  </B.FormGroup>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.sdt}</B.FormLabel>
+                  </B.FormGroup>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewOrder && viewOrder.diaChi}</B.FormLabel>
+                  </B.FormGroup>
+                  <B.FormGroup className='d-flex justify-content-between'>
+                    <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
+                    <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.pt_ThanhToan}</B.FormLabel>
+                  </B.FormGroup>
+                </B.Row>
+                <hr />
+                <B.Row>
+                  <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
+                    <thead className='text-dark'>
+                      <tr>
+                        <th>Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {viewOrder && viewOrder.pxct.map((prod) => {
+                        return (
+                          <>
+                            <tr key={prod.product.id}>
+                              <td>{prod.product.id}</td>
+                              <td>{prod.product.tenSP}</td>
+                              <td>{prod.soluong}</td>
+                              <td>{formatMoney(prod.product.gia)}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                            </tr>
+                          </>
+                        )
+                      })}
+                    </tbody>
+                  </B.Table>
+                </B.Row>
+                <B.Row className='px-3 mt-2'>
+                  <B.Row className='mb-5'>
+                    <B.Col>
+                      <p>Nhân viên kho
+                        <p className='fst-italic ms-4'>Ký tên</p>
+                      </p>
+                    </B.Col>
+                    <B.Col className='text-end'>
+                      <p>Nhân viên bán hàng
+                        <p className='fst-italic me-5'>Ký tên</p></p>
+                    </B.Col>
+                  </B.Row>
+                  <div className='fst-italic mt-5'>Nhân viên kho giữ lại phiếu sau khi xuất kho</div>
+                </B.Row>
+              </B.ModalBody>
+            </div>
+          </B.Tab>
+        </B.Tabs>
+        <B.ModalFooter>
+          {viewOrder && viewOrder.status > 0 && viewOrder.status < 5 ?
+            <>
+              <B.Button
+                variant="outline-success"
+                className="mt-2 me-2 rounded-0"
+                onClick={handlePrintPx}
+              >
+                In phiếu yêu cầu xuất kho
+              </B.Button>
+              <B.Button
+                variant="outline-primary"
+                className="mt-2 me-2 rounded-0"
+                onClick={handlePrint}
+              >
+                In hóa đơn
+              </B.Button>
+            </> : null}
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleClosePrint}
+          >
+            Hủy bỏ
+          </B.Button>
+        </B.ModalFooter>
       </B.Modal>
 
       <B.Container fluid>
         <B.Row className='pe-xl-5 mb-4'>
-          <B.Col lg={10}><h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ PHIẾU XUẤT</h1></B.Col>
+          <B.Col lg={10}><h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ ĐƠN HÀNG</h1></B.Col>
           <B.Col lg={2} className='mt-lg-3 text-end'><RiRefreshLine className='fs-3 customborder' onClick={() => setSubmitting(true)} /></B.Col>
         </B.Row>
 
         <B.Tabs activeKey={tabkey}
           onSelect={(k) => setTabkey(k)}>
-          <B.Tab eventKey={1} title="Danh sách phiếu xuất" className=" border border-top-0 py-3 px-3">
+          <B.Tab eventKey={1} title="Danh sách đơn hàng" className=" border border-top-0 py-3 px-3">
             <B.Row className='pe-xl-5 mb-3'>
               <B.Col lg={4} className='mt-2'>
                 <ReactSearchAutocomplete
                   items={searchList}
                   onSearch={handleOnSearch}
                   onClear={handleOnClear}
-                  placeholder='Tìm kiếm phiếu xuất'
+                  placeholder='Tìm kiếm đơn hàng'
                   maxResults={10}
                   showNoResults={false}
                   styling={{
@@ -514,13 +790,16 @@ const DonHang = () => {
                           <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
                             {checkStatus.map((val) => {
                               return (
-                                <>
-                                  {item.status > 1 && item.status < 4 ? (
-                                    null
-                                  ) : <B.Dropdown.Item key={val.id}
-                                    onClick={() => handleUpdateStatus(val, item)}
-                                  >{val.name}</B.Dropdown.Item>}
-                                </>
+                                // <>
+                                //   {item.status > 1 && item.status < 4 ? (
+                                //     null
+                                //   ) : <B.Dropdown.Item key={val.id}
+                                //     onClick={() => handleUpdateStatus(val, item)}
+                                //   >{val.name}</B.Dropdown.Item>}
+                                // </>
+                                <B.Dropdown.Item key={val.id}
+                                  onClick={() => handleUpdateStatus(val, item)}
+                                >{val.name}</B.Dropdown.Item>
                               )
                             })}
                           </B.DropdownButton>
