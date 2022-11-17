@@ -8,7 +8,7 @@ import "./styles.css";
 const Product = (props) => {
   const { item } = props;
   // const id = useParams();
-
+  // console.log(item);
   // const handleFindId = (id) => {
   //   // console.log(axios.get('/api/loaisp/view').then((res) => res.data.Loaisp));
   //   const arrayID = axios.get('/api/loaisp/view').then((res) => res.data.Loaisp)
@@ -23,15 +23,12 @@ const Product = (props) => {
   }
   return (
     <>
-      <div className="container-fluid pt-5">
+      <div className="container-fluid pt-5 ">
         <div className="row px-xl-4 pb-3">
           {item.map((item, index) => {
             for (let i = 0; i <= index; i++) {
               return (
-                <div
-                  key={item.id}
-                  className="col-lg-3 col-md-6 col-sm-12 pb-1 "
-                >
+                <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
                   <div className="card product-item border-0 mb-4">
                     <Link
                       className="text-decoration-none text-black"
@@ -45,39 +42,22 @@ const Product = (props) => {
                         ></img>
                       </div>
                       <div className="text-center   p-0 pt-4 pb-3 ">
-                        <h6 className="mb-3 hovertext text-uppercase">{item.tenSP}</h6>
+                        <h6 className="mb-3 hovertext text-uppercase">
+                          {item.tenSP}
+                        </h6>
                         <div className="d-flex justify-content-center">
                           <h6 className="text-danger">
                             {formatMoney(item.gia)}
                           </h6>
                         </div>
-                        <div ><VscCommentDiscussion/><span className="ms-2">Bình luận (100)</span></div>
+                        <div>
+                          <VscCommentDiscussion />
+                          <span className="ms-2">
+                            Bình luận ({item.comments.length})
+                          </span>
+                        </div>
                       </div>
                     </Link>
-                    {/* <div className="card-footer d-flex text-center bg-light border">
-                      <div className="w-100"> */}
-                    {/* <AiFillEye className="me-1 mb-1"></AiFillEye> */}
-
-                    {/* <button className="btn1 btn21 btn-sep1 icon-cart rounded">
-                          <div className="text2">Mua ngay</div>
-                        </button> */}
-
-                    {/* <span>Xem chi tiết</span> */}
-                    {/* </div> */}
-                    {/* <div className="text-center">
-                        <a
-                          href=""
-                          className="text-decoration-none text-dark p-1"
-                        >
-                          <BsFillCartFill className="me-1 mb-1"></BsFillCartFill>
-                          <span>
-                            <Link className="text-decoration-none">
-                              Thêm vào giỏ
-                            </Link>
-                          </span>
-                        </a>
-                      </div> */}
-                    {/* </div> */}
                   </div>
                 </div>
               );

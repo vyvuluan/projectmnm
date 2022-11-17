@@ -51,7 +51,7 @@ const HomePage = () => {
       .get("/api/home")
       .then(function (response) {
         // handle success
-        // console.log(response.data.product_new);
+        
         setListProductNew(response.data.product_new);
         setListProductBestSell(response.data.product_bestseller)
       })

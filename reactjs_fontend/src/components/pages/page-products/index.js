@@ -24,6 +24,8 @@ const PageProducts = () => {
   const [CheckedALL, setCheckedALL] = useState([]);
 
   const [viewNSX, setViewNSX] = useState([]);
+  const [comments, setComments] = useState([]);
+
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
@@ -146,11 +148,14 @@ const PageProducts = () => {
         .get(`/api/products/view?page=${page}`)
         .then(function (response) {
           // handle success
+          // console.log(response.data.data);
+          
           setListProduct(response.data.data);
           setTotalPage(response.data.total);
           setPerPage(response.data.per_page);
           setCurrentPage(response.data.current_page);
           setLoading(false);
+          
         })
         .catch(function (error) {
           // handle error
@@ -163,6 +168,7 @@ const PageProducts = () => {
       return () => controller.abort();
     }
   }, [page, searchParam]);
+  
   if (loading) {
     return (
       <>
@@ -184,10 +190,10 @@ const PageProducts = () => {
     }
   }
 
-  // console.log(listProduct);
-
+  
+  
   // const [dataFilter, setDataFilter] = useState();
-  console.log(b);
+  // console.log(b);
   const handleChange = (e) => {
     // console.log([e.target.value]);
     var a = e.target.value;
