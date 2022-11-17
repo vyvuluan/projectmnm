@@ -264,7 +264,7 @@ export default function Header() {
       </Bt.Container>
 
       <Bt.Container fluid mb={5}>
-        <Bt.Row className="border-top border-secondary px-xl-5">
+        <Bt.Row className="border-top border-bottom border-secondary px-xl-5">
           <Bt.Col
             lg={3}
             className="d-none d-lg-block"
@@ -329,10 +329,10 @@ export default function Header() {
                 className="d-flex justify-content-between"
                 id="responsive-navbar-nav"
               >
-                <Bt.Nav className="me-auto py-2 ms-md-5 ms-2">
+                <Bt.Nav className="me-auto py-2 ms-md-5 ms-2" activeKey={location.pathname}>
                   <Bt.NavItem>
                     <Bt.NavLink
-                      eventKey={1}
+                      eventKey={'/'}
                       className="fs-5 fw-normal me-2 effect-box"
                     >
                       <Link className="text-decoration-none aEffect " to="/">
@@ -341,22 +341,22 @@ export default function Header() {
                     </Bt.NavLink>
                   </Bt.NavItem>
                   <Bt.NavItem>
-                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={2}>
-                      <Link
-                        className="text-decoration-none aEffect"
-                        to="/contact"
-                      >
-                        Liên hệ
-                      </Link>
-                    </Bt.NavLink>
-                  </Bt.NavItem>
-                  <Bt.NavItem>
-                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={3}>
+                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={'/pageproducts'}>
                       <Link
                         className="text-decoration-none aEffect"
                         to="/pageproducts"
                       >
                         Sản phẩm
+                      </Link>
+                    </Bt.NavLink>
+                  </Bt.NavItem>
+                  <Bt.NavItem>
+                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={'/contact'}>
+                      <Link
+                        className="text-decoration-none aEffect"
+                        to="/contact"
+                      >
+                        Liên hệ
                       </Link>
                     </Bt.NavLink>
                   </Bt.NavItem>
