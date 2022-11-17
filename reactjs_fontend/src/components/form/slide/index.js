@@ -5,9 +5,9 @@ import "./style.css";
 import Category from "../category";
 const Slideshows = () => {
   const images = [
-    "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
-    "https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80",
-    "https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+    "https://cdn.tgdd.vn/2022/11/banner/Big-hero-desk-jpg-final-1920x450.jpg",
+    "https://xgear.net/wp-content/uploads/2022/11/Ideapad-Gaming.jpg",
+    "https://xgear.net/wp-content/uploads/2022/11/banner-gaming-gear.jpg",
   ];
   const delay = 3000;
   const handleOnclickPre = () => {
@@ -47,8 +47,11 @@ const Slideshows = () => {
   }, [index]);
   return (
     <>
-      <div className="container-fluid" >
-        <div className="row" style={{ flexDirection: "row", flexWrap: "nowrap" }} >
+      <div className="container-fluid">
+        <div
+          className="row"
+          style={{ flexDirection: "row", flexWrap: "nowrap" }}
+        >
           {/* -------------------------------------------------------------------------  */}
           {/* <Category></Category> */}
           {/* ----------------------------------------------------------------- */}
@@ -76,8 +79,10 @@ const Slideshows = () => {
                 ))}
               </div>
 
-              <div style={{ zIndex: "10" }} className=" carousel-caption d-flex flex-column align-items-center justify-content-center">
-
+              <div
+                style={{ zIndex: "10" }}
+                className=" carousel-caption d-flex flex-column align-items-center justify-content-center"
+              >
                 <div
                   className="p-3"
                   style={{
@@ -85,16 +90,14 @@ const Slideshows = () => {
                   }}
                 >
                   <h4 className="text-light text-uppercase font-weight-medium mb-3">
-                    10% Off Your First Order
+                    NHÂN DỊP KHAI TRƯƠNG L3M SHOP
                   </h4>
                   <h3 className="display-4 text-white font-weight-semi-bold mb-4">
-                    Fashionable Dress
+                    GIẢM GIÁ SỐC LÊN ĐẾN{" "}
+                    <h1 style={{ fontSize: "100px" }}>50%</h1>
                   </h3>
-
                 </div>
-
               </div>
-
             </div>
 
             <a
@@ -124,8 +127,6 @@ const Slideshows = () => {
           </div>
         </div>
       </div>
-
-
     </>
   );
 };
