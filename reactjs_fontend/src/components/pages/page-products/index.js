@@ -40,8 +40,8 @@ const PageProducts = () => {
   let idNSX1 = viewNSX.map((item) => {
     return dataIDNSX.push(item.id);
   });
-  
-   
+
+
 
   const handlePerPage = (page) => {
     // console.log(page);
@@ -78,7 +78,7 @@ const PageProducts = () => {
           setViewNSX(res.data.Nsx);
           // setIdNSX(res.data.Nsx.id);
           let dataNSXtest = []
-          res.data.Nsx.map((item) =>{
+          res.data.Nsx.map((item) => {
             return dataNSXtest.push(item.id)
           })
           setB(dataNSXtest)
@@ -95,10 +95,13 @@ const PageProducts = () => {
     // console.log(...searchParam);
     if (searchParam.has("search")) {
       axios
-        .get(`/api/searchProduct?key=${searchParam.get("search")}`)
+        .get(`/api/products-search?key=${searchParam.get("search")}&page=${page}`)
         .then((res) => {
           if (res.status === 200) {
-            setListProduct(res.data.product);
+            setListProduct(res.data.data.data);
+            setTotalPage(res.data.data.total);
+            setPerPage(res.data.data.per_page);
+            setCurrentPage(res.data.data.current_page);
             setLoading(false);
           }
         });
@@ -239,8 +242,7 @@ const PageProducts = () => {
     // console.log(Checked);
     axios
       .get(
-        `/api/sort-chitiet-minmax?nsx_id=${
-          b ? b : Checked
+        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked
         }&giaMin=${value1[0]}&giaMax=${value1[1]}&page=${page}`
       )
       .then(
