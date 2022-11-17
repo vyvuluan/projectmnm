@@ -192,7 +192,7 @@ export default function Header() {
                 <Bt.InputGroup>
                   <Bt.Form.Control
                     type="text"
-                    placeholder="Search"
+                    placeholder="Tìm kiếm sản phẩm"
                     onChange={getValueSearch}
 
                     className="rounded-0 shadow-none focus-outline-none fw-semibold"
