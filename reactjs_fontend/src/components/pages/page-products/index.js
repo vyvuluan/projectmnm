@@ -93,7 +93,7 @@ const PageProducts = () => {
     // console.log(...searchParam);
     if (searchParam.has("search")) {
       axios
-        .get(`/api/products-search?key=${searchParam.get("search")}`)
+        .get(`/api/products-search?key=${searchParam.get("search")}&page=${page}`)
         .then((res) => {
           if (res.status === 200) {
             setListProduct(res.data.data.data);
