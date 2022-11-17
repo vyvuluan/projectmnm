@@ -121,14 +121,14 @@ class ManagePhieuXuatController extends Controller
                     ]);
                 }
             case 3; // Lọc theo giá thấp đến cao
-                $px = PhieuXuat::orderBy('tongTien', 'asc')->where('status', '>=', 1)->paginate(10);
+                $px = PhieuXuat::orderBy('tongTien', 'asc')->where('status', '>=', 1)->orwhere('pt_ThanhToan', 'Tại quầy')->paginate(10);
                 return response()->json([
                     'status' => 200,
                     'data' => $px,
 
                 ]);
             case 4; // Lọc theo giá cao đến thấp
-                $px = PhieuXuat::orderBy('tongTien', 'desc')->where('status', '>=', 1)->paginate(10);
+                $px = PhieuXuat::orderBy('tongTien', 'desc')->where('status', '>=', 1)->orwhere('pt_ThanhToan', 'Tại quầy')->paginate(10);
                 return response()->json([
                     'status' => 200,
                     'data' => $px,
@@ -331,6 +331,11 @@ class ManagePhieuXuatController extends Controller
             return response()->json([
                 'status' => 400,
                 'message' => 'Đơn hàng đã được giao không thể chỉnh sửa',
+            ]);
+        } else if ($px->pt_ThanhToan == 'Tại quầy') {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Bạn không thể thay đổi tình trạng đơn hàng tạo tại quầy',
             ]);
         }
         $px->status = $request->status;
