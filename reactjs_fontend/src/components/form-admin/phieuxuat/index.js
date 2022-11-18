@@ -995,10 +995,10 @@ function Index() {
                                         )}
 
                                         {showSearchTable && (
-                                            pxsearchList && pxsearchList.map((px) => {
+                                            pxsearchList && pxsearchList.map((px, index) => {
                                                 return (
                                                     <tr key={px.id}>
-                                                        <td>{px.id}</td>
+                                                        <td>{index + 1}</td>
                                                         <td>{px.tenKH}</td>
                                                         <td>{px.sdt}</td>
                                                         <td>{px.diaChi}</td>

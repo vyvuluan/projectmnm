@@ -68,8 +68,6 @@ const AccountInfo = () => {
   var Female = "Nữ";
 
   useEffect(() => {
-    // const cookies = new Cookies();
-    // setRoleID(cookies.get("role_id"));
     setAuth(localStorage.getItem("auth_fullname"));
   }, []);
 

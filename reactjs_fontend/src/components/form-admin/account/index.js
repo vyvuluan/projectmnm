@@ -318,7 +318,7 @@ const Account = () => {
                   }
                   return (
                     <tr key={item.id}>
-                      <td className="align-middle">{item.id}</td>
+                      <td className="align-middle">{index +1}</td>
                       <td className="align-middle">{item.username}</td>
                       <td className="align-middle">{item.email}</td>
 
