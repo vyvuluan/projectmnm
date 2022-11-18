@@ -14,7 +14,7 @@ const Ncc = () => {
   const [ncclist, setNcclist] = useState([]);
   const [show, setShow] = useState(false);
   const [NCCData, setNCCData] = useState();
-  const [submitting, setSubmitting] = useState(true)
+  const [submitting, setSubmitting] = useState(true);
   const handleClose = () => {
     setShow((prev) => !prev);
     setSubmitting(true);
@@ -80,18 +80,20 @@ const Ncc = () => {
   // Thêm NCC (end)
 
   const getNccData = useCallback(async () => {
-    const res = await axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`)
+    const res = await axios.get(
+      `http://localhost:8000/api/kho/ncc?page=${page}`
+    );
     if (res.data.status === 200) {
       setNcclist(res.data.Ncc.data);
       setTotalPage(res.data.Ncc.total);
       setPerPage(res.data.Ncc.per_page);
       setCurrentPage(res.data.Ncc.current_page);
     }
-  }, [page])
+  }, [page]);
 
   useEffect(() => {
     getNccData().then(() => setSubmitting(false));
-  }, [submitting, getNccData])
+  }, [submitting, getNccData]);
 
   return (
     <>
@@ -205,14 +207,14 @@ const Ncc = () => {
                 </tr>
               </thead>
               <tbody>
-                {ncclist.map((NCC) => {
+                {ncclist.map((NCC, index) => {
                   return (
                     <>
                       <tr key={NCC.id}>
                         {/* <td >
                           <input type="checkbox" />
                         </td> */}
-                        <td>{NCC.id}</td>
+                        <td>{index + 1}</td>
                         <td>{NCC.tenNCC}</td>
                         <td>{NCC.sdt}</td>
                         <td>{NCC.diaChi}</td>
