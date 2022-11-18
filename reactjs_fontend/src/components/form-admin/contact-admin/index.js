@@ -113,6 +113,7 @@ const ContactAdmin = () => {
           <B.Table responsive='lg' className='table-borderless border border-secondary mb-0'>
             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
               <tr>
+                <th>STT</th>
                 <th>Họ và tên khách hàng</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
@@ -124,6 +125,7 @@ const ContactAdmin = () => {
               {contactList && contactList.map((contact, index) => {
                 return (
                   <tr key={index}>
+                    <td>{index + 1}</td>
                     <td>{contact.customer?.ten}</td>
                     <td>{contact.customer?.user.email}</td>
                     <td>{contact.customer?.sdt}</td>
