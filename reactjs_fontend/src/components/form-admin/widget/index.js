@@ -23,6 +23,8 @@ const Widget = ({ dataWidget }) => {
   const [chiTieu, setChiTieu] = useState();
   const [contact, setContact] = useState();
   const [SLBan, setSLBan] = useState();
+  const [tongSLBanNV, setTongSLBanNV] = useState();
+
   const [tongTienNV, setTongtienNV] = useState();
   const [terms, setTerms] = useState(true);
   if (chiTieu == null) {
@@ -47,7 +49,8 @@ const Widget = ({ dataWidget }) => {
       setSLBan(dataWidget?.soluongban.soluongban);
       setTongtienNV(dataWidget?.tongTien?.tongTien);
       setchuaXuLy(dataWidget?.chuaxuly?.chuaxuly);
-      setchuaXuLy(dataWidget?.daxuly?.daxuly);
+      setDaXuly(dataWidget?.daxuly?.daxuly);
+      setTongSLBanNV(dataWidget?.tongsoluong?.soluongban);
     }
     // console.log(dataWidget?.doanhthu?.tongTien);
   });
@@ -66,11 +69,31 @@ const Widget = ({ dataWidget }) => {
       </div>
 
       <div className="col ">
-        <div className="text-xs pl-3 font-weight-bold text-primary text-uppercase mb-1">
+        <div className="text-xs pl-3 font-weight-bold text-success text-uppercase mb-1">
           ĐH đã xử lý
         </div>
         <div className="h5 pl-3 mb-0 font-weight-bold text-gray-800">
           {daXuly}
+        </div>
+      </div>
+    </>
+  );
+  let NV_UI_HTML = (
+    <>
+      <div className="col border-right">
+        <div className="text-xs pl-3 font-weight-bold text-warning text-uppercase mb-1">
+          Tin nhắn chưa đọc
+        </div>
+        <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
+          {contact}
+        </div>
+      </div>
+      <div className="col ">
+        <div className="text-xs pl-3 font-weight-bold text-primary text-uppercase mb-1">
+          Tổng đơn đặt hàng
+        </div>
+        <div className="h5 pl-3 mb-0 font-weight-bold text-gray-800">
+          {tongSLBanNV}
         </div>
       </div>
     </>
@@ -84,7 +107,7 @@ const Widget = ({ dataWidget }) => {
             <div className="card-body">
               <div className="row no-gutters align-items-center">
                 {cookies.get("role_id") == 4 ? (
-                   NV_HTML 
+                  NV_HTML
                 ) : (
                   <>
                     <div className="col mr-2">
@@ -111,6 +134,36 @@ const Widget = ({ dataWidget }) => {
 
         {/* <!-- Earnings (Monthly) Card Example --> */}
         <div className="col-xl-3 col-md-6 mb-4">
+          <div className="card border-left-warning shadow h-100 py-2">
+            <div className="card-body">
+              <div className="row no-gutters align-items-center">
+                {cookies.get("role_id") == 4 ? (
+                  NV_UI_HTML
+                ) : (
+                  <>
+                    <div className="col mr-2">
+                      <div className="text-xs pl-3 font-weight-bold text-warning text-uppercase mb-1">
+                        Tin nhắn chưa đọc
+                      </div>
+                      <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
+                        {contact}
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      {/* <i className="fas fa-comments fa-2x text-gray-300"></i> */}
+                      <BsFillChatSquareQuoteFill
+                        className="text-gray-300 pr-2"
+                        size={40}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-xl-3 col-md-6 mb-4">
           <div className="card border-left-success shadow h-100 py-2">
             <div className="card-body">
               <div className="row no-gutters align-items-center">
@@ -118,7 +171,7 @@ const Widget = ({ dataWidget }) => {
                   {cookies.get("role_id") == 4 ? (
                     <>
                       <div className="text-xs pl-3 font-weight-bold text-success text-uppercase mb-1">
-                        Tổng tiền phiếu xuất
+                        tổng tiền nhân viên bán
                       </div>
                       <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
                         {formatMoney(tongTienNV)}
@@ -150,9 +203,19 @@ const Widget = ({ dataWidget }) => {
             <div className="card-body">
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
-                  <div className="text-xs  pl-3 font-weight-bold text-info text-uppercase mb-1">
-                    Tổng số đơn hàng
-                  </div>
+                  {cookies.get("role_id") == 4 ? (
+                    <>
+                      <div className="text-xs  pl-3 font-weight-bold text-info text-uppercase mb-1">
+                        tổng đơn hàng nhân viên bán
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-xs  pl-3 font-weight-bold text-info text-uppercase mb-1">
+                        Tổng số đơn hàng
+                      </div>
+                    </>
+                  )}
                   <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
                     {SLBan}
                   </div>
@@ -186,29 +249,6 @@ const Widget = ({ dataWidget }) => {
         </div>
 
         {/* <!-- Pending Requests Card Example --> */}
-        <div className="col-xl-3 col-md-6 mb-4">
-          <div className="card border-left-warning shadow h-100 py-2">
-            <div className="card-body">
-              <div className="row no-gutters align-items-center">
-                <div className="col mr-2">
-                  <div className="text-xs pl-3 font-weight-bold text-warning text-uppercase mb-1">
-                    Tin nhắn chưa đọc
-                  </div>
-                  <div className="h5 mb-0 pl-3 font-weight-bold text-gray-800">
-                    {contact}
-                  </div>
-                </div>
-                <div className="col-auto">
-                  {/* <i className="fas fa-comments fa-2x text-gray-300"></i> */}
-                  <BsFillChatSquareQuoteFill
-                    className="text-gray-300 pr-2"
-                    size={40}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
