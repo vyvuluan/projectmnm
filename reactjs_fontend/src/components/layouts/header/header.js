@@ -9,7 +9,15 @@ import {
   FaShoppingBag,
 } from "react-icons/fa";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { Link, Navigate, NavLink, Route, useLocation, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  NavLink,
+  Route,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -87,7 +95,9 @@ export default function Header() {
         </div> */}
         <div className="row">
           <div className="col-lg-9 d-none d-md-block text-center m-auto badge text-wrap">
-            <span className="text-danger">Chào, {nameUser}</span>
+            <span className="text-danger">
+              {nameUser ? `Chào, ${nameUser}` : null}
+            </span>
           </div>
           <div className="col-lg-3 btn rounded-0" style={{ width: "51px" }}>
             <DropDownMenu logout={logoutSubmit} />
@@ -126,14 +136,13 @@ export default function Header() {
     e.preventDefault();
     const params = new URLSearchParams(location.search);
 
-    if (params.has('search')) {
-      params.delete('search')
-      history(`?search=${search}`)
+    if (params.has("search")) {
+      params.delete("search");
+      history(`?search=${search}`);
     } else {
       history(`/pageproducts?search=${search}`);
     }
-  }
-
+  };
 
   return (
     <>
@@ -194,7 +203,6 @@ export default function Header() {
                     type="text"
                     placeholder="Tìm kiếm sản phẩm"
                     onChange={getValueSearch}
-
                     className="rounded-0 shadow-none focus-outline-none fw-semibold"
                   ></Bt.Form.Control>
                   <Bt.InputGroup.Text className="bg-transparent text-primary rounded-0">
@@ -235,9 +243,7 @@ export default function Header() {
               </div>
             </div> */}
             <Bt.Row>
-              <Bt.Col className="col-md-9 col-6">
-                {AuthButton}
-              </Bt.Col>
+              <Bt.Col className="col-md-9 col-6">{AuthButton}</Bt.Col>
               <Bt.Col className="col-md-3 col-6">
                 <Link to={`/Cart`} className="btn rounded-0">
                   <FaShoppingCart
@@ -295,7 +301,6 @@ export default function Header() {
                   backgroundColor: "#fff",
                   width: "100%",
                 }}
-
               >
                 <Bt.Collapse in={open} className={`w-100`}>
                   <div id="collapse-categories">
@@ -329,10 +334,13 @@ export default function Header() {
                 className="d-flex justify-content-between"
                 id="responsive-navbar-nav"
               >
-                <Bt.Nav className="me-auto py-2 ms-md-5 ms-2" activeKey={location.pathname}>
+                <Bt.Nav
+                  className="me-auto py-2 ms-md-5 ms-2"
+                  activeKey={location.pathname}
+                >
                   <Bt.NavItem>
                     <Bt.NavLink
-                      eventKey={'/'}
+                      eventKey={"/"}
                       className="fs-5 fw-normal me-2 effect-box"
                     >
                       <Link className="text-decoration-none aEffect " to="/">
@@ -341,7 +349,10 @@ export default function Header() {
                     </Bt.NavLink>
                   </Bt.NavItem>
                   <Bt.NavItem>
-                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={'/pageproducts'}>
+                    <Bt.NavLink
+                      className="fs-5 fw-normal me-2 "
+                      eventKey={"/pageproducts"}
+                    >
                       <Link
                         className="text-decoration-none aEffect"
                         to="/pageproducts"
@@ -351,7 +362,10 @@ export default function Header() {
                     </Bt.NavLink>
                   </Bt.NavItem>
                   <Bt.NavItem>
-                    <Bt.NavLink className="fs-5 fw-normal me-2 " eventKey={'/contact'}>
+                    <Bt.NavLink
+                      className="fs-5 fw-normal me-2 "
+                      eventKey={"/contact"}
+                    >
                       <Link
                         className="text-decoration-none aEffect"
                         to="/contact"

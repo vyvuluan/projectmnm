@@ -555,22 +555,34 @@ const PhieuNhap = () => {
 
   const changeStatus = (item) => {
     const id = item.id;
-    const controller = new AbortController();
-    axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
-      // console.log(res);
-      if (res.data.status === 200) {
-        setSubmitting(true);
+    Swal.fire({
+      title: "Thay đổi tình trạng?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const controller = new AbortController();
+        axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
+          // console.log(res);
+          if (res.data.status === 200) {
+            setSubmitting(true);
 
-        swal({
-          title: res.data.message,
-          icon: "success",
-          button: "đóng",
+            swal({
+              title: res.data.message,
+              icon: "success",
+              button: "đóng",
+            });
+          }
         });
+        return () => {
+          controller.abort();
+        };
       }
     });
-    return () => {
-      controller.abort();
-    };
   };
 
   return (
@@ -772,7 +784,7 @@ const PhieuNhap = () => {
                               onSelect={handleOnSelectSp}
                               fuseOptions={{ keys: ["id", "tenSP"] }}
                               resultStringKeyName="tenSP"
-                              // formatResult={formatResult}
+                              formatResult={formatResult}
                               showIcon={false}
                               styling={{
                                 height: "36px",
