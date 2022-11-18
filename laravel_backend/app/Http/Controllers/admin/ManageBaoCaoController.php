@@ -65,7 +65,7 @@ class ManageBaoCaoController extends Controller
         $ctpxs = CtPhieuXuat::selectRaw('sum(soluong) as soluong,  maLoai')
             ->join('products', 'ct_phieu_xuats.product_id', '=', 'products.id')
             ->join('phieu_xuats', 'ct_phieu_xuats.px_id', '=', 'phieu_xuats.id')
-
+            ->where('phieu_xuats.status', 4)
             ->groupBy('maLoai')
             ->get();
         $tongPhanTram = 0;
@@ -298,9 +298,13 @@ class ManageBaoCaoController extends Controller
             ->where('status', '>=', 1)
             ->first();
         $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')
-            ->where('employee_id', auth()->user()->employee->id)->first();
+            ->where('employee_id', auth()->user()->employee->id)
+            ->where('status', 4)->first();
         $tongTien = PhieuXuat::selectRaw('sum(tongTien) as tongTien')
-            ->where('employee_id', auth()->user()->employee->id)->first();
+            ->where('employee_id', auth()->user()->employee->id)
+            ->where('status', 4)->first();
+        $tongsoluong = PhieuXuat::selectRaw('count(id) as soluongban')
+            ->where('status', 4)->first();
         return response()->json([
             'status' => 200,
             'total_sl' => $total_sl,
@@ -310,6 +314,7 @@ class ManageBaoCaoController extends Controller
             'tongTien' => $tongTien,
             'chuaxuly' => $chuaxuly,
             'daxuly' => $daxuly,
+            'tongsoluong' => $tongsoluong,
         ]);
     }
 }
