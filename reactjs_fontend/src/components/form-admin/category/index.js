@@ -189,7 +189,7 @@ function Index() {
                         <B.Table responsive='lg' className='table-borderless border border-secondarymb-0'>
                             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                 <tr>
-                                    <th className='text-center'>STT</th>
+                                    <th className='text-center' >STT</th>
                                     <th>Tên Loại sản phẩm</th>
                                     <th className='text-center'>Thao tác</th>
                                 </tr>
