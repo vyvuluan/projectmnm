@@ -952,7 +952,7 @@ function Index() {
                                 <B.Table className='table-borderless border border-secondary mb-0'>
                                     <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>STT</th>
                                             <th>Tên Khách hàng</th>
                                             <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
@@ -1005,7 +1005,6 @@ function Index() {
                                                         <td>{px.pt_ThanhToan}</td>
                                                         <td>{px.discount}%</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
-                                                        <td className='text-success fw-semibold'>{test(px.status)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
                                                                 {checkStatus.map((val) => (
