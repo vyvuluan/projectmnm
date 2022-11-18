@@ -82,11 +82,15 @@ const ContactAdmin = () => {
               <B.FormLabel className='fs-6'>Lời nhắn của <span className="text-success">{contact?.customer?.ten}</span></B.FormLabel>
               <B.FormText className='fs-6 mb-3 text-muted border border-secondary p-3'>{contact?.message}</B.FormText>
             </B.FormGroup>
-            <B.FormGroup>
-              <B.FormLabel className='fs-6'>Phản hồi khách hàng</B.FormLabel>
-              <B.FormControl as='textarea' rows={6} className='mb-3 rounded-0' value={reply} onChange={(e) => setReply(e.target.value)}></B.FormControl>
-            </B.FormGroup>
-            <B.Button type='submit' variant='primary' className='rounded-0'>Gửi phản hồi <GrSend className="ms-1" /></B.Button>
+            {contact?.status === 0 ?
+              <>
+                <B.FormGroup>
+                  <B.FormLabel className='fs-6'>Phản hồi khách hàng</B.FormLabel>
+                  <B.FormControl as='textarea' rows={6} className='mb-3 rounded-0' value={reply} onChange={(e) => setReply(e.target.value)}></B.FormControl>
+                </B.FormGroup>
+                <B.Button type='submit' variant='primary' className='rounded-0'>Gửi phản hồi <GrSend className="ms-1" /></B.Button>
+              </>
+              : <B.Button type='submit' variant='primary' className='rounded-0' disabled>Đã phản hồi</B.Button>}
           </B.Form>
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
@@ -125,7 +129,7 @@ const ContactAdmin = () => {
                     <td>{contact.customer?.sdt}</td>
                     <td>{contact.status === 0 ? 'Chưa phản hồi' : 'Đã phản hồi'}</td>
                     <td className="text-center">{contact.status === 0 ? <RiMailSendFill className="text-info fs-4" onClick={() => handleShow(contact)} />
-                      : <RiMailCheckFill className="text-success fs-4" />}</td>
+                      : <RiMailCheckFill className="text-success fs-4" onClick={() => handleShow(contact)} />}</td>
                   </tr>
                 )
               })}
