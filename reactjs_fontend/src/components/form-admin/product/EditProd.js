@@ -71,6 +71,7 @@ const Prodedit = ({ product, showModal }) => {
         axios.post(`/api/kho/products/update/${id}`, formData).then(res => {
             if (res.data.status === 200) {
                 swal('Success', res.data.message, 'success')
+                showModal();
             } else if (res.data.status === 404) {
                 swal('Error', res.data.message, 'error')
             }
@@ -84,7 +85,7 @@ const Prodedit = ({ product, showModal }) => {
                 onSelect={(k) => setTabKey(k)}
             >
                 <B.Tab eventKey={1} title="Thông tin sản phẩm" className=" border border-top-0 py-3 px-3">
-                    <B.Form onSubmit={handleUpdate}>
+                    <B.Form>
                         <B.Row>
                             <B.Col lg={4}>
                                 {previewIMG && previewIMG !== null ?
@@ -121,7 +122,6 @@ const Prodedit = ({ product, showModal }) => {
                                 </B.FormGroup>
                             </B.Col>
                         </B.Row>
-                        <B.Button variant='primary' type='submit' className='rounded-0 w-100' onClick={showModal}>Lưu thay đổi</B.Button>
                     </B.Form>
                 </B.Tab>
                 <B.Tab eventKey={2} title="Mô tả sản phẩm" className=" border border-top-0 py-3 px-3">
@@ -226,6 +226,7 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
             </B.Tabs>
 
+            <B.Button variant='primary' type='submit' className='rounded-0 pull-right mt-2' onClick={handleUpdate}>Lưu thay đổi</B.Button>
         </>
     )
 }

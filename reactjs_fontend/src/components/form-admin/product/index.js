@@ -308,7 +308,7 @@ function Index() {
               title="Thêm sản phẩm"
               className=" border border-top-0 py-3 px-3"
             >
-              <B.Form onSubmit={submitProduct}>
+              <B.Form>
                 <B.Row>
                   <B.Col lg={3}>
                     <div className="prev-container mb-4">
@@ -431,14 +431,6 @@ function Index() {
                         />
                       </div>
                     </div>
-                    <B.Button
-                      type="submit"
-                      variant="outline-primary"
-                      className="rounded-0 py-2 mb-2 mt-3"
-                    >
-                      <BsPersonPlusFill className="me-2" />
-                      Thêm sản phẩm
-                    </B.Button>
                   </B.Col>
                 </B.Row>
               </B.Form>
@@ -814,6 +806,15 @@ function Index() {
             />
           </>
         )}
+
+        <B.Button
+          variant="outline-primary"
+          className="rounded-0 py-2 mb-2 mt-3"
+          onClick={submitProduct}
+        >
+          <BsPersonPlusFill className="me-2" />
+          Thêm sản phẩm
+        </B.Button>
 
       </B.Container>
     </>
