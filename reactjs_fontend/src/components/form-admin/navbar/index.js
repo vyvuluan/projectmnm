@@ -61,45 +61,8 @@ const NavBarAdmin = () => {
           <div className="text-muted fs-6">ADMINISTRATOR</div>
         </div>
         <ul className="navbar-nav ml-auto">
-          {/* <!-- Nav Item - Alerts --> */}
-          <li className="nav-item dropdown no-arrow mx-1">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="alertsDropdown"
-              type="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <FaBell />
-              {/* <!-- Counter - Alerts --> */}
-              <span className="badge badge-danger badge-counter d-none">3</span>
-            </a>
-            {/* <!-- Dropdown - Alerts --> */}
-          </li>
-
-          {/* <!-- Nav Item - Messages --> */}
-          <li className="nav-item dropdown no-arrow mx-1">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="messagesDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <FaEnvelope />
-              {/* <!-- Counter - Messages --> */}
-              <span className="badge badge-danger d-none  badge-counter">
-                7
-              </span>
-            </a>
-            {/* <!-- Dropdown - Messages --> */}
-          </li>
-
-          <div className="topbar-divider d-none d-sm-block"></div>
+        
+          {/* <div className="topbar-divider d-none d-sm-block"></div> */}
 
           {/* <!-- Nav Item - User Information --> */}
           <li className="nav-item no-arrow">
