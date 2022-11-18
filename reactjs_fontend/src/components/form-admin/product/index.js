@@ -208,6 +208,7 @@ function Index() {
           setError([]);
           setSubmitting(true);
           setEditorKey(newKey);
+          setPreviewIMG();
         } else if (res.data.status === 422) {
           swal("Vui lòng nhập đầy đủ các mục", "", "error");
           setError(res.data.errors);
