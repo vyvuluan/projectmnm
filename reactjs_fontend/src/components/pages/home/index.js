@@ -15,35 +15,36 @@ const axios = require("axios").default;
 // Make a request for a user with a given ID
 
 const HomePage = () => {
-  const [paramToken, setParamToken] = useSearchParams()
-  const [paramEmail, setParamEmail] = useSearchParams()
-  const [paramFullname, setParamFullname] = useSearchParams()
-
+  const [paramToken, setParamToken] = useSearchParams();
+  const [paramEmail, setParamEmail] = useSearchParams();
+  const [paramFullname, setParamFullname] = useSearchParams();
+  const [paramEmailFB, setParamEmailFB] = useSearchParams();
 
   const history = useNavigate();
 
   const [listProductNew, setListProductNew] = useState([]);
   const [listProductBestSell, setListProductBestSell] = useState([]);
-
-
   useEffect(() => {
     const controller = new AbortController();
-    if (paramToken.get('token') && paramEmail.get('email') && paramFullname.get('fullname')) {
-      localStorage.setItem('auth_token', paramToken.get('token'))
-      localStorage.setItem('auth_name', paramEmail.get('email'))
-      localStorage.setItem('auth_fullname', paramEmail.get('fullname'))
+    if (
+      paramToken.get("token") &&
+      paramEmail.get("email") || paramEmailFB.get("email") == ""  &&
+      paramFullname.get("fullname")
+    ) {
+      localStorage.setItem("auth_token", paramToken.get("token"));
+      localStorage.setItem("auth_name", paramEmail.get("email"));
+      localStorage.setItem("auth_fullname", paramEmail.get("fullname"));
 
       swal({
         title: "Đăng nhập thành công",
         icon: "success",
         button: "đóng",
       });
-      history('/')
+      history("/");
     }
     //clear function
     return () => controller.abort();
   }, []);
-
 
   useEffect(() => {
     const controller = new AbortController();
@@ -51,9 +52,9 @@ const HomePage = () => {
       .get("/api/home")
       .then(function (response) {
         // handle success
-        
+
         setListProductNew(response.data.product_new);
-        setListProductBestSell(response.data.product_bestseller)
+        setListProductBestSell(response.data.product_bestseller);
       })
       .catch(function (error) {
         // handle error
