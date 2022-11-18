@@ -40,11 +40,11 @@ const Prodedit = ({ product, showModal }) => {
     };
 
     const handleMotaChange = (value) => {
-        setMota({ value });
+        setMota([value]);
     }
 
     const handleCTSPChange = (value) => {
-        setCtsp({ value })
+        setCtsp([value])
     }
 
     const handleProductChange = (e) => {
