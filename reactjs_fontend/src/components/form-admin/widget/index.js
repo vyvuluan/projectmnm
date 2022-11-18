@@ -9,7 +9,7 @@ import Cookies from "universal-cookie";
 import { BiDollar, BiTask } from "react-icons/bi";
 const Widget = ({ dataWidget }) => {
   // const { dataWidget } = props;
-  console.log(dataWidget);
+  // console.log(dataWidget);
   const cookies = new Cookies();
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {

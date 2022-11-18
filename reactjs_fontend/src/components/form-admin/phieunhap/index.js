@@ -187,11 +187,16 @@ const PhieuNhap = () => {
   //   console.log(typeof(newDate) );
 
   const handleOnSearch = (key) => {
-    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
-      if (res.data.status === 200) {
-        setNcclist(res.data.ncc);
-      }
-    });
+    axios
+      .get(`http://localhost:8000/api/searchNcc?key=${key}`)
+      .then((res) => {
+        if (res.data.status === 200) {
+          setNcclist(res.data.ncc);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   const handleOnNCClear = () => {
     setNcclist([]);
@@ -206,15 +211,13 @@ const PhieuNhap = () => {
   //search sp
   const handleOnSearchSp = (key) => {
     axios.get(`api/products-search?key=${key}`).then((res) => {
-      // console.log(res.status);
       if (res.status === 200) {
-        setListProduct(res.data.data);
+        setListProduct(res.data.data.data);
       }
     });
   };
-
+  // console.log(listProduct);
   const handleOnSelectSp = (value) => {
-    // console.log(value.id);
     setIdProduct(value.id);
   };
 
@@ -497,47 +500,6 @@ const PhieuNhap = () => {
           });
       }
     });
-    // swal("Chắc chắn xóa", {
-    //   buttons: {
-    //     catch: {
-    //       text: "Chắc",
-    //       value: "catch",
-    //     },
-    //     no: {
-    //       text: "Chưa",
-    //       value: "no",
-    //     },
-    //   },
-    // }).then((value) => {
-    //   switch (value) {
-    //     case "catch":
-    //       axios
-    //         .delete(`/api/kho/deletePN/${id}`)
-    //         .then((res) => {
-    //           console.log(res);
-    //           if (res.data.status == 200) {
-    //             setSubmitting(true);
-
-    //             swal({
-    //               title: res.data.message,
-    //               icon: "success",
-    //               button: "đóng",
-    //             });
-    //           } else if (res.status == 200) {
-    //             swal({
-    //               title: res.data.message,
-    //               icon: "warning",
-    //               button: "đóng",
-    //             });
-    //           }
-    //         })
-    //         .catch(function (error) {
-    //           // handle error
-    //           console.log(error);
-    //         });
-    //       break;
-    //   }
-    // });
   };
   //tab 2
   const handleReload = () => {
@@ -593,57 +555,36 @@ const PhieuNhap = () => {
 
   const changeStatus = (item) => {
     const id = item.id;
-    const controller = new AbortController();
-    axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
-      // console.log(res);
-      if (res.data.status === 200) {
-        setSubmitting(true);
+    Swal.fire({
+      title: "Thay đổi tình trạng?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const controller = new AbortController();
+        axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
+          // console.log(res);
+          if (res.data.status === 200) {
+            setSubmitting(true);
 
-        swal({
-          title: res.data.message,
-          icon: "success",
-          button: "đóng",
+            swal({
+              title: res.data.message,
+              icon: "success",
+              button: "đóng",
+            });
+          }
         });
+        return () => {
+          controller.abort();
+        };
       }
     });
-    return () => {
-      controller.abort();
-    };
   };
-  //Đang sử lý
-  // const handleReloadShowCTPNtab3 = useCallback(() => {
-  //   const controller = new AbortController();
-  //   // console.log("tab3");
-  //   axios
-  //     .get(`/api/kho/getAllPN-new?page=${page}`)
-  //     .then((res) => {
-  //       if (res.data.status === 200) {
-  //         const listData = res.data.pns.data;
-  //         console.log(listData[listData.length - 1].pnct);
-  //         setDataShowPN(listData);
-  //         // setViewPn(listData[listData.length - 1].pnct);
-  //         // if (viewPn) {
-  //         //   var test = [];
-  //         //   viewPn.pnct.map((item) => {
-  //         //     listData.filter((e) => e.id == item.id);
-  //         //   });
-  //         //   setViewPn(test);
-  //         // }
-  //         // console.log();
-  //         // setViewPn(res.data.pns.data)
-  //         // handleView(res.data.pns.data[0].pnct)
-  //       }
-  //     })
 
-  //     .catch(function (error) {
-  //       // handle error
-  //       console.log(error);
-  //     });
-  //   return () => {
-  //     controller.abort();
-  //   };
-  // });
-  // console.log();
   return (
     <>
       <B.Modal show={show} onHide={handleClose}>
