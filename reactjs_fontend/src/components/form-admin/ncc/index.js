@@ -194,9 +194,9 @@ const Ncc = () => {
                 style={{ backgroundColor: "#edf1ff" }}
               >
                 <tr>
-                  <th>
+                  {/* <th>
                     <input type="checkbox" />
-                  </th>
+                  </th> */}
                   <th>ID</th>
                   <th>Tên nhà cung cấp</th>
                   <th>Số điện thoại</th>
@@ -208,10 +208,10 @@ const Ncc = () => {
                 {ncclist.map((NCC) => {
                   return (
                     <>
-                      <tr>
-                        <td key={NCC.id}>
+                      <tr key={NCC.id}>
+                        {/* <td >
                           <input type="checkbox" />
-                        </td>
+                        </td> */}
                         <td>{NCC.id}</td>
                         <td>{NCC.tenNCC}</td>
                         <td>{NCC.sdt}</td>

@@ -80,7 +80,7 @@ const Slideshows = () => {
               </div>
 
               <div
-                style={{ zIndex: "10" }}
+                style={{ zIndex: "10",textShadow:"2px 2px #FF0000" }}
                 className=" carousel-caption d-flex flex-column align-items-center justify-content-center"
               >
                 <div

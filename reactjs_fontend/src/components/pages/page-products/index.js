@@ -285,7 +285,7 @@ const PageProducts = () => {
       </Bt.Container>
       <Container fluid className="mt-5">
         <Row>
-          <SectionTitle title="Sản phẩm" />
+          
           <Col sm={2}>
             <Filter
               handleFilter={handleFilter}

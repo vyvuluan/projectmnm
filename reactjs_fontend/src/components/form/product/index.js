@@ -34,10 +34,10 @@ const Product = (props) => {
                       className="text-decoration-none text-black"
                       to={`/DetailProduct/${item.id}`}
                     >
-                      <div className="product-img position-relative overflow-hidden bg-transparent  p-0">
+                      <div className="text-center product-img position-relative overflow-hidden bg-transparent  p-0">
                         <img
-                          style={{ height: "338px", objectFit: "contain" }}
-                          className="img-fluid w-100 hoverCSS "
+                          style={{ height: "300px", width:"200px",alignItems:"center" ,  objectFit: "contain" }}
+                          className="img-fluid hoverCSS "
                           src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                           alt="img product"
                         ></img>

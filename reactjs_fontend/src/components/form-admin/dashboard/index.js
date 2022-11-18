@@ -21,7 +21,12 @@ const DashBoard = () => {
   const [dataSPganhet, setDataSPganhet] = useState([]);
   
   const cookies = new Cookies();
-
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
   useEffect(() => {
     const controller = new AbortController();
     if (cookies.get("role_id") == 2) {
@@ -129,7 +134,7 @@ const DashBoard = () => {
                           <td>{index + 1}</td>
                           <td>{item.tenSP}</td>
                           <td className="text-danger">{item.soLuongSP}</td>
-                          <td>{item.gia}</td>
+                          <td>{formatMoney(item.gia)}</td>
                           <td>
                             <BsArrowUpRightCircleFill
                                data-toggle="tooltip"

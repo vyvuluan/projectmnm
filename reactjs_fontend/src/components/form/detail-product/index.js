@@ -193,10 +193,11 @@ const DetailProduct = (props) => {
           <div className="col-lg-5 pb-5">
             <div
               id="product-carousel"
-              className="carousel slide"
+              className="carousel slide h-60"
               data-ride="carousel"
+              
             >
-              <div className="carousel-inner border">
+              <div className="carousel-inner border ">
                 <div className="carousel-item active">
                   <img
                     className="w-100 h-100"
@@ -204,29 +205,9 @@ const DetailProduct = (props) => {
                     alt="prod"
                   ></img>
                 </div>
-                <div className="carousel-item">
-                  <img
-                    className="w-100 h-100"
-                    src="img/product-2.jpg"
-                    alt="Image"
-                  ></img>
-                </div>
-                <div className="carousel-item">
-                  <img
-                    className="w-100 h-100"
-                    src="img/product-3.jpg"
-                    alt="Image"
-                  ></img>
-                </div>
-                <div className="carousel-item">
-                  <img
-                    className="w-100 h-100"
-                    src="img/product-4.jpg"
-                    alt="Image"
-                  ></img>
-                </div>
+    
               </div>
-              <a
+              {/* <a
                 className="carousel-control-prev"
                 href="#product-carousel"
                 data-slide="prev"
@@ -239,7 +220,7 @@ const DetailProduct = (props) => {
                 data-slide="next"
               >
                 <GrNext />
-              </a>
+              </a> */}
             </div>
           </div>
 

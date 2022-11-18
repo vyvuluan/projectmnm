@@ -136,7 +136,7 @@ function Index() {
                         <B.Table className='table-borderless border border-secondary text-center mb-0'>
                             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                 <tr>
-                                    <th><input type='checkbox' /></th>
+                                    {/* <th><input type='checkbox' /></th> */}
                                     <th>ID</th>
                                     <th>Tên nhà sản xuất</th>
                                     <th>Quốc gia</th>
@@ -147,7 +147,7 @@ function Index() {
                                 {nsxlist && nsxlist.map((item, index) => {
                                     return (
                                         <tr key={item.id}>
-                                            <td className='align-middle'><input type='checkbox' /></td>
+                                            {/* <td className='align-middle'><input type='checkbox' /></td> */}
                                             <td className='align-middle'>{index + 1}</td>
                                             <td className='align-middle'>{item.tenNSX}</td>
                                             <td className='align-middle'>{item.quocGia}</td>
