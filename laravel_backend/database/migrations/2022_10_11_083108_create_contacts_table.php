@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('customer_id')->unsigned();
             $table->string('message');
-            $table->integer('status',1)->default(0);
+            $table->integer('status')->default(0)->length(1);
             $table->timestamps();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });

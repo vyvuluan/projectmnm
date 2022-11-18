@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('employee_id')->nullable()->unsigned();
             $table->bigInteger('customer_id')->nullable()->unsigned();
-            $table->integer('status',1);
+            $table->integer('status')->length(1);
             $table->string('pt_ThanhToan');
             $table->string('tenKH');
             $table->string('sdt',10);
