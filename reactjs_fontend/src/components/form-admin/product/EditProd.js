@@ -128,9 +128,6 @@ const Prodedit = ({ product, showModal }) => {
                     <Editor
                         apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleMotaChange}
-                        // onInit={mota}
-                        // onInit={(editor) => { editorRef.current = editor }}
-
                         initialValue={mota}
                         init={{
                             height: 500,

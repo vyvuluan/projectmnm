@@ -453,6 +453,7 @@ function Index() {
                     onInit={(evt, editor) => {
                       editorRef.current = editor;
                     }}
+                    initialValue={"<p>CPU: </p> <p>Ram: </p> <p>GPU: </p> <p>Màn hình: </p> <p>Bộ nhớ: </p> <p>Pin: </p> <p>Khối lượng: </p>"}
                     init={{
                       height: 500,
                       menubar: false,
@@ -491,6 +492,7 @@ function Index() {
                     onInit={(evt, editor) => {
                       editorRef.current = editor;
                     }}
+                    initialValue={"<p>Đây là mô tả của sản phẩm</p>"}
                     init={{
                       height: 500,
                       menubar: false,
