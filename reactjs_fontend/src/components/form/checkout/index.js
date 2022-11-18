@@ -128,7 +128,8 @@ function Checkout() {
                 if (res.data.status === 200) {
                     swal("Đặt hàng thành công", res.data.message, "success");
                     setError([]);
-                    navigate("/");
+                    navigate("/paymentreturn");
+                    localStorage.removeItem("count");
                 } else if (res.data.status === 422) {
                     swal("Hãy nhập đầy đủ các mục", "", "error");
                     setError(res.data.errors);
@@ -157,7 +158,8 @@ function Checkout() {
                         axios.post(`http://localhost:8000/api/dathang`, data).then((resp) => {
                             if (resp.data.status === 200) {
                                 swal("Thành công", resp.data.message, "success");
-                                navigate("/");
+                                localStorage.removeItem("count");
+                                navigate("/paymentreturn");
                             } else if (resp.data.status === 401) {
                                 swal("Thất bại", resp.data.message, "error");
                             } else if (resp.data.status === 400) {

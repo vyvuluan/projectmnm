@@ -82,14 +82,14 @@ const Account = () => {
 
   const refresh = useCallback(async () => {
     if (cookies.get("role_id") == 2) {
-      
+
       const res = await axios.get(`/api/admin/manageUser?page=${page}`);
       setUser(res.data.users.data);
       setTotalPage(res.data.users.total);
       setPerPage(res.data.users.per_page);
       setCurrentPage(res.data.users.current_page);
     }
-    else if(cookies.get("role_id") == 4){
+    else if (cookies.get("role_id") == 4) {
       const res = await axios.get(`/api/nhanvien/manageUser?page=${page}`);
       setUser(res.data.users.data);
       setTotalPage(res.data.users.total);
@@ -248,7 +248,7 @@ const Account = () => {
                 <option>Theo quyền</option>
               </B.FormSelect>
             </B.FormGroup> */}
-            <B.Table className="table-borderless border border-secondary text-center mb-0">
+            <B.Table className="table-borderless border border-secondary mb-0">
               <thead
                 className="text-dark"
                 style={{ backgroundColor: "#edf1ff" }}
@@ -261,7 +261,7 @@ const Account = () => {
                   <th>Quyền</th>
                   <th>Hoạt động</th>
 
-                  <th>Thao tác</th>
+                  <th className="text-center">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="align-middle">
@@ -325,7 +325,7 @@ const Account = () => {
                       {htmlRole}
                       {htmlStatus}
 
-                      <td className="align-middle fs-5 text-primary">
+                      <td className="text-center fs-5 text-primary">
                         <AiFillEye
                           type="button"
                           data-toggle="tooltip"
@@ -348,7 +348,7 @@ const Account = () => {
                 })}
               </tbody>
             </B.Table>
-          {loading ? <LoadingPage/> : null}
+            {loading ? <LoadingPage /> : null}
           </B.Col>
         </B.Row>
         <Pagination

@@ -166,19 +166,13 @@ export default function Header() {
           </Bt.Col>
           <Bt.Col lg={6} className="text-end text-lg-right">
             <div className="d-inline-flex align-items-center">
-              <a className="text-dark px-2" href={"#"}>
+              <a className="text-dark px-2" href={"https://www.facebook.com/profile.php?id=100007156123173"} target="_blank" rel="noreferrer noopener">
                 <Icon.Facebook></Icon.Facebook>
               </a>
-              <a className="text-dark px-2" href={"#"}>
-                <Icon.Twitter></Icon.Twitter>
-              </a>
-              <a className="text-dark px-2" href={"#"}>
-                <Icon.Linkedin></Icon.Linkedin>
-              </a>
-              <a className="text-dark px-2" href={"#"}>
+              <a className="text-dark px-2" href={"https://www.instagram.com/sontungmtp/"} target="_blank" rel="noreferrer noopener">
                 <Icon.Instagram></Icon.Instagram>
               </a>
-              <a className="text-dark px-2" href={"#"}>
+              <a className="text-dark px-2" href={"https://www.youtube.com/results?search_query=eunji+pyoapple"} target="_blank" rel="noreferrer noopener">
                 <Icon.Youtube></Icon.Youtube>
               </a>
             </div>

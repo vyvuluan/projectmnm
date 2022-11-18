@@ -18,7 +18,7 @@ class ManageProductController extends Controller
      */
     public function index()
     {
-        $prd = Product::orderBy('id', 'desc')->paginate(10);
+        $prd = Product::orderBy('id', 'desc')->paginate(8);
         return $prd;
     }
     public function ctsp($product)
@@ -238,7 +238,7 @@ class ManageProductController extends Controller
             ->orwhereHas('loaisp', function ($query) use ($key) {
                 $query->where('tenLoai', 'LIKE', '%' . $key . '%');
             });
-        $product = $product_query->paginate(10);
+        $product = $product_query->paginate(8);
 
         return response()->json([
             'data' => $product,

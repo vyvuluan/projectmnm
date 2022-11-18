@@ -709,8 +709,14 @@ class ManagePhieuXuatController extends Controller
             ->where('status', '>=', 1)
             ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
             ->where('status', '>=', 1)
-            ->orwhere('pt_ThanhToan', 'Tại quầy')
-
+            ->orwhere('tenKH', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+            ->orwhere('sdt', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+            ->orwhere('diaChi', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
+            ->orwhere('payment_id', 'LIKE', '%' . $key . '%')
+            ->where('pt_ThanhToan', 'Tại quầy')
             // ->paginate(10);
             ->get();
         $px = $px_query;

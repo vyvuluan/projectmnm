@@ -3,13 +3,15 @@ import user from "../../../img/user.png";
 import edit from "../../../img/edit.png";
 import { FaUserCircle, FaClipboardList } from 'react-icons/fa'
 import { RiLogoutBoxFill } from 'react-icons/ri'
+import { MdAdminPanelSettings } from 'react-icons/md'
 import logout from "../../../img/log-out.png";
 import React, { useState, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { Link } from 'react-router-dom'
-import "./style.css";
+import "./style1.css";
 const DropDownMenu = (props) => {
 
+  const [auth, setAuth] = useState();
   const [open, setOpen] = useState(false);
   // console.log(props.logout);
   let menuRef = useRef();
@@ -29,10 +31,14 @@ const DropDownMenu = (props) => {
     };
   });
 
+  useEffect(() => {
+    setAuth(localStorage.getItem("auth_fullname"));
+  }, []);
+
   return (
     <div className="menu-container" ref={menuRef}>
       <div
-        className="menu-trigger"
+        className="menu-trigger1"
         onClick={() => {
           setOpen(!open);
         }}
@@ -40,14 +46,17 @@ const DropDownMenu = (props) => {
         {/* <img className="anh" src={user}></img> */}
         <FaUser
           style={{ width: "auto", height: "25px" }}
-          className="text-primary anh1"
+          className="text-primary anh12"
         />
 
-        <div className={`dropdown-menu1 ${open ? "active" : "inactive"}`}>
+        <div className={`dropdown-menu12 ${open ? "active" : "inactive"}`}>
           <ul className="ul">
-            <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem icon={<FaUserCircle />} text={"Tài khoản"} /></Link>
-            {/* logout1={test}  */}
-            <Link to={'/myorder'} className='text-decoration-none'><DropdownItem icon={<FaClipboardList />} text={"Đơn hàng"} /></Link>
+            {auth ?
+              <>
+                <Link to={'/accountinfo'} className='text-decoration-none'><DropdownItem icon={<FaUserCircle />} text={"Tài khoản"} /></Link>
+                <Link to={'/myorder'} className='text-decoration-none'><DropdownItem icon={<FaClipboardList />} text={"Đơn hàng"} /></Link>
+              </>
+              : <Link to={'/pageadmin'} className='text-decoration-none'><DropdownItem icon={<MdAdminPanelSettings />} text={"Quản lý"} /></Link>}
             <DropdownItem icon={<RiLogoutBoxFill />} text={"Đăng xuất"} logout1={props.logout} />
           </ul>
         </div>
@@ -59,9 +68,9 @@ const DropDownMenu = (props) => {
 function DropdownItem(props) {
   // console.log(props.logout1);
   return (
-    <li className="dropdownItem1" onClick={props.logout1}>
+    <li className="dropdownItem12" onClick={props.logout1}>
       <span className="fs-4">{props.icon}</span>
-      <a className="iconItem mt-2 ms-3"> {props.text} </a>
+      <a className="iconItem1 mt-2 ms-3"> {props.text} </a>
     </li>
   );
 }
