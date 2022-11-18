@@ -291,7 +291,12 @@ class ManageBaoCaoController extends Controller
             }
         }
         $contact_count = Contact::where('status', 0)->count();
-
+        $chuaxuly = PhieuXuat::selectRaw('count(id) as chuaxuly')
+            ->where('status', 0)
+            ->first();
+        $daxuly = PhieuXuat::selectRaw('count(id) as daxuly')
+            ->where('status', '>=', 1)
+            ->first();
         $soluongban = PhieuXuat::selectRaw('count(id) as soluongban')
             ->where('employee_id', auth()->user()->employee->id)->first();
         $tongTien = PhieuXuat::selectRaw('sum(tongTien) as tongTien')
@@ -303,6 +308,8 @@ class ManageBaoCaoController extends Controller
             'contact_count' => $contact_count,
             'soluongban' => $soluongban,
             'tongTien' => $tongTien,
+            'chuaxuly' => $chuaxuly,
+            'daxuly' => $daxuly,
         ]);
     }
 }
