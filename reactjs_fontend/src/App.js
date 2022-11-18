@@ -10,6 +10,7 @@ import Cookies from "universal-cookie";
 import swal from "sweetalert";
 
 import { icons } from "react-icons/lib";
+import { useEffect } from "react";
 // import TestTable from "./components/form-admin/TestTable";
 // import { DropDownMenu } from "./components/form";
 // import HomePage from "./components/pages/home/index.js"
@@ -27,6 +28,10 @@ axios.interceptors.request.use((config) => {
 });
 function App() {
   const cookies = new Cookies();
+
+  useEffect(() => {
+    document.title = "L3M SHOP"
+  }, [])
 
   return (
     <>

@@ -34,7 +34,7 @@ const Product = (props) => {
                       className="text-decoration-none text-black"
                       to={`/DetailProduct/${item.id}`}
                     >
-                      <div className=" product-img position-relative overflow-hidden bg-transparent  p-0">
+                      <div className="product-img position-relative overflow-hidden bg-transparent  p-0">
                         <img
                           className="img-fluid w-100 hoverCSS "
                           src={`http://localhost:8000/uploadhinh/${item.hinh}`}

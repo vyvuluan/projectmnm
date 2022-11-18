@@ -90,11 +90,11 @@ const Slideshows = () => {
                   }}
                 >
                   <h4 className="text-light text-uppercase font-weight-medium mb-3">
-                    NHÂN DỊP KHAI TRƯƠNG L3M SHOP
+                    CHÍNH HÃNG
                   </h4>
                   <h3 className="display-4 text-white font-weight-semi-bold mb-4">
-                    GIẢM GIÁ SỐC LÊN ĐẾN{" "}
-                    <h1 style={{ fontSize: "100px" }}>50%</h1>
+                    LAPTOP-PC-WORKSTATION{" "}
+                    <h1 style={{ fontSize: "100px" }}>L3M SHOP</h1>
                   </h3>
                 </div>
               </div>

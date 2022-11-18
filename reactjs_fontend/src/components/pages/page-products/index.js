@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import {
   SectionTitle,
@@ -152,13 +153,13 @@ const PageProducts = () => {
         .then(function (response) {
           // handle success
           // console.log(response.data.data);
-          
+
           setListProduct(response.data.data);
           setTotalPage(response.data.total);
           setPerPage(response.data.per_page);
           setCurrentPage(response.data.current_page);
           setLoading(false);
-          
+
         })
         .catch(function (error) {
           // handle error
@@ -171,10 +172,20 @@ const PageProducts = () => {
       return () => controller.abort();
     }
   }, [page, searchParam]);
-  
+
   if (loading) {
     return (
       <>
+        <Bt.Container fluid className='bg-secondary mb-5'>
+          <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
+            <h1 className='fw-semibold text-uppercase mb-3'>SẢN PHẨM</h1>
+            <div className='d-inline-flex'>
+              <p className='m-0'><Link to='/' className='text-decoration-none' variant='primary'>Home</Link></p>
+              <p className='m-0 px-2'>-</p>
+              <p className='m-0 text-muted'>Sản phẩm</p>
+            </div>
+          </div>
+        </Bt.Container>
         <LoadingPage />
       </>
     );
@@ -193,8 +204,8 @@ const PageProducts = () => {
     }
   }
 
-  
-  
+
+
   // const [dataFilter, setDataFilter] = useState();
   // console.log(b);
   const handleChange = (e) => {
@@ -262,6 +273,16 @@ const PageProducts = () => {
 
   return (
     <>
+      <Bt.Container fluid className='bg-secondary mb-5'>
+        <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
+          <h1 className='fw-semibold text-uppercase mb-3'>SẢN PHẨM</h1>
+          <div className='d-inline-flex'>
+            <p className='m-0'><Link to='/' className='text-decoration-none' variant='primary'>Home</Link></p>
+            <p className='m-0 px-2'>-</p>
+            <p className='m-0 text-muted'>Sản phẩm</p>
+          </div>
+        </div>
+      </Bt.Container>
       <Container fluid className="mt-5">
         <Row>
           <SectionTitle title="Sản phẩm" />
