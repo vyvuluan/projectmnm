@@ -126,18 +126,18 @@ function Index() {
                 {/* table hien thi tai khoan */}
                 <B.Row className='pe-xl-5'>
                     <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
-                        <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
+                        {/* <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
                             <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>
                                 <option>Sắp xếp</option>
                                 <option>Từ A-Z</option>
                                 <option>Theo ID</option>
                             </B.FormSelect>
-                        </B.FormGroup>
+                        </B.FormGroup> */}
                         <B.Table className='table-borderless border border-secondary text-center mb-0'>
                             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                 <tr>
                                     {/* <th><input type='checkbox' /></th> */}
-                                    <th>ID</th>
+                                    <th>STT</th>
                                     <th>Tên nhà sản xuất</th>
                                     <th>Quốc gia</th>
                                     <th>Thao tác</th>

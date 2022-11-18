@@ -4,7 +4,7 @@ const LoginGoogle = (props) => {
   
   // const [data, setData] = useState({});
   // console.log(props.l);
-    
+  
   return (
     <>
       <a

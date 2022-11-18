@@ -195,7 +195,7 @@ const DetailProduct = (props) => {
               id="product-carousel"
               className="carousel slide h-60"
               data-ride="carousel"
-              
+
             >
               <div className="carousel-inner border ">
                 <div className="carousel-item active">
@@ -205,7 +205,7 @@ const DetailProduct = (props) => {
                     alt="prod"
                   ></img>
                 </div>
-    
+
               </div>
               {/* <a
                 className="carousel-control-prev"
@@ -255,26 +255,6 @@ const DetailProduct = (props) => {
             </p>
 
             <div>{avail_stock}</div>
-
-            <div className="d-flex pt-2">
-              <p className="text-dark font-weight-medium mb-0 mr-2">
-                Share on:
-              </p>
-              <div className="d-inline-flex">
-                <a className="text-dark px-2" href="">
-                  <BsFacebook />
-                </a>
-                <a className="text-dark px-2" href="">
-                  <BsTwitter />
-                </a>
-                <a className="text-dark px-2" href="">
-                  <BsLinkedin />
-                </a>
-                <a className="text-dark px-2" href="">
-                  <BsPinterest />
-                </a>
-              </div>
-            </div>
           </div>
         </div>
         <div className="px-xl-5">

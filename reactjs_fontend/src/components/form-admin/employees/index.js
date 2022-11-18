@@ -488,7 +488,7 @@ const Employees = () => {
                 type="submit"
                 variant="outline-primary"
                 className="rounded-0 py-2 mb-2 w-100"
-                // onClick={handleThemNV}
+              // onClick={handleThemNV}
               >
                 <BsPersonPlusFill className="me-2" />
                 Thêm nhân viên
@@ -519,7 +519,7 @@ const Employees = () => {
                 style={{ backgroundColor: "#edf1ff" }}
               >
                 <tr>
-                  <th>ID</th>
+                  <th>STT</th>
                   <th>Họ và tên</th>
                   {/* <th>Email</th> */}
                   <th>Giới tính</th>
