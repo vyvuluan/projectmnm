@@ -16,6 +16,7 @@ import CreateAccNV from "./createAccNV";
 import LoadingPage from "../../layouts/Loading";
 const Employees = () => {
   const [submitting, setSubmitting] = useState(true);
+  const [showTable, setShowtable] = useState(false);
 
   const [user, setUser] = useState([]);
   const [username, setUsername] = useState();
@@ -173,11 +174,13 @@ const Employees = () => {
     });
   };
   const handleOnSearch = (key) => {
-    axios.get(`/api/admin/manageEmployee?key=${key}`).then((res) => {
+    axios.get(`/api/searchEmp?key=${key}`).then((res) => {
       if (res.data.status === 200) {
-        // console.log(res.data.emloyee);
-        setListNV(res.data.emloyee.data);
+        setListNV(res.data.emp);
+        setShowtable(true);
       }
+    }).then(function (error) {
+      console.log(error);
     });
   };
   var array = [];
@@ -205,6 +208,7 @@ const Employees = () => {
     );
   };
   const handleOnNVclear = () => {
+    setShowtable(false);
     setSubmitting(true);
   };
   const refreshNV = useCallback(async () => {
@@ -261,19 +265,55 @@ const Employees = () => {
         });
     }
   };
-
+  // console.log(listNV);
   var employee_HTML = "";
-  if (user.length > 0) {
+  if (user.length > 0 || listNV.length > 0) {
     employee_HTML = (
       <>
-        {user &&
+        {!showTable &&
+          user &&
           user.map((item, index) => {
             // console.log(item);
             // if (user_id == null) {
             // }
             return (
               <tr key={item.id}>
-                <td className="align-middle">{item.id}</td>
+                <td className="align-middle">{index + 1}</td>
+                <td className="align-middle">{item.ten}</td>
+                {/* <td className="align-middle">{item.email}</td> */}
+                <td className="align-middle">
+                  {item.gioiTinh == 1 ? "Nam" : "Nữ"}
+                </td>
+                <td
+                  className="align-middle"
+                  style={{ wordBreak: "break-word", width: "400px" }}
+                >
+                  {item.diaChi}
+                </td>
+                <td className="align-middle">{item.sdt}</td>
+
+                <td className="fs-5 text-primary text-left  ">
+                  <BiEdit onClick={() => handleShow(item)} />
+                  <MdDeleteForever
+                    className="ms-3"
+                    onClick={() => handleDeleteNV(item.id)}
+                  />
+                  {item.user_id == null ? (
+                    <BsPersonPlus
+                      onClick={() => handleShowCreate(item)}
+                      className="ms-3"
+                    />
+                  ) : null}
+                </td>
+              </tr>
+            );
+          })}
+        {showTable &&
+          listNV &&
+          listNV.map((item, index) => {
+            return (
+              <tr key={item.id}>
+                <td className="align-middle">{index + 1}</td>
                 <td className="align-middle">{item.ten}</td>
                 {/* <td className="align-middle">{item.email}</td> */}
                 <td className="align-middle">
@@ -371,11 +411,13 @@ const Employees = () => {
                     items={listNV}
                     onSearch={handleOnSearch}
                     onClear={handleOnNVclear}
-                    onSelect={handleOnSelect}
-                    fuseOptions={{ keys: ["id", "ten"] }}
-                    resultStringKeyName="ten"
+                    // onSelect={handleOnSelect}
+                    // fuseOptions={{ keys: ["id", "ten"] }}
+                    // resultStringKeyName="ten"
                     // showIcon={false}
-                    formatResult={formatResult}
+                    maxResults={10}
+                    showNoResults={false}
+                    // formatResult={formatResult}
                     styling={{
                       height: "36px",
                       border: "1px solid lightgray",
@@ -529,45 +571,7 @@ const Employees = () => {
                   <th style={{ width: "120px" }}>Thao tác</th>
                 </tr>
               </thead>
-              <tbody className="align-middle">
-                {employee_HTML}
-
-                {/* {user &&
-                  user.map((item, index) => {
-                    
-                    return (
-                      <tr key={item.id}>
-                        <td className="align-middle">{item.id}</td>
-                        <td className="align-middle">{item.ten}</td>
-                        
-                        <td className="align-middle">
-                          {item.gioiTinh == 1 ? "Nam" : "Nữ"}
-                        </td>
-                        <td
-                          className="align-middle"
-                          style={{ wordBreak: "break-word", width: "400px" }}
-                        >
-                          {item.diaChi}
-                        </td>
-                        <td className="align-middle">{item.sdt}</td>
-
-                        <td className="fs-5 text-primary text-left  ">
-                          <BiEdit onClick={() => handleShow(item)} />
-                          <MdDeleteForever
-                            className="ms-3"
-                            onClick={() => handleDeleteNV(item.id)}
-                          />
-                          {item.user_id == null ? (
-                            <BsPersonPlus
-                              onClick={() => handleShowCreate(item)}
-                              className="ms-3"
-                            />
-                          ) : null}
-                        </td>
-                      </tr>
-                    );
-                  })} */}
-              </tbody>
+              <tbody className="align-middle">{employee_HTML}</tbody>
             </B.Table>
             {loading ? <LoadingPage /> : null}
           </B.Col>

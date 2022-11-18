@@ -92,7 +92,7 @@ const Widget = ({ dataWidget }) => {
                         Chi tiêu
                       </div>
                       <div className="h5 pl-3 mb-0 font-weight-bold text-gray-800">
-                        {chiTieu}
+                        {formatMoney(chiTieu)}
                       </div>
                     </div>
                     <div className="col-auto">
