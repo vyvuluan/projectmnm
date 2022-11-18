@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import * as B from "react-bootstrap";
 
-const CreateAccNV = ({createAcc,showModal}) => {
+const CreateAccNV = ({createAcc,showModal,setSubmitting}) => {
     const id = createAcc.id
     const [valueCV, setValueCV] = useState();
     const [error, setError] = useState();
@@ -52,7 +52,7 @@ const CreateAccNV = ({createAcc,showModal}) => {
                 button: "đóng",
               });
               showModal(false)
-              
+              setSubmitting(true)
             } else if (res.data.status === 401) {
               swal({
                 title: res.data.error,

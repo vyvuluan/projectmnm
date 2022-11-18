@@ -171,47 +171,6 @@ const Employees = () => {
           });
       }
     });
-    // swal("Chắc chắn xóa", {
-    //   buttons: {
-    //     catch: {
-    //       text: "Chắc",
-    //       value: "catch",
-    //     },
-    //     no: {
-    //       text: "Chưa",
-    //       value: "no",
-    //     },
-    //   },
-    // }).then((value) => {
-    //   switch (value) {
-    //     case "catch":
-    //       axios
-    //         .delete(`/api/admin/manageEmployee/${id}`)
-    //         .then((res) => {
-    //           console.log(res);
-    //           if (res.data.status == 200) {
-    //             setSubmitting(true);
-
-    //             swal({
-    //               title: res.data.message,
-    //               icon: "success",
-    //               button: "đóng",
-    //             });
-    //           } else if (res.status == 200) {
-    //             swal({
-    //               title: res.data.message,
-    //               icon: "warning",
-    //               button: "đóng",
-    //             });
-    //           }
-    //         })
-    //         .catch(function (error) {
-    //           // handle error
-    //           console.log(error);
-    //         });
-    //       break;
-    //   }
-    // });
   };
   const handleOnSearch = (key) => {
     axios.get(`/api/admin/manageEmployee?key=${key}`).then((res) => {
@@ -376,7 +335,11 @@ const Employees = () => {
           <B.ModalTitle>Tạo tài khoản nhân viên</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
-          <CreateAccNV createAcc={createAcc} showModal={handleCloseCreateAcc} />
+          <CreateAccNV
+            createAcc={createAcc}
+            showModal={handleCloseCreateAcc}
+            setSubmitting={setSubmitting}
+          />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
           <B.Button
