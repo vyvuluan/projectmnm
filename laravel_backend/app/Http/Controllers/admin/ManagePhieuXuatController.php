@@ -122,12 +122,22 @@ class ManagePhieuXuatController extends Controller
                     ]);
                 }
             case 2; // Lọc theo Pt Thanh toán
-                $px = PhieuXuat::where('pt_ThanhToan', $value)->where('status', '>=', 1)->paginate(10);
-                if ($px) {
-                    return response()->json([
-                        'status' => 200,
-                        'data' => $px,
-                    ]);
+                if ($value == 'Tại quầy') {
+                    $px = PhieuXuat::where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+                    if ($px) {
+                        return response()->json([
+                            'status' => 200,
+                            'data' => $px,
+                        ]);
+                    }
+                } else {
+                    $px = PhieuXuat::where('pt_ThanhToan', $value)->where('status', '>=', 1)->paginate(10);
+                    if ($px) {
+                        return response()->json([
+                            'status' => 200,
+                            'data' => $px,
+                        ]);
+                    }
                 }
             case 3; // Lọc theo giá thấp đến cao
                 $px = PhieuXuat::orderBy('tongTien', 'asc')->where('status', '>=', 1)->orwhere('pt_ThanhToan', 'Tại quầy')->paginate(10);
