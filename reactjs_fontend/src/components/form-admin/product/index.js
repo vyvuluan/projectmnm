@@ -606,7 +606,7 @@ function Index() {
                   <option>Theo loại</option>
                 </B.FormSelect>
               </B.FormGroup> */}
-                <B.Table responsive className="table-borderless border border-secondary mb-0">
+                <B.Table responsive className="table-borderless border border-secondary mb-3">
                   <thead
                     className="text-dark"
                     style={{ backgroundColor: "#edf1ff" }}
