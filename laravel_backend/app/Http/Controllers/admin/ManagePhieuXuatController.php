@@ -105,6 +105,15 @@ class ManagePhieuXuatController extends Controller
         $value = $request->value;
         switch ($key) {
             case 1; // Lọc theo tình trạng
+                if ($value == 0) {
+                    $px = PhieuXuat::where('status', $value)->where('pt_ThanhToan', 'Tại quầy')->orderBy('id', 'desc')->paginate(10);
+                    if ($px) {
+                        return response()->json([
+                            'status' => 200,
+                            'data' => $px,
+                        ]);
+                    }
+                }
                 $px = PhieuXuat::where('status', $value)->orderBy('id', 'desc')->paginate(10);
                 if ($px) {
                     return response()->json([
