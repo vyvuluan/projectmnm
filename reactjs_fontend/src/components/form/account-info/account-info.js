@@ -2,10 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import product1 from "../../../img/product-1.jpg";
 import * as Bt from "react-bootstrap";
 import axios from "axios";
+import Cookies from "universal-cookie";
 import AccountEdit from "./accountEdit";
 import ChangePassAccount from "./changePassAccount";
 
 const AccountInfo = () => {
+  const [auth, setAuth] = useState();
   const [userName, setUserName] = useState();
   const [sex, setSex] = useState();
   const [address, setAddress] = useState();
@@ -64,6 +66,12 @@ const AccountInfo = () => {
 
   var Male = "Nam";
   var Female = "Nữ";
+
+  useEffect(() => {
+    // const cookies = new Cookies();
+    // setRoleID(cookies.get("role_id"));
+    setAuth(localStorage.getItem("auth_fullname"));
+  }, []);
 
 
   return (
@@ -145,20 +153,24 @@ const AccountInfo = () => {
             <h6 className="text-muted mb-3">{phone}</h6>
             <h4 className="text-dark fw-semibold mb-3">Email</h4>
             <h6 className="text-muted mb-3">{emailUser}</h6>
-            <Bt.Button
-              variant="primary"
-              className="rounded-0 py-2 me-3 mt-3"
-              onClick={() => handleShow()}
-            >
-              Chỉnh sửa thông tin
-            </Bt.Button>
-            <Bt.Button
-              variant="primary"
-              className="rounded-0 py-2 mt-3"
-              onClick={() => handleShowChangePass()}
-            >
-              Đổi mật khẩu
-            </Bt.Button>
+            {!auth ?
+              null :
+              <>
+                <Bt.Button
+                  variant="primary"
+                  className="rounded-0 py-2 me-3 mt-3"
+                  onClick={() => handleShow()}
+                >
+                  Chỉnh sửa thông tin
+                </Bt.Button>
+                <Bt.Button
+                  variant="primary"
+                  className="rounded-0 py-2 mt-3"
+                  onClick={() => handleShowChangePass()}
+                >
+                  Đổi mật khẩu
+                </Bt.Button>
+              </>}
           </Bt.Col>
         </Bt.Row>
       </Bt.Container>

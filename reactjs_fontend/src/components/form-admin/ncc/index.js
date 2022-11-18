@@ -121,29 +121,6 @@ const Ncc = () => {
             </h1>
           </B.Col>
           <B.Col lg={1}></B.Col>
-          <B.Col lg={6}>
-            <B.Form>
-              <B.FormGroup>
-                <B.InputGroup>
-                  <B.FormControl
-                    type="text"
-                    placeholder="Tìm kiếm"
-                    className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                  ></B.FormControl>
-                  <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
-                  </B.InputGroup.Text>
-                </B.InputGroup>
-              </B.FormGroup>
-              <B.FormGroup className="d-flex d-inline-block justify-content-between mt-2">
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo id"
-                />
-              </B.FormGroup>
-            </B.Form>
-          </B.Col>
         </B.Row>
         <B.Row className="pe-xl-5 mb-5">
           <B.Form onSubmit={submitNcc} id="formAddNCC">
