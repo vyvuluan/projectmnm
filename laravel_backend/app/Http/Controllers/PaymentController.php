@@ -26,7 +26,7 @@ class PaymentController extends Controller
         if (auth('sanctum')->check()) {
             $maKH = auth('sanctum')->user()->customer->id;
             if ($request->payment_id != null) {
-                $stus = 0;
+                $stus = 1;
             } else {
                 $stus = 0;
             }
@@ -414,7 +414,7 @@ class PaymentController extends Controller
 
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
-            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
+            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
             return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
         }
         // }
