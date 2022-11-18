@@ -36,6 +36,7 @@ const Product = (props) => {
                     >
                       <div className="product-img position-relative overflow-hidden bg-transparent  p-0">
                         <img
+                          style={{ height: "338px", objectFit: "contain" }}
                           className="img-fluid w-100 hoverCSS "
                           src={`http://localhost:8000/uploadhinh/${item.hinh}`}
                           alt="img product"
