@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.css';
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./style.css";
@@ -53,15 +53,15 @@ const NavBarAdmin = () => {
         {/* form tìm kiếm */}
         <div className="row m-3 " style={{ color: "#d19c97" }}>
           {/* <h5>L3M Admin</h5> */}
-          <a href="#" className="text-decoration-none">
+          <Link to="/" className="text-decoration-none">
             <span className="fs-4 text-primary fw-bold">
               L3M <span className="text-white">SHOP</span>
             </span>
-          </a>
+          </Link>
           <div className="text-muted fs-6">ADMINISTRATOR</div>
         </div>
         <ul className="navbar-nav ml-auto">
-        
+
           {/* <div className="topbar-divider d-none d-sm-block"></div> */}
 
           {/* <!-- Nav Item - User Information --> */}
@@ -74,8 +74,8 @@ const NavBarAdmin = () => {
               <DropDownMenuAdmin logout={logoutSubmit} />
             </a>
 
-      
-           
+
+
           </li>
         </ul>
       </nav>
