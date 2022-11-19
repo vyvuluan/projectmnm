@@ -5,9 +5,10 @@ import "./style.css";
 import Category from "../category";
 const Slideshows = () => {
   const images = [
-    "https://cdn.tgdd.vn/2022/11/banner/Big-hero-desk-jpg-final-1920x450.jpg",
-    "https://xgear.net/wp-content/uploads/2022/11/Ideapad-Gaming.jpg",
-    "https://xgear.net/wp-content/uploads/2022/11/banner-gaming-gear.jpg",
+    "https://media.jw.com.au/media/wysiwyg/2022/11/1400X400.jpg",
+    "https://media.jw.com.au/media/wysiwyg/2022/09/1400X400.jpg",
+    "https://storage-asset.msi.com/event/2020/nb/In-reboot-GearUp/images/Reboot-and-gearUp-event-banner02.jpg",
+    "https://promotions.newegg.ca/asus/21-2758/1380x360.jpg"
   ];
   const delay = 3000;
   const handleOnclickPre = () => {

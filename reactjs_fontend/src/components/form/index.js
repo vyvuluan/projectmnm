@@ -1,4 +1,4 @@
-export { default as ResetPass } from "./repass-confirm/index.js";
+// export { default as ResetPass } from "./repass-confirm/index.js";
 export { default as Login } from "./login/index.js";
 export { default as ForgotPass } from "./resetpass/index.js";
 export { default as Resgiter } from "./register/index.js";

@@ -188,7 +188,7 @@ const PhieuNhap = () => {
 
   const handleOnSearch = (key) => {
     axios
-      .get(`http://localhost:8000/api/searchNcc?key=${key}`)
+      .get(`/api/searchNcc?key=${key}`)
       .then((res) => {
         if (res.data.status === 200) {
           setNcclist(res.data.ncc);
