@@ -4,7 +4,7 @@ const NotFoundPage = () => {
   return (
     <>
       <div className="main">
-      <a href="/" className="bn3637 bn36 ">HOME</a>
+        <a href="/" className="bn3637 bn36 ">HOME</a>
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 355">
             <g id="ocean">
@@ -386,4 +386,4 @@ const NotFoundPage = () => {
     </>
   );
 };
-// export default NotFoundPage1;
+export default NotFoundPage;
