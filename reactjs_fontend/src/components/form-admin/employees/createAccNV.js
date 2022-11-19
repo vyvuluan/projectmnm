@@ -39,7 +39,7 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
       axios
         .post(`api/admin/manageEmployee/createUser/${id}`, data)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.status === 200) {
             // console.log("thanh cong");
             swal({
