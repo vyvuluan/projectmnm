@@ -17,7 +17,10 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discount = Discount::orderBy('created_at', 'desc')->paginate(10);
+        $date = Carbon::today();
+        $discount = Discount::where('start', '<', $date)
+            ->where('end', '>', $date)
+            ->orderBy('created_at', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'discount' =>  $discount,
@@ -216,9 +219,9 @@ class DiscountController extends Controller
         $discount = Discount::where('start', '<', $date)
             ->where('end', '>', $date)
             ->get();
-            return response()->json([
-                'status' => 200,
-                'discount' => $discount,
-            ]);
+        return response()->json([
+            'status' => 200,
+            'discount' => $discount,
+        ]);
     }
 }
