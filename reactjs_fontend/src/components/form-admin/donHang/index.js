@@ -6,6 +6,7 @@ import swal from "sweetalert";
 import { FaRegEye } from 'react-icons/fa'
 import { useReactToPrint } from 'react-to-print';
 import { RiRefreshLine } from 'react-icons/ri'
+import { BsFillExclamationSquareFill } from 'react-icons/bs'
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
@@ -332,136 +333,14 @@ const DonHang = () => {
       sheet: 'Phiếu xuất'
     })
 
+  const renderTooltip = (props) => (
+    <B.Tooltip id="button-tooltip" {...props}>
+      Đơn hàng thanh toán thất bại hãy hủy đơn hàng này!!!
+    </B.Tooltip>
+  );
+
   return (
     <>
-      {/* <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
-        <div ref={componentRef}>
-          <B.ModalHeader>
-            <B.ModalTitle>
-              <div className='text-primary fw-bold'>
-                L3M
-                <span className='text-dark'>SHOP</span>
-                <p className='fs-6 text-dark fw-semibold'>Mã hóa đơn: {viewOrder && viewOrder.id}</p>
-              </div>
-            </B.ModalTitle>
-            <B.ModalTitle>
-              <div>
-                Hóa đơn bán hàng
-                <p className='fs-6'>Ngày {date} {month} Năm {year}</p>
-              </div>
-            </B.ModalTitle>
-          </B.ModalHeader>
-          <B.Row className='px-3 mt-2'>
-            <div className='fs-6'>Công ty TNHH thương mại L3M</div>
-            <div className='fs-6'>Địa chỉ: 273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</div>
-            <div className='fst-italic fs-6'>Hotline: 0123498765<span className='ms-5'>Email: l3mstore@gmail.com</span></div>
-          </B.Row>
-          <hr />
-          <B.ModalBody>
-            <B.Row>
-              <B.FormGroup className='d-flex justify-content-between'>
-                <B.FormLabel className='fs-6'>Họ và tên khách hàng:</B.FormLabel>
-                <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.tenKH}</B.FormLabel>
-              </B.FormGroup>
-              <B.FormGroup className='d-flex justify-content-between'>
-                <B.FormLabel className='fs-6'>Số điện thoại khách hàng:</B.FormLabel>
-                <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.sdt}</B.FormLabel>
-              </B.FormGroup>
-              <B.FormGroup className='d-flex justify-content-between'>
-                <B.FormLabel className='fs-6'>Địa chỉ:</B.FormLabel>
-                <B.FormLabel className='fs-6 ms-2 mb-3 text-success text-end'>{viewOrder && viewOrder.diaChi}</B.FormLabel>
-              </B.FormGroup>
-              <B.FormGroup className='d-flex justify-content-between'>
-                <B.FormLabel className='fs-6'>Phương thức thanh toán:</B.FormLabel>
-                <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewOrder && viewOrder.pt_ThanhToan}</B.FormLabel>
-              </B.FormGroup>
-            </B.Row>
-            <hr />
-            <B.Row>
-              <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
-                <thead className='text-dark'>
-                  <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Bảo hành</th>
-                    <th>Giá</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {viewOrder && viewOrder.pxct.map((prod) => {
-                    return (
-                      <>
-                        <tr key={prod.product.id}>
-                          <td>{prod.product.tenSP}</td>
-                          <td>{prod.soluong}</td>
-                          <td>{prod.product.baoHanh} tháng</td>
-                          <td>{formatMoney(prod.product.gia)}</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                        </tr>
-                      </>
-                    )
-                  })}
-                </tbody>
-                <tfoot className='border-top'>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Tạm tính: </td>
-                    <td>{viewOrder && viewOrder.discount !== 0 ? formatMoney(viewOrder?.tongTien / (1 - viewOrder?.discount / 100)) : formatMoney(viewOrder?.tongTien)}</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Giảm giá: </td>
-                    <td>{viewOrder && viewOrder.discount}%</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className='fw-semibold'>Tổng tiền: </td>
-                    <td>{formatMoney(viewOrder && viewOrder.tongTien)}</td>
-                  </tr>
-                </tfoot>
-              </B.Table>
-            </B.Row>
-            <B.Row className='px-3 mt-2'>
-              <B.Row className='mb-5'>
-                <B.Col>
-                  <p>Khách hàng
-                    <p className='fst-italic ms-3'>Ký tên</p>
-                  </p>
-                </B.Col>
-                <B.Col className='text-end'>
-                  <p>Nhân viên bán hàng
-                    <p className='fst-italic me-5'>Ký tên</p></p>
-                </B.Col>
-              </B.Row>
-              <div className='fst-italic mt-5'>Vui lòng giữ lại hóa đơn trong vòng 1 tháng sau khi mua hàng</div>
-            </B.Row>
-          </B.ModalBody>
-        </div>
-        <B.ModalFooter>
-          {viewOrder && viewOrder.status > 0 && viewOrder.status < 5 ?
-            <B.Button
-              variant="outline-primary"
-              className="mt-2 me-2 rounded-0"
-              onClick={handlePrint}
-            >
-              In hóa đơn
-            </B.Button>
-            : null}
-          <B.Button
-            variant="outline-primary"
-            className="mt-2 rounded-0"
-            onClick={handleClosePrint}
-          >
-            Hủy bỏ
-          </B.Button>
-        </B.ModalFooter>
-      </B.Modal> */}
-
       <B.Modal size='lg' show={showPrint} onHide={handleClosePrint}>
         <B.Tabs activeKey={pxtab} onSelect={(k) => setpxtab(k)}>
           <B.Tab eventKey={1} title="Hóa đơn">
@@ -774,7 +653,15 @@ const DonHang = () => {
                           </B.DropdownButton>
                           </td>
                           <td className='text-center'>
-                            <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />
+                            {item.status === 0 && (item.pt_ThanhToan === 'VnPay' || item.pt_ThanhToan === 'PayPal') ?
+                              <B.OverlayTrigger
+                                placement="left"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltip}
+                              >
+                                <div className="d-flex gap-2"><BsFillExclamationSquareFill className='fs-4 text-danger' />
+                                  <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} /></div>
+                              </B.OverlayTrigger> : <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />}
                           </td>
                         </tr>
                       )
@@ -818,6 +705,8 @@ const DonHang = () => {
                           </B.DropdownButton>
                           </td>
                           <td className='text-center'>
+                            {item.status === 0 && (item.pt_ThanhToan === 'VnPay' || item.pt_ThanhToan === 'PayPal') ?
+                              <BsFillExclamationSquareFill className='fs-4 text-danger me-2' /> : null}
                             <FaRegEye className='fs-3 text-info' onClick={() => handleShowPrint(item)} />
                           </td>
                         </tr>
