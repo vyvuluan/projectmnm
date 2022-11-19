@@ -105,14 +105,16 @@ const Account = () => {
   const handleDeleteAccount = (item) => {
     // console.log(item.id);
     const id = item.id;
-    swal("Chắc chưa", {
+    swal({
+      title: "Bạn chắc chứ?",
+      text: "Xóa tài khoản sẽ không thể hoàn tác",
       buttons: {
         catch: {
-          text: "Chắc",
+          text: "Xóa tài khoản",
           value: "catch",
         },
         no: {
-          text: "chưa",
+          text: "Hủy bỏ",
           value: "no",
         },
       },
@@ -155,8 +157,10 @@ const Account = () => {
                 // handle error
                 console.log(error);
               });
-          }
+          } break;
+        default:
           break;
+
       }
     });
   };
@@ -185,44 +189,6 @@ const Account = () => {
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          <B.Col lg={4}>
-            {/* <B.Form>
-              <B.FormGroup>
-                <B.InputGroup>
-                  <B.FormControl
-                    type="text"
-                    placeholder="Tìm kiếm"
-                    className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                  ></B.FormControl>
-                  <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
-                  </B.InputGroup.Text>
-                </B.InputGroup>
-              </B.FormGroup>
-              <B.FormGroup className="d-flex d-inline-block justify-content-between mt-2">
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo id"
-                />
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo username"
-                />
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo email"
-                />
-                <B.FormSelect className="w-25 rounded-0 shadow-none">
-                  <option>Administrator</option>
-                  <option>Thủ kho</option>
-                  <option>Nhân viên</option>
-                </B.FormSelect>
-              </B.FormGroup>
-            </B.Form> */}
-          </B.Col>
         </B.Row>
 
         {/* table hien thi tai khoan */}
