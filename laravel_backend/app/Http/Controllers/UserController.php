@@ -352,11 +352,11 @@ class UserController extends Controller
 
         // ]);
         $validator = Validator::make($request->all(), [
-            'password_old' => 'required|max:255',
+            'password_old' => 'max:255',
             'password' => 'required|max:255',
             're_password' => 'required|max:255',
         ], [
-            'password_old.required' => 'Ô password Không được bỏ trống',
+            // 'password_old.required' => 'Ô password Không được bỏ trống',
             'password_old.max' => 'Ô password tối đa 255 ký tự',
 
             'password.required' => 'Ô password Không được bỏ trống',

@@ -44,7 +44,7 @@ const ChangePassAccount = ({ showModal }) => {
             className="rounded-0"
             value={passOld}
             onChange={(e) => setPassOld(e.target.value)}
-            required
+          // required
           ></Bt.FormControl>
         </Bt.FormGroup>
         <Bt.FormGroup className="mb-3" controlId="formNewpass">
@@ -75,7 +75,7 @@ const ChangePassAccount = ({ showModal }) => {
           type="submit"
           variant="primary"
           className="rounded-0 py-2 mt-3"
-          // onClick={()=> handleShow()}
+        // onClick={()=> handleShow()}
         >
           Lưu thay đổi
         </Bt.Button>
