@@ -22,10 +22,10 @@ const PageProducts = () => {
   const [gia, setGia] = useState();
   const [value1, setValue1] = useState([0, gia]);
   const [Checked, setChecked] = useState([]);
-  const [CheckedALL, setCheckedALL] = useState([]);
+  // const [CheckedALL, setCheckedALL] = useState([]);
 
   const [viewNSX, setViewNSX] = useState([]);
-  const [comments, setComments] = useState([]);
+  // const [comments, setComments] = useState([]);
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
