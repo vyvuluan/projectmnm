@@ -109,7 +109,7 @@ const Filter = ({
       {NSX_HTML}
       {Price_HTML}
       <Button
-        style={{ float: "right" }}
+        style={{ float: "right", marginBottom:"10px" }}
         variant="danger"
         onClick={handleFilter}
       >
