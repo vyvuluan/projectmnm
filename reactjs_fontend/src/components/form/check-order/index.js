@@ -11,7 +11,6 @@ const checkStatus = [
   { id: 2, name: 'Đang đóng gói', icon: 'pe-7s-medal' },
   { id: 3, name: 'Đang vận chuyển', icon: 'pe-7s-car' },
   { id: 4, name: 'Giao hàng thành công', icon: 'pe-7s-home' },
-  { id: 5, name: 'Đơn hàng đã hủy', icon: 'pe-7s-close-circle' },
 ];
 
 const CheckOrder = () => {
@@ -106,16 +105,26 @@ const CheckOrder = () => {
 
             <div className="card-body">
               <div className="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
-                {checkStatus.map((item, index) => (
-                  <div key={item.id} className={'step' + [status >= index ? ' completed' : '']}>
+                {status !== 5 ?
+                  checkStatus.map((item, index) => (
+                    <div key={item.id} className={'step' + [status >= index ? ' completed' : '']}>
+                      <div className="step-icon-wrap">
+                        <div className="step-icon">
+                          <i className={item.icon}></i>
+                        </div>
+                      </div>
+                      <h4 className="step-title">{item.name}</h4>
+                    </div>
+                  ))
+                  :
+                  <div className={'step completed'}>
                     <div className="step-icon-wrap">
                       <div className="step-icon">
-                        <i className={item.icon}></i>
+                        <i className='pe-7s-close-circle'></i>
                       </div>
                     </div>
-                    <h4 className="step-title">{item.name}</h4>
-                  </div>
-                ))}
+                    <h4 className="step-title">Đơn hàng đã hủy</h4>
+                  </div>}
               </div>
             </div>
           </div>

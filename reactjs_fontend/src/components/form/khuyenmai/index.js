@@ -60,7 +60,7 @@ const Index = () => {
                     desktop: {
                         breakpoint: {
                             max: 3000,
-                            min: 1024
+                            min: 1600
                         },
                         items: 4,
                         partialVisibilityGutter: 100
@@ -68,9 +68,9 @@ const Index = () => {
                     desktopMd: {
                         breakpoint: {
                             max: 1600,
-                            min: 600
+                            min: 1024
                         },
-                        items: 3,
+                        items: 2,
                         partialVisibilityGutter: 100
                     },
                     mobile: {
@@ -86,7 +86,7 @@ const Index = () => {
                             max: 1024,
                             min: 464
                         },
-                        items: 2,
+                        items: 1,
                         partialVisibilityGutter: 80
                     }
                 }}

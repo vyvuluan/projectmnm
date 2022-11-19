@@ -118,7 +118,7 @@ function Index() {
                     <div className="d-inline-flex">
                         <p className="m-0">
                             <Link to={"/"} className="text-decoration-none" variant="primary">
-                                Home
+                                Trang chủ
                             </Link>
                         </p>
                         <p className="m-0 px-2">-</p>

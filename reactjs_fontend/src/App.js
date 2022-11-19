@@ -7,6 +7,7 @@ import { ProductCate } from "./components/form/index.js";
 import PrivateRoutes from "./Router/AdminPrivateRoute";
 import { EmptyCart, NotFoundPage, PageAdmin } from "./components";
 import Cookies from "universal-cookie";
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 import swal from "sweetalert";
 
 import { icons } from "react-icons/lib";
@@ -57,9 +58,14 @@ function App() {
             );
           })}
 
-          {/* <Route path="*" element={<NotFoundPage />} /> */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
+
+      <MessengerCustomerChat
+        pageId="100412282908828"
+        appId="514291876703666"
+      />
     </>
   );
 }
