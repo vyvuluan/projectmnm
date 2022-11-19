@@ -166,13 +166,30 @@ export default function Header() {
           </Bt.Col>
           <Bt.Col lg={6} className="text-end text-lg-right">
             <div className="d-inline-flex align-items-center">
-              <a className="text-dark px-2" href={"https://www.facebook.com/profile.php?id=100007156123173"} target="_blank" rel="noreferrer noopener">
+              <a
+                className="text-dark px-2"
+                href={"https://www.facebook.com/profile.php?id=100007156123173"}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <Icon.Facebook></Icon.Facebook>
               </a>
-              <a className="text-dark px-2" href={"https://www.instagram.com/sontungmtp/"} target="_blank" rel="noreferrer noopener">
+              <a
+                className="text-dark px-2"
+                href={"https://www.instagram.com/sontungmtp/"}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <Icon.Instagram></Icon.Instagram>
               </a>
-              <a className="text-dark px-2" href={"https://www.youtube.com/results?search_query=eunji+pyoapple"} target="_blank" rel="noreferrer noopener">
+              <a
+                className="text-dark px-2"
+                href={
+                  "https://www.youtube.com/results?search_query=eunji+pyoapple"
+                }
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <Icon.Youtube></Icon.Youtube>
               </a>
             </div>
@@ -213,29 +230,6 @@ export default function Header() {
             </Bt.Form>
           </Bt.Col>
           <Bt.Col className="col-lg-3 col-6">
-            {/* <div className="row">
-              <div className="col-9">{AuthButton}</div>
-              <div className="col-3 text-end">
-                <Link to={`/Cart`} className="btn rounded-0">
-                  <FaShoppingCart
-                    style={{ width: "auto", height: "25px" }}
-                    className="text-primary"
-                  />
-                  <Bt.Badge
-                    bg="secondary"
-                    text="danger"
-                    style={{
-                      position: "absolute",
-                      marginTop: "-1px",
-                      right: "7px",
-                      borderRadius: "50%",
-                    }}
-                  >
-                    {count}
-                  </Bt.Badge>
-                </Link>
-              </div>
-            </div> */}
             <Bt.Row>
               <Bt.Col className="col-md-9 col-6">{AuthButton}</Bt.Col>
               <Bt.Col className="col-md-3 col-6">

@@ -14,13 +14,16 @@ const NewPass = () => {
     setResetPass({ ...resetPass, [e.target.name]: e.target.value });
   };
   const SubmitNewPass = (e) => {
+    const data = {
+      password: resetPass.password,
+    };
     e.preventDefault();
     axios
-      .put(`/api/reset-password/${token}`)
+      .put(`/api/reset-password/${token}`, data)
       .then((res) => {
         // console.log(res);
         if (res.status === 200) {
-          console.log(res);
+          // console.log(res);
           swal({
             title: "Thay đổi thành công",
             icon: "success",

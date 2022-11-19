@@ -10,7 +10,7 @@ const Category = () => {
   const [getID, setGetID] = useState();
   const [listCategory, setListCategory] = useState([]);
   const [linkCate, setLinkcate] = useState("");
-  
+
   useEffect(() => {
     const controller = new AbortController();
     axios
@@ -44,7 +44,6 @@ const Category = () => {
             return (
               <div key={item.id} className="py-3 border border-top-0 hoverItem">
                 <Link
-                  
                   to={"/pageproducts?category=" + item.id}
                   className="text-decoration-none text-dark ms-4"
                 >
