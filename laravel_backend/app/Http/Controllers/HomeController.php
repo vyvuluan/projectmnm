@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $product_new = Product::orderBy('id','desc')->limit(4)->get();
+        $product_new = Product::orderBy('id','desc')->limit(8)->get();
 
 
         $ctpxs = CtPhieuXuat::selectRaw('sum(soluong) as soluong,  product_id')

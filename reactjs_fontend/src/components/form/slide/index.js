@@ -48,7 +48,7 @@ const Slideshows = () => {
   }, [index]);
   return (
     <>
-      <div className="container-fluid">
+      <div className="container-fluid pb-5">
         <div
           className="row"
           style={{ flexDirection: "row", flexWrap: "nowrap" }}
@@ -81,7 +81,7 @@ const Slideshows = () => {
               </div>
 
               <div
-                style={{ zIndex: "10",textShadow:"2px 2px #FF0000" }}
+                style={{ zIndex: "10", textShadow: "2px 2px #FF0000" }}
                 className=" carousel-caption d-flex flex-column align-items-center justify-content-center"
               >
                 <div

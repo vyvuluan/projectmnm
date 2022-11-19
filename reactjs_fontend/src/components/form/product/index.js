@@ -29,7 +29,7 @@ const Product = (props) => {
           {item.map((item, index) => {
             for (let i = 0; i <= index; i++) {
               return (
-                <div key={item.id} className="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div key={item.id} className="col-lg-3 col-md-4 col-6 pb-1">
                   <div className="card product-item border-0 mb-4">
                     <Link
                       className="text-decoration-none text-black"
