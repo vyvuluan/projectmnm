@@ -280,7 +280,7 @@ function Index() {
           <B.ModalTitle>Sửa sản phẩm</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
-          <EditProd product={prodData} showModal={handleClose} />
+          <EditProd product={prodData} showModal={handleClose} category={categorylist} roleID={roleID} />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
           <B.Button
@@ -303,299 +303,300 @@ function Index() {
         </B.Row>
 
         {roleID === '3' ? (
-          <B.Tabs activeKey={tabkey} onSelect={(k) => setTabkey(k)}>
-            <B.Tab
-              eventKey={1}
-              title="Thêm sản phẩm"
-              className=" border border-top-0 py-3 px-3"
-            >
-              <B.Form>
-                <B.Row>
-                  <B.Col lg={3}>
-                    <div className="prev-container mb-4">
-                      {previewIMG && <img src={previewIMG.preview} alt=""></img>}
-                    </div>
-                    <B.FormGroup className="file_wrap">
-                      <B.FormControl
-                        size="md"
-                        type="file"
-                        name="image"
-                        onChange={handleImage}
-                        className="rounded-0 shadow-none mb-3 w-50"
-                      ></B.FormControl>
-                      <small className="text-danger">{errorlist.image}</small>
-                    </B.FormGroup>
-                  </B.Col>
-                  <B.Col lg={9}>
-                    <B.FormGroup>
-                      <B.FormControl
-                        type="text"
-                        name="tenSP"
-                        className="rounded-0 shadow-none mb-3"
-                        placeholder="Tên sản phẩm"
-                        onChange={handleProductInput}
-                        value={productInput.tenSP}
-                      ></B.FormControl>
-                      <small className="text-danger">{errorlist.tenSP}</small>
-                    </B.FormGroup>
+          <>
+            <B.Tabs activeKey={tabkey} onSelect={(k) => setTabkey(k)}>
+              <B.Tab
+                eventKey={1}
+                title="Thêm sản phẩm"
+                className=" border border-top-0 py-3 px-3"
+              >
+                <B.Form>
+                  <B.Row>
+                    <B.Col lg={3}>
+                      <div className="prev-container mb-4">
+                        {previewIMG && <img src={previewIMG.preview} alt=""></img>}
+                      </div>
+                      <B.FormGroup className="file_wrap">
+                        <B.FormControl
+                          size="md"
+                          type="file"
+                          name="image"
+                          onChange={handleImage}
+                          className="rounded-0 shadow-none mb-3 w-50"
+                        ></B.FormControl>
+                        <small className="text-danger">{errorlist.image}</small>
+                      </B.FormGroup>
+                    </B.Col>
+                    <B.Col lg={9}>
+                      <B.FormGroup>
+                        <B.FormControl
+                          type="text"
+                          name="tenSP"
+                          className="rounded-0 shadow-none mb-3"
+                          placeholder="Tên sản phẩm"
+                          onChange={handleProductInput}
+                          value={productInput.tenSP}
+                        ></B.FormControl>
+                        <small className="text-danger">{errorlist.tenSP}</small>
+                      </B.FormGroup>
 
-                    <div className="d-flex">
-                      <B.FormGroup className="me-2 w-100">
-                        <B.FormSelect
-                          name="loaisp_id"
-                          onChange={handleProductInput}
-                          value={productInput.loaisp_id}
-                          className="rounded-0 shadow-none mb-3 text-muted"
-                        >
-                          <option>Chọn loại sản phẩm</option>
-                          {categorylist &&
-                            categorylist.map((item) => {
-                              return (
-                                <option value={item.id} key={item.id}>
-                                  {item.tenLoai}
-                                </option>
-                              );
-                            })}
-                        </B.FormSelect>
-                        <small className="text-danger">
-                          {errorlist.loaisp_id}
-                        </small>
-                      </B.FormGroup>
-                      <B.FormGroup className="w-100 me-2">
-                        <B.FormControl
-                          type="text"
-                          name="gia"
-                          className="rounded-0 shadow-none mb-3"
-                          placeholder="Giá"
-                          onChange={handleProductInput}
-                          value={productInput.gia}
-                        ></B.FormControl>
-                        <small className="text-danger">{errorlist.gia}</small>
-                      </B.FormGroup>
-                      <B.FormGroup className="w-100">
-                        <B.FormControl
-                          type="text"
-                          name="baohanh"
-                          className="rounded-0 shadow-none mb-3"
-                          placeholder="Bảo hành (tháng)"
-                          onChange={handleProductInput}
-                          value={productInput.baohanh}
-                        ></B.FormControl>
-                        <small className="text-danger">{errorlist.baohanh}</small>
-                      </B.FormGroup>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <div className="w-100 me-2">
-                        <ReactSearchAutocomplete
-                          items={ncclist}
-                          onSearch={handleOnSearch}
-                          onSelect={handleOnSelect}
-                          placeholder='Tìm kiếm nhà cung cấp'
-                          fuseOptions={{ keys: ["id", "tenNCC"] }}
-                          resultStringKeyName="tenNCC"
-                          styling={{
-                            height: "36px",
-                            border: "1px solid lightgray",
-                            borderRadius: "0",
-                            backgroundColor: "white",
-                            boxShadow: "none",
-                            hoverBackgroundColor: "#d19c97",
-                            color: "black",
-                            fontSize: "15px",
-                            iconColor: "black",
-                            lineColor: "#d19c97",
-                            clearIconMargin: "3px 8px 0 0",
-                          }}
-                        />
+                      <div className="d-flex">
+                        <B.FormGroup className="me-2 w-100">
+                          <B.FormSelect
+                            name="loaisp_id"
+                            onChange={handleProductInput}
+                            value={productInput.loaisp_id}
+                            className="rounded-0 shadow-none mb-3 text-muted"
+                          >
+                            <option>Chọn loại sản phẩm</option>
+                            {categorylist &&
+                              categorylist.map((item) => {
+                                return (
+                                  <option value={item.id} key={item.id}>
+                                    {item.tenLoai}
+                                  </option>
+                                );
+                              })}
+                          </B.FormSelect>
+                          <small className="text-danger">
+                            {errorlist.loaisp_id}
+                          </small>
+                        </B.FormGroup>
+                        <B.FormGroup className="w-100 me-2">
+                          <B.FormControl
+                            type="text"
+                            name="gia"
+                            className="rounded-0 shadow-none mb-3"
+                            placeholder="Giá"
+                            onChange={handleProductInput}
+                            value={productInput.gia}
+                          ></B.FormControl>
+                          <small className="text-danger">{errorlist.gia}</small>
+                        </B.FormGroup>
+                        <B.FormGroup className="w-100">
+                          <B.FormControl
+                            type="text"
+                            name="baohanh"
+                            className="rounded-0 shadow-none mb-3"
+                            placeholder="Bảo hành (tháng)"
+                            onChange={handleProductInput}
+                            value={productInput.baohanh}
+                          ></B.FormControl>
+                          <small className="text-danger">{errorlist.baohanh}</small>
+                        </B.FormGroup>
                       </div>
-                      <div className="w-100">
-                        <ReactSearchAutocomplete
-                          items={nsxlist}
-                          onSearch={handleOnNsxSearch}
-                          onSelect={handleOnNsxSelect}
-                          placeholder='Tìm kiếm nhà sản xuất'
-                          fuseOptions={{ keys: ["id", "tenNSX"] }}
-                          resultStringKeyName="tenNSX"
-                          styling={{
-                            height: "36px",
-                            border: "1px solid lightgray",
-                            borderRadius: "0",
-                            backgroundColor: "white",
-                            boxShadow: "none",
-                            hoverBackgroundColor: "#d19c97",
-                            color: "black",
-                            fontSize: "15px",
-                            iconColor: "black",
-                            lineColor: "#d19c97",
-                            clearIconMargin: "3px 8px 0 0",
-                          }}
-                        />
+                      <div className="d-flex justify-content-between">
+                        <div className="w-100 me-2">
+                          <ReactSearchAutocomplete
+                            items={ncclist}
+                            onSearch={handleOnSearch}
+                            onSelect={handleOnSelect}
+                            placeholder='Tìm kiếm nhà cung cấp'
+                            fuseOptions={{ keys: ["id", "tenNCC"] }}
+                            resultStringKeyName="tenNCC"
+                            styling={{
+                              height: "36px",
+                              border: "1px solid lightgray",
+                              borderRadius: "0",
+                              backgroundColor: "white",
+                              boxShadow: "none",
+                              hoverBackgroundColor: "#d19c97",
+                              color: "black",
+                              fontSize: "15px",
+                              iconColor: "black",
+                              lineColor: "#d19c97",
+                              clearIconMargin: "3px 8px 0 0",
+                            }}
+                          />
+                        </div>
+                        <div className="w-100">
+                          <ReactSearchAutocomplete
+                            items={nsxlist}
+                            onSearch={handleOnNsxSearch}
+                            onSelect={handleOnNsxSelect}
+                            placeholder='Tìm kiếm nhà sản xuất'
+                            fuseOptions={{ keys: ["id", "tenNSX"] }}
+                            resultStringKeyName="tenNSX"
+                            styling={{
+                              height: "36px",
+                              border: "1px solid lightgray",
+                              borderRadius: "0",
+                              backgroundColor: "white",
+                              boxShadow: "none",
+                              hoverBackgroundColor: "#d19c97",
+                              color: "black",
+                              fontSize: "15px",
+                              iconColor: "black",
+                              lineColor: "#d19c97",
+                              clearIconMargin: "3px 8px 0 0",
+                            }}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    </B.Col>
+                  </B.Row>
+                </B.Form>
+              </B.Tab>
+
+              <B.Tab
+                eventKey={2}
+                title="Thêm chi tiết/mô tả"
+                className=" border border-top-0 py-3 px-3"
+              >
+                <B.Row>
+                  <B.Col lg={4}>
+                    <label className="ps-3 ms-1 fs-5 fw-semibold text-uppercase border border-5 border-top-0 border-bottom-0 border-end-0 border-primary">
+                      Chi tiết sản phẩm
+                    </label>
+                    <Editor
+                      key={editorKey}
+                      apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
+                      onEditorChange={handleCTSPInput}
+                      onInit={(evt, editor) => {
+                        editorRef.current = editor;
+                      }}
+                      initialValue={"<p>CPU: </p> <p>Ram: </p> <p>GPU: </p> <p>Màn hình: </p> <p>Bộ nhớ: </p> <p>Pin: </p> <p>Khối lượng: </p>"}
+                      init={{
+                        height: 500,
+                        menubar: false,
+                        plugins: [
+                          "advlist",
+                          "autolink",
+                          "lists",
+                          "charmap",
+                          "preview",
+                          "anchor",
+                          "searchreplace",
+                          "visualblocks",
+                          "insertdatetime",
+                          "table",
+                          "wordcount",
+                          "fullscreen",
+                        ],
+                        toolbar:
+                          "undo redo | blocks | " +
+                          "bold italic forecolor | alignleft aligncenter" +
+                          "alignright alignjustify | bullist numlist outdent indent | " +
+                          "removeformat",
+                        content_style:
+                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                      }}
+                    />
+                  </B.Col>
+                  <B.Col lg={8}>
+                    <label className="ps-3 ms-1 fs-5 fw-semibold text-uppercase border border-5 border-top-0 border-bottom-0 border-end-0 border-primary">
+                      Mô tả sản phẩm
+                    </label>
+                    <Editor
+                      key={editorKey}
+                      apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
+                      onEditorChange={handleMotaInput}
+                      onInit={(evt, editor) => {
+                        editorRef.current = editor;
+                      }}
+                      initialValue={"<p>Đây là mô tả của sản phẩm</p>"}
+                      init={{
+                        height: 500,
+                        menubar: false,
+                        plugins: [
+                          "advlist",
+                          "autolink",
+                          "lists",
+                          "link",
+                          "image",
+                          "charmap",
+                          "preview",
+                          "anchor",
+                          "searchreplace",
+                          "visualblocks",
+                          "code",
+                          "fullscreen",
+                          "insertdatetime",
+                          "media",
+                          "table",
+                          "code",
+                          "help",
+                          "wordcount",
+                          "media",
+                          "image",
+                          "editimage",
+                        ],
+                        toolbar:
+                          "undo redo | blocks | " +
+                          "bold italic forecolor | alignleft aligncenter media image editimage " +
+                          "alignright alignjustify | bullist numlist outdent indent | " +
+                          "removeformat | help",
+                        content_style:
+                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        file_picker_callback: function (cb, value, meta) {
+                          var input = document.createElement("input");
+                          input.setAttribute("type", "file");
+                          input.setAttribute("accept", "image/*");
+                          input.onchange = function () {
+                            var file = this.files[0];
+
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                              var id = "blobid" + new Date().getTime();
+                              var blobCache =
+                                editorRef.current.editorUpload.blobCache;
+                              var base64 = reader.result.split(",")[1];
+                              var blobInfo = blobCache.create(id, file, base64);
+                              blobCache.add(blobInfo);
+                              cb(blobInfo.blobUri(), { title: file.name });
+                            };
+                            reader.readAsDataURL(file);
+                          };
+                          input.click();
+                        },
+                      }}
+                    />
                   </B.Col>
                 </B.Row>
-              </B.Form>
-            </B.Tab>
+              </B.Tab>
 
-            <B.Tab
-              eventKey={2}
-              title="Thêm chi tiết/mô tả"
-              className=" border border-top-0 py-3 px-3"
-            >
-              <B.Row>
-                <B.Col lg={4}>
-                  <label className="ps-3 ms-1 fs-5 fw-semibold text-uppercase border border-5 border-top-0 border-bottom-0 border-end-0 border-primary">
-                    Chi tiết sản phẩm
-                  </label>
-                  <Editor
-                    key={editorKey}
-                    apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
-                    onEditorChange={handleCTSPInput}
-                    onInit={(evt, editor) => {
-                      editorRef.current = editor;
-                    }}
-                    initialValue={"<p>CPU: </p> <p>Ram: </p> <p>GPU: </p> <p>Màn hình: </p> <p>Bộ nhớ: </p> <p>Pin: </p> <p>Khối lượng: </p>"}
-                    init={{
-                      height: 500,
-                      menubar: false,
-                      plugins: [
-                        "advlist",
-                        "autolink",
-                        "lists",
-                        "charmap",
-                        "preview",
-                        "anchor",
-                        "searchreplace",
-                        "visualblocks",
-                        "insertdatetime",
-                        "table",
-                        "wordcount",
-                        "fullscreen",
-                      ],
-                      toolbar:
-                        "undo redo | blocks | " +
-                        "bold italic forecolor | alignleft aligncenter" +
-                        "alignright alignjustify | bullist numlist outdent indent | " +
-                        "removeformat",
-                      content_style:
-                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    }}
-                  />
-                </B.Col>
-                <B.Col lg={8}>
-                  <label className="ps-3 ms-1 fs-5 fw-semibold text-uppercase border border-5 border-top-0 border-bottom-0 border-end-0 border-primary">
-                    Mô tả sản phẩm
-                  </label>
-                  <Editor
-                    key={editorKey}
-                    apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
-                    onEditorChange={handleMotaInput}
-                    onInit={(evt, editor) => {
-                      editorRef.current = editor;
-                    }}
-                    initialValue={"<p>Đây là mô tả của sản phẩm</p>"}
-                    init={{
-                      height: 500,
-                      menubar: false,
-                      plugins: [
-                        "advlist",
-                        "autolink",
-                        "lists",
-                        "link",
-                        "image",
-                        "charmap",
-                        "preview",
-                        "anchor",
-                        "searchreplace",
-                        "visualblocks",
-                        "code",
-                        "fullscreen",
-                        "insertdatetime",
-                        "media",
-                        "table",
-                        "code",
-                        "help",
-                        "wordcount",
-                        "media",
-                        "image",
-                        "editimage",
-                      ],
-                      toolbar:
-                        "undo redo | blocks | " +
-                        "bold italic forecolor | alignleft aligncenter media image editimage " +
-                        "alignright alignjustify | bullist numlist outdent indent | " +
-                        "removeformat | help",
-                      content_style:
-                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                      file_picker_callback: function (cb, value, meta) {
-                        var input = document.createElement("input");
-                        input.setAttribute("type", "file");
-                        input.setAttribute("accept", "image/*");
-                        input.onchange = function () {
-                          var file = this.files[0];
-
-                          var reader = new FileReader();
-                          reader.onload = function () {
-                            var id = "blobid" + new Date().getTime();
-                            var blobCache =
-                              editorRef.current.editorUpload.blobCache;
-                            var base64 = reader.result.split(",")[1];
-                            var blobInfo = blobCache.create(id, file, base64);
-                            blobCache.add(blobInfo);
-                            cb(blobInfo.blobUri(), { title: file.name });
-                          };
-                          reader.readAsDataURL(file);
-                        };
-                        input.click();
-                      },
-                    }}
-                  />
-                </B.Col>
-              </B.Row>
-            </B.Tab>
-
-            <B.Tab
-              eventKey={3}
-              title="Xem sản phẩm"
-              className=" border border-top-0 py-3 px-3"
-            >
-              <B.Row className='px-xl-3 mb-3'>
-                <B.Col lg={4}>
-                  <ReactSearchAutocomplete
-                    items={prodSearchlist}
-                    onSearch={handleOnProdSearch}
-                    onClear={handleOnProdClear}
-                    placeholder='Tìm kiếm sản phẩm'
-                    maxResults={10}
-                    showNoResults={false}
-                    styling={{
-                      height: "34px",
-                      border: "1px solid lightgray",
-                      borderRadius: "0",
-                      backgroundColor: "white",
-                      boxShadow: "none",
-                      hoverBackgroundColor: "#d19c97",
-                      color: "black",
-                      fontSize: "15px",
-                      iconColor: "black",
-                      lineColor: "#d19c97",
-                      clearIconMargin: "3px 8px 0 0",
-                      zIndex: '2',
-                    }}
-                  />
-                </B.Col>
-                <B.Col lg={8}>
-                  <B.FormGroup className='mb-2 pull-right'>
-                    <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
-                      {sort.map((item, index) => (
-                        <option value={item.value}>{item.name}</option>
-                      ))}
-                    </B.FormSelect>
-                  </B.FormGroup>
-                </B.Col>
-              </B.Row>
-              <B.Row className="px-xl-3 mb-3">
-                {/* <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+              <B.Tab
+                eventKey={3}
+                title="Xem sản phẩm"
+                className=" border border-top-0 py-3 px-3"
+              >
+                <B.Row className='px-xl-3 mb-3'>
+                  <B.Col lg={4}>
+                    <ReactSearchAutocomplete
+                      items={prodSearchlist}
+                      onSearch={handleOnProdSearch}
+                      onClear={handleOnProdClear}
+                      placeholder='Tìm kiếm sản phẩm'
+                      maxResults={10}
+                      showNoResults={false}
+                      styling={{
+                        height: "34px",
+                        border: "1px solid lightgray",
+                        borderRadius: "0",
+                        backgroundColor: "white",
+                        boxShadow: "none",
+                        hoverBackgroundColor: "#d19c97",
+                        color: "black",
+                        fontSize: "15px",
+                        iconColor: "black",
+                        lineColor: "#d19c97",
+                        clearIconMargin: "3px 8px 0 0",
+                        zIndex: '2',
+                      }}
+                    />
+                  </B.Col>
+                  <B.Col lg={8}>
+                    <B.FormGroup className='mb-2 pull-right'>
+                      <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }} onChange={(e) => SortStt(e.target.value)}>
+                        {sort.map((item, index) => (
+                          <option value={item.value}>{item.name}</option>
+                        ))}
+                      </B.FormSelect>
+                    </B.FormGroup>
+                  </B.Col>
+                </B.Row>
+                <B.Row className="px-xl-3 mb-3">
+                  {/* <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
                 <B.FormSelect
                   className="rounded-0 shadow-none"
                   style={{ width: "200px" }}
@@ -606,83 +607,92 @@ function Index() {
                   <option>Theo loại</option>
                 </B.FormSelect>
               </B.FormGroup> */}
-                <B.Table responsive className="table-borderless border border-secondary mb-3">
-                  <thead
-                    className="text-dark"
-                    style={{ backgroundColor: "#edf1ff" }}
-                  >
-                    <tr>
-                      <th>STT</th>
-                      <th>Tên sản phẩm</th>
-                      <th>Loại</th>
-                      <th>Giá</th>
-                      <th>Số lượng</th>
-                      <th className="text-center">Thao tác</th>
-                    </tr>
-                  </thead>
-                  {!showTable && (
-                    <tbody>
-                      {viewProd.map((item, index) => {
-                        return (
-                          <>
-                            <tr key={item.id}>
-                              <td>{index + 1}</td>
-                              <td><img
-                                src={`http://localhost:8000/uploadhinh/${item.hinh}`}
-                                width="50px"
-                                alt={item.tenSP}
-                              /> {item.tenSP}</td>
-                              <td>{item.maLoai}</td>
-                              <td>
-                                {formatMoney(item.gia)}
-                              </td>
-                              <td>{item.soLuongSP}</td>
-                              <td className="text-center fs-5 text-primary">
-                                <BiEdit className="me-2" onClick={() => handleShow(item)} />
-                                <BsTrash2 onClick={() => handleDeleteProd(item)} />
-                              </td>
-                            </tr>
-                          </>
-                        );
-                      })}
-                    </tbody>
-                  )}
-                  {showTable && (
-                    <tbody>
-                      {prodSearchlist && prodSearchlist.map((item, index) => {
-                        return (
-                          <>
-                            <tr key={item.id}>
-                              <td>{index + 1}</td>
-                              <td><img
-                                src={`http://localhost:8000/uploadhinh/${item.hinh}`}
-                                width="50px"
-                                alt={item.tenSP}
-                              /> {item.tenSP}</td>
-                              <td>{item.maLoai}</td>
-                              <td>
-                                {formatMoney(item.gia)}
-                              </td>
-                              <td>{item.soLuongSP}</td>
-                              <td className="text-center fs-5 text-primary">
-                                <BiEdit className="me-2" onClick={() => handleShow(item)} />
-                                <BsTrash2 onClick={() => handleDeleteProd(item)} />
-                              </td>
-                            </tr>
-                          </>
-                        );
-                      })}
-                    </tbody>
-                  )}
-                </B.Table>
-              </B.Row>
-              <Pagination
-                currentPage={currentPage}
-                totalPage={pageNumbers}
-                handlePerPage={handlePerPage}
-              />
-            </B.Tab>
-          </B.Tabs>
+                  <B.Table responsive className="table-borderless border border-secondary mb-3">
+                    <thead
+                      className="text-dark"
+                      style={{ backgroundColor: "#edf1ff" }}
+                    >
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Loại</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th className="text-center">Thao tác</th>
+                      </tr>
+                    </thead>
+                    {!showTable && (
+                      <tbody>
+                        {viewProd.map((item, index) => {
+                          return (
+                            <>
+                              <tr key={item.id}>
+                                <td>{index + 1}</td>
+                                <td><img
+                                  src={`http://localhost:8000/uploadhinh/${item.hinh}`}
+                                  width="50px"
+                                  alt={item.tenSP}
+                                /> {item.tenSP}</td>
+                                <td>{item.loaisp.tenLoai}</td>
+                                <td>
+                                  {formatMoney(item.gia)}
+                                </td>
+                                <td>{item.soLuongSP}</td>
+                                <td className="text-center fs-5 text-primary">
+                                  <BiEdit className="me-2" onClick={() => handleShow(item)} />
+                                  <BsTrash2 onClick={() => handleDeleteProd(item)} />
+                                </td>
+                              </tr>
+                            </>
+                          );
+                        })}
+                      </tbody>
+                    )}
+                    {showTable && (
+                      <tbody>
+                        {prodSearchlist && prodSearchlist.map((item, index) => {
+                          return (
+                            <>
+                              <tr key={item.id}>
+                                <td>{index + 1}</td>
+                                <td><img
+                                  src={`http://localhost:8000/uploadhinh/${item.hinh}`}
+                                  width="50px"
+                                  alt={item.tenSP}
+                                /> {item.tenSP}</td>
+                                <td>{item.maLoai}</td>
+                                <td>
+                                  {formatMoney(item.gia)}
+                                </td>
+                                <td>{item.soLuongSP}</td>
+                                <td className="text-center fs-5 text-primary">
+                                  <BiEdit className="me-2" onClick={() => handleShow(item)} />
+                                  <BsTrash2 onClick={() => handleDeleteProd(item)} />
+                                </td>
+                              </tr>
+                            </>
+                          );
+                        })}
+                      </tbody>
+                    )}
+                  </B.Table>
+                </B.Row>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPage={pageNumbers}
+                  handlePerPage={handlePerPage}
+                />
+              </B.Tab>
+            </B.Tabs>
+            <B.Button
+              variant="outline-primary"
+              className="rounded-0 py-2 mb-2 mt-3"
+              onClick={submitProduct}
+            >
+              <BsPersonPlusFill className="me-2" />
+              Thêm sản phẩm
+            </B.Button>
+          </>
         ) : (
           <>
             <B.Row className='px-xl-3 mb-3'>
@@ -758,14 +768,13 @@ function Index() {
                               width="50px"
                               alt={item.tenSP}
                             /> {item.tenSP}</td>
-                            <td>{item.maLoai}</td>
+                            <td>{item.loaisp.tenLoai}</td>
                             <td>
                               {formatMoney(item.gia)}
                             </td>
                             <td>{item.soLuongSP}</td>
                             <td className="text-center fs-5 text-primary">
                               <BiEdit className="me-2" onClick={() => handleShow(item)} />
-                              <BsTrash2 onClick={() => handleDeleteProd(item)} />
                             </td>
                           </tr>
                         </>
@@ -792,7 +801,6 @@ function Index() {
                             <td>{item.soLuongSP}</td>
                             <td className="text-center fs-5 text-primary">
                               <BiEdit className="me-2" onClick={() => handleShow(item)} />
-                              <BsTrash2 onClick={() => handleDeleteProd(item)} />
                             </td>
                           </tr>
                         </>
@@ -809,16 +817,6 @@ function Index() {
             />
           </>
         )}
-
-        <B.Button
-          variant="outline-primary"
-          className="rounded-0 py-2 mb-2 mt-3"
-          onClick={submitProduct}
-        >
-          <BsPersonPlusFill className="me-2" />
-          Thêm sản phẩm
-        </B.Button>
-
       </B.Container>
     </>
   );

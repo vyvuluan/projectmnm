@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import * as Bt from "react-bootstrap";
+import { AiFillFire } from 'react-icons/ai'
 
 import {
   Slideshow,
@@ -28,7 +29,7 @@ const HomePage = () => {
     const controller = new AbortController();
     if (
       paramToken.get("token") &&
-      paramEmail.get("email") || paramEmailFB.get("email") == ""  &&
+      paramEmail.get("email") || paramEmailFB.get("email") == "" &&
       paramFullname.get("fullname")
     ) {
       localStorage.setItem("auth_token", paramToken.get("token"));

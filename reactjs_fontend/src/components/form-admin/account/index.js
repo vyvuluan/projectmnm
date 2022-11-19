@@ -167,7 +167,7 @@ const Account = () => {
     <>
       <B.Modal show={show} onHide={handleClose}>
         <B.ModalHeader closeButton className="bg-secondary">
-          <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
+          <B.ModalTitle>Sửa tài khoản</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
           <ViewAccount
@@ -176,15 +176,6 @@ const Account = () => {
             setSubmitting={setSubmitting}
           />
         </B.ModalBody>
-        <B.ModalFooter className="bg-secondary">
-          <B.Button
-            variant="outline-primary"
-            className="mt-2 rounded-0"
-            onClick={handleClose}
-          >
-            Hủy bỏ
-          </B.Button>
-        </B.ModalFooter>
       </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
@@ -318,7 +309,7 @@ const Account = () => {
                   }
                   return (
                     <tr key={item.id}>
-                      <td className="align-middle">{index +1}</td>
+                      <td className="align-middle">{index + 1}</td>
                       <td className="align-middle">{item.username}</td>
                       <td className="align-middle">{item.email}</td>
 

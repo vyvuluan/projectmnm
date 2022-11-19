@@ -189,7 +189,6 @@ const Index = () => {
             <B.Container fluid className='pt-5'>
                 <B.Row className='px-xl-5 mb-2'>
                     <div className='d-flex'>
-                        {/* <div className='bordertext'></div> */}
                         <AiFillFire className='fs-2 text-danger mt-1' />
                         <MdArrowForwardIos className='iconsize mt-2' />
                         <h2 className=''>Mã khuyến mại sốc</h2>
