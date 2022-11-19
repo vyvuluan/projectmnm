@@ -5,7 +5,7 @@ import * as B from "react-bootstrap";
 
 const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
   const id = createAcc.id;
-  const [valueCV, setValueCV] = useState();
+  const [valueCV, setValueCV] = useState(2);
   const [error, setError] = useState();
 
   const handleChangeCV = (e) => {
@@ -135,9 +135,6 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
               defaultValue={2}
               className="rounded-0 shadow-none mb-3 text-muted"
             >
-              <option disabled selected>
-                --Chọn quyền--
-              </option>
               <option value={2}>admin</option>
               <option value={3}>kho</option>
               <option value={4}>nhân viên</option>
