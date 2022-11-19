@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('employee_id')->nullable()->unsigned();
             $table->bigInteger('ncc_id')->nullable()->unsigned();
-            $table->integer('status')->default(0);
+            $table->integer('status')->default(0)->length(1);
             $table->bigInteger('tongTien')->default(0);
             $table->timestamps();
 

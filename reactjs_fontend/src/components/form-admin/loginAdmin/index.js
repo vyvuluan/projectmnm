@@ -57,7 +57,6 @@ const LoginAdmin = () => {
             history("/PageAdmin");
           } else if (res.data.status === 401) {
             // console.log(res.data);
-
             swal({
               title: res.data.error,
               icon: "warning",
@@ -68,6 +67,13 @@ const LoginAdmin = () => {
             swal({
               title: res.data.error,
               icon: "warning",
+              button: "đóng",
+            });
+          } else if (res.data.status === 404) {
+            // console.log(res.data);
+            swal({
+              title: res.data.error,
+              icon: "error",
               button: "đóng",
             });
           }

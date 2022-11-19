@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 function SideNavBar() {
   const cookies = new Cookies();
 
-  
+
 
   return (
     <>
@@ -41,7 +41,7 @@ function SideNavBar() {
                         key={index}
                         className="text-white"
                         eventKey={path}
-                        // onClick={handlelink}
+                      // onClick={handlelink}
                       >
                         <Link
                           style={{ textDecoration: "none", color: "#fff" }}

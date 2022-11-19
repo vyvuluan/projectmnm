@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import * as B from "react-bootstrap";
 import axios, { Axios } from "axios";
 import swal from "sweetalert";
 import { BsPersonPlusFill } from "react-icons/bs";
-
+import Swal from "sweetalert2";
 import { AiOutlineFileAdd, AiFillEye } from "react-icons/ai";
 import { FiTool } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
 import { BiReset, BiEdit } from "react-icons/bi";
-import { FaTimes } from "react-icons/fa";
-
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
 import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
+import Ctpn from "./ctpn";
+import LichSuNhapHang from "./lichsunhaphang";
 
 /*
     xóa tìm kiếm
@@ -45,15 +43,18 @@ const PhieuNhap = () => {
   const [ncclist, setNcclist] = useState([]);
   const [nccData, setNccData] = useState();
   const [listProduct, setListProduct] = useState([]);
-  const [idProduct, setIdProduct] = useState();
+  const [idProduct, setIdProduct] = useState([]);
   const [idPN, setIdPN] = useState(null);
   const [errorSL, setErrorSL] = useState();
   const [errorSP, setErrorSP] = useState();
   const [errorGia, setErrorGia] = useState();
   const [pnCt, setPnCt] = useState([]);
   const [idShowPn, setIdShowPn] = useState([]);
+  const [submitting, setSubmitting] = useState(true);
 
   const [tongTien, setTongtien] = useState([]);
+  const [tongTienPN, setTongtienPN] = useState([]);
+
   const [status, setStatus] = useState();
   const [check, setCheck] = useState();
   const [dataShowPN, setDataShowPN] = useState([]);
@@ -71,12 +72,45 @@ const PhieuNhap = () => {
   const [showUpdateCtPN, setShowUpdateCtPN] = useState(false);
   const [showCtPN, setShowCtPN] = useState(false);
   const [showTab, setShowTab] = useState(false);
-  const handleView = (pn) => {
-    console.log(pn);
+
+  const [buttonText, setButtonText] = useState("Chưa thanh toán");
+
+  // const handleClick = () =>  {
+  //   setButtonText('Đã thanh toán');
+  // }
+
+  const handleView = (item) => {
+    // console.log(item);
     setShowTab(true);
     setTabKey(3);
-    // set(pn);
+    setViewPn(item);
+    setTongtienPN(item.tongTien);
+    setIdPN(item.id);
   };
+
+  const test = (value) => {
+    // console.log(value.product_id);
+    var index, index1;
+    const d = dataShowPN.filter((item, i) => {
+      return item.id === value.pn_id ? (index = i) : null;
+    });
+    const d1 = dataShowPN[index].pnct.filter((item1, i1) => {
+      return item1.product_id == value.product_id ? (index1 = i1) : null;
+    });
+    // setDataShowPN((prev) => [
+    //   ...prev,
+    //   (prev[index].pnct[i1] = value),
+    // ])
+    let newData = [...dataShowPN];
+    // console.log(index + " " + index1);
+    // console.log(newData[index].pnct[index1]);
+    newData[index].pnct[index1] = value;
+
+    // console.log(newData);
+    setDataShowPN(newData);
+  };
+
+  // console.log(dataShowPN);
   const handleCloseTab = () => {
     setShowTab(false);
     setTabKey(2);
@@ -101,7 +135,7 @@ const PhieuNhap = () => {
       case 0: {
         x = (
           <>
-            <span className="text-danger fw-semibold">Chưa thanh toán</span>
+            <span className="fw-semibold">Chưa thanh toán</span>
           </>
         );
         break;
@@ -109,7 +143,7 @@ const PhieuNhap = () => {
       case 1: {
         x = (
           <>
-            <span className="text-success fw-semibold">Đã thanh toán</span>
+            <span className=" fw-semibold">Đã thanh toán</span>
           </>
         );
         break;
@@ -129,7 +163,15 @@ const PhieuNhap = () => {
   const handleShow = () => {
     setShow(true);
   };
-  const handleShowUpdateCtPN = () => {
+  const [nameProduct, setNameProduct] = useState();
+  const [soLuong, setSoLuong] = useState();
+  const [gia, setGia] = useState();
+
+  const handleShowUpdateCtPN = (item) => {
+    setIdProduct(item?.product_id);
+    setNameProduct(item?.product.tenSP);
+    setSoLuong(item?.soluong);
+    setGia(item?.gia);
     setShowUpdateCtPN(true);
   };
   const handleShowCtPN = () => {
@@ -145,11 +187,16 @@ const PhieuNhap = () => {
   //   console.log(typeof(newDate) );
 
   const handleOnSearch = (key) => {
-    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
-      if (res.data.status === 200) {
-        setNcclist(res.data.ncc);
-      }
-    });
+    axios
+      .get(`http://localhost:8000/api/searchNcc?key=${key}`)
+      .then((res) => {
+        if (res.data.status === 200) {
+          setNcclist(res.data.ncc);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   const handleOnNCClear = () => {
     setNcclist([]);
@@ -164,18 +211,29 @@ const PhieuNhap = () => {
   //search sp
   const handleOnSearchSp = (key) => {
     axios.get(`api/products-search?key=${key}`).then((res) => {
-      // console.log(res.status);
       if (res.status === 200) {
-        setListProduct(res.data.data);
+        setListProduct(res.data.data.data);
       }
     });
   };
-
+  // console.log(listProduct);
   const handleOnSelectSp = (value) => {
-    // console.log(value);
     setIdProduct(value.id);
   };
 
+  // console.log(dataShowPN);
+
+  const refresh = useCallback(async () => {
+    const res = await axios.get(`/api/kho/getAllPN-new?page=${page}`);
+    setDataShowPN(res.data.pns.data);
+    setTotalPage(res.data.pns.total);
+    setPerPage(res.data.pns.per_page);
+    setCurrentPage(res.data.pns.current_page);
+  }, [page]);
+
+  useEffect(() => {
+    refresh().then(() => setSubmitting(false));
+  }, [submitting, refresh]);
   const formatResult = (item) => {
     return (
       <div className="result-wrapper">
@@ -205,6 +263,12 @@ const PhieuNhap = () => {
     );
   };
 
+  function formatMoney(money) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(money);
+  }
   //thêm pn
   const data1 = {
     ncc_id: nccData,
@@ -213,7 +277,7 @@ const PhieuNhap = () => {
   const AddPN = () => {
     if (data1.ncc_id !== undefined) {
       axios
-        .post(`api/kho/addPN`, data1)
+        .post(`/api/kho/addPN`, data1)
         .then((res) => {
           // console.log(res);
           if (res.data.status === 200) {
@@ -252,7 +316,7 @@ const PhieuNhap = () => {
   };
   const AddCTPN = () => {
     axios
-      .post(`api/kho/addCtPN/${idPN}`, dataCT)
+      .post(`/api/kho/addCtPN/${idPN}`, dataCT)
       .then((res) => {
         // console.log(res);
         if (res.data.status === 200) {
@@ -263,23 +327,16 @@ const PhieuNhap = () => {
           });
           setShowTable(true);
           axios
-            .get(`api/kho/PN/${idPN}`)
+            .get(`/api/kho/PN/${idPN}`)
             .then((res) => {
               // console.log(res);
 
               if (res.data.status === 200) {
                 setPnCt(res.data.pn.pnct);
-
                 setTongtien(res.data.pn.tongTien);
                 setErrorSL([]);
                 setErrorGia([]);
                 setErrorSP([]);
-
-                // swal({
-                //   title: res.data.message,
-                //   icon: "success",
-                //   button: "đóng",
-                // });
               }
             })
 
@@ -288,7 +345,7 @@ const PhieuNhap = () => {
               console.log(error);
             });
         } else if (res.data.status === 400) {
-          console.log(res.data);
+          // console.log(res.data);
           setStatus(res.data.status);
           setErrorSL(res.data.message.soluong);
           setErrorGia(res.data.message.gia);
@@ -309,40 +366,34 @@ const PhieuNhap = () => {
         console.log(error);
       });
   };
+
   //delete Ctpn
-  const handleDelete = (e) => {
-    e.preventDefault();
-    swal("Chắc chưa", {
-      buttons: {
-        catch: {
-          text: "Chắc",
-          value: "catch",
-        },
-        no: {
-          text: "chưa",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "catch":
-          axios
-            .delete(`api/kho/deleteCtPN/${idPN}/${idProduct}`)
-            .then((res) => {
-              // console.log(res);
-              if (res.data.status == 200) {
-                swal({
-                  title: res.data.message,
-                  icon: "success",
-                  button: "đóng",
-                });
-              }
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
-          break;
+  const handleDelete = (idPN1, idProduct1) => {
+    Swal.fire({
+      title: "Xóa?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/api/kho/deleteCtPN/${idPN1}/${idProduct1}`)
+          .then((res) => {
+            console.log(res);
+            if (res.data.status == 200) {
+              Swal.fire("Đã xóa!", "Bạn đã xóa chi tiết phiếu nhập", "success");
+              setShowTab(true);
+              setTabKey(2);
+              setSubmitting(true);
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
       }
     });
   };
@@ -362,12 +413,14 @@ const PhieuNhap = () => {
   //xem phiếu nhập
   useEffect(() => {
     axios
-      .get(`api/kho/getAllPN-new?page=${page}`)
+      .get(`/api/kho/getAllPN-new?page=${page}`)
       .then((res) => {
         if (res.data.status === 200) {
-          // console.log(res.data.pns);
+          // console.log(res.data.pns.data);
           setDataShowPN(res.data.pns.data);
-          setIdShowPn(res.data.pns);
+          // setIdShowPn(res.data.pns);
+          // setTongtienPN(res.data.pns.data.tongTien)
+          // setIdPN()
           setTotalPage(res.data.pns.total);
           setPerPage(res.data.pns.per_page);
           setCurrentPage(res.data.pns.current_page);
@@ -384,11 +437,9 @@ const PhieuNhap = () => {
         console.log(error);
       });
   }, [page]);
-  // console.log(dataShowPN);
+
   //Sắp xếp theo tổng tiền
   const SortMoney = (e) => {
-    // console.log(e);
-    // setInc(e)
     if (e == "inc") {
       axios.get(`api/kho/loc-pn-thap-cao?page=${page}`).then((res) => {
         console.log(res.data);
@@ -414,40 +465,126 @@ const PhieuNhap = () => {
   const handleDeletePN = (id) => {
     // console.log(id);
     // e.preventDefault();
-    swal("Chắc chắn xóa", {
-      buttons: {
-        catch: {
-          text: "Chắc",
-          value: "catch",
-        },
-        no: {
-          text: "Chưa",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "catch":
-          axios
-            .delete(`api/kho/deletePN/${id}`)
-            .then((res) => {
-              console.log(res);
-              if (res.data.status == 200) {
-                swal({
-                  title: res.data.message,
-                  icon: "success",
-                  button: "đóng",
-                });
-              }
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
-          break;
+    Swal.fire({
+      title: "Xóa?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/api/kho/deletePN/${id}`)
+          .then((res) => {
+            // console.log(res);
+            if (res.data.status == 200) {
+              swal({
+                title: res.data.message,
+                icon: "success",
+                button: "đóng",
+              });
+              setSubmitting(true);
+            } else if (res.status == 200) {
+              swal({
+                title: res.data.message,
+                icon: "warning",
+                button: "đóng",
+              });
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
       }
     });
   };
+  //tab 2
+  const handleReload = () => {
+    const controller = new AbortController();
+
+    axios.get(`api/kho/getAllPN-new?page=${page}`).then((res) => {
+      if (res.data.status === 200) {
+        setDataShowPN(res.data.pns.data);
+
+        setTotalPage(res.data.pns.total);
+        setPerPage(res.data.pns.per_page);
+        setCurrentPage(res.data.pns.current_page);
+      }
+    });
+    return () => {
+      controller.abort();
+    };
+  };
+  //tab 1
+  const handleReloadCTPN = () => {
+    const controller = new AbortController();
+    axios
+      .get(`api/kho/PN/${idPN}`)
+      .then((res) => {
+        // console.log(res);
+
+        if (res.data.status === 200) {
+          setPnCt(res.data.pn.pnct);
+          setTongtien(res.data.pn.tongTien);
+          setErrorSL([]);
+          setErrorGia([]);
+          setErrorSP([]);
+
+          // swal({
+          //   title: res.data.message,
+          //   icon: "success",
+          //   button: "đóng",
+          // });
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+    return () => {
+      controller.abort();
+    };
+  };
+
+  const dataStatus = {
+    status_check: 1,
+  };
+
+  const changeStatus = (item) => {
+    const id = item.id;
+    Swal.fire({
+      title: "Thay đổi tình trạng?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const controller = new AbortController();
+        axios.put(`api/kho/setStatusPn/${id}`, dataStatus).then((res) => {
+          // console.log(res);
+          if (res.data.status === 200) {
+            setSubmitting(true);
+
+            swal({
+              title: res.data.message,
+              icon: "success",
+              button: "đóng",
+            });
+          }
+        });
+        return () => {
+          controller.abort();
+        };
+      }
+    });
+  };
+
   return (
     <>
       <B.Modal show={show} onHide={handleClose}>
@@ -475,7 +612,16 @@ const PhieuNhap = () => {
           <UpdateCtPN
             idPN={idPN}
             idSP={idProduct}
+            soLuong={soLuong}
+            gia={gia}
+            listProduct={listProduct}
+            tenSP={nameProduct}
+            handleOnSearchSp={handleOnSearchSp}
+            handleOnSelectSp={handleOnSelectSp}
+            formatResult={formatResult}
             showModal={handleCloseUpdateCtPN}
+            test={test}
+            dataShowPN={dataShowPN}
           />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
@@ -524,7 +670,7 @@ const PhieuNhap = () => {
             <B.Tabs activeKey={tabkey} onSelect={(k) => setTabKey(k)}>
               <B.Tab
                 eventKey={1}
-                title="thêm phiếu nhập"
+                title="Thêm phiếu nhập"
                 className=" border border-top-0 py-3 px-3"
               >
                 <B.Row>
@@ -697,39 +843,6 @@ const PhieuNhap = () => {
                         </td>
                       </tr>
                       {check == 2 && status == 400 ? checkLoi : null}
-
-                      {/* <tr>
-                      <td className="align-middle">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="align-middle">2</td>
-                      <td className="align-middle">
-                        Nhập 50 laptop ASUS đợt 2
-                      </td>
-                      <td className="align-middle">Laptop ASUS ROG G14</td>
-                      <td className="align-middle">GearVN/ASUS</td>
-                      <td className="align-middle">50</td>
-                      <td className="align-middle">3,500,000,000</td>
-                      <td className="align-middle">7/12/2021</td>
-                      <td className="align-middle fs-5 text-primary">
-                        <BiEdit />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="align-middle">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="align-middle">3</td>
-                      <td className="align-middle">Nhập 10 laptop Lenovo</td>
-                      <td className="align-middle">Laptop Lenovo Legion</td>
-                      <td className="align-middle">StarComP/Lenovo</td>
-                      <td className="align-middle">10</td>
-                      <td className="align-middle">300,000,000</td>
-                      <td className="align-middle">2/2/2022</td>
-                      <td className="align-middle fs-5 text-primary">
-                        <BiEdit />
-                      </td>
-                    </tr> */}
                     </tbody>
                   </B.Table>
                 </B.Form>
@@ -748,11 +861,21 @@ const PhieuNhap = () => {
                           <th>Tên sản phẩm</th>
                           <th>Số lượng</th>
                           <th>Giá</th>
-                          <th>Thao tác</th>
+                          <th style={{ width: "15%" }}>
+                            Thao tác
+                            <BiReset
+                              onClick={handleReloadCTPN}
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="làm mới"
+                              className="fs-4 customborder ms-3"
+                            />
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="align-middle">
                         {pnCt.map((item, index) => {
+                          // console.log(item);
                           return (
                             <>
                               <tr key={index}>
@@ -761,7 +884,9 @@ const PhieuNhap = () => {
                                   {item.product.tenSP}
                                 </td>
                                 <td className="align-middle">{item.soluong}</td>
-                                <td className="align-middle">{item.gia}</td>
+                                <td className="align-middle">
+                                  {formatMoney(item.gia)}
+                                </td>
 
                                 <td className="align-middle fs-5 text-primary">
                                   <FiTool
@@ -770,14 +895,16 @@ const PhieuNhap = () => {
                                     data-placement="bottom"
                                     title="Sửa chi tiết phiếu nhập"
                                     style={{ marginRight: "15px" }}
-                                    onClick={() => handleShowUpdateCtPN()}
+                                    onClick={() => handleShowUpdateCtPN(item)}
                                   />
                                   <MdDeleteForever
                                     type="button"
                                     data-toggle="tooltip"
                                     data-placement="bottom"
                                     title="Xóa chi tiết phiếu nhập"
-                                    onClick={handleDelete}
+                                    onClick={() =>
+                                      handleDelete(item.pn_id, item.product_id)
+                                    }
                                   />
                                 </td>
                               </tr>
@@ -787,7 +914,7 @@ const PhieuNhap = () => {
                       </tbody>
                     </B.Table>
                     <h5 className="text-right mt-2 text-primary">
-                      Tổng tiền: {tongTien} VNĐ
+                      Tổng tiền: {formatMoney(tongTien)}
                     </h5>
                   </B.Form>
                 )}
@@ -809,6 +936,8 @@ const PhieuNhap = () => {
                       <option value={"inc"}>Tổng tiền tăng dần </option>
                       <option value={"dec"}>Tổng tiền giảm dần </option>
                     </B.FormSelect>
+
+                    <B.Button onClick={handleReload}>làm mới</B.Button>
                   </B.FormGroup>
                   <B.Table className="table-borderless border border-secondary text-center mb-0">
                     <thead
@@ -827,10 +956,9 @@ const PhieuNhap = () => {
                     </thead>
                     <tbody className="align-middle">
                       {dataShowPN.map((item, index) => {
-                        // console.log(item.id);
                         let chuoi = item.created_at;
                         let tachChuoi = chuoi.slice(0, 10);
-                        // console.log(tachChuoi);
+
                         return (
                           <>
                             <tr>
@@ -838,10 +966,34 @@ const PhieuNhap = () => {
                               <td className="align-middle">
                                 {item?.ncc?.tenNCC}
                               </td>
-                              <td className="align-middle">{item.tongTien}</td>
+                              <td className="align-middle">
+                                {formatMoney(item.tongTien)}
+                              </td>
                               <td className="align-middle">{tachChuoi}</td>
-                              <td className="align-middle ">
-                                {CheckStatus(item.status)}
+                              <td className="align-middle">
+                                {item.status == 1 ? (
+                                  <B.Button
+                                    disabled
+                                    style={{
+                                      backgroundColor: "green",
+                                      border: "none",
+                                      color: "white",
+                                    }}
+                                    onClick={() => changeStatus(item)}
+                                  >
+                                    {CheckStatus(item.status)}
+                                  </B.Button>
+                                ) : (
+                                  <B.Button
+                                    style={{
+                                      backgroundColor: "red",
+                                      border: "none",
+                                    }}
+                                    onClick={() => changeStatus(item)}
+                                  >
+                                    {CheckStatus(item.status)}
+                                  </B.Button>
+                                )}
                               </td>
 
                               <td className="align-middle fs-5 text-primary">
@@ -853,6 +1005,7 @@ const PhieuNhap = () => {
                                   style={{ marginRight: "15px" }}
                                   onClick={() => handleView(item)}
                                 />
+
                                 <MdDeleteForever
                                   type="button"
                                   data-toggle="tooltip"
@@ -880,177 +1033,21 @@ const PhieuNhap = () => {
                   title="Xem chi tiết phiếu nhập"
                   className=" border border-top-0 py-3 px-3"
                 >
-                  <B.Row className="px-xl-3 mb-3">
-                    <B.Col lg={8} xs={8}>
-                      <h5 className="text-primary mb-3">Chi tiết phiếu nhập</h5>
-                    </B.Col>
-                    <B.Col lg={4} xs={4} className="text-end">
-                      <BiReset
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="làm mới"
-                        className="fs-3 customborder"
-                      />
-                      <BiEdit
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Sửa phiếu nhập"
-                        className="fs-3 customborder"
-                        onClick={() => handleShow()}
-                      />
-                      <FaTimes
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Đóng"
-                        className="fs-3 customborder"
-                        onClick={handleCloseTab}
-                      />
-                    </B.Col>
-                  </B.Row>
-                  <B.Form>
-                    <B.Table className=" text-right table-borderless border border-secondary text-center mb-0">
-                      <thead
-                        className="text-dark"
-                        style={{ backgroundColor: "#edf1ff" }}
-                      >
-                        <tr>
-                          <th>STT</th>
-                          <th>Tên sản phẩm</th>
-                          <th>Số lượng</th>
-                          <th>Giá</th>
-                          <th>Thao tác</th>
-                        </tr>
-                      </thead>
-                      <tbody className="align-middle">
-                        {pnCt.map((item, index) => {
-                          console.log(item);
-                          return (
-                            <>
-                              <tr key={index}>
-                                <td className="align-middle">{index + 1}</td>
-                                <td className="align-middle">
-                                  {item.product.tenSP}
-                                </td>
-                                <td className="align-middle">{item.soluong}</td>
-                                <td className="align-middle">{item.gia}</td>
-
-                                <td className="align-middle fs-5 text-primary">
-                                  <FiTool
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="bottom"
-                                    title="Sửa chi tiết phiếu nhập"
-                                    style={{ marginRight: "15px" }}
-                                    onClick={() => handleShowUpdateCtPN()}
-                                  />
-                                  <MdDeleteForever
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="bottom"
-                                    title="Xóa chi tiết phiếu nhập"
-                                    onClick={handleDelete}
-                                  />
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
-                      </tbody>
-                    </B.Table>
-                    <h5 className="text-right mt-2 text-primary">
-                      Tổng tiền: {tongTien} VNĐ
-                    </h5>
-                  </B.Form>
+                  <Ctpn
+                    tongTienPN={tongTienPN}
+                    handleDelete={handleDelete}
+                    handleShowUpdateCtPN={handleShowUpdateCtPN}
+                    viewPn={viewPn}
+                    handleCloseTab={handleCloseTab}
+                  ></Ctpn>
                 </B.Tab>
               )}
+              <B.Tab eventKey={4} title="Lịch sử nhập hàng">
+                <LichSuNhapHang />
+              </B.Tab>
             </B.Tabs>
           </B.Col>
         </B.Row>
-        {/* table hien thi tai khoan */}
-        {/* <B.Row className="pe-xl-5">
-          <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
-              <B.FormSelect
-                className="rounded-0 shadow-none"
-                style={{ width: "200px" }}
-              >
-                <option>Sắp xếp</option>
-                <option>Từ A-Z</option>
-                <option>Theo ID</option>
-                <option>Theo NCC</option>
-                <option>Theo NSX</option>
-                <option>Theo ngày nhập</option>
-              </B.FormSelect>
-            </B.FormGroup>
-            <B.Table className="table-borderless border border-secondary text-center mb-0">
-              <thead
-                className="text-dark"
-                style={{ backgroundColor: "#edf1ff" }}
-              >
-                <tr>
-                  <th>
-                    <input type="checkbox" />
-                  </th>
-                  <th>ID</th>
-                  <th>Tên phiếu nhập</th>
-                  <th>Tên sản phẩm</th>
-                  <th>NCC/NSX</th>
-                  <th>Số lượng</th>
-                  <th>Giá nhập</th>
-                  <th>Ngày nhập</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="align-middle">
-                <tr>
-                  <td className="align-middle">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="align-middle">1</td>
-                  <td className="align-middle">Nhập 50 laptop ASUS đợt 1</td>
-                  <td className="align-middle">Laptop ASUS TUF A15</td>
-                  <td className="align-middle">GearVN/ASUS</td>
-                  <td className="align-middle">50</td>
-                  <td className="align-middle">2,500,000,000</td>
-                  <td className="align-middle">20/8/2021</td>
-                  <td className="align-middle fs-5 text-primary">
-                    <BiEdit />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="align-middle">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="align-middle">2</td>
-                  <td className="align-middle">Nhập 50 laptop ASUS đợt 2</td>
-                  <td className="align-middle">Laptop ASUS ROG G14</td>
-                  <td className="align-middle">GearVN/ASUS</td>
-                  <td className="align-middle">50</td>
-                  <td className="align-middle">3,500,000,000</td>
-                  <td className="align-middle">7/12/2021</td>
-                  <td className="align-middle fs-5 text-primary">
-                    <BiEdit />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="align-middle">
-                    <input type="checkbox" />
-                  </td>
-                  <td className="align-middle">3</td>
-                  <td className="align-middle">Nhập 10 laptop Lenovo</td>
-                  <td className="align-middle">Laptop Lenovo Legion</td>
-                  <td className="align-middle">StarComP/Lenovo</td>
-                  <td className="align-middle">10</td>
-                  <td className="align-middle">300,000,000</td>
-                  <td className="align-middle">2/2/2022</td>
-                  <td className="align-middle fs-5 text-primary">
-                    <BiEdit />
-                  </td>
-                </tr>
-              </tbody>
-            </B.Table>
-          </B.Col>
-        </B.Row> */}
       </B.Container>
     </>
   );

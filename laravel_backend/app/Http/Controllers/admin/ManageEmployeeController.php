@@ -18,7 +18,7 @@ class ManageEmployeeController extends Controller
      */
     public function index()
     {
-        $emp = Employee::paginate(5);
+        $emp = Employee::orderBy('id', 'desc')->paginate(5);
         return response()->json([
             'status' => 200,
             'emloyee' =>  $emp,
@@ -42,11 +42,36 @@ class ManageEmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'ten' => 'required|max:20',
+            'ngaySinh' => 'required',
+            'sdt' => 'required|numeric|digits:10',
+            'diaChi' => 'required|max:100',
+            'gioiTinh' => 'required',
+            'cv_id' => 'required',
+        ], [
+            'ten.required' => 'Ô họ tên Không được bỏ trống',
+            'ngaySinh.required' => 'Ô ngày sinh Không được bỏ trống',
+            'diaChi.required' => 'Ô địa chỉ Không được bỏ trống',
+            'gioiTinh.required' => 'Ô giới tính Không được bỏ trống',
+            'sdt.required' => 'Ô số điện thoại Không được bỏ trống',
+            'sdt.numeric' => 'Ô số điện thoại không đúng định dạng số',
+            'sdt.digits' => 'Ô số điện thoại phải là 10 số',
+            'cv_id.required' => 'Ô cv_id Không được bỏ trống',
+            'ngaySinh.max' => 'Ô ngày sinh tối đa 100 ký tự',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'mesage' => $validator->messages(),
+            ]);
+        }
         $emloyee = Employee::create($request->all());
 
         return response()->json([
             'status' => 200,
-            'username' =>  $emloyee,
+            'emloyee' =>  $emloyee,
             'message' => 'Tạo nhân viên thành công',
         ]);
     }
@@ -159,12 +184,22 @@ class ManageEmployeeController extends Controller
     public function destroy($manageEmloyee)
     {
         $emloyee = Employee::find($manageEmloyee);
-        $user = User::where('id', $emloyee->user_id)->delete();
-        return response()->json([
-            'status' => 200,
-            'user' => $user,
-            'message' => 'xóa thành công',
-        ]);
+        $user = User::where('id', $emloyee->user_id)->first();
+        if (empty($user)) {
+            $emloyee->delete();
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'xóa thành công',
+            ]);
+        } else {
+            $user->delete();
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'xóa thành công',
+            ]);
+        }
     }
 
 

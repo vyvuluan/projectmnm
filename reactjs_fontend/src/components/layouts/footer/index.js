@@ -16,17 +16,17 @@ const Footers = () => {
           items: [
             {
               title: "Về chúng tôi",
-              url: "https://pro.ant.design/",
+              url: "http://localhost:3000/",
               openExternal: true,
             },
             {
               title: "Tư vấn mua hàng",
-              url: "https://mobile.ant.design/",
+              url: "http://localhost:3000/",
               openExternal: true,
             },
             {
               title: "Tuyển dụng",
-              url: "https://kitchen.alipay.com/",
+              url: "http://localhost:3000/",
             },
           ],
         },
@@ -35,21 +35,21 @@ const Footers = () => {
           items: [
             {
               title: "Chính sách trả góp",
-              url: "https://pro.ant.design/",
+              url: "http://localhost:3000/",
               openExternal: true,
             },
             {
               title: "Chính sách bảo mật",
-              url: "https://mobile.ant.design/",
+              url: "http://localhost:3000",
               openExternal: true,
             },
             {
               title: "Chính sách giải quyết khiếu nại",
-              url: "https://kitchen.alipay.com/",
+              url: "http://localhost:3000",
             },
             {
               title: "Chính sách bảo hành",
-              url: "https://kitchen.alipay.com/",
+              url: "http://localhost:3000",
             },
           ],
         },
@@ -58,17 +58,17 @@ const Footers = () => {
           items: [
             {
               title: "Tổng hợp khuyến mãi",
-              url: "https://pro.ant.design/",
+              url: "http://localhost:3000/",
               openExternal: true,
             },
             {
               title: "VGA Giảm Sâu",
-              url: "https://mobile.ant.design/",
+              url: "http://localhost:3000",
               openExternal: true,
             },
             {
               title: "Laptop 1.990k - Giảm đến 50%",
-              url: "https://kitchen.alipay.com/",
+              url: "http://localhost:3000",
             },
           ],
         },
@@ -89,8 +89,7 @@ const Footers = () => {
                 />
               ),
               title: "Tổng hợp Hotline CSKH, phản ánh",
-              url: "https://yuque.com",
-
+              url: "http://localhost:3000" ,
               openExternal: true,
             },
             {
@@ -101,8 +100,7 @@ const Footers = () => {
                 />
               ),
               title: "Thông tin thanh toán",
-              url: "https://yunfengdie.com",
-
+              url: "http://localhost:3000",
               openExternal: true,
             },
           ],

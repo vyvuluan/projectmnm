@@ -25,7 +25,7 @@ use  App\Http\Controllers\admin\ManageLoaispController;
 use  App\Http\Controllers\admin\ManageCustomerController;
 use  App\Http\Controllers\admin\ManagePhieuNhapController;
 use  App\Http\Controllers\admin\ManageBaoCaoController;
-
+use  App\Http\Controllers\admin\DiscountController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,6 +41,8 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 //api search nhà cung cấp theo tên mã số điện thoại
 Route::get('/searchNcc', [ManageNccController::class, 'searchNcc']);
+//api search nhà sản xuất theo tên mã quốc gia
+Route::get('/searchNsx', [ManageNsxController::class, 'searchNsx']);
 //api search sản phẩm theo tên mã
 Route::get('/searchProduct', [ManageProductController::class, 'searchProduct']);
 //api search phiếu nhập
@@ -49,10 +51,14 @@ Route::get('/searchPn', [ManagePhieuNhapController::class, 'searchPn']);
 Route::get('/searchEmp', [ManageEmployeeController::class, 'searchEmp']);
 Route::get('/locTenNvAZ', [ManageEmployeeController::class, 'locTenAZ']);
 Route::get('/locTenNvZA', [ManageEmployeeController::class, 'locTenZA']);
+//api check discount
+Route::get('check-discount', [DiscountController::class, 'check_discount']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/contact', [ContactContrller::class, 'store']);
+    //api xem danh sách đơn hàng của khách hàng
+    Route::get('/danh-sach-don-hang-khach-hang', [PaymentController::class, 'getDH_maKH']);
 });
 
 Route::get('/login/{provider}', [UserController::class, 'redirectToProvider']);
@@ -89,9 +95,9 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     Route::resource('manageEmployee', ManageEmployeeController::class);
     //cấp tài khoản cho nhân viên
     Route::post('manageEmployee/createUser/{id}', [ManageEmployeeController::class, 'createUser']);
-
     //api báo cáo thống kê
     Route::get('baocao', [ManageBaoCaoController::class, 'thongKeDoanhThuThang']);
+    //api tính số contact chưa đọc
 });
 
 
@@ -118,6 +124,10 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::get('getAllPN-new', [ManagePhieuNhapController::class, 'getAllPN_new']);
     //api hiển thị chi tiết phiếu nhập và phiếu nhập theo id phiếu nhập
     Route::get('PN/{pn_id}', [ManagePhieuNhapController::class, 'editPN']);
+
+    //api set tình trạng phiếu nhập
+    Route::put('setStatusPn/{pn_id}', [ManagePhieuNhapController::class, 'setStatusPN']);
+
     //api sản phẩm sắp hết hàng < 10 số lượng
     Route::get('spGanHet', [ManageBaoCaoController::class, 'spGanHet']);
     //lọc phiếu nhập theo giá
@@ -131,13 +141,19 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
 
     //api thống kê doanh thu và số lượng
     Route::get('thongKeChiTieuSoLuong', [ManageBaoCaoController::class, 'thongKeChiTieuSoLuong']);
+    //Api Thống kê của phiếu xuất
+    Route::get('thongKeDoanhThuSoLuong', [ManageBaoCaoController::class, 'thongKeDoanhThuSoLuong']);
+    Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
 
-
+    //Api set status phiếu xuất
+    Route::put('setstatusPX/{id}', [ManagePhieuXuatController::class, 'setstatusPX']);
     //Api Quản lý  Phiếu Xuất
-    Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
+    Route::get('dspx', [ManagePhieuXuatController::class, 'dspx_kho']); // Danh sách các phiếu xuất đã xác nhận dùng ở quản lý kho
+    Route::get('search_kho', [ManagePhieuXuatController::class, 'search_kho']); // Tìm Kiếm Phiếu Xuất dùng ở kho
     Route::resource('px', ManagePhieuXuatController::class);
-    Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
-    //Api Quản lý chi tiết phiếu xuất
+    Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class, 'xemctpx']);
+    Route::get('locpx_kho', [ManagePhieuXuatController::class, 'locPx_kho']); // Lọc Phiếu xuất key và value
+    //Api quản lý ct phiếu xuất
     Route::get('ctpx/{px_id}', [ManagePhieuXuatController::class, 'xemctpx']);
     Route::get('editctpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'editctpx']);
     Route::put('updatectpx/{px_id}/{product_id}', [ManagePhieuXuatController::class, 'updatectpx']);  // update ct phiếu xuất
@@ -158,14 +174,14 @@ Route::middleware('auth:sanctum', 'role_thukho')->prefix('kho')->group(function 
     Route::resource('loaisp', ManageLoaispController::class);
     // Chi tiết sản phẩm
     Route::get('products/chitiet/{id}', [ManageProductController::class, 'ctsp']);
+    // Cập nhật sản phẩm
+    Route::post('products/update/{id}', [ManageProductController::class, 'update']);
 });
+
+Route::get('nsx', [ManageNsxController::class, 'nsxall']);
 
 //nhân viên
 Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(function () {
-
-    //Api Quản lý  Phiếu Xuất
-    Route::resource('px', ManagePhieuXuatController::class);
-    Route::get('px/ctpx/{id_px}', [ManagePhieuXuatController::class, 'xemctpx']);
 
     //Api Quản lý khách hàng
     Route::resource('customer', ManageCustomerController::class);
@@ -175,20 +191,39 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
     //api thông tin tài khoản theo user id
     Route::get('manageUser/{user_id}', [ManageUserController::class, 'edit']);
     //api sửa tài khoản
-    Route::put('manageUser/{user_id}', [ManageUserController::class, 'update']);
+    Route::put('manageUser/{user_id}', [ManageUserController::class, 'update_tk_kh']);
     //api xóa tài khoản
     Route::delete('manageUser/{user_id}', [ManageUserController::class, 'destroy_user_customer']);
 
     //api thống kê doanh thu và số lượng của nhân viên
     Route::get('doanhThuNhanVien', [ManageBaoCaoController::class, 'doanhThuNhanVien']);
+    //api hiển thị danh sách các contact
+    Route::get('/contact', [ContactContrller::class, 'index']);
+    Route::put('/contact/{customer_id}', [ContactContrller::class, 'sendMail']);
+    //discount
+    Route::resource('discount', DiscountController::class);
+
+    //Api set status đơn hàng
+    Route::put('setstatusDH/{id}', [ManagePhieuXuatController::class, 'setstatusDH']);
+    //Api Quản lý  Đơn Hàng (Phiếu xuất)
+    Route::get('locpx', [ManagePhieuXuatController::class, 'locPx']); // Lọc Phiếu xuất key và value
+    Route::get('px-search', [ManagePhieuXuatController::class, 'search']); // Tìm Kiếm Phiếu Xuất
+    Route::resource('px', ManagePhieuXuatController::class)->only('index');
+    Route::get('editpx/{px_id}', [ManagePhieuXuatController::class, 'editpx']);
+
+    //Api Quản lý chi tiết phiếu xuất
+    Route::get('lichSuXuatHang', [ManageBaoCaoController::class, 'lichSuXuatHang']);
+    //Api Quản lý sản phẩm
+    Route::resource('products', ManageProductController::class)->only('update');
 });
 
 
 // API Long
 // API Khách hàng
+Route::put('huyDH/{id}', [ManagePhieuXuatController::class, 'huyDH']); // Huỷ đơn hàng
 //Api sản phẩm
 Route::resource('products/view', ProductController::class)->only('index');
-Route::get('products-search', [ProductController::class, 'search']);
+Route::get('products-search', [ManageProductController::class, 'search']); // Dùng cho trang chủ thôi
 Route::get('allcomment/{product_id}', [ProductController::class, 'allcomment']);
 Route::post('addcomment', [ProductController::class, 'addcomment']);
 
@@ -212,13 +247,17 @@ Route::post('momo', [PaymentController::class, 'momopay']);
 Route::get('saveorder', [PaymentController::class, 'saveorder']); // api này front end không dùng
 
 
+//lọc sản phẩm
+Route::get('/sortProduct', [ProductController::class, 'sortProduct']);
+
+Route::get('/giaMax', [ProductController::class, 'product_max']);
+
+Route::get('/sort-chitiet', [ProductController::class, 'sort_chitiet']);
 
 
+Route::get('/sort-chitiet-minmax', [ProductController::class, 'sort_chitiet_minmax']);
 
-
-
-
-
+Route::get('/ds_discount_tontai', [DiscountController::class, 'ds_discount_tontai']);
 
 // Route::resource('products/add', ProductController::class)->only('store');
 // Route::delete('products/delete/{id}', [ProductController::class,'destroy']);

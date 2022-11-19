@@ -17,7 +17,7 @@ class ManageNccController extends Controller
      */
     public function index()
     {
-        $Ncc = Ncc::paginate();
+        $Ncc = Ncc::orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => 200,
             'Ncc' => $Ncc,

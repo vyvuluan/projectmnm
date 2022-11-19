@@ -6,7 +6,16 @@
     padding: 5px;
 }
 
-.prev-container img {
+.prev-container>img {
     width: 100%;
+    max-width: 336px;
     height: 100%;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 1600px) {
+    .prev-container {
+        width: auto;
+        height: auto;
+    }
 }

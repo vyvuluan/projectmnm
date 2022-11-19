@@ -15,7 +15,7 @@ class ManageUserController extends Controller
         $users = User::where('role_id', 2)
             ->orWhere('role_id', 3)
             ->orWhere('role_id', 4)
-            ->orderBy('id', 'asc')
+            ->orderBy('id', 'desc')
             ->paginate(10);
         return response()->json([
             'users' => $users,
@@ -56,7 +56,7 @@ class ManageUserController extends Controller
         $user = User::where('email', $request->email)->first();
         if (empty($user)) {
             return response()->json([
-                'status' => 401,
+                'status' => 400,
                 'error' => 'không tồn tại tài khoản',
             ]);
         } else {
@@ -64,8 +64,8 @@ class ManageUserController extends Controller
 
 
                 return response()->json([
-                    'status' => 401,
-                    'message' => 'Tài khoản hoặc mật khẩu không chính xác',
+                    'status' => 400,
+                    'error' => 'Tài khoản hoặc mật khẩu không chính xác',
                 ]);
             } else {
                 if ($user->status == 1) {
@@ -103,13 +103,13 @@ class ManageUserController extends Controller
                         return response()->json([
 
                             'error' => 'Bạn không có quyền đăng nhập vào chức năng này',
-                            'status' => 404,
+                            'status' => 401,
                         ]);
                     }
                 } else {
                     return response()->json([
-                        'status' => 402,
-                        'message' => 'Tài khoản đã bị khóa',
+                        'status' => 401,
+                        'error' => 'Tài khoản đã bị khóa',
                     ]);
                 }
 
@@ -134,24 +134,20 @@ class ManageUserController extends Controller
     public function update(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users',
-            'username' => 'required|max:255|unique:users',
+            'email' => 'required|email',
             'role_id' => 'required|max:4|numeric|min:2',
-
+            'status' => 'required',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
-            'email.unique' => 'Địa chỉ email đã tồn tại',
-
-            'username.required' => 'Ô username không được bỏ trống',
-            'username.max' => 'Ô username tối đa 255 ký tự',
-            'username.unique' => 'username đã tồn tại',
 
             'role_id.required' => 'Ô role_id không được bỏ trống',
             'role_id.max' => 'Ô role_id có giá trị từ 2 đến 4',
 
             'role_id.numeric' => 'Ô role_id phải là số',
             'role_id.min' => 'Ô role_id có giá trị từ 2 đến 4',
+
+            'status.required' => 'Ô status không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -160,12 +156,33 @@ class ManageUserController extends Controller
             ]);
         }
         $user = User::find($user_id);
-        $user = $user->update($request->all());
-        return response()->json([
-            'status' => 200,
-            'user' => $user,
-            'message' => 'sửa thành công',
-        ]);
+
+        // $check_email = User::where('email',$request->email)->where('id',$user_id)->count();
+        // $check_username = User::where('username',$request->username)->where('id',$user_id)->count();
+
+        if ($user->email == $request->email) {
+            $user = $user->update($request->all());
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'sửa thành công',
+            ]);
+        } else {
+            $check_email = User::where('email', $request->email)->count();
+            if ($check_email != 0) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Email đã tồn tại',
+                ]);
+            } else {
+                $user = $user->update($request->all());
+                return response()->json([
+                    'status' => 200,
+                    'user' => $user,
+                    'message' => 'sửa thành công',
+                ]);
+            }
+        }
     }
     public function destroy($user_id)
     {
@@ -181,6 +198,49 @@ class ManageUserController extends Controller
         ]);
     }
 
+    public function update_tk_kh(Request $request, $user_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'status' => 'required',
+        ], [
+            'email.required' => 'Ô email Không được bỏ trống',
+            'email.email' => 'Địa chỉ email không hợp lệ',
+
+            'status.required' => 'Ô status không được bỏ trống',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->messages(),
+            ]);
+        }
+        $user = User::find($user_id);
+
+        if ($user->email == $request->email) {
+            $user = $user->update($request->all());
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'message' => 'sửa thành công',
+            ]);
+        } else {
+            $check_email = User::where('email', $request->email)->count();
+            if ($check_email != 0) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Email đã tồn tại',
+                ]);
+            } else {
+                $user = $user->update($request->all());
+                return response()->json([
+                    'status' => 200,
+                    'user' => $user,
+                    'message' => 'sửa thành công',
+                ]);
+            }
+        }
+    }
 
     public function destroy_user_customer($user_id)
     {

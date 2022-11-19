@@ -1,7 +1,9 @@
 .App {
   text-align: center;
 }
-
+html{
+  scroll-behavior: smooth;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -39,3 +41,20 @@
     transform: rotate(360deg);
   }
 }
+
+.btnclick {
+  background-color: #d70018 !important;
+}
+
+.btnclick:hover {
+  background-color: #af1729 !important;
+}
+
+/* * {
+  -ms-overflow-style: none;
+} */
+
+/* 
+::-webkit-scrollbar {
+  display: none;
+} */

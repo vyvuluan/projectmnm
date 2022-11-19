@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
-use App\Models\CtPhieuXuat;
+use App\Models\Discount;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
-
+use Carbon\Carbon;
 use PHPUnit\Framework\Constraint\Count;
 
 class PaymentController extends Controller
@@ -25,10 +25,15 @@ class PaymentController extends Controller
     {
         if (auth('sanctum')->check()) {
             $maKH = auth('sanctum')->user()->customer->id;
+            if ($request->payment_id != null) {
+                $stus = 1;
+            } else {
+                $stus = 0;
+            }
             // $maKH=$request->maKH;
             $payment = new PhieuXuat;
             $payment->customer_id = $maKH;
-            $payment->status = 0;
+            $payment->status = $stus;
             $payment->pt_ThanhToan = $request->payment_mode;
             $payment->tenKH = $request->tenKH;
             $payment->sdt = $request->sdt;
@@ -51,6 +56,31 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
+            if (isset($request->discount)) {
+                $date = Carbon::today();
+                $discount = Discount::where('discount_id', $request->discount)
+                    ->where('start', '<', $date)
+                    ->where('end', '>', $date)
+                    ->first();
+                if (!empty($discount)) {
+                    if ($discount->dieukien <= $tongTien) {
+                        $payment->discount = $discount->phantram;
+                        $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
+                    } else {
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Không có mã giảm giá bạn vừa nhập',
+                    ]);
+                }
+            }
+
+
             $payment->save();
             $payment->pxct()->createMany($pxChiTiet);
             Cart::destroy($cart);
@@ -167,9 +197,7 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
-            $payment->save();
-            $payment->pxct()->createMany($pxChiTiet);
-            Cart::destroy($cart);
+
 
             $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
             $partnerCode = 'MOMOBKUN20180529';
@@ -179,7 +207,7 @@ class PaymentController extends Controller
             $amount = $tongTien;
             //$amount = 100000;
 
-            $redirectUrl = "http://localhost:3000/";
+            $redirectUrl = "http://localhost:3000/paymentreturn";
             $ipnUrl = "http://localhost:8000/api/dathang";
             $extraData = "";
             // $extraData = $_POST["extraData"];
@@ -206,8 +234,11 @@ class PaymentController extends Controller
             );
 
             $result = $this->execPostRequest($endpoint, json_encode($data));
-            var_dump($result);
-            $jsonResult = json_decode($result, true);  // decode json
+            $jsonResult = json_decode($result, true);  // decode json // xác nhận thành công
+            // Lưu vào database
+            $payment->save();
+            $payment->pxct()->createMany($pxChiTiet);
+            Cart::destroy($cart);
             return redirect()->to($jsonResult['payUrl']);
         } else {
             return response()->json([
@@ -383,8 +414,8 @@ class PaymentController extends Controller
 
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
-            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '3']);
-            return Redirect::to('http://localhost:3000?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
+            return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
         }
         // }
         // else
@@ -445,12 +476,22 @@ class PaymentController extends Controller
     public function getStatus($id)
     {
         $px = PhieuXuat::find($id);
-        $ctpx = PhieuXuat::find($id)->pxct;
+        // $ctpx = PhieuXuat::find($id)->pxct;
         return response()->json([
             'id' => $px->id,
             'tinhTrang' => $px->status,
             'donHang' => $px,
-            'ctpx' => $ctpx,
+            // 'ctpx' => $ctpx,
+        ]);
+    }
+    public function getDH_maKH()
+    {
+
+        $px = PhieuXuat::where('customer_id', auth('sanctum')->user()->customer->id)->orderBy('id', 'desc')->paginate(5);
+        // $ctpx = PhieuXuat::find($id)->pxct;
+        return response()->json([
+            'donHang' => $px,
+            // 'ctpx' => $ctpx,
         ]);
     }
 

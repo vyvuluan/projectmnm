@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as Bt from "react-bootstrap";
 import emptycart from "../../../img/emptycart.png";
 
@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoaderIcon from "../../layouts/Loading/index";
 
 export default function Cart() {
+  const [submitting, setSubmitting] = useState(true);
   const navaigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
@@ -28,25 +29,20 @@ export default function Cart() {
     }).format(money);
   }
 
+  const getCart = useCallback(async () => {
+    const res = await axios.get(`http://localhost:8000/api/cart`);
+    if (res.data.status === 200) {
+      setCart(res.data.cart);
+      setLoading(false);
+    } else if (res.data.status === 401) {
+      navaigate("/");
+      swal("Warning", res.data.message, "error");
+    }
+  }, [])
+
   useEffect(() => {
-    let isMounted = true;
-
-    axios.get(`http://localhost:8000/api/cart`).then((res) => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setCart(res.data.cart);
-          setLoading(false);
-        } else if (res.data.status === 401) {
-          navaigate("/");
-          swal("Warning", res.data.message, "error");
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [cart, navaigate]);
+    getCart().then(() => setSubmitting(false));
+  }, [submitting, getCart]);
 
   const handleDecrement = (id_cart) => {
     setCart((cart) =>
@@ -68,7 +64,7 @@ export default function Cart() {
         id_cart === item.id
           ? {
             ...item,
-            soLuongSP: item.soLuongSP + (item.soLuongSP < 10 ? 1 : 0),
+            soLuongSP: item.soLuongSP + (item.soLuongSP < 4 ? 1 : 0),
           }
           : item
       )
@@ -80,7 +76,19 @@ export default function Cart() {
     axios
       .put(`http://localhost:8000/api/cart-updatequantity/${id_cart}/${scope}`)
       .then((res) => {
-        if (res.data.status === 200) {
+        if (res.data.status === 400) {
+          setCart((cart) =>
+            cart.map((item) =>
+              id_cart === item.id
+                ? {
+                  ...item,
+                  soLuongSP: item.soLuongSP - 1,
+                }
+                : item
+            )
+          );
+          updateCartQuantity(id_cart, "dec");
+          swal('Thất bại', res.data.message, 'error')
         }
       });
   }
@@ -88,18 +96,15 @@ export default function Cart() {
   const deleteCartItem = (e, id_cart) => {
     e.preventDefault();
 
-    const thisClicked = e.currentTarget;
-    thisClicked.innerText = "Removing";
-
     axios
       .delete(`http://localhost:8000/api/deletecart/${id_cart}`)
       .then((res) => {
         if (res.data.status === 200) {
           swal("Success", res.data.message, "success");
-          thisClicked.closest("tr").remove();
+          localStorage.setItem("count", localStorage.getItem("count") - 1)
+          setSubmitting(true);
         } else if (res.data.status === 404) {
           swal("Error", res.data.message, "error");
-          thisClicked.innerText = "Remove";
         }
       });
   };
@@ -138,8 +143,8 @@ export default function Cart() {
     cart_HTML = (
       <div>
         <Bt.Row className="px-xl-5">
-          <Bt.Col lg={8} className="table-responsive mb-5">
-            <Bt.Table className="table-borderless border border-secondary text-center mb-0">
+          <Bt.Col lg={8} className="mb-5">
+            <Bt.Table responsive className="table-borderless border border-secondary text-center mb-0">
               <thead
                 className="text-dark"
                 style={{ backgroundColor: "#edf1ff" }}
@@ -169,7 +174,7 @@ export default function Cart() {
                       <td>
                         <Bt.InputGroup className="quantity mx-auto">
                           <Bt.Button
-                            className="btn-sm rounded-0"
+                            className="btn-sm rounded-0 shadow-none btnclick"
                             variant="primary"
                             type="button"
                             onClick={() => handleDecrement(item.id)}
@@ -180,7 +185,7 @@ export default function Cart() {
                             {item.soLuongSP}
                           </Bt.InputGroup.Text>
                           <Bt.Button
-                            className="btn-sm rounded-0"
+                            className="btn-sm rounded-0 shadow-none btnclick"
                             variant="primary"
                             type="button"
                             onClick={() => handleIncrement(item.id)}
@@ -194,7 +199,7 @@ export default function Cart() {
                       </td>
                       <td>
                         <Bt.Button
-                          className="btn-sm rounded-0"
+                          className="btn-sm rounded-0 shadow-none btnclick"
                           type="button"
                           onClick={(e) => deleteCartItem(e, item.id)}
                         >
@@ -218,9 +223,9 @@ export default function Cart() {
                   <h6 className="fw-medium">{formatMoney(totalCartPrice)}</h6>
                 </div>
                 <div className="d-flex justify-content-between mb-3 pt-1">
-                  <h6 className="fw-medium">Thuế 10%</h6>
+                  <h6 className="fw-medium">Giảm giá</h6>
                   <h6 className="fw-medium">
-                    {formatMoney(totalCartPrice * 0.1)}
+                    0% (Có thể áp dụng mã tại bước thanh toán)
                   </h6>
                 </div>
               </Bt.Card.Body>
@@ -228,7 +233,7 @@ export default function Cart() {
                 <div className="d-flex justify-content-between mt-2">
                   <h5 className="fw-bold">Tổng tiền</h5>
                   <h5 className="fw-bold">
-                    {formatMoney(totalCartPrice * 1.1)}
+                    {formatMoney(totalCartPrice)}
                   </h5>
                 </div>
                 <Link to="/checkout">
@@ -286,7 +291,7 @@ export default function Cart() {
         </div>
       </Bt.Container>
 
-      <Bt.Container fluid pt={5}>
+      <Bt.Container fluid pt={5} className="mb-5">
         <Bt.Form>{cart_HTML}</Bt.Form>
       </Bt.Container>
     </>

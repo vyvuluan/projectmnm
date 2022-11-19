@@ -61,12 +61,20 @@ class UserController extends Controller
         } else {
             if ($user->status == 1) {
                 if ($user->role_id == 1) {
+                    $cus = Customer::where('user_id', $user->id)->first();
                     $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
                     return response()->json([
                         'status' => 200,
                         'username' => $user->username,
+                        'fullname' => $cus->ten,
                         'token' => $token,
+
                         'message' => 'Đăng nhập thành công',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 402,
+                        'message' => 'Tài khoản bạn đang có quyền quản lý ko có quyền đăng nhập ở trang khách hàng',
                     ]);
                 }
             } else {
@@ -85,31 +93,9 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        // $request->validate([
-        //     'email' => 'required|email|unique:users',
-        //     'username' => 'required|max:255|unique:users',
-        //     'password' => 'required|max:255',
-        //     're_password' => 'required|max:255',
-        // ],[
-        //     'email.required' => 'Ô email Không được bỏ trống',
-        //     'email.email' => 'Địa chỉ email không hợp lệ',
-        //     'email.unique' => 'Địa chỉ email đã tồn tại',
-
-        //     'username.required' => 'Ô username không được bỏ trống',
-        //     'username.max' => 'Ô username tối đa 255 ký tự',
-        //     'username.unique' => 'username đã tồn tại',
-
-        //     'password.required' => 'Ô password không được bỏ trống',
-        //     'password.max' => 'Ô password tối đa 255 ký tự',
-
-        //     're_password.required' => 'Ô re_password không được bỏ trống',
-        //     're_password.max' => 'Ô re_password tối đa 255 ký tự',
-
-
-
-        // ]);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
+            'fullname' => 'required|min:8',
             'username' => 'required|min:8|unique:users',
             'password' => 'required|min:8',
             're_password' => 'required|min:8',
@@ -121,6 +107,9 @@ class UserController extends Controller
             'username.required' => 'Ô username không được bỏ trống',
             'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
+
+            'fullname.required' => 'Ô fullname không được bỏ trống',
+            'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
 
             'password.required' => 'Ô password không được bỏ trống',
             'password.min' => 'Ô password tối thiểu 8 ký tự',
@@ -151,10 +140,12 @@ class UserController extends Controller
             $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
             $customer = new Customer();
             $customer->user_id = $user->id;
+            $customer->ten = $request->fullname;
             $customer->save();
             return response()->json([
                 'status' => 200,
                 'username' => $user->username,
+                'fullname' => $request->fullname,
                 'token' => $token,
                 'message' => 'Đăng ký thành công',
             ]);
@@ -226,11 +217,12 @@ class UserController extends Controller
         if (empty($check)) {
             $customer = new Customer();
             $customer->user_id = $userCreated->id;
+            $customer->ten = $user->getName();
             $customer->save();
         }
 
 
-        return Redirect::to('http://localhost:3000?token=' . $token . '&email=' . $user->email);
+        return Redirect::to('http://localhost:3000?token=' . $token . '&email=' . $user->email . '&fullname=' . $user->getName());
         // return response()->json([
         // 'status' => 200,
         // 'message' => 'Đăng nhập thành công',
@@ -252,6 +244,7 @@ class UserController extends Controller
     {
         if (auth('sanctum')->check()) {
             return response()->json([
+                'status' => 200,
                 'data_user' => auth('sanctum')->user(),
                 'data_customer' => auth('sanctum')->user()->customer,
             ]);
@@ -359,11 +352,11 @@ class UserController extends Controller
 
         // ]);
         $validator = Validator::make($request->all(), [
-            'password_old' => 'required|max:255',
+            'password_old' => 'max:255',
             'password' => 'required|max:255',
             're_password' => 'required|max:255',
         ], [
-            'password_old.required' => 'Ô password Không được bỏ trống',
+            // 'password_old.required' => 'Ô password Không được bỏ trống',
             'password_old.max' => 'Ô password tối đa 255 ký tự',
 
             'password.required' => 'Ô password Không được bỏ trống',
@@ -384,12 +377,7 @@ class UserController extends Controller
             $re_password = $request->re_password;
             $password_old = $request->password_old;
             $user = User::find(auth('sanctum')->user()->id);
-            if (!Hash::check($request->password_old, $user->password)) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => 'password cũ không chính xác',
-                ]);
-            } else {
+            if ($password_old == null) {
                 if ($password != $re_password) {
                     return response()->json([
                         'status' => 401,
@@ -404,6 +392,29 @@ class UserController extends Controller
                         'status' => 200,
                         'message' => 'update thành công',
                     ]);
+                }
+            } else {
+                if (!Hash::check($request->password_old, $user->password)) {
+                    return response()->json([
+                        'status' => 401,
+                        'message' => 'password cũ không chính xác',
+                    ]);
+                } else {
+                    if ($password != $re_password) {
+                        return response()->json([
+                            'status' => 401,
+                            'message' => 'password và nhập lại password không trùng khớp',
+                        ]);
+                    } else {
+                        $user = User::find(auth('sanctum')->user()->id);
+
+                        $user->password = Hash::make($password);
+                        $user->save();
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'update thành công',
+                        ]);
+                    }
                 }
             }
         } else {

@@ -24,6 +24,8 @@ import {
   Checkout,
   Accountinfo,
   NewPass,
+  MyOrder,
+  PaymentReturn,
 
 } from "../components/form";
 import {
@@ -40,8 +42,11 @@ import {
   Emplyee,
   Phieunhap,
   PhieuXuat,
+  DonHang,
+  LoaiSP,
+  Discount,
 } from "../components/form-admin";
-import Chart  from "../components/form-admin/chart";
+import Chart from "../components/form-admin/chart";
 import LoginAdmin from "../components/form-admin/loginAdmin";
 export const PublicRouter = [
   {
@@ -61,7 +66,7 @@ export const PublicRouter = [
   },
 
   {
-    path: "/CheckOrder",
+    path: "/myorder/CheckOrder/:id",
     component: CheckOrder,
     layout: _Layout,
   },
@@ -132,6 +137,21 @@ export const PublicRouter = [
     component: Accountinfo,
     layout: _Layout,
   },
+  {
+    path: "/myorder",
+    component: MyOrder,
+    layout: _Layout,
+  },
+  {
+    path: "/sortProduct",
+    component: PageProducts,
+    layout: _Layout,
+  },
+  {
+    path: "/paymentreturn",
+    component: PaymentReturn,
+    layout: _Layout,
+  },
 ];
 //chưa xử lý
 export const PublicRouter_Admin = [
@@ -199,6 +219,21 @@ export const PublicRouter_Admin = [
   {
     path: "/Phieuxuat",
     component: PhieuXuat,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/Donhang",
+    component: DonHang,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/loaisp",
+    component: LoaiSP,
+    layout: _LayoutAdmin,
+  },
+  {
+    path: "/discount",
+    component: Discount,
     layout: _LayoutAdmin,
   },
 ];

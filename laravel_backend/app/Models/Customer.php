@@ -16,6 +16,7 @@ class Customer extends Model
         'gioiTinh',
         'user_id',
     ];
+    protected $with = ['user'];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -23,5 +24,9 @@ class Customer extends Model
     public function pxs()
     {
         return $this->hasMany(PhieuXuat::class);
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'customer_id', 'id');
     }
 }

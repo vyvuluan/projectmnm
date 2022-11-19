@@ -1,0 +1,83 @@
+.imgcontainer {
+    width: 310px;
+    height: 150px;
+    position: relative;
+    text-align: center;
+    border-bottom: 4px solid #d70018;
+}
+
+.bgimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.textimg {
+    position: absolute;
+    font-size: 30px;
+    top: 20px;
+    left: 130px;
+}
+
+.textimg-bottom {
+    position: absolute;
+    font-size: 12px;
+    top: 80px;
+    left: 130px;
+}
+
+.textimg-bottom2 {
+    position: absolute;
+    font-size: 12px;
+    top: 110px;
+    left: 130px;
+}
+
+.iconsize {
+    font-size: 27px;
+}
+
+@media screen and (max-width: 464px) {
+
+    .imgcontainer {
+        width: 90%;
+        height: 90%;
+    }
+
+    .bgimg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .textimg {
+        position: absolute;
+        font-size: 18px;
+        top: 8px;
+        left: 71px;
+    }
+
+    .textimg-bottom {
+        position: absolute;
+        font-size: 7px;
+        top: 45px;
+        left: 71px;
+    }
+
+    .textimg-bottom2 {
+        position: absolute;
+        font-size: 7px;
+        top: 53px;
+        left: 71px;
+    }
+
+    .iconsize {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .iconsize {
+        font-size: 22px;
+    }
+}

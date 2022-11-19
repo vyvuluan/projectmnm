@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as B from "react-bootstrap";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
@@ -14,7 +14,11 @@ const Ncc = () => {
   const [ncclist, setNcclist] = useState([]);
   const [show, setShow] = useState(false);
   const [NCCData, setNCCData] = useState();
-  const handleClose = () => setShow((prev) => !prev);
+  const [submitting, setSubmitting] = useState(true);
+  const handleClose = () => {
+    setShow((prev) => !prev);
+    setSubmitting(true);
+  };
   const handleShow = (NCC) => {
     setShow(true);
     setNCCData(NCC);
@@ -65,6 +69,7 @@ const Ncc = () => {
           sdt: "",
           diachi: "",
         });
+        setSubmitting(true);
         setError([]);
       } else if (res.data.status === 400) {
         swal("Error", res.data.message, "error");
@@ -74,44 +79,21 @@ const Ncc = () => {
   };
   // Thêm NCC (end)
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
-    axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`).then((res) => {
-      if (isMounted) {
-        if (res.data.status === 200) {
-          setNcclist(res.data.Ncc.data);
-          setTotalPage(res.data.Ncc.total);
-          setPerPage(res.data.Ncc.per_page);
-          setCurrentPage(res.data.Ncc.current_page);
-        }
-      }
-      return () => {
-        controller.abort();
-
-        isMounted = false;
-      };
-    });
-
+  const getNccData = useCallback(async () => {
+    const res = await axios.get(
+      `http://localhost:8000/api/kho/ncc?page=${page}`
+    );
+    if (res.data.status === 200) {
+      setNcclist(res.data.Ncc.data);
+      setTotalPage(res.data.Ncc.total);
+      setPerPage(res.data.Ncc.per_page);
+      setCurrentPage(res.data.Ncc.current_page);
+    }
   }, [page]);
 
-  const handleReload = (e) => {
-    const controller = new AbortController();
-
-    axios.get(`http://localhost:8000/api/kho/ncc?page=${page}`).then((res) => {
-      if (res.data.status === 200) {
-        setNcclist(res.data.Ncc.data);
-        setTotalPage(res.data.Ncc.total);
-        setPerPage(res.data.Ncc.per_page);
-        setCurrentPage(res.data.Ncc.current_page);
-      }
-      return () => {
-        controller.abort();
-      };
-    });
-  }
-
+  useEffect(() => {
+    getNccData().then(() => setSubmitting(false));
+  }, [submitting, getNccData]);
 
   return (
     <>
@@ -141,31 +123,7 @@ const Ncc = () => {
             </h1>
           </B.Col>
           <B.Col lg={1}></B.Col>
-          <B.Col lg={6}>
-            <B.Form>
-              <B.FormGroup>
-                <B.InputGroup>
-                  <B.FormControl
-                    type="text"
-                    placeholder="Tìm kiếm"
-                    className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                  ></B.FormControl>
-                  <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
-                  </B.InputGroup.Text>
-                </B.InputGroup>
-              </B.FormGroup>
-              <B.FormGroup className="d-flex d-inline-block justify-content-between mt-2">
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo id"
-                />
-              </B.FormGroup>
-            </B.Form>
-          </B.Col>
         </B.Row>
-        <B.Button variant='primary' onClick={handleReload}>Refresh</B.Button>
         <B.Row className="pe-xl-5 mb-5">
           <B.Form onSubmit={submitNcc} id="formAddNCC">
             <B.Row>
@@ -222,7 +180,7 @@ const Ncc = () => {
         {/* table hien thi tai khoan */}
         <B.Row className="pe-xl-5">
           <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+            {/* <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
               <B.FormSelect
                 className="rounded-0 shadow-none"
                 style={{ width: "200px" }}
@@ -231,17 +189,17 @@ const Ncc = () => {
                 <option>Từ A-Z</option>
                 <option>Theo ID</option>
               </B.FormSelect>
-            </B.FormGroup>
+            </B.FormGroup> */}
             <B.Table className="table-borderless border border-secondary mb-0">
               <thead
                 className="text-dark"
                 style={{ backgroundColor: "#edf1ff" }}
               >
                 <tr>
-                  <th>
+                  {/* <th>
                     <input type="checkbox" />
-                  </th>
-                  <th>ID</th>
+                  </th> */}
+                  <th>STT</th>
                   <th>Tên nhà cung cấp</th>
                   <th>Số điện thoại</th>
                   <th>Địa chỉ</th>
@@ -249,14 +207,14 @@ const Ncc = () => {
                 </tr>
               </thead>
               <tbody>
-                {ncclist.map((NCC) => {
+                {ncclist.map((NCC, index) => {
                   return (
                     <>
-                      <tr>
-                        <td key={NCC.id}>
+                      <tr key={NCC.id}>
+                        {/* <td >
                           <input type="checkbox" />
-                        </td>
-                        <td>{NCC.id}</td>
+                        </td> */}
+                        <td>{index + 1}</td>
                         <td>{NCC.tenNCC}</td>
                         <td>{NCC.sdt}</td>
                         <td>{NCC.diaChi}</td>

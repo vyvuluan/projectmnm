@@ -56,31 +56,12 @@ function Index() {
 
         axios.post(`/api/kho/nsx`, data).then(res => {
             if (res.data.status === 200) {
+                setSubmitting(true);
                 swal('Success', res.data.message, 'success')
             }
         })
     }
 
-    // useEffect(() => {
-    //     let isMounted = true;
-    //     const controller = new AbortController();
-
-    //     axios.get(`http://localhost:8000/api/kho/nsx?page=${page}`).then((res) => {
-    //         if (isMounted) {
-    //             if (res.data.status === 200) {
-    //                 setNsxList(res.data.Nsx.data);
-    //                 setTotalPage(res.data.Nsx.total);
-    //                 setPerPage(res.data.Nsx.per_page);
-    //                 setCurrentPage(res.data.Nsx.current_page)
-    //             }
-    //         }
-    //     });
-
-    //     return () => {
-    //         isMounted = false;
-    //         controller.abort();
-    //     };
-    // }, [page]);
     const [submitting, setSubmitting] = useState(true)
 
     const getNsxData = useCallback(async () => {
@@ -118,25 +99,6 @@ function Index() {
                         <h1 className='fw-bold text-primary mb-4 text-capitalize'>QUẢN LÝ NHÀ SẢN XUẤT</h1>
                     </B.Col>
                     <B.Col lg={1}></B.Col>
-                    <B.Col lg={6}>
-                        <B.Form>
-                            <B.FormGroup>
-                                <B.InputGroup>
-                                    <B.FormControl
-                                        type="text"
-                                        placeholder="Tìm kiếm"
-                                        className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                                    ></B.FormControl>
-                                    <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                                        <FaSearch variant="primary" />
-                                    </B.InputGroup.Text>
-                                </B.InputGroup>
-                            </B.FormGroup>
-                            <B.FormGroup className='d-flex d-inline-block justify-content-between mt-2'>
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo id' />
-                            </B.FormGroup>
-                        </B.Form>
-                    </B.Col>
 
                 </B.Row>
 
@@ -153,18 +115,9 @@ function Index() {
                             </B.Col>
                             <B.Col lg={4}>
                                 <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100'>
-                                    {/* <B.Button variant='outline-primary' type='submit' className='rounded-0 py-2 mb-2 w-100' onClick={() => setSubmitting(true)}> */}
                                     <BsPersonPlusFill className='me-2' />
                                     Thêm nhà sản xuất
                                 </B.Button>
-                                {/* <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                                    <FaUserEdit className='me-2' />
-                                    Sửa nhà sản xuất
-                                </B.Button>
-                                <B.Button variant='outline-primary' className='rounded-0 py-2 mb-2 w-100'>
-                                    <AiOutlineUserDelete className='me-2' />
-                                    Xóa nhà sản xuất
-                                </B.Button> */}
                             </B.Col>
                         </B.Row>
                     </B.Form>
@@ -173,18 +126,18 @@ function Index() {
                 {/* table hien thi tai khoan */}
                 <B.Row className='pe-xl-5'>
                     <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
-                        <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
+                        {/* <B.FormGroup className='d-flex d-inline-block justify-content-between mb-2'>
                             <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>
                                 <option>Sắp xếp</option>
                                 <option>Từ A-Z</option>
                                 <option>Theo ID</option>
                             </B.FormSelect>
-                        </B.FormGroup>
+                        </B.FormGroup> */}
                         <B.Table className='table-borderless border border-secondary text-center mb-0'>
                             <thead className='text-dark' style={{ backgroundColor: '#edf1ff' }}>
                                 <tr>
-                                    <th><input type='checkbox' /></th>
-                                    <th>ID</th>
+                                    {/* <th><input type='checkbox' /></th> */}
+                                    <th>STT</th>
                                     <th>Tên nhà sản xuất</th>
                                     <th>Quốc gia</th>
                                     <th>Thao tác</th>
@@ -194,7 +147,7 @@ function Index() {
                                 {nsxlist && nsxlist.map((item, index) => {
                                     return (
                                         <tr key={item.id}>
-                                            <td className='align-middle'><input type='checkbox' /></td>
+                                            {/* <td className='align-middle'><input type='checkbox' /></td> */}
                                             <td className='align-middle'>{index + 1}</td>
                                             <td className='align-middle'>{item.tenNSX}</td>
                                             <td className='align-middle'>{item.quocGia}</td>

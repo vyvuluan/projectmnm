@@ -14,9 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('contacts', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->id();
+            $table->bigInteger('customer_id')->unsigned();
             $table->string('message');
+            $table->integer('status')->default(0)->length(1);
             $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

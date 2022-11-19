@@ -24,15 +24,15 @@ class PasswordResetController extends Controller
         $passwordReset = PasswordReset::updateOrCreate([
             'email' => $user->email,
         ], [
-           // 'token' => $user->createToken('token-name')->plainTextToken,
-             'token' => Str::random(60),
+            // 'token' => $user->createToken('token-name')->plainTextToken,
+            'token' => Str::random(60),
         ]);
         if ($passwordReset) {
             $user->notify(new ResetPasswordRequest($passwordReset->token));
         }
 
         return response()->json([
-        'message' => 'We have e-mailed your password reset link!'
+            'message' => 'Chúng tôi đã gửi cho bạn một email để reset lại mật khẩu vui lòng kiểm tra'
         ]);
     }
 
@@ -50,7 +50,7 @@ class PasswordResetController extends Controller
         // $user = User::where('email', $passwordReset->email)->firstOrFail();
         $password = Hash::make($request->password);
         $updatePasswordUser = User::where('email', $passwordReset->email)
-              ->update(['password' => $password]);
+            ->update(['password' => $password]);
         // $updatePasswordUser = $user->update($password);
         PasswordReset::where('token', $token)->delete();
         // $passwordReset->delete();

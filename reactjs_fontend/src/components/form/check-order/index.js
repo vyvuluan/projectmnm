@@ -1,73 +1,121 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
-import OrderDetail from "../order-detail";  
-import { Link } from "react-router-dom";
+import OrderDetail from "../order-detail";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import * as B from 'react-bootstrap'
+
+const checkStatus = [
+  { id: 0, name: 'Đơn hàng chờ xác nhận', icon: 'pe-7s-cart' },
+  { id: 1, name: 'Đơn hàng đã xác nhận', icon: 'pe-7s-config' },
+  { id: 2, name: 'Đang đóng gói', icon: 'pe-7s-medal' },
+  { id: 3, name: 'Đang vận chuyển', icon: 'pe-7s-car' },
+  { id: 4, name: 'Giao hàng thành công', icon: 'pe-7s-home' },
+  { id: 5, name: 'Đơn hàng đã hủy', icon: 'pe-7s-close-circle' },
+];
+
 const CheckOrder = () => {
-  
+  const { id } = useParams();
+  const [status, setStatus] = useState();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    axios.get(`/api/getStatusDH/${id}`).then(res => {
+      if (isMounted) {
+        if (res.status === 200) {
+          setStatus(res.data.donHang.status);
+        }
+      }
+      return () => isMounted = false;
+    })
+  }, [id]);
+
+  const check = (stt) => {
+    var x;
+    switch (stt) {
+      case 0: {
+        x = 'Chờ xác nhận';
+        break;
+      }
+      case 1: {
+        x = 'Đã xác nhận';
+        break;
+      }
+      case 2: {
+        x = 'Đang đóng gói';
+        break;
+      }
+      case 3: {
+        x = 'Đang vận chuyển';
+        break;
+      }
+      case 4: {
+        x = 'Giao hàng thành công';
+        break;
+      }
+      case 5: {
+        x = 'Đơn hàng đã hủy';
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    return x;
+  }
+
   return (
     <>
+      <B.Container fluid className="bg-secondary mb-5">
+        <div
+          className="d-flex flex-column align-items-center justify-content-center"
+          style={{ minHeight: "300px" }}
+        >
+          <h1 className="fw-semibold text-uppercase mb-3">Tình trạng đơn hàng</h1>
+          <div className="d-inline-flex">
+            <p className="m-0">
+              <Link to={"/"} className="text-decoration-none" variant="primary">
+                Home
+              </Link>
+            </p>
+            <p className="m-0 px-2">-</p>
+            <p className="m-0">
+              <Link to={"/myorder"} className="text-decoration-none" variant="primary">
+                Đơn hàng
+              </Link>
+            </p>
+            <p className="m-0 px-2">-</p>
+            <p className="m-0 text-muted">Tình trạng đơn hàng</p>
+          </div>
+        </div>
+      </B.Container>
+
       <div className="container padding-bottom-3x mb-5 mt-5">
         <form action="">
           <div className="card mb-3">
             <div className="p-4 text-center text-white text-lg bg-primary">
               <span className="text-uppercase">Đơn hàng số - </span>
-              <span className="text-medium">001698653lp</span>
+              <span className="text-medium">{id}</span>
             </div>
             <div className="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
               <div className="w-100 text-center py-1 px-2">
-                <span className="text-medium">Vận chuyển qua: </span> Grapp
-              </div>
-              <div className="w-100 text-center py-1 px-2">
-                <span className="text-medium">Tình Trạng: </span> Kiểm tra chất
-                lượng
-              </div>
-              <div className="w-100 text-center py-1 px-2">
-                <span className="text-medium">Ngày dự kiến: </span> APR 27, 2021
+                <span className="text-medium">Tình Trạng: </span> {check(status)}
               </div>
             </div>
 
             <div className="card-body">
               <div className="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
-                <div className="step completed">
-                  <div className="step-icon-wrap">
-                    <div className="step-icon">
-                      <i className="pe-7s-cart"></i>
+                {checkStatus.map((item, index) => (
+                  <div key={item.id} className={'step' + [status >= index ? ' completed' : '']}>
+                    <div className="step-icon-wrap">
+                      <div className="step-icon">
+                        <i className={item.icon}></i>
+                      </div>
                     </div>
+                    <h4 className="step-title">{item.name}</h4>
                   </div>
-                  <h4 className="step-title">Đơn hàng chờ xác nhận</h4>
-                </div>
-                <div className="step completed">
-                  <div className="step-icon-wrap">
-                    <div className="step-icon">
-                      <i className="pe-7s-config"></i>
-                    </div>
-                  </div>
-                  <h4 className="step-title">Đơn hàng đã xác nhận</h4>
-                </div>
-                <div className="step completed">
-                  <div className="step-icon-wrap">
-                    <div className="step-icon">
-                      <i className="pe-7s-medal"></i>
-                    </div>
-                  </div>
-                  <h4 className="step-title">Đang được vận chuyển</h4>
-                </div>
-                <div className="step">
-                  <div className="step-icon-wrap">
-                    <div className="step-icon">
-                      <i className="pe-7s-car"></i>
-                    </div>
-                  </div>
-                  <h4 className="step-title">Đã thanh toán</h4>
-                </div>
-                <div className="step">
-                  <div className="step-icon-wrap">
-                    <div className="step-icon">
-                      <i className="pe-7s-home"></i>
-                    </div>
-                  </div>
-                  <h4 className="step-title">Sản phẩm đã được giao</h4>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -82,12 +130,12 @@ const CheckOrder = () => {
                 Thông báo cho tôi khi đơn hàng được giao
               </label> */}
             </div>
-            <div className="text-left text-sm-right">
+            {/* <div className="text-left text-sm-right">
               <Link className="btn btn-outline-primary btn-rounded btn-sm " to={`/OrderDetail`}>
                 Xem chi tiết đơn hàng
               </Link>
 
-            </div>
+            </div> */}
           </div>
         </form>
       </div>

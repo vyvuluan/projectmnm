@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('ten')->nullable();
             $table->date('ngaySinh')->nullable();
             $table->string('diaChi')->nullable();
-            $table->integer('sdt')->nullable();
-            $table->integer('gioiTinh')->nullable();
+            $table->string('sdt',10)->nullable();
+            $table->integer('gioiTinh')->nullable()->length(1);
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

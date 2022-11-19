@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import product1 from "../../../img/product-1.jpg";
 import * as Bt from "react-bootstrap";
 import axios from "axios";
+import Cookies from "universal-cookie";
 import AccountEdit from "./accountEdit";
 import ChangePassAccount from "./changePassAccount";
 
 const AccountInfo = () => {
+  const [auth, setAuth] = useState();
   const [userName, setUserName] = useState();
   const [sex, setSex] = useState();
   const [address, setAddress] = useState();
@@ -15,8 +17,12 @@ const AccountInfo = () => {
   const [showPass, setShowPass] = useState(false);
   const [bird, setBird] = useState();
   const [accountData, setAccountData] = useState();
+  const [submitting, setSubmitting] = useState(true);
   //show đổi tài khoản
-  const handleClose = () => setShow((prev) => !prev);
+  const handleClose = () => {
+    setSubmitting(true);
+    setShow((prev) => !prev);
+  }
 
   const handleShow = () => {
     setShow(true);
@@ -27,24 +33,45 @@ const AccountInfo = () => {
   const handleShowChangePass = () => {
     setShowPass(true);
   };
-  useEffect(() => {
-    axios.get("api/detailUser").then((res) => {
-      // console.log(res.data.data_user.customer.sdt)
-      setAccountData(res.data.data_user)
+
+  // useEffect(() => {
+  //   axios.get("api/detailUser").then((res) => {
+  //     setAccountData(res.data.data_user);
+  //     setEmailUser(res.data.data_user.email);
+  //     setUserName(res.data.data_user.customer.ten);
+  //     setSex(res.data.data_user.customer?.gioiTinh);
+  //     setAddress(res.data.data_user.customer?.diaChi);
+  //     setPhone(res.data.data_user.customer?.sdt);
+  //     setBird(res.data.data_user.customer?.ngaySinh)
+
+  //   });
+  // }, []);
+
+  const getUserData = useCallback(async () => {
+    const res = await axios.get("api/detailUser")
+    if (res.data.status === 200) {
+      setAccountData(res.data.data_user);
       setEmailUser(res.data.data_user.email);
-      setUserName(res.data.data_user.username);
+      setUserName(res.data.data_user.customer.ten);
       setSex(res.data.data_user.customer?.gioiTinh);
       setAddress(res.data.data_user.customer?.diaChi);
       setPhone(res.data.data_user.customer?.sdt);
       setBird(res.data.data_user.customer?.ngaySinh)
+    }
+  }, [])
 
-    });
+  useEffect(() => {
+    getUserData().then(() => setSubmitting(false));
+  }, [submitting, getUserData])
+
+  var Male = "Nam";
+  var Female = "Nữ";
+
+  useEffect(() => {
+    setAuth(localStorage.getItem("auth_fullname"));
   }, []);
-  
-  var Male = "nam";
-  var Female = "nữ";
 
-  
+
   return (
     <>
       <Bt.Modal show={show} onHide={handleClose}>
@@ -52,7 +79,7 @@ const AccountInfo = () => {
           <Bt.ModalTitle>Sửa tài khoản</Bt.ModalTitle>
         </Bt.ModalHeader>
         <Bt.ModalBody>
-          <AccountEdit accountData = {accountData}  showModal={handleClose} />
+          <AccountEdit accountData={accountData} showModal={handleClose} />
         </Bt.ModalBody>
         <Bt.ModalFooter className="bg-secondary">
           <Bt.Button
@@ -124,20 +151,24 @@ const AccountInfo = () => {
             <h6 className="text-muted mb-3">{phone}</h6>
             <h4 className="text-dark fw-semibold mb-3">Email</h4>
             <h6 className="text-muted mb-3">{emailUser}</h6>
-            <Bt.Button
-              variant="primary"
-              className="rounded-0 py-2 me-3 mt-3"
-              onClick={() => handleShow()}
-            >
-              Chỉnh sửa thông tin
-            </Bt.Button>
-            <Bt.Button
-              variant="primary"
-              className="rounded-0 py-2 mt-3"
-              onClick={() => handleShowChangePass()}
-            >
-              Đổi mật khẩu
-            </Bt.Button>
+            {!auth ?
+              null :
+              <>
+                <Bt.Button
+                  variant="primary"
+                  className="rounded-0 py-2 me-3 mt-3"
+                  onClick={() => handleShow()}
+                >
+                  Chỉnh sửa thông tin
+                </Bt.Button>
+                <Bt.Button
+                  variant="primary"
+                  className="rounded-0 py-2 mt-3"
+                  onClick={() => handleShowChangePass()}
+                >
+                  Đổi mật khẩu
+                </Bt.Button>
+              </>}
           </Bt.Col>
         </Bt.Row>
       </Bt.Container>

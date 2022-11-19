@@ -1,36 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as B from "react-bootstrap";
-import { BsPersonPlusFill } from "react-icons/bs";
+import { AiFillEye } from "react-icons/ai";
 import { FaUserEdit, FaSearch } from "react-icons/fa";
-import { AiOutlineUserDelete } from "react-icons/ai";
+import { MdDeleteForever } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
 import Cookies from "universal-cookie";
-
+import ViewAccount from "./viewAccount";
+import swal from "sweetalert";
+import Pagination from "../../form/pagination";
+import LoadingPage from "../../layouts/Loading";
 const Account = () => {
   const cookies = new Cookies();
   const [user, setUser] = useState([]);
+  const [viewAcc, setViewAcc] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow((prev) => !prev);
+  const handleShow = (item) => {
+    // console.log(item);
+    setViewAcc(item);
+    setShow(true);
+  };
   const [addAccount, setAddAccount] = useState({
     username: "",
     email: "",
     password: "",
     role_id: "",
   });
-  const handleInput = (e) => {
-    e.persist();
-    setAddAccount({ ...addAccount, [e.target.name]: e.target.value });
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [perPage, setPerPage] = useState();
+  const [currentPage, setCurrentPage] = useState();
+  const handlePerPage = (page) => {
+    setPage(page);
   };
 
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPage / perPage); i++) {
+    pageNumbers.push(i);
+  }
   //   hiển thị ds user
 
   useEffect(() => {
     // const controller = new AbortController();
     if (cookies.get("role_id") == 2) {
       axios
-        .get("/api/admin/manageUser")
+        .get(`/api/admin/manageUser?page=${page}`)
         .then((res) => {
-          // console.log(res.data.users.data);
+          // console.log(res);
           setUser(res.data.users.data);
+          setTotalPage(res.data.users.total);
+          setPerPage(res.data.users.per_page);
+          setCurrentPage(res.data.users.current_page);
+          setLoading(false)
         })
         .catch(function (error) {
           // handle error
@@ -43,119 +69,132 @@ const Account = () => {
         .then((res) => {
           // console.log(res.data.users.data);
           setUser(res.data.users.data);
+          setLoading(false)
+
         })
         .catch(function (error) {
           // handle error
           console.log(error);
         });
     }
-  }, []);
+  }, [page]);
+  const [submitting, setSubmitting] = useState(true);
+
+  const refresh = useCallback(async () => {
+    if (cookies.get("role_id") == 2) {
+
+      const res = await axios.get(`/api/admin/manageUser?page=${page}`);
+      setUser(res.data.users.data);
+      setTotalPage(res.data.users.total);
+      setPerPage(res.data.users.per_page);
+      setCurrentPage(res.data.users.current_page);
+    }
+    else if (cookies.get("role_id") == 4) {
+      const res = await axios.get(`/api/nhanvien/manageUser?page=${page}`);
+      setUser(res.data.users.data);
+      setTotalPage(res.data.users.total);
+      setPerPage(res.data.users.per_page);
+      setCurrentPage(res.data.users.current_page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    refresh().then(() => setSubmitting(false));
+  }, [submitting, refresh]);
+
+  const handleDeleteAccount = (item) => {
+    // console.log(item.id);
+    const id = item.id;
+    swal({
+      title: "Bạn chắc chứ?",
+      text: "Xóa tài khoản sẽ không thể hoàn tác",
+      buttons: {
+        catch: {
+          text: "Xóa tài khoản",
+          value: "catch",
+        },
+        no: {
+          text: "Hủy bỏ",
+          value: "no",
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "catch":
+          if (cookies.get("role_id") == 2) {
+            axios
+              .delete(`/api/admin/manageUser/${id}`)
+              .then((res) => {
+                // console.log(res.data);
+                if (res.data.status === 200) {
+                  swal({
+                    title: res.data.message,
+                    icon: "success",
+                    button: "đóng",
+                  });
+                  setSubmitting(true);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          } else if (cookies.get("role_id") == 4) {
+            axios
+              .delete(`/api/nhanvien/manageUser/${id}`)
+              .then((res) => {
+                // console.log(res.data);
+                if (res.data.status === 200) {
+                  swal({
+                    title: res.data.message,
+                    icon: "success",
+                    button: "đóng",
+                  });
+                  setSubmitting(true);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          } break;
+        default:
+          break;
+
+      }
+    });
+  };
+
   var htmlRole;
+  var htmlStatus;
   return (
     <>
+      <B.Modal show={show} onHide={handleClose}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>Sửa tài khoản</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <ViewAccount
+            viewAcc={viewAcc}
+            showModal={handleClose}
+            setSubmitting={setSubmitting}
+          />
+        </B.ModalBody>
+      </B.Modal>
       <B.Container fluid>
         <B.Row className="pe-xl-5 mb-4">
-          <B.Col lg={4}>
+          <B.Col lg={6}>
             <h1 className="fw-bold text-primary mb-4 text-capitalize">
               QUẢN LÝ TÀI KHOẢN
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          <B.Col lg={6}>
-            <B.Form>
-              <B.FormGroup>
-                <B.InputGroup>
-                  <B.FormControl
-                    type="text"
-                    placeholder="Tìm kiếm"
-                    className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                  ></B.FormControl>
-                  <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                    <FaSearch variant="primary" />
-                  </B.InputGroup.Text>
-                </B.InputGroup>
-              </B.FormGroup>
-              <B.FormGroup className="d-flex d-inline-block justify-content-between mt-2">
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo id"
-                />
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo username"
-                />
-                <B.FormCheck
-                  type="checkbox"
-                  className="rounded-0"
-                  label="Theo email"
-                />
-                <B.FormSelect className="w-25 rounded-0 shadow-none">
-                  <option>Administrator</option>
-                  <option>Thủ kho</option>
-                  <option>Nhân viên</option>
-                </B.FormSelect>
-              </B.FormGroup>
-            </B.Form>
-          </B.Col>
-        </B.Row>
-
-        <B.Row className="pe-xl-5 mb-5">
-          <B.Col lg={8}>
-            <B.Form>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Username"
-                ></B.FormControl>
-              </B.FormGroup>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Email"
-                ></B.FormControl>
-              </B.FormGroup>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Mật khẩu"
-                ></B.FormControl>
-              </B.FormGroup>
-              <B.FormGroup>
-                <B.FormControl
-                  type="text"
-                  className="rounded-0 shadow-none mb-3"
-                  placeholder="Quyền"
-                ></B.FormControl>
-              </B.FormGroup>
-            </B.Form>
-          </B.Col>
-          <B.Col lg={4}>
-            <B.Button
-              variant="outline-primary"
-              className="rounded-0 py-2 mb-2 w-100"
-            >
-              <FaUserEdit className="me-2" />
-              Sửa tài khoản
-            </B.Button>
-            <B.Button
-              variant="outline-primary"
-              className="rounded-0 py-2 mb-2 w-100"
-            >
-              <AiOutlineUserDelete className="me-2" />
-              Xóa tài khoản
-            </B.Button>
-          </B.Col>
         </B.Row>
 
         {/* table hien thi tai khoan */}
         <B.Row className="pe-xl-5">
           <B.Col lg className="d-grd gap-2 mx-auto table-responsive mb-5">
-            <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
+            {/* <B.FormGroup className="d-flex d-inline-block justify-content-between mb-2">
               <B.FormSelect
                 className="rounded-0 shadow-none"
                 style={{ width: "200px" }}
@@ -165,22 +204,21 @@ const Account = () => {
                 <option>Theo ID</option>
                 <option>Theo quyền</option>
               </B.FormSelect>
-            </B.FormGroup>
-            <B.Table className="table-borderless border border-secondary text-center mb-0">
+            </B.FormGroup> */}
+            <B.Table className="table-borderless border border-secondary mb-0">
               <thead
                 className="text-dark"
                 style={{ backgroundColor: "#edf1ff" }}
               >
                 <tr>
-                  <th>
-                    <input type="checkbox" />
-                  </th>
-                  <th>ID</th>
+                  <th>STT</th>
                   <th>Username</th>
                   <th>Email</th>
 
                   <th>Quyền</th>
-                  <th>Thao tác</th>
+                  <th>Hoạt động</th>
+
+                  <th className="text-center">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="align-middle">
@@ -212,26 +250,69 @@ const Account = () => {
                       </td>
                     );
                   }
+                  if (item.status == 1) {
+                    htmlStatus = (
+                      <>
+                        <td
+                          className="align-middle fw-bold"
+                          style={{ color: "#379237" }}
+                        >
+                          ON
+                        </td>
+                      </>
+                    );
+                  } else {
+                    htmlStatus = (
+                      <>
+                        <td
+                          className="align-middle fw-bold"
+                          style={{ color: "#cecece" }}
+                        >
+                          OFF
+                        </td>
+                      </>
+                    );
+                  }
                   return (
-                    <tr>
-                      <td className="align-middle">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="align-middle">{item.id}</td>
+                    <tr key={item.id}>
+                      <td className="align-middle">{index + 1}</td>
                       <td className="align-middle">{item.username}</td>
                       <td className="align-middle">{item.email}</td>
 
                       {htmlRole}
-                      <td className="align-middle fs-5 text-primary">
-                        <BiEdit />
+                      {htmlStatus}
+
+                      <td className="text-center fs-5 text-primary">
+                        <AiFillEye
+                          type="button"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Xem chi tiết "
+                          style={{ marginRight: "15px" }}
+                          onClick={() => handleShow(item)}
+                        />
+
+                        <MdDeleteForever
+                          type="button"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Xóa tài khoản"
+                          onClick={() => handleDeleteAccount(item)}
+                        />
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </B.Table>
+            {loading ? <LoadingPage /> : null}
           </B.Col>
         </B.Row>
+        <Pagination
+          currentPage={currentPage}
+          totalPage={pageNumbers}
+          handlePerPage={handlePerPage}
+        />
       </B.Container>
     </>
   );

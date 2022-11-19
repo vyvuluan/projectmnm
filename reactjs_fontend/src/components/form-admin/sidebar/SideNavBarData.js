@@ -4,13 +4,15 @@ import * as AiI from "react-icons/ai";
 import * as IoI from "react-icons/io";
 import * as RiI from "react-icons/ri";
 import * as HiI from "react-icons/hi";
+import { FaProductHunt } from "react-icons/fa"
 import { AiOutlineContacts } from "react-icons/ai";
+import { TbDiscount2 } from 'react-icons/tb'
 import {
   MdOutlineManageAccounts,
   MdOutlineRequestPage,
   MdOutlineInput,
 } from "react-icons/md";
-import { BiBuildingHouse } from "react-icons/bi";
+import { BiBuildingHouse, BiCategory } from "react-icons/bi";
 //báo cáo 234
 //sp 3
 //lien he 4
@@ -39,8 +41,21 @@ export const SideNavBarData = [
     path: "/products",
     icon: <FaI.FaBoxOpen />,
     link: `/Products`,
+    id_role: [3, 4]
+  },
+  {
+    title: "Loại Sản Phẩm",
+    path: "/loaisp",
+    icon: <BiCategory />,
+    link: "/loaisp",
     id_role: [3]
-
+  },
+  {
+    title: "Khuyến mại",
+    path: "/discount",
+    icon: <TbDiscount2 />,
+    link: "/discount",
+    id_role: [4]
   },
   {
     title: "Liên hệ",
@@ -90,9 +105,16 @@ export const SideNavBarData = [
 
   },
   {
+    title: "Đơn hàng",
+    path: "/donhang",
+    icon: <MdOutlineRequestPage />,
+    link: "/Donhang",
+    id_role: [4]
+  },
+  {
     title: "Phiếu xuất",
     path: "/phieuxuat",
-    icon: <MdOutlineRequestPage />,
+    icon: <FaProductHunt />,
     link: "/Phieuxuat",
     id_role: [3]
   },

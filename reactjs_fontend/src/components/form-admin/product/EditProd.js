@@ -1,20 +1,24 @@
 import axios from 'axios';
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import * as B from 'react-bootstrap'
 import swal from 'sweetalert';
 import { Editor } from "@tinymce/tinymce-react";
 
-const Prodedit = ({ product, showModal }) => {
+const Prodedit = ({ product, showModal, category, roleID }) => {
 
-    const editorRef = useRef(null);
+    console.log(roleID);
+
+    const [picture, setPicture] = useState([]);
+    const [previewIMG, setPreviewIMG] = useState();
     const [mota, setMota] = useState(product.moTa);
     const [ctsp, setCtsp] = useState(product.ctSanPham);
     const [tabkey, setTabKey] = useState(1);
+    const [newCate, setNewCate] = useState(product.loaisp.id);
+    const editorRef = useRef(product.moTa);
 
     const id = product.id;
     const [prodEdit, setProdEdit] = useState({
         tenSP: product.tenSP,
-        sl: product.soLuongSP,
         gia: product.gia,
         loaisp: product.maLoai,
         baohanh: product.baoHanh,
@@ -22,12 +26,28 @@ const Prodedit = ({ product, showModal }) => {
         nsx: product.maNSX,
     });
 
+    useEffect(() => {
+        return () => {
+            previewIMG && URL.revokeObjectURL(previewIMG.preview);
+        };
+    }, [previewIMG]);
+
+    const handleImage = (e) => {
+        setPicture({ image: e.target.files[0] });
+
+        const file = e.target.files[0];
+
+        file.preview = URL.createObjectURL(file);
+
+        setPreviewIMG(file);
+    };
+
     const handleMotaChange = (value) => {
-        setMota({ moTa: value });
+        setMota([value]);
     }
 
     const handleCTSPChange = (value) => {
-        setCtsp({ ctSanPham: value })
+        setCtsp([value])
     }
 
     const handleProductChange = (e) => {
@@ -38,25 +58,38 @@ const Prodedit = ({ product, showModal }) => {
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        const data = {
-            tenSP: prodEdit.tenSP,
-            soLuongSP: prodEdit.sl,
-            gia: prodEdit.gia,
-            baoHanh: prodEdit.baohanh,
-            maLoai: prodEdit.loaisp,
-            maNCC: prodEdit.ncc,
-            maNSX: prodEdit.nsx,
-            moTa: mota.moTa,
-            ctSanPham: ctsp.ctSanPham,
-        }
+        const formData = new FormData();
+        // if (previewIMG !== null) {
+        formData.set("hinh", picture.image);
+        // }
+        formData.set("maLoai", newCate);
+        formData.set("tenSP", prodEdit.tenSP);
+        formData.set("gia", prodEdit.gia);
+        formData.set("maNCC", prodEdit.ncc);
+        formData.set("maNSX", prodEdit.nsx);
+        formData.set("moTa", mota);
+        formData.set("baoHanh", prodEdit.baohanh);
+        formData.set("ctSanPham", ctsp);
 
-        axios.put(`/api/kho/products/${id}`, data).then(res => {
-            if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success')
-            } else if (res.data.status === 404) {
-                swal('Error', res.data.message, 'error')
-            }
-        })
+        if (roleID === '4') {
+            axios.post(`/api/nhanvien/products/${id}?_method=PUT`, formData).then(res => {
+                if (res.data.status === 200) {
+                    swal('Success', res.data.message, 'success')
+                    showModal();
+                } else if (res.data.status === 404) {
+                    swal('Error', res.data.message, 'error')
+                }
+            })
+        } else if (roleID === '3') {
+            axios.post(`/api/kho/products/update/${id}`, formData).then(res => {
+                if (res.data.status === 200) {
+                    swal('Success', res.data.message, 'success')
+                    showModal();
+                } else if (res.data.status === 404) {
+                    swal('Error', res.data.message, 'error')
+                }
+            })
+        }
     }
 
     return (
@@ -66,54 +99,61 @@ const Prodedit = ({ product, showModal }) => {
                 onSelect={(k) => setTabKey(k)}
             >
                 <B.Tab eventKey={1} title="Thông tin sản phẩm" className=" border border-top-0 py-3 px-3">
-                    <B.Form onSubmit={handleUpdate}>
-                        <B.FormGroup>
-                            <B.FormLabel>Tên sản phẩm</B.FormLabel>
-                            <B.FormControl type='text' name='tenSP' className='rounded-0 shadow-none mb-3' placeholder='Tên sản phẩm'
-                                value={prodEdit.tenSP} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        <B.FormGroup>
-                            <B.FormLabel>Số Lượng</B.FormLabel>
-                            <B.FormControl type='text' name='sl' className='rounded-0 shadow-none mb-3' placeholder='Số Lượng'
-                                value={prodEdit.sl} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        <B.FormGroup>
-                            <B.FormLabel>Giá</B.FormLabel>
-                            <B.FormControl type='text' name='gia' className='rounded-0 shadow-none mb-3' placeholder='Giá'
-                                value={prodEdit.gia} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        {/* <B.FormGroup>
-                            <B.FormLabel>Loại sản phẩm</B.FormLabel>
-                            <B.FormControl type='text' name='loaisp' className='rounded-0 shadow-none mb-3' placeholder='Loại sản phẩm'
-                                value={prodEdit.loaisp} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup> */}
-                        <B.FormGroup>
-                            <B.FormLabel>Bảo Hành</B.FormLabel>
-                            <B.FormControl type='text' name='baohanh' className='rounded-0 shadow-none mb-3' placeholder='Bảo Hành'
-                                value={prodEdit.baohanh} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        {/* <B.FormGroup>
-                            <B.FormLabel>Nhà cung cấp</B.FormLabel>
-                            <B.FormControl type='text' name='ncc' className='rounded-0 shadow-none mb-3' placeholder='Nhà cung cấp'
-                                value={prodEdit.ncc} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup>
-                        <B.FormGroup>
-                            <B.FormLabel>Nhà sản xuất</B.FormLabel>
-                            <B.FormControl type='text' name='nsx' className='rounded-0 shadow-none mb-3' placeholder='Nhà sản xuất'
-                                value={prodEdit.nsx} onChange={handleProductChange}></B.FormControl>
-                        </B.FormGroup> */}
-                        <B.Button variant='primary' type='submit' className='rounded-0 w-100' onClick={showModal}>Lưu thay đổi</B.Button>
+                    <B.Form>
+                        <B.Row>
+                            <B.Col lg={4}>
+                                {previewIMG && previewIMG !== null ?
+                                    <div className="prev-container mb-4">
+                                        {<img src={previewIMG.preview} alt=""></img>}
+                                    </div>
+                                    : <div className="prev-container mb-2 me-2">
+                                        {<img src={`http://localhost:8000/uploadhinh/${product.hinh}`} alt=""></img>}
+                                    </div>}
+                                <B.FormGroup className="">
+                                    <B.FormControl
+                                        type="file"
+                                        name="image"
+                                        onChange={handleImage}
+                                        className="rounded-0 shadow-none mb-3"
+                                    ></B.FormControl>
+                                </B.FormGroup>
+                            </B.Col>
+                            <B.Col lg={8}>
+                                <B.FormGroup>
+                                    <B.FormLabel>Tên sản phẩm</B.FormLabel>
+                                    <B.FormControl type='text' name='tenSP' className='rounded-0 shadow-none mb-3 w-100' placeholder='Tên sản phẩm'
+                                        value={prodEdit.tenSP} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Loại sản phẩm</B.FormLabel>
+                                    <B.FormSelect
+                                        onChange={(e) => setNewCate(e.target.value)}
+                                        value={newCate}
+                                        className="rounded-0 shadow-none mb-3 w-100">
+                                        {category.map(item => (
+                                            <option value={item.id} key={item.id}>{item.tenLoai}</option>
+                                        ))}
+                                    </B.FormSelect>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Giá</B.FormLabel>
+                                    <B.FormControl type='text' name='gia' className='rounded-0 shadow-none mb-3' placeholder='Giá'
+                                        value={prodEdit.gia} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Bảo Hành</B.FormLabel>
+                                    <B.FormControl type='text' name='baohanh' className='rounded-0 shadow-none mb-3' placeholder='Bảo Hành'
+                                        value={prodEdit.baohanh} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                            </B.Col>
+                        </B.Row>
                     </B.Form>
                 </B.Tab>
                 <B.Tab eventKey={2} title="Mô tả sản phẩm" className=" border border-top-0 py-3 px-3">
                     <Editor
-                        apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                        apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleMotaChange}
-                        onInit={(evt, editor) => {
-                            editorRef.current = editor
-                        }}
                         initialValue={mota}
-                        // value={mota}
                         init={{
                             height: 500,
                             menubar: false,
@@ -172,7 +212,7 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
                 <B.Tab eventKey={3} title="Chi tiết sản phẩm" className=" border border-top-0 py-3 px-3">
                     <Editor
-                        apiKey="9h1x1877ytvzphzr5xx9vfz2454i9j6kvn1pq8hyd9le04yl"
+                        apiKey="a8nb9uaw0lp4od36nbcunv8as7dlqf8udfnatman56onjtpv"
                         onEditorChange={handleCTSPChange}
                         onInit={(evt, editor) => {
                             editorRef.current = editor
@@ -208,6 +248,7 @@ const Prodedit = ({ product, showModal }) => {
                 </B.Tab>
             </B.Tabs>
 
+            <B.Button variant='primary' type='submit' className='rounded-0 pull-right mt-2' onClick={handleUpdate}>Lưu thay đổi</B.Button>
         </>
     )
 }

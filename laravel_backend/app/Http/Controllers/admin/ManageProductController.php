@@ -5,10 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Validator;
-use App\Models\loaisp;
-//use App\Http\Resources\ProductResource;
-use App\Models\Product as ModelsProduct;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -21,23 +18,18 @@ class ManageProductController extends Controller
      */
     public function index()
     {
-         //$product= new Product ;
-         //return $product::all(Product::paginate(2));
-
-         $prd = Product::paginate();
-         return $prd;
-        //return ProductResource::collection(Product::paginate(2));
+        $prd = Product::orderBy('id', 'desc')->paginate(8);
+        return $prd;
     }
     public function ctsp($product)
     {
-        $SP=Product::find($product);
-        $tenLoai= $SP->loaisp->tenLoai;
+        $SP = Product::find($product);
+        $tenLoai = $SP->loaisp->tenLoai;
         $product = Product::find($product);
         return response()->json([
-            'sanPham'=>$product,
-            'tenLoai'=>$tenLoai,
-            ]);
-
+            'sanPham' => $product,
+            'tenLoai' => $tenLoai,
+        ]);
     }
 
     /**
@@ -47,7 +39,6 @@ class ManageProductController extends Controller
      */
     public function create($product)
     {
-
     }
 
     /**
@@ -58,50 +49,59 @@ class ManageProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'tenSP' =>'required',
-            'soLuongSP' =>'required|numeric',
-            'maNSX' =>'required|max:10',
-            'maNCC' =>'required|max:10',
-            'gia' =>'required|numeric',
-            'baoHanh' =>'required|numeric',
-            'moTa' =>'required',
-            'ctSanPham' =>'required',
+        $validator = Validator::make($request->all(), [
+            'tenSP' => 'required',
+            //'soLuongSP' => 'required|numeric',
+            'maNSX' => 'required|max:10',
+            'maNCC' => 'required|max:10',
+            'gia' => 'required|numeric',
+            'baoHanh' => 'required|numeric',
+            'moTa' => 'required',
+            'ctSanPham' => 'required',
+            'maLoai' => 'required'
+        ], [
+
+            'tenSP.required' => 'Ô tên sản phẩm không được bỏ trống',
+            //'soLuongSP.numeric' => 'Ô số lượng phải là số',
+            //'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
+            'maNSX.required' => 'Ô maNSX không được bỏ trống',
+            'maNCC.required' => 'Ô maNCC không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'baoHanh.numeric' => 'Ô bảo hành phải là số',
+            'baoHanh.required' => 'Ô bảo hành không được bỏ trống',
+            'moTa.required' => 'Ô mô tả không được bỏ trống',
+            'ctSanPham.required' => 'Ô ctSanPham không được bỏ trống',
+            'maLoai.required' => 'Ô mã loại không được bỏ trống',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $product = new Product();
             //$product->maSP = $request->maSP;
             $product->tenSP = $request->tenSP;
-            $product->soLuongSP = $request->soLuongSP;
+            //$product->soLuongSP = $request->soLuongSP;
             $product->maLoai = $request->maLoai;
             $product->maNSX = $request->maNSX;
             $product->maNCC = $request->maNCC;
             $product->gia = $request->gia;
             $product->baoHanh = $request->baoHanh;
-            $product->moTa= $request->moTa;
-            $product->ctSanPham= $request->ctSanPham;
-            if($request->hasFile('hinh'))
-            {
+            $product->moTa = $request->moTa;
+            $product->ctSanPham = $request->ctSanPham;
+            if ($request->hasFile('hinh')) {
                 $hinh = $request->file('hinh');
-                $ext= $hinh->getClientOriginalExtension();
-                $name = time().'_'.$hinh->getClientOriginalName();
-                Storage::disk('public')->put($name,File::get($hinh));
-                $product->hinh=$name;
-            }else{
-                $product->hinh='default.jpg';
+                $ext = $hinh->getClientOriginalExtension();
+                $name = time() . '_' . $hinh->getClientOriginalName();
+                Storage::disk('public')->put($name, File::get($hinh));
+                $product->hinh = $name;
             }
             $product->save();
             return response()->json([
-                'status'=>200,
-                'message'=>'Thêm sản phẩm thành công ',
+                'status' => 200,
+                'message' => 'Thêm sản phẩm thành công ',
             ]);
         }
     }
@@ -112,10 +112,8 @@ class ManageProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Product $product)
+    public function show(Product $product)
     {
-
-        return new ProductResource($product);
     }
 
     /**
@@ -128,9 +126,9 @@ class ManageProductController extends Controller
     {
         $product = Product::find($id);
         return response()->json([
-            'status'=>200,
-            'product'=>$product,
-            ]);
+            'status' => 200,
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -140,62 +138,68 @@ class ManageProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$product)
+    public function update(Request $request, $product)
     {
-        $validator = Validator::make($request->all(),[
-            'tenSP' =>'required',
-            'soLuongSP' =>'required|numeric',
-            'maNSX' =>'required|max:10',
-            'maNCC' =>'required|max:10',
-            'gia' =>'required|numeric',
-            'baoHanh' =>'required|numeric',
-            'moTa' =>'required',
-            'ctSanPham' =>'required',
+        $validator = Validator::make($request->all(), [
+            'tenSP' => 'required',
+            //'soLuongSP' => 'required|numeric',
+            'maNSX' => 'required|max:10',
+            'maNCC' => 'required|max:10',
+            'gia' => 'required|numeric',
+            'baoHanh' => 'required|numeric',
+            'moTa' => 'required',
+            'ctSanPham' => 'required',
+            'maLoai' => 'required'
+        ], [
+
+            'tenSP.required' => 'Ô tên sản phẩm không được bỏ trống',
+            //'soLuongSP.numeric' => 'Ô số lượng phải là số',
+            //'soLuongSP.required' => 'Ô số lượng phải không được bỏ trống',
+            'maNSX.required' => 'Ô maNSX không được bỏ trống',
+            'maNCC.required' => 'Ô maNCC không được bỏ trống',
+            'gia.numeric' => 'Ô giá phải là số',
+            'gia.required' => 'Ô giá không được bỏ trống',
+            'baoHanh.numeric' => 'Ô bảo hành phải là số',
+            'baoHanh.required' => 'Ô bảo hành không được bỏ trống',
+            'moTa.required' => 'Ô mô tả không được bỏ trống',
+            'ctSanPham.required' => 'Ô ctSanPham không được bỏ trống',
+            'maLoai.required' => 'Ô mã loại không được bỏ trống',
         ]);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>400,
-                'error'=>$validator->messages(),
+                'status' => 400,
+                'error' => $validator->messages(),
             ]);
-        }
-        else
-        {
+        } else {
             $product =  Product::find($product);
-            if($product)
-            {
+            if ($product) {
                 $product->tenSP = $request->tenSP;
-                $product->soLuongSP = $request->soLuongSP;
+                //$product->soLuongSP = $request->soLuongSP;
                 $product->maLoai = $request->maLoai;
                 $product->maNSX = $request->maNSX;
                 $product->maNCC = $request->maNCC;
                 $product->gia = $request->gia;
                 $product->baoHanh = $request->baoHanh;
-                $product->moTa= $request->moTa;
-                $product->ctSanPham= $request->ctSanPham;
-                if($request->hasFile('hinh'))
-                {
+                $product->moTa = $request->moTa;
+                $product->ctSanPham = $request->ctSanPham;
+                if ($request->hasFile('hinh')) {
+                    //unlink('public/uploadhinh/' . $product->hinh);
                     $hinh = $request->file('hinh');
-                    $ext= $hinh->getClientOriginalExtension();
-                    $name = time().'_'.$hinh->getClientOriginalName();
-                    Storage::disk('../public')->put($name,File::get($hinh));
-                    $product->hinh=$name;
-                }else{
-                    $product->hinh='default.jpg';
+                    $ext = $hinh->getClientOriginalExtension();
+                    $name = time() . '_' . $hinh->getClientOriginalName();
+                    Storage::disk('public')->put($name, File::get($hinh));
+                    $product->hinh = $name;
                 }
-                $product->save();
+                $product->update();
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Cập nhật thành công',
-                    ]);
-            }
-            else
-            {
+                    'status' => 200,
+                    'message' => 'Cập nhật thành công',
+                ]);
+            } else {
                 return response()->json([
-                    'status'=>200,
-                    'message'=>'Không tìm thấy sản phẩm',
-                    ]);
-
+                    'status' => 200,
+                    'message' => 'Không tìm thấy sản phẩm',
+                ]);
             }
         }
     }
@@ -209,49 +213,47 @@ class ManageProductController extends Controller
     public function destroy($product)
     {
         $product = Product::find($product);
-        if($product)
-        {
+        if ($product) {
             $product->delete();
             return response()->json([
-                'status'=>200,
-                'message'=>'Xoá thành công',
-                ]);
-        }
-        else
-        {
+                'status' => 200,
+                'message' => 'Xoá thành công',
+            ]);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'Không tìm thấy sản phẩm cần xoá',
-                ]);
+                'status' => 404,
+                'message' => 'Không tìm thấy sản phẩm cần xoá',
+            ]);
         }
     }
+    //search tất cả
     public function search(Request $request)
     {
         $key = $request->key;
-         $product_query =  Product::with('loaisp');
-         $product_query
-         ->where('tenSP','LIKE','%'.$key.'%')
-         ->orwhere('moTa','LIKE','%'.$key.'%')
-         ->orwhere('ctSanPham','LIKE','%'.$key.'%')
-         ->orwhereHas('loaisp',function($query) use ($key){
-            $query->where('tenLoai','LIKE','%'.$key.'%');
+        $product_query =  Product::with('loaisp');
+        $product_query
+            ->where('tenSP', 'LIKE', '%' . $key . '%')
+            ->orwhere('moTa', 'LIKE', '%' . $key . '%')
+            ->orwhere('ctSanPham', 'LIKE', '%' . $key . '%')
+            ->orwhereHas('loaisp', function ($query) use ($key) {
+                $query->where('tenLoai', 'LIKE', '%' . $key . '%');
             });
-            $product = $product_query->get();
+        $product = $product_query->paginate(8);
 
         return response()->json([
-            'data'=>$product,
-            'message'=>'kết quả',
-            ]);
+            'data' => $product,
+            'message' => 'kết quả',
+        ]);
     }
     //search theo tên và mã
     public function searchProduct(Request $request)
     {
-        $product = Product::where('id','like','%'.$request->key.'%')
-                    ->orWhere('tenSP','like','%'.$request->key.'%')
-                    ->get();
+        $product = Product::where('id', 'like', '%' . $request->key . '%')
+            ->orWhere('tenSP', 'like', '%' . $request->key . '%')
+            ->get();
         return response()->json([
-                'status'=>200,
-                'product'=> $product,
-                ]);           
+            'status' => 200,
+            'product' => $product,
+        ]);
     }
 }

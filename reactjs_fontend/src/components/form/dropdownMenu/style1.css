@@ -15,7 +15,7 @@
   text-decoration: none;
 }
 
-.menu-trigger .anh1 {
+.menu-trigger1 .anh12 {
   /* position: absolute; */
   top: 20px;
   right: 20px;
@@ -25,36 +25,33 @@
   overflow: hidden;
   cursor: pointer;
   background-color: #fff;
-  
+
 }
 
-.dropdown-menu1 {
+.dropdown-menu12 {
   z-index: 10;
   position: absolute;
   top: 50px;
-  right: 0;
+  left: -25px;
   background-color: rgb(255, 255, 255);
   border-radius: var(--border-radius);
   padding: 10px 20px;
   width: 200px;
-  border: 1px solid #cecece;
+  border: 1px solid #edf1ff;
 
 }
 
-.dropdown-menu1::before {
+/* .dropdown-menu1::before {
   content: "";
   position: absolute;
   top: -11px;
-  right: 15px;
+  left: 15px;
   height: 20px;
   width: 20px;
   background: var(--secondary-bg);
-  transform: rotate(45deg);
-  border-top: 1px solid #cecece;
-  border-left: 1px solid #cecece;
-}
+} */
 
-.dropdown-menu1.active {
+.dropdown-menu12.active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -62,7 +59,7 @@
   z-index: 10;
 }
 
-.dropdown-menu1.inactive {
+.dropdown-menu12.inactive {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-20px);
@@ -86,37 +83,42 @@
   font-weight: 400;
 }
 
-.dropdown-menu1 ul li {
+.dropdown-menu12 ul li {
   padding: 10px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  /* border-top: 1px solid rgba(0, 0, 0, 0.05); */
 }
 
-.dropdown-menu1 ul li:hover a {
-  color: rgb(212, 33, 9);
+.dropdown-menu12 ul li:hover a {
+  color: rgb(0, 0, 0);
   cursor: pointer;
+  text-decoration: none;
 }
 
-.dropdown-menu1 ul li:hover img {
+.dropdown-menu12 ul li:hover img {
   opacity: 1;
   cursor: pointer;
 }
 
-.dropdownItem1 {
+.dropdownItem12 {
   display: flex;
+  margin-left: 10px;
+  font-size: 20px;
 }
 
-.dropdownItem1 .anhItem {
+.dropdownItem12 .anhItem1 {
   max-width: 20px;
   margin-right: 10px;
   opacity: 0.5;
   transition: var(--speed);
 }
 
-.dropdownItem1 .iconItem {
+.dropdownItem12 .iconItem1 {
   max-width: 100px;
   margin-left: 10px;
   transition: var(--speed);
+  text-decoration: none;
 }
-.menu-container{
-    text-align: center;
+
+.menu-container {
+  text-align: center;
 }

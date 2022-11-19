@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.css';
 // import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./style.css";
@@ -9,10 +9,11 @@ import ContactAdmin from "../contact-admin";
 import DropDownMenuAdmin from "../dropdownMenuAdmin";
 import swal from "sweetalert";
 import axios from "axios";
-
+import Cookies from "universal-cookie";
 const NavBarAdmin = () => {
   const [nameUserAdmin, setNameUserAdmin] = useState();
   const history = useNavigate();
+  const cookies = new Cookies();
 
   const logoutSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ const NavBarAdmin = () => {
           // console.log(res);
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_name");
+          cookies.remove("role_id");
           swal({
             title: res.data.message,
             icon: "success",
@@ -51,53 +53,16 @@ const NavBarAdmin = () => {
         {/* form tìm kiếm */}
         <div className="row m-3 " style={{ color: "#d19c97" }}>
           {/* <h5>L3M Admin</h5> */}
-          <a href="#" className="text-decoration-none">
+          <Link to="/" className="text-decoration-none">
             <span className="fs-4 text-primary fw-bold">
               L3M <span className="text-white">SHOP</span>
             </span>
-          </a>
+          </Link>
           <div className="text-muted fs-6">ADMINISTRATOR</div>
         </div>
         <ul className="navbar-nav ml-auto">
-          {/* <!-- Nav Item - Alerts --> */}
-          <li className="nav-item dropdown no-arrow mx-1">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="alertsDropdown"
-              type="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <FaBell />
-              {/* <!-- Counter - Alerts --> */}
-              <span className="badge badge-danger badge-counter d-none">3</span>
-            </a>
-            {/* <!-- Dropdown - Alerts --> */}
-          </li>
 
-          {/* <!-- Nav Item - Messages --> */}
-          <li className="nav-item dropdown no-arrow mx-1">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="messagesDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <FaEnvelope />
-              {/* <!-- Counter - Messages --> */}
-              <span className="badge badge-danger d-none  badge-counter">
-                7
-              </span>
-            </a>
-            {/* <!-- Dropdown - Messages --> */}
-          </li>
-
-          <div className="topbar-divider d-none d-sm-block"></div>
+          {/* <div className="topbar-divider d-none d-sm-block"></div> */}
 
           {/* <!-- Nav Item - User Information --> */}
           <li className="nav-item no-arrow">
@@ -109,34 +74,8 @@ const NavBarAdmin = () => {
               <DropDownMenuAdmin logout={logoutSubmit} />
             </a>
 
-            {/* <!-- Dropdown - User Information --> */}
-            <div
-              className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-              aria-labelledby="userDropdown"
-            >
-              <a className="dropdown-item" href="#">
-                <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                Profile
-              </a>
-              <a className="dropdown-item" href="#">
-                <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                Settings
-              </a>
-              <a className="dropdown-item" href="#">
-                <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                Activity Log
-              </a>
-              <div className="dropdown-divider"></div>
-              <a
-                className="dropdown-item"
-                href="#"
-                data-toggle="modal"
-                data-target="#logoutModal"
-              >
-                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                Logout
-              </a>
-            </div>
+
+
           </li>
         </ul>
       </nav>

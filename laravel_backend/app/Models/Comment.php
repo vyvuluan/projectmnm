@@ -13,6 +13,11 @@ class Comment extends Model
         'customer_id',
         'comment',
     ];
+    protected $with = ['customer'];
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
     public function product()
     {
         return $this->belongsTo(Product::class);
