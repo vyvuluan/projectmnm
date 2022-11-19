@@ -188,7 +188,7 @@ function Index() {
     const newKey = editorKey * 43;
 
     axios
-      .post(`http://localhost:8000/api/kho/products`, formData)
+      .post(`/api/kho/products`, formData)
       .then((res) => {
         if (res.data.status === 200) {
           swal("Thêm sản phẩm thành công", res.data.message, "success");
