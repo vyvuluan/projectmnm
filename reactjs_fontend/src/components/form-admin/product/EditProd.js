@@ -4,13 +4,16 @@ import * as B from 'react-bootstrap'
 import swal from 'sweetalert';
 import { Editor } from "@tinymce/tinymce-react";
 
-const Prodedit = ({ product, showModal }) => {
+const Prodedit = ({ product, showModal, category, roleID }) => {
+
+    console.log(roleID);
 
     const [picture, setPicture] = useState([]);
     const [previewIMG, setPreviewIMG] = useState();
     const [mota, setMota] = useState(product.moTa);
     const [ctsp, setCtsp] = useState(product.ctSanPham);
     const [tabkey, setTabKey] = useState(1);
+    const [newCate, setNewCate] = useState(product.loaisp.id);
     const editorRef = useRef(product.moTa);
 
     const id = product.id;
@@ -59,7 +62,7 @@ const Prodedit = ({ product, showModal }) => {
         // if (previewIMG !== null) {
         formData.set("hinh", picture.image);
         // }
-        formData.set("maLoai", prodEdit.loaisp);
+        formData.set("maLoai", newCate);
         formData.set("tenSP", prodEdit.tenSP);
         formData.set("gia", prodEdit.gia);
         formData.set("maNCC", prodEdit.ncc);
@@ -68,14 +71,25 @@ const Prodedit = ({ product, showModal }) => {
         formData.set("baoHanh", prodEdit.baohanh);
         formData.set("ctSanPham", ctsp);
 
-        axios.post(`/api/kho/products/update/${id}`, formData).then(res => {
-            if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success')
-                showModal();
-            } else if (res.data.status === 404) {
-                swal('Error', res.data.message, 'error')
-            }
-        })
+        if (roleID === '4') {
+            axios.post(`/api/nhanvien/products/${id}?_method=PUT`, formData).then(res => {
+                if (res.data.status === 200) {
+                    swal('Success', res.data.message, 'success')
+                    showModal();
+                } else if (res.data.status === 404) {
+                    swal('Error', res.data.message, 'error')
+                }
+            })
+        } else if (roleID === '3') {
+            axios.post(`/api/kho/products/update/${id}`, formData).then(res => {
+                if (res.data.status === 200) {
+                    swal('Success', res.data.message, 'success')
+                    showModal();
+                } else if (res.data.status === 404) {
+                    swal('Error', res.data.message, 'error')
+                }
+            })
+        }
     }
 
     return (
@@ -109,6 +123,17 @@ const Prodedit = ({ product, showModal }) => {
                                     <B.FormLabel>Tên sản phẩm</B.FormLabel>
                                     <B.FormControl type='text' name='tenSP' className='rounded-0 shadow-none mb-3 w-100' placeholder='Tên sản phẩm'
                                         value={prodEdit.tenSP} onChange={handleProductChange}></B.FormControl>
+                                </B.FormGroup>
+                                <B.FormGroup>
+                                    <B.FormLabel>Loại sản phẩm</B.FormLabel>
+                                    <B.FormSelect
+                                        onChange={(e) => setNewCate(e.target.value)}
+                                        value={newCate}
+                                        className="rounded-0 shadow-none mb-3 w-100">
+                                        {category.map(item => (
+                                            <option value={item.id} key={item.id}>{item.tenLoai}</option>
+                                        ))}
+                                    </B.FormSelect>
                                 </B.FormGroup>
                                 <B.FormGroup>
                                     <B.FormLabel>Giá</B.FormLabel>

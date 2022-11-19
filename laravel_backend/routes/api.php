@@ -213,6 +213,8 @@ Route::middleware('auth:sanctum', 'role_nhanvien')->prefix('nhanvien')->group(fu
 
     //Api Quản lý chi tiết phiếu xuất
     Route::get('lichSuXuatHang', [ManageBaoCaoController::class, 'lichSuXuatHang']);
+    //Api Quản lý sản phẩm
+    Route::resource('products', ManageProductController::class)->only('update');
 });
 
 

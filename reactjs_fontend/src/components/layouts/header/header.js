@@ -338,7 +338,7 @@ export default function Header() {
                       className="fs-5 fw-normal me-2 effect-box"
                     >
                       <Link className="text-decoration-none aEffect " to="/">
-                        Home
+                        Trang chủ
                       </Link>
                     </Bt.NavLink>
                   </Bt.NavItem>
