@@ -25,7 +25,7 @@ class Product extends Model
 
     public function loaisp()
     {
-        return $this->belongsTo(loaisp::class, 'maLoai', 'id');
+        return $this->belongsTo(Loaisp::class, 'maLoai', 'id');
     }
     public function pnct()
     {

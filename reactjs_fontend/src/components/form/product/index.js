@@ -5,6 +5,7 @@ import { Link, useSearchParams, useParams } from "react-router-dom";
 import Pagination from "../pagination";
 import axios from "axios";
 import "./styles.css";
+const imageURL = "http://localhost:8000"
 const Product = (props) => {
   const { item } = props;
   // const id = useParams();
@@ -36,9 +37,9 @@ const Product = (props) => {
                     >
                       <div className="text-center product-img position-relative overflow-hidden bg-transparent  p-0">
                         <img
-                          style={{ height: "200px", width:"200px",alignItems:"center" ,  objectFit: "contain" }}
+                          style={{ height: "200px", width: "200px", alignItems: "center", objectFit: "contain" }}
                           className="img-fluid hoverCSS "
-                          src={`http://localhost:8000/uploadhinh/${item.hinh}`}
+                          src={`${imageURL}/uploadhinh/${item.hinh}`}
                           alt="img product"
                         ></img>
                       </div>
