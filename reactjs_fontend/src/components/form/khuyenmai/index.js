@@ -122,10 +122,11 @@ const Index = () => {
         discount_html =
             <Carousel
                 additionalTransfrom={0}
-                removeArrowOnDeviceType={['mobile']}
+                removeArrowOnDeviceType={['mobile', 'smallmobile']}
                 autoPlay
                 autoPlaySpeed={3000}
-                centerMode={true}
+                centerMode={false}
+                partialVisible
                 containerClass="container-with-dots"
                 dotListClass=""
                 draggable={false}
