@@ -377,12 +377,7 @@ class UserController extends Controller
             $re_password = $request->re_password;
             $password_old = $request->password_old;
             $user = User::find(auth('sanctum')->user()->id);
-            if (!Hash::check($request->password_old, $user->password)) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => 'password cũ không chính xác',
-                ]);
-            } else {
+            if ($password_old == null) {
                 if ($password != $re_password) {
                     return response()->json([
                         'status' => 401,
@@ -397,6 +392,29 @@ class UserController extends Controller
                         'status' => 200,
                         'message' => 'update thành công',
                     ]);
+                }
+            } else {
+                if (!Hash::check($request->password_old, $user->password)) {
+                    return response()->json([
+                        'status' => 401,
+                        'message' => 'password cũ không chính xác',
+                    ]);
+                } else {
+                    if ($password != $re_password) {
+                        return response()->json([
+                            'status' => 401,
+                            'message' => 'password và nhập lại password không trùng khớp',
+                        ]);
+                    } else {
+                        $user = User::find(auth('sanctum')->user()->id);
+
+                        $user->password = Hash::make($password);
+                        $user->save();
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'update thành công',
+                        ]);
+                    }
                 }
             }
         } else {
