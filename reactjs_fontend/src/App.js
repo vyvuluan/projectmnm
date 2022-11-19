@@ -30,8 +30,8 @@ function App() {
   const cookies = new Cookies();
 
   useEffect(() => {
-    document.title = "L3M SHOP";
-  }, []);
+    document.title = "L3M SHOP"
+  }, [])
 
   return (
     <>
@@ -57,7 +57,7 @@ function App() {
             );
           })}
 
-          {/* <Route path="*" element={<NotFoundPage />} /> */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </>
