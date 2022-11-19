@@ -356,6 +356,11 @@ class ManagePhieuXuatController extends Controller
                 'status' => 400,
                 'message' => 'Bạn không thể thay đổi tình trạng đơn hàng tạo tại quầy',
             ]);
+        } else if ($px->status == 0 && ($px->pt_ThanhToan == 'VnPay' || $px->pt_ThanhToan == 'PayPal')) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng online thanh toán thất bại không thể chỉnh sửa',
+            ]);
         }
         $px->status = $request->status;
         $px->employee_id = $maNV;
