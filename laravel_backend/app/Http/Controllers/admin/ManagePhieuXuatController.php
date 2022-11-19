@@ -357,9 +357,22 @@ class ManagePhieuXuatController extends Controller
                 'message' => 'Bạn không thể thay đổi tình trạng đơn hàng tạo tại quầy',
             ]);
         } else if ($px->status == 0 && ($px->pt_ThanhToan == 'VnPay' || $px->pt_ThanhToan == 'PayPal')) {
+            $px->status = 5;
+            $px->employee_id = $maNV;
+            $px->save();
+            if ($px->status = 5) {
+                $pxcts = $px->pxct;
+                foreach ($pxcts as $pxct) {
+                    $product = Product::find($pxct->product_id);
+                    if ($product) {
+                        $product->soLuongSP += $pxct->soluong;
+                        $product->save();
+                    }
+                }
+            }
             return response()->json([
                 'status' => 400,
-                'message' => 'Đơn hàng online thanh toán thất bại không thể chỉnh sửa',
+                'message' => 'Đơn hàng online thanh toán thất bại không thể chỉnh sửa , đơn hàng sẽ bị hủy !',
             ]);
         }
         $px->status = $request->status;
