@@ -17,7 +17,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import LoadingPage from "../../layouts/Loading/index.js";
 const PageProducts = () => {
   const [loading, setLoading] = useState(true);
-  const [b, setB] = useState([])
+  const [b, setB] = useState([]);
   // const [firstPage,setFirstPage] = useState();
   const [gia, setGia] = useState();
   const [value1, setValue1] = useState([0, gia]);
@@ -26,7 +26,6 @@ const PageProducts = () => {
 
   const [viewNSX, setViewNSX] = useState([]);
   const [comments, setComments] = useState([]);
-
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
@@ -41,8 +40,6 @@ const PageProducts = () => {
   let idNSX1 = viewNSX.map((item) => {
     return dataIDNSX.push(item.id);
   });
-
-
 
   const handlePerPage = (page) => {
     // console.log(page);
@@ -78,11 +75,11 @@ const PageProducts = () => {
           // console.log(res.data.Nsx);
           setViewNSX(res.data.Nsx);
           // setIdNSX(res.data.Nsx.id);
-          let dataNSXtest = []
+          let dataNSXtest = [];
           res.data.Nsx.map((item) => {
-            return dataNSXtest.push(item.id)
-          })
-          setB(dataNSXtest)
+            return dataNSXtest.push(item.id);
+          });
+          setB(dataNSXtest);
         }
       })
       .catch(function (error) {
@@ -90,13 +87,14 @@ const PageProducts = () => {
       });
   }, []);
 
-
   useEffect(() => {
     // const controller = new AbortController();
     // console.log(...searchParam);
     if (searchParam.has("search")) {
       axios
-        .get(`/api/products-search?key=${searchParam.get("search")}&page=${page}`)
+        .get(
+          `/api/products-search?key=${searchParam.get("search")}&page=${page}`
+        )
         .then((res) => {
           if (res.status === 200) {
             setListProduct(res.data.data.data);
@@ -159,7 +157,6 @@ const PageProducts = () => {
           setPerPage(response.data.per_page);
           setCurrentPage(response.data.current_page);
           setLoading(false);
-
         })
         .catch(function (error) {
           // handle error
@@ -176,13 +173,20 @@ const PageProducts = () => {
   if (loading) {
     return (
       <>
-        <Bt.Container fluid className='bg-secondary mb-5'>
-          <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
-            <h1 className='fw-semibold text-uppercase mb-3'>SẢN PHẨM</h1>
-            <div className='d-inline-flex'>
-              <p className='m-0'><Link to='/' className='text-decoration-none' variant='primary'>Home</Link></p>
-              <p className='m-0 px-2'>-</p>
-              <p className='m-0 text-muted'>Sản phẩm</p>
+        <Bt.Container fluid className="bg-secondary mb-5">
+          <div
+            className="d-flex flex-column align-items-center justify-content-center"
+            style={{ minHeight: "300px" }}
+          >
+            <h1 className="fw-semibold text-uppercase mb-3">SẢN PHẨM</h1>
+            <div className="d-inline-flex">
+              <p className="m-0">
+                <Link to="/" className="text-decoration-none" variant="primary">
+                  Home
+                </Link>
+              </p>
+              <p className="m-0 px-2">-</p>
+              <p className="m-0 text-muted">Sản phẩm</p>
             </div>
           </div>
         </Bt.Container>
@@ -203,8 +207,6 @@ const PageProducts = () => {
       );
     }
   }
-
-
 
   // const [dataFilter, setDataFilter] = useState();
   // console.log(b);
@@ -249,12 +251,12 @@ const PageProducts = () => {
   };
 
   const handleFilter = () => {
-    console.log(idNSX1);
     // console.log(Checked);
     axios
       .get(
-        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked
-        }&giaMin=${value1[0]}&giaMax=${value1[1]}&page=${page}`
+        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${
+          value1[0]
+        }&giaMax=${value1[1]}&page=${page}`
       )
       .then(
         (res) => {
@@ -273,19 +275,25 @@ const PageProducts = () => {
 
   return (
     <>
-      <Bt.Container fluid className='bg-secondary mb-5'>
-        <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
-          <h1 className='fw-semibold text-uppercase mb-3'>SẢN PHẨM</h1>
-          <div className='d-inline-flex'>
-            <p className='m-0'><Link to='/' className='text-decoration-none' variant='primary'>Home</Link></p>
-            <p className='m-0 px-2'>-</p>
-            <p className='m-0 text-muted'>Sản phẩm</p>
+      <Bt.Container fluid className="bg-secondary mb-5">
+        <div
+          className="d-flex flex-column align-items-center justify-content-center"
+          style={{ minHeight: "300px" }}
+        >
+          <h1 className="fw-semibold text-uppercase mb-3">SẢN PHẨM</h1>
+          <div className="d-inline-flex">
+            <p className="m-0">
+              <Link to="/" className="text-decoration-none" variant="primary">
+                Home
+              </Link>
+            </p>
+            <p className="m-0 px-2">-</p>
+            <p className="m-0 text-muted">Sản phẩm</p>
           </div>
         </div>
       </Bt.Container>
       <Container fluid className="mt-5">
         <Row>
-          
           <Col sm={2}>
             <Filter
               handleFilter={handleFilter}

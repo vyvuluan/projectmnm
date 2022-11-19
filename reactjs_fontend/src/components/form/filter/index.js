@@ -46,7 +46,7 @@ const Filter = ({
             <input
               type="checkbox"
               className="custom-control-input"
-              defaultChecked={uncheckAll}
+              // defaultChecked={uncheckAll}
               checked={uncheckAll}
               id="all"
               name="all"
