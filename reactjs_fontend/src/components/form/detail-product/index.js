@@ -207,48 +207,14 @@ const DetailProduct = (props) => {
                 </div>
 
               </div>
-              {/* <a
-                className="carousel-control-prev"
-                href="#product-carousel"
-                data-slide="prev"
-              >
-                <GrPrevious />
-              </a>
-              <a
-                className="carousel-control-next"
-                href="#product-carousel"
-                data-slide="next"
-              >
-                <GrNext />
-              </a> */}
             </div>
           </div>
 
           <div className="col-lg-7 pb-5">
             <h3 className="font-weight-semi-bold">{product.tenSP}</h3>
-            {/* <div className="d-flex mb-3">
-              <div className="text-primary mr-2">
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-              </div>
-              <small className="pt-1">(50 Reviews)</small>
-            </div> */}
-            <small className="text-primary fw-semibold">{comment.length} bình luận</small>
-            <h3 className="font-weight-semi-bold mt-2 mb-4">
+            <h3 className="font-weight-semi-bold mt-3 mb-3 text-primary">
               {formatMoney(product.gia)}
+              <small className="fw-semibold text-dark fs-5"> ({comment.length} bình luận)</small>
             </h3>
             <p className="mb-4">
               <div dangerouslySetInnerHTML={{ __html: product.ctSanPham }} />
