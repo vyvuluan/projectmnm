@@ -84,15 +84,15 @@ const DetailProduct = (props) => {
         // console.log(res);
         localStorage.setItem("count", res.data.count)
 
-        swal("Success", res.data.message, "success");
+        swal("Thành công", res.data.message, "success");
       } else if (res.data.status === 400) {
-        swal("Warning", res.data.message, "warning");
+        swal("Cảnh báo", res.data.message, "warning");
       } else if (res.data.status === 409) {
-        swal("Warning", res.data.message, "warning");
+        swal("Cảnh báo", res.data.message, "warning");
       } else if (res.data.status === 401) {
-        swal("Error", res.data.message, "error");
+        swal("Thất bại", res.data.message, "error");
       } else if (res.data.status === 404) {
-        swal("Warning", res.data.message, "warning");
+        swal("Cảnh báo", res.data.message, "warning");
       }
     });
   };
@@ -131,9 +131,9 @@ const DetailProduct = (props) => {
     axios.post(`/api/addcomment`, data).then(res => {
       if (res.data.status === 200) {
         setSubmitting(true);
-        swal('Success', res.data.message, 'success');
+        swal('Thành công', res.data.message, 'success');
       } else if (res.data.status === 401) {
-        swal('Error', res.data.message, 'error')
+        swal('Thất bại', res.data.message, 'error')
       }
     })
   }

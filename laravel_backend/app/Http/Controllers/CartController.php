@@ -58,11 +58,13 @@ class CartController extends Controller
                     if ($cartItem) {
 
                         $cartItem->soLuongSP += $soLuongSP;
-                        $warnSP = $cartItem->soLuongSP -= $soLuongSP;
+                        //$warnSP = $cartItem->soLuongSP -= $soLuongSP;
                         if ($cartItem->soLuongSP > $spCheck->soLuongSP) {
                             return response()->json([
                                 'status' => 400,
-                                'message' => 'Kho chỉ còn : ' . $spCheck->soLuongSP . ' sản phẩm , giỏ hàng bạn đã có sẵn' . $warnSP . ' sản phẩm',
+                                'message' => '  Cửa hàng chỉ còn ' . $spCheck->soLuongSP . ' sản phẩm mà thôi
+                                 Vui lòng kiểm tra lại giỏ hàng của bạn !  ',
+
                             ]);
                         }
                         $cartItem->save();
