@@ -232,10 +232,10 @@ class ManagePhieuXuatController extends Controller
             ]);
         } else {
             $checkpx = PhieuXuat::find($request->px_id);
-            if ($checkpx->status > 1) {
+            if ($checkpx->status >= 1) {
                 return response()->json([
                     'status' => 400,
-                    'message' => 'Đơn hành đã thánh toán !',
+                    'message' => 'Đơn hành đã thanh toán không thể chỉnh sửa !',
                 ]);
             }
             if ($checkpx) {
@@ -360,7 +360,7 @@ class ManagePhieuXuatController extends Controller
             $px->status = 5;
             $px->employee_id = $maNV;
             $px->save();
-            if ($px->status = 5) {
+            if ($px->status == 5) {
                 $pxcts = $px->pxct;
                 foreach ($pxcts as $pxct) {
                     $product = Product::find($pxct->product_id);
@@ -378,7 +378,7 @@ class ManagePhieuXuatController extends Controller
         $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
-        if ($px->status = 5) {
+        if ($px->status == 5) {
             $pxcts = $px->pxct;
             foreach ($pxcts as $pxct) {
                 $product = Product::find($pxct->product_id);
@@ -466,7 +466,7 @@ class ManagePhieuXuatController extends Controller
         $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
-        if ($px->status = 5) {
+        if ($px->status == 5) {
             $pxcts = $px->pxct;
             foreach ($pxcts as $pxct) {
                 $product = Product::find($pxct->product_id);
