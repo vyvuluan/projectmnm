@@ -169,18 +169,28 @@ export default function Cart() {
                       <td>{formatMoney(item.product.gia)}</td>
                       <td>
                         <Bt.InputGroup className="quantity mx-auto">
+                          {item.soLuongSP <= 1 ? 
                           <Bt.Button
+                          className="btn-sm rounded-0 shadow-none btnclick"
+                          variant="primary"
+                          type="button"
+                          disabled
+                        >
+                          <FaMinus />
+                        </Bt.Button>
+                        :
+                        <Bt.Button
                             className="btn-sm rounded-0 shadow-none btnclick"
                             variant="primary"
                             type="button"
                             onClick={() => handleDecrement(item.id)}
                           >
                             <FaMinus />
-                          </Bt.Button>
+                          </Bt.Button>}
                           <Bt.InputGroup.Text className="form-control-sm text-center">
                             {item.soLuongSP}
                           </Bt.InputGroup.Text>
-                          {item.soLuongSP >= 4 ?
+                          {item.soLuongSP >= 4 || item.soLuongSP === item.product.soLuongSP ?
                             <Bt.Button
                               className="btn-sm rounded-0 shadow-none btnclick"
                               variant="primary"

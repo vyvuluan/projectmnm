@@ -16,7 +16,7 @@ import BillKho from '../print/billkho'
 import './style.css'
 
 const checkStatus = [
-    { id: 4, name: 'Đã xuất kho' },
+    { id: 4, name: 'Xuất kho' },
     { id: 5, name: 'Hủy đơn hàng' },
 ];
 
@@ -27,7 +27,7 @@ const sort = [
     { value: '0', name: 'Chờ xác nhận' },
     { value: '1', name: 'Đã xác nhận' },
     { value: '4', name: 'Đã xuất kho' },
-    { value: '5', name: 'Đơn hàng đã hủy' },
+    { value: '5', name: 'Đã huỷ đơn' },
     { value: 'Tại quầy', name: 'Thanh toán tại quầy' },
 ]
 
@@ -296,7 +296,7 @@ function Index() {
     };
 
     const handleIncrement = () => {
-        if (quantity < 10) {
+        if (quantity < 4 && quantity < prodData.soLuongSP) {
             setQuantity((prevCount) => prevCount + 1);
         }
     };
@@ -932,25 +932,45 @@ function Index() {
                                                             /> {prodData.tenSP}</td>
                                                             <td style={{ width: '130px' }}>
                                                                 <B.InputGroup className="quantity mx-auto">
+                                                                    {quantity <= 1 ?
                                                                     <B.Button
+                                                                    className="btn-sm rounded-0 shadow-none btnclick"
+                                                                    variant="primary"
+                                                                    type="button"
+                                                                    disabled
+                                                                >
+                                                                    <FaMinus />
+                                                                </B.Button>
+                                                                :
+                                                                <B.Button
                                                                         className="btn-sm rounded-0 shadow-none btnclick"
                                                                         variant="primary"
                                                                         type="button"
                                                                         onClick={handleDecrement}
                                                                     >
                                                                         <FaMinus />
-                                                                    </B.Button>
+                                                                    </B.Button>}
                                                                     <B.InputGroup.Text className="form-control-sm text-center">
                                                                         {quantity}
                                                                     </B.InputGroup.Text>
+                                                                    {quantity >= 4 || quantity === prodData.soLuongSP ?
                                                                     <B.Button
+                                                                    className="btn-sm rounded-0 shadow-none btnclick"
+                                                                    variant="primary"
+                                                                    type="button"
+                                                                    disabled
+                                                                >
+                                                                    <FaPlus />
+                                                                </B.Button>
+                                                                :
+                                                                <B.Button
                                                                         className="btn-sm rounded-0 shadow-none btnclick"
                                                                         variant="primary"
                                                                         type="button"
                                                                         onClick={handleIncrement}
                                                                     >
                                                                         <FaPlus />
-                                                                    </B.Button>
+                                                                    </B.Button>}
                                                                 </B.InputGroup>
                                                             </td>
                                                             <td className='text-center'>{formatMoney(prodData.gia * quantity)}</td>
@@ -1094,25 +1114,45 @@ function Index() {
                                                             /> {prodData.tenSP}</td>
                                                             <td style={{ width: '130px' }}>
                                                                 <B.InputGroup className="quantity mx-auto">
+                                                                    {quantity <= 1 ?
                                                                     <B.Button
-                                                                        className="btn-sm rounded-0"
+                                                                    className="btn-sm rounded-0 shadow-none btnclick"
+                                                                    variant="primary"
+                                                                    type="button"
+                                                                    disabled
+                                                                >
+                                                                    <FaMinus />
+                                                                </B.Button>
+                                                                :
+                                                                <B.Button
+                                                                        className="btn-sm rounded-0 shadow-none btnclick"
                                                                         variant="primary"
                                                                         type="button"
                                                                         onClick={handleDecrement}
                                                                     >
                                                                         <FaMinus />
-                                                                    </B.Button>
+                                                                    </B.Button>}
                                                                     <B.InputGroup.Text className="form-control-sm text-center">
                                                                         {quantity}
                                                                     </B.InputGroup.Text>
+                                                                    {quantity >= 4 || quantity === prodData.soLuongSP ?
                                                                     <B.Button
-                                                                        className="btn-sm rounded-0"
+                                                                    className="btn-sm rounded-0 shadow-none btnclick"
+                                                                    variant="primary"
+                                                                    type="button"
+                                                                    disabled
+                                                                >
+                                                                    <FaPlus />
+                                                                </B.Button>
+                                                                :
+                                                                <B.Button
+                                                                        className="btn-sm rounded-0 shadow-none btnclick"
                                                                         variant="primary"
                                                                         type="button"
                                                                         onClick={handleIncrement}
                                                                     >
                                                                         <FaPlus />
-                                                                    </B.Button>
+                                                                    </B.Button>}
                                                                 </B.InputGroup>
                                                             </td>
                                                             <td className='text-center'>{formatMoney(prodData.gia * quantity)}</td>

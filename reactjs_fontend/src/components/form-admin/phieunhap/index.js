@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback ,useRef} from "react";
 import * as B from "react-bootstrap";
 import axios, { Axios } from "axios";
 import swal from "sweetalert";
 import { BsPersonPlusFill } from "react-icons/bs";
 import Swal from "sweetalert2";
-import { AiOutlineFileAdd, AiFillEye } from "react-icons/ai";
+import { AiOutlineFileAdd, AiFillEye, AiFillPrinter } from "react-icons/ai";
 import { FiTool } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
 import { BiReset, BiEdit } from "react-icons/bi";
+import { useReactToPrint } from 'react-to-print';
 
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
@@ -15,6 +16,7 @@ import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
 import Ctpn from "./ctpn";
 import LichSuNhapHang from "./lichsunhaphang";
+import PrinterPN from "./printerPN";
 
 /*
     xóa tìm kiếm
@@ -49,8 +51,9 @@ const PhieuNhap = () => {
   const [errorSP, setErrorSP] = useState();
   const [errorGia, setErrorGia] = useState();
   const [pnCt, setPnCt] = useState([]);
-  const [idShowPn, setIdShowPn] = useState([]);
+  // const [idShowPn, setIdShowPn] = useState([]);
   const [submitting, setSubmitting] = useState(true);
+  const [showPrint, setShowPrint] = useState(false);
 
   const [tongTien, setTongtien] = useState([]);
   const [tongTienPN, setTongtienPN] = useState([]);
@@ -67,13 +70,15 @@ const PhieuNhap = () => {
   const handleCloseCtPN = () => setShowCtPN((prev) => !prev);
   const [viewPn, setViewPn] = useState();
   const [tabkey, setTabKey] = useState(1);
+  const componentRef = useRef();
 
   const [show, setShow] = useState(false);
   const [showUpdateCtPN, setShowUpdateCtPN] = useState(false);
   const [showCtPN, setShowCtPN] = useState(false);
   const [showTab, setShowTab] = useState(false);
 
-  const [buttonText, setButtonText] = useState("Chưa thanh toán");
+  // const [buttonText, setButtonText] = useState("Chưa thanh toán");
+  const handleClosePrintPN = () => setShowPrint(prev => !prev);
 
   // const handleClick = () =>  {
   //   setButtonText('Đã thanh toán');
@@ -584,9 +589,41 @@ const PhieuNhap = () => {
       }
     });
   };
+  const handlePrintPN = (pn) => {
+    setShowPrint(true);
+    setViewPn(pn);
+  };
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+});
 
+  // console.log();
   return (
     <>
+      <B.Modal size='lg' show={showPrint} onHide={handleClosePrintPN}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>In phiếu nhập</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <PrinterPN componentRef={componentRef}  formatMoney={formatMoney} viewPn={viewPn}/>
+        </B.ModalBody>
+        <B.ModalFooter className="bg-secondary">
+        <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handlePrint}
+          >
+            In
+          </B.Button>
+          <B.Button
+            variant="outline-primary"
+            className="mt-2 rounded-0"
+            onClick={handleClosePrintPN}
+          >
+            Hủy bỏ
+          </B.Button>
+        </B.ModalFooter>
+      </B.Modal>
       <B.Modal show={show} onHide={handleClose}>
         <B.ModalHeader closeButton className="bg-secondary">
           <B.ModalTitle>Thêm nhà cung cấp</B.ModalTitle>
@@ -642,27 +679,7 @@ const PhieuNhap = () => {
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          {/* <B.Col lg={6}>
-                        <B.Form>
-                            <B.FormGroup>
-                                <B.InputGroup>
-                                    <B.FormControl
-                                        type="text"
-                                        placeholder="Tìm kiếm"
-                                        className="rounded-0 shadow-none focus-outline-none fw-semibold"
-                                    ></B.FormControl>
-                                    <B.InputGroup.Text className="bg-transparent text-primary rounded-0">
-                                        <FaSearch variant="primary" />
-                                    </B.InputGroup.Text>
-                                </B.InputGroup>
-                            </B.FormGroup>
-                            <B.FormGroup className='d-flex d-inline-block justify-content-between mt-2'>
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo id' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo NCC' />
-                                <B.FormCheck type='checkbox' className='rounded-0' label='Theo NSX' />
-                            </B.FormGroup>
-                        </B.Form>
-                    </B.Col> */}
+          
         </B.Row>
 
         <B.Row className="pe-xl-5 mb-5">
@@ -950,8 +967,7 @@ const PhieuNhap = () => {
                         <th>Tổng tiền</th>
                         <th>Ngày tạo</th>
                         <th>Tình trạng</th>
-
-                        <th>Thao tác</th>
+                        <th style={{ width: "110px" }}>Thao tác </th>
                       </tr>
                     </thead>
                     <tbody className="align-middle">
@@ -996,12 +1012,12 @@ const PhieuNhap = () => {
                                 )}
                               </td>
 
-                              <td className="align-middle fs-5 text-primary">
+                              <td className="align-middle fs-5 text-primary text-left">
                                 <AiFillEye
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
-                                  title="Xem chi tiết phiếu nhập"
+                                  title="Xem phiếu nhập"
                                   style={{ marginRight: "15px" }}
                                   onClick={() => handleView(item)}
                                 />
@@ -1010,9 +1026,19 @@ const PhieuNhap = () => {
                                   type="button"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
-                                  title="Xóa chi tiết phiếu nhập"
+                                  style={{ marginRight: "15px" }}
+                                  title="Xóa phiếu nhập"
                                   onClick={() => handleDeletePN(item.id)}
                                 />
+                                {item.status == 1 ? (
+                                  <AiFillPrinter
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="in phiếu nhập"
+                                    onClick={()=>handlePrintPN(item)}
+                                  />
+                                ) : null}
                               </td>
                             </tr>
                           </>

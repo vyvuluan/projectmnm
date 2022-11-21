@@ -304,7 +304,7 @@ class ManageBaoCaoController extends Controller
             ->where('employee_id', auth()->user()->employee->id)
             ->where('status', 4)->first();
         $tongsoluong = PhieuXuat::selectRaw('count(id) as soluongban')
-            ->where('status', 4)->first();
+            ->first();
         return response()->json([
             'status' => 200,
             'total_sl' => $total_sl,

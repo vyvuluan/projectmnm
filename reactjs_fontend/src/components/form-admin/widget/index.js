@@ -57,7 +57,7 @@ const Widget = ({ dataWidget }) => {
   // console.log(doanhthu);
   // console.log(chiTieu)
   // console.log(contact);
-  let NV_HTML = (
+  let NV_UI_HTML = (
     <>
       <div className="col border-right">
         <div className="text-xs pl-3 font-weight-bold text-primary text-uppercase mb-1">
@@ -78,7 +78,7 @@ const Widget = ({ dataWidget }) => {
       </div>
     </>
   );
-  let NV_UI_HTML = (
+  let NV_HTML = (
     <>
       <div className="col border-right">
         <div className="text-xs pl-3 font-weight-bold text-warning text-uppercase mb-1">

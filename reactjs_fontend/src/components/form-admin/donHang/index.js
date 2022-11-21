@@ -194,7 +194,7 @@ const DonHang = () => {
         break;
       }
       case 5: {
-        x = 'Đơn hàng đã hủy';
+        x = 'Đã huỷ đơn';
         break;
       }
       default: {
