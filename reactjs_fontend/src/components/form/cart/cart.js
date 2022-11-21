@@ -79,16 +79,12 @@ export default function Cart() {
         if (res.data.status === 400) {
           setCart((cart) =>
             cart.map((item) =>
-              id_cart === item.id
-                ? {
-                  ...item,
-                  soLuongSP: item.soLuongSP - 1,
-                }
+              id_cart === item.id ?
+                { ...item, soLuongSP: item.soLuongSP - 1 }
                 : item
             )
           );
-          updateCartQuantity(id_cart, "dec");
-          swal('Thất bại', res.data.message, 'error')
+          swal('Thất bại', res.data.message, 'warning')
         }
       });
   }
@@ -100,7 +96,6 @@ export default function Cart() {
       .delete(`http://localhost:8000/api/deletecart/${id_cart}`)
       .then((res) => {
         if (res.data.status === 200) {
-          swal("Success", res.data.message, "success");
           localStorage.setItem("count", localStorage.getItem("count") - 1)
           setSubmitting(true);
         } else if (res.data.status === 404) {
@@ -108,6 +103,7 @@ export default function Cart() {
         }
       });
   };
+
 
   if (loading) {
     return (
@@ -184,14 +180,24 @@ export default function Cart() {
                           <Bt.InputGroup.Text className="form-control-sm text-center">
                             {item.soLuongSP}
                           </Bt.InputGroup.Text>
-                          <Bt.Button
-                            className="btn-sm rounded-0 shadow-none btnclick"
-                            variant="primary"
-                            type="button"
-                            onClick={() => handleIncrement(item.id)}
-                          >
-                            <FaPlus />
-                          </Bt.Button>
+                          {item.soLuongSP >= 4 ?
+                            <Bt.Button
+                              className="btn-sm rounded-0 shadow-none btnclick"
+                              variant="primary"
+                              type="button"
+                              disabled
+                            >
+                              <FaPlus />
+                            </Bt.Button>
+                            :
+                            <Bt.Button
+                              className="btn-sm rounded-0 shadow-none btnclick"
+                              variant="primary"
+                              type="button"
+                              onClick={() => handleIncrement(item.id)}
+                            >
+                              <FaPlus />
+                            </Bt.Button>}
                         </Bt.InputGroup>
                       </td>
                       <td className="">

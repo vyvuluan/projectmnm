@@ -108,7 +108,7 @@ const Index = () => {
                 {discountList.map((item, index) => (
                     <div className='imgcontainer' key={index}>
                         <img src={magiamgia} alt='' className='bgimg'></img>
-                        <label className='textimg text-white'>{item.discount_id}</label>
+                        <label className='textimg text-white'>{item.discount_id} {item.phantram}%</label>
                         <div className='textimg-bottom text-danger'>
                             <span>{item.start}</span>
                             <span> - </span>
