@@ -66,7 +66,7 @@ const DetailProduct = (props) => {
     }
   };
   const handleIncrement = () => {
-    if (quantity < product.soLuongSP) {
+    if (quantity < 4 && quantity < product.soLuongSP) {
       setQuantity((prevCount) => prevCount + 1);
     }
   };
@@ -85,6 +85,8 @@ const DetailProduct = (props) => {
         localStorage.setItem("count", res.data.count)
 
         swal("Success", res.data.message, "success");
+      } else if (res.data.status === 400) {
+        swal("Warning", res.data.message, "warning");
       } else if (res.data.status === 409) {
         swal("Warning", res.data.message, "warning");
       } else if (res.data.status === 401) {
