@@ -54,6 +54,9 @@ const UpdateCtPN = ({
             button: "đóng",
           });
           showModal(false);
+
+          
+
           let data1;
           dataShowPN.filter((item, index) => {
             return item.id == idPN
@@ -62,6 +65,7 @@ const UpdateCtPN = ({
               })
               : null;
           });
+          
           data1.gia = CTPN?.gia;
           data1.soluong = CTPN?.soluong;
           if (data1) {
@@ -79,7 +83,9 @@ const UpdateCtPN = ({
       .catch(function (error) {
         // handle error
         // console.log(error);
-      });
+      }).finally(function () {
+        // always execute
+      });;
   };
 
   return (

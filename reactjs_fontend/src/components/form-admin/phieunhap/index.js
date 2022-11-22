@@ -16,7 +16,7 @@ import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
 import Ctpn from "./ctpn";
 import LichSuNhapHang from "./lichsunhaphang";
-import Bill from '../print/bill'
+import Bill from "../print/bill";
 
 /*
     xóa tìm kiếm
@@ -76,7 +76,9 @@ const PhieuNhap = () => {
   const [showUpdateCtPN, setShowUpdateCtPN] = useState(false);
   const [showCtPN, setShowCtPN] = useState(false);
   const [showTab, setShowTab] = useState(false);
-
+  const [nameProduct, setNameProduct] = useState();
+  const [soLuong, setSoLuong] = useState();
+  const [gia, setGia] = useState();
   // const [buttonText, setButtonText] = useState("Chưa thanh toán");
   const handleClosePrintPN = () => setShowPrint((prev) => !prev);
 
@@ -94,7 +96,6 @@ const PhieuNhap = () => {
   };
 
   const test = (value) => {
-    // console.log(value.product_id);
     var index, index1;
     const d = dataShowPN.filter((item, i) => {
       return item.id === value.pn_id ? (index = i) : null;
@@ -102,17 +103,22 @@ const PhieuNhap = () => {
     const d1 = dataShowPN[index].pnct.filter((item1, i1) => {
       return item1.product_id == value.product_id ? (index1 = i1) : null;
     });
-    // setDataShowPN((prev) => [
-    //   ...prev,
-    //   (prev[index].pnct[i1] = value),
-    // ])
+    
     let newData = [...dataShowPN];
-    // console.log(index + " " + index1);
-    // console.log(newData[index].pnct[index1]);
+   
     newData[index].pnct[index1] = value;
 
     // console.log(newData);
     setDataShowPN(newData);
+
+    let tongtienNew = viewPn.pnct.filter((item) => {
+      return item.pn_id == value.pn_id && item.product_id == value.product_id;
+    });
+
+    let tongtienNew1 = tongtienNew[0].gia * tongtienNew[0].soluong;
+
+    let tongtienOld = gia * soLuong;
+    setTongtienPN((prev) => prev - tongtienOld + tongtienNew1);
   };
 
   // console.log(dataShowPN);
@@ -168,11 +174,9 @@ const PhieuNhap = () => {
   const handleShow = () => {
     setShow(true);
   };
-  const [nameProduct, setNameProduct] = useState();
-  const [soLuong, setSoLuong] = useState();
-  const [gia, setGia] = useState();
 
   const handleShowUpdateCtPN = (item) => {
+    // console.log(item);
     setIdProduct(item?.product_id);
     setNameProduct(item?.product.tenSP);
     setSoLuong(item?.soluong);
@@ -387,13 +391,26 @@ const PhieuNhap = () => {
         axios
           .delete(`/api/kho/deleteCtPN/${idPN1}/${idProduct1}`)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             if (res.data.status == 200) {
               Swal.fire("Đã xóa!", "Bạn đã xóa chi tiết phiếu nhập", "success");
-              setShowTab(true);
-              setTabKey(2);
-              setSubmitting(true);
+              let tongtienNew = viewPn.pnct.filter((item) => {
+                return item.pn_id == idPN1 && item.product_id == idProduct1;
+              });
+
+              let tongtienNew1 = tongtienNew[0].gia * tongtienNew[0].soluong;
+              // console.log(tongtienNew);
+              setTongtienPN((prev) => prev - tongtienNew1);
+
+              setViewPn({
+                pnct: viewPn.pnct.filter((item) => {
+                  return item.pn_id == idPN1 && item.product_id != idProduct1;
+                }),
+              });
             }
+            // setShowTab(true);
+            // setTabKey(2);
+            setSubmitting(true);
           })
           .catch(function (error) {
             // handle error
@@ -537,12 +554,6 @@ const PhieuNhap = () => {
           setErrorSL([]);
           setErrorGia([]);
           setErrorSP([]);
-
-          // swal({
-          //   title: res.data.message,
-          //   icon: "success",
-          //   button: "đóng",
-          // });
         }
       })
       .catch(function (error) {
@@ -595,20 +606,20 @@ const PhieuNhap = () => {
   };
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-});
+  });
 
   // console.log();
   return (
     <>
-      <B.Modal size='lg' show={showPrint} onHide={handleClosePrintPN}>
+      <B.Modal size="lg" show={showPrint} onHide={handleClosePrintPN}>
         <B.ModalBody>
           <div ref={componentRef}>
             <Bill
-              tenPhieu='pn'
+              tenPhieu="pn"
               billCode={viewPn?.id}
-              tenNCC={viewPn?.ncc.tenNCC}
-              sdt={viewPn?.ncc.sdt}
-              diaChi={viewPn?.ncc.sdt}
+              tenNCC={viewPn?.ncc?.tenNCC}
+              sdt={viewPn?.ncc?.sdt}
+              diaChi={viewPn?.ncc?.diaChi}
               tongTien={viewPn?.tongTien}
               data={viewPn}
             />
@@ -686,7 +697,6 @@ const PhieuNhap = () => {
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-
         </B.Row>
 
         <B.Row className="pe-xl-5 mb-5">
@@ -836,7 +846,7 @@ const PhieuNhap = () => {
                             required
                             onChange={handleInput}
                             value={inputPN.soluong}
-                          // placeholder={errorSL}
+                            // placeholder={errorSL}
                           ></B.FormControl>
                           {/* <span className="text-danger">{errorSL}</span> */}
                         </td>
@@ -849,7 +859,7 @@ const PhieuNhap = () => {
                             required
                             onChange={handleInput}
                             value={inputPN.gia}
-                          // placeholder={errorGia}
+                            // placeholder={errorGia}
                           ></B.FormControl>
                           {/* <span className="text-danger">{errorGia}</span> */}
                         </td>
@@ -1072,6 +1082,7 @@ const PhieuNhap = () => {
                     handleShowUpdateCtPN={handleShowUpdateCtPN}
                     viewPn={viewPn}
                     handleCloseTab={handleCloseTab}
+                    handleReloadCTPN={handleReloadCTPN}
                   ></Ctpn>
                 </B.Tab>
               )}
