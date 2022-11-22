@@ -244,7 +244,7 @@ class ManagePhieuXuatController extends Controller
                     if ($request->soluong > $checksp->soLuongSP) {
                         return response()->json([
                             'status' => 400,
-                            'message' => 'Kho không đủ hàng !',
+                            'message' => 'Kho không còn đủ hàng , Số hàng tồn kho : ' . $checksp->soLuongSP,
                         ]);
                     }
                     $pxcts = PhieuXuat::find($request->px_id)->pxct;
@@ -608,7 +608,7 @@ class ManagePhieuXuatController extends Controller
                         } else {
                             return response()->json([
                                 'status' => 402,
-                                'message' => 'Kho không còn đủ hàng',
+                                'message' => 'Kho không còn đủ hàng , Số hàng tồn kho : ' . $checksp->soLuongSP,
                             ]);
                         }
                     } else {
