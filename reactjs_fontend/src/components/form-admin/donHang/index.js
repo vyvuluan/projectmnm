@@ -10,7 +10,6 @@ import { BsFillExclamationSquareFill } from 'react-icons/bs'
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import Bill from '../print/bill'
-import BillKho from '../print/billkho'
 
 const checkStatus = [
   { id: 0, name: 'Chờ xác nhận' },
@@ -345,8 +344,9 @@ const DonHang = () => {
           <B.Tab eventKey={1} title="Hóa đơn">
             <div ref={componentRef}>
               <Bill
+                tenPhieu='px'
                 billCode={viewOrder?.id}
-                hotenKH={viewOrder?.tenKH}
+                tenKH={viewOrder?.tenKH}
                 sdt={viewOrder?.sdt}
                 diaChi={viewOrder?.diaChi}
                 pttt={viewOrder?.pt_ThanhToan}
@@ -358,7 +358,8 @@ const DonHang = () => {
           </B.Tab>
           <B.Tab eventKey={2} title="Phiếu xuất kho">
             <div ref={componentRefPx}>
-              <BillKho
+              <Bill
+                tenPhieu='ycxk'
                 billCode={viewOrder?.id}
                 tenKH={viewOrder?.tenKH}
                 sdt={viewOrder?.sdt}

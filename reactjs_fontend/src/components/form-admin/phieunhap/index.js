@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback ,useRef} from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import * as B from "react-bootstrap";
 import axios, { Axios } from "axios";
 import swal from "sweetalert";
@@ -16,7 +16,7 @@ import UpdateCtPN from "./updateCtPn";
 import Pagination from "../../form/pagination";
 import Ctpn from "./ctpn";
 import LichSuNhapHang from "./lichsunhaphang";
-import PrinterPN from "./printerPN";
+import Bill from '../print/bill'
 
 /*
     xóa tìm kiếm
@@ -595,20 +595,27 @@ const PhieuNhap = () => {
   };
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-});
+  });
 
   // console.log();
   return (
     <>
       <B.Modal size='lg' show={showPrint} onHide={handleClosePrintPN}>
-        <B.ModalHeader closeButton className="bg-secondary">
-          <B.ModalTitle>In phiếu nhập</B.ModalTitle>
-        </B.ModalHeader>
         <B.ModalBody>
-          <PrinterPN componentRef={componentRef}  formatMoney={formatMoney} viewPn={viewPn}/>
+          <div ref={componentRef}>
+            <Bill
+              tenPhieu='pn'
+              billCode={viewPn?.id}
+              tenNCC={viewPn?.ncc.tenNCC}
+              sdt={viewPn?.ncc.sdt}
+              diaChi={viewPn?.ncc.sdt}
+              tongTien={viewPn?.tongTien}
+              data={viewPn}
+            />
+          </div>
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
-        <B.Button
+          <B.Button
             variant="outline-primary"
             className="mt-2 rounded-0"
             onClick={handlePrint}
@@ -679,7 +686,7 @@ const PhieuNhap = () => {
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          
+
         </B.Row>
 
         <B.Row className="pe-xl-5 mb-5">
@@ -829,7 +836,7 @@ const PhieuNhap = () => {
                             required
                             onChange={handleInput}
                             value={inputPN.soluong}
-                            // placeholder={errorSL}
+                          // placeholder={errorSL}
                           ></B.FormControl>
                           {/* <span className="text-danger">{errorSL}</span> */}
                         </td>
@@ -842,7 +849,7 @@ const PhieuNhap = () => {
                             required
                             onChange={handleInput}
                             value={inputPN.gia}
-                            // placeholder={errorGia}
+                          // placeholder={errorGia}
                           ></B.FormControl>
                           {/* <span className="text-danger">{errorGia}</span> */}
                         </td>
@@ -1036,7 +1043,7 @@ const PhieuNhap = () => {
                                     data-toggle="tooltip"
                                     data-placement="bottom"
                                     title="in phiếu nhập"
-                                    onClick={()=>handlePrintPN(item)}
+                                    onClick={() => handlePrintPN(item)}
                                   />
                                 ) : null}
                               </td>
