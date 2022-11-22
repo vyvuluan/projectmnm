@@ -668,25 +668,43 @@ function Index() {
                             <B.FormGroup className='mb-2'>
                                 <B.FormLabel className='fs-5'>Số lượng sản phẩm</B.FormLabel>
                                 <B.InputGroup className="quantity mx-auto">
-                                    <B.Button
-                                        className="btn-sm rounded-0 shadow-none btnclick"
-                                        variant="primary"
-                                        type="button"
-                                        onClick={handleProdDecrement}
-                                    >
-                                        <FaMinus />
-                                    </B.Button>
+                                    {prodQuantity <= 1 ?
+                                        <B.Button
+                                            className="btn-sm rounded-0 shadow-none btnclick"
+                                            variant="primary"
+                                            type="button"
+                                            disabled
+                                        >
+                                            <FaMinus />
+                                        </B.Button>
+                                        : <B.Button
+                                            className="btn-sm rounded-0 shadow-none btnclick"
+                                            variant="primary"
+                                            type="button"
+                                            onClick={handleProdDecrement}
+                                        >
+                                            <FaMinus />
+                                        </B.Button>}
                                     <B.InputGroup.Text className="form-control-sm text-center">
                                         {prodQuantity}
                                     </B.InputGroup.Text>
-                                    <B.Button
-                                        className="btn-sm rounded-0 shadow-none btnclick"
-                                        variant="primary"
-                                        type="button"
-                                        onClick={handleProdIncrement}
-                                    >
-                                        <FaPlus />
-                                    </B.Button>
+                                    {prodQuantity >= 4 || prodQuantity === editProd?.product.soluong ?
+                                        <B.Button
+                                            className="btn-sm rounded-0 shadow-none btnclick"
+                                            variant="primary"
+                                            type="button"
+                                            disabled
+                                        >
+                                            <FaPlus />
+                                        </B.Button>
+                                        : <B.Button
+                                            className="btn-sm rounded-0 shadow-none btnclick"
+                                            variant="primary"
+                                            type="button"
+                                            onClick={handleProdIncrement}
+                                        >
+                                            <FaPlus />
+                                        </B.Button>}
                                 </B.InputGroup>
                             </B.FormGroup>
                             <B.FormGroup className='mb-2'>
