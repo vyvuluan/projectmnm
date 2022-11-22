@@ -66,6 +66,14 @@ class CartController extends Controller
                                  Vui lòng kiểm tra lại giỏ hàng của bạn !  ',
 
                             ]);
+                        } else if ($cartItem->soLuongSP > 4) {
+                            return response()->json([
+                                'status' => 400,
+                                'message' => ' Bạn chỉ có thể mua tối đa 4 sản phẩm cho 1 loại mặt hàng
+                                 Vui lòng kiểm tra lại giỏ hàng của bạn !  ',
+
+
+                            ]);
                         }
                         $cartItem->save();
                         $count = $cartItem->count();
