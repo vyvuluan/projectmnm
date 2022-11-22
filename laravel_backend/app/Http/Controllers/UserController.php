@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConfirmMail;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Employee;
-
+use App\Notifications\SendMailConfirmRegister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -91,6 +92,14 @@ class UserController extends Controller
             'data' => User::all(),
         ]);
     }
+    public function generateUniqueCode()
+    {
+        do {
+            $code = random_int(100000, 999999);
+        } while (ConfirmMail::where("code", "=", $code)->first());
+
+        return $code;
+    }
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -134,20 +143,70 @@ class UserController extends Controller
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'status' => 2,
             ]);
 
 
-            $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+            // $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
             $customer = new Customer();
             $customer->user_id = $user->id;
             $customer->ten = $request->fullname;
             $customer->save();
+            $code = $this->generateUniqueCode();
+            $confirm = ConfirmMail::create([
+                'email' => $request->email,
+                'code' => $code,
+            ]);
+            if ($user) {
+                //$contact = Contact::where('customer_id', $customer_id)->first();
+                $user->notify(new SendMailConfirmRegister($user->email, $code));
+                return Redirect::to('http://localhost:3000/confirm-email?email=' . $user->email);
+            }
+            // return response()->json([
+            //     'status' => 200,
+            //     'username' => $user->username,
+            //     'fullname' => $request->fullname,
+            //     'token' => $token,
+            //     'message' => 'Đăng ký thành công',
+            // ]);
+        }
+    }
+
+    public function gui_lai_code($email)
+    {
+        $confirm = ConfirmMail::where('email', $email)->first();
+        $confirm->delete();
+        $code = $this->generateUniqueCode();
+        $confirm = ConfirmMail::create([
+            'email' => $email,
+            'code' => $code,
+        ]);
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $user->notify(new SendMailConfirmRegister($email, $code));
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Gửi lại mã thành công vui lòng check mail',
+        ]);
+    }
+
+    public function confirm_email(Request $request, $email)
+    {
+        $confirm = ConfirmMail::where('email', $email)->first();
+        if ($confirm->code == $request->code) {
+            $user = User::where('email', $email)->first();
+            $user->status = 1;
+            $user->save();
+            $confirm->delete();
             return response()->json([
                 'status' => 200,
-                'username' => $user->username,
-                'fullname' => $request->fullname,
-                'token' => $token,
-                'message' => 'Đăng ký thành công',
+                'message' => 'Đăng ký thành công'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Mã code không chính xác'
             ]);
         }
     }
@@ -229,6 +288,7 @@ class UserController extends Controller
         // 'userCreated' =>$userCreated ,
         // 'Access-Token' => $token]);
     }
+
 
     /**
      * @param $provider

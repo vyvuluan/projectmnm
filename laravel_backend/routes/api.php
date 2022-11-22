@@ -39,6 +39,10 @@ use  App\Http\Controllers\admin\DiscountController;
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
+
+Route::put('/confirm-email/{email}', [UserController::class, 'confirm_email']);
+Route::post('/gui-lai-code/{email}', [UserController::class, 'gui_lai_code']);
+
 //api search nhà cung cấp theo tên mã số điện thoại
 Route::get('/searchNcc', [ManageNccController::class, 'searchNcc']);
 //api search nhà sản xuất theo tên mã quốc gia
