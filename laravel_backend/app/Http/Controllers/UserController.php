@@ -160,8 +160,8 @@ class UserController extends Controller
             if ($user) {
                 //$contact = Contact::where('customer_id', $customer_id)->first();
                 $user->notify(new SendMailConfirmRegister($user->email, $code));
-                return Redirect::to('http://localhost:3000/confirm-email?email=' . $user->email);
             }
+            return Redirect::to('http://localhost:3000/confirm-email?email=' . $user->email);
             // return response()->json([
             //     'status' => 200,
             //     'username' => $user->username,
