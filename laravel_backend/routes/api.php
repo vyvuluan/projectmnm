@@ -26,6 +26,7 @@ use  App\Http\Controllers\admin\ManageCustomerController;
 use  App\Http\Controllers\admin\ManagePhieuNhapController;
 use  App\Http\Controllers\admin\ManageBaoCaoController;
 use  App\Http\Controllers\admin\DiscountController;
+use Illuminate\Support\Facades\Redirect;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,6 +40,9 @@ use  App\Http\Controllers\admin\DiscountController;
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
+Route::get('test', function () {
+    return Redirect::away('http://localhost:3000');
+});
 
 Route::put('/confirm-email/{email}', [UserController::class, 'confirm_email']);
 Route::post('/gui-lai-code/{email}', [UserController::class, 'gui_lai_code']);
