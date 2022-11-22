@@ -321,13 +321,17 @@ const Account = () => {
                           style={{ marginRight: "15px" }}
                           onClick={() => handleDeleteAccount(item)}
                         />
-                        <RiLockPasswordFill
-                          type="button"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="Reset mật khẩu"
-                          onClick={() => handleShowResetAcc(item)}
-                        />
+                        {cookies.get("role_id") == 2 ? (
+                          <>
+                            <RiLockPasswordFill
+                              type="button"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="Reset mật khẩu"
+                              onClick={() => handleShowResetAcc(item)}
+                            />
+                          </>
+                        ) : null}
                       </td>
                     </tr>
                   );
