@@ -98,6 +98,9 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     //api báo cáo thống kê
     Route::get('baocao', [ManageBaoCaoController::class, 'thongKeDoanhThuThang']);
     //api tính số contact chưa đọc
+
+
+    Route::put('reset-password/{user_id}', [ManageUserController::class, 'reset_password']);
 });
 
 

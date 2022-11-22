@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback ,useRef} from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import * as B from "react-bootstrap";
 import axios, { Axios } from "axios";
 import swal from "sweetalert";
@@ -8,7 +8,7 @@ import { AiOutlineFileAdd, AiFillEye, AiFillPrinter } from "react-icons/ai";
 import { FiTool } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
 import { BiReset, BiEdit } from "react-icons/bi";
-import { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from "react-to-print";
 
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AddPhieuNhap from "./addPhieunhap";
@@ -78,7 +78,7 @@ const PhieuNhap = () => {
   const [showTab, setShowTab] = useState(false);
 
   // const [buttonText, setButtonText] = useState("Chưa thanh toán");
-  const handleClosePrintPN = () => setShowPrint(prev => !prev);
+  const handleClosePrintPN = () => setShowPrint((prev) => !prev);
 
   // const handleClick = () =>  {
   //   setButtonText('Đã thanh toán');
@@ -595,20 +595,24 @@ const PhieuNhap = () => {
   };
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-});
+  });
 
   // console.log();
   return (
     <>
-      <B.Modal size='lg' show={showPrint} onHide={handleClosePrintPN}>
+      <B.Modal size="lg" show={showPrint} onHide={handleClosePrintPN}>
         <B.ModalHeader closeButton className="bg-secondary">
           <B.ModalTitle>In phiếu nhập</B.ModalTitle>
         </B.ModalHeader>
         <B.ModalBody>
-          <PrinterPN componentRef={componentRef}  formatMoney={formatMoney} viewPn={viewPn}/>
+          <PrinterPN
+            componentRef={componentRef}
+            formatMoney={formatMoney}
+            viewPn={viewPn}
+          />
         </B.ModalBody>
         <B.ModalFooter className="bg-secondary">
-        <B.Button
+          <B.Button
             variant="outline-primary"
             className="mt-2 rounded-0"
             onClick={handlePrint}
@@ -679,7 +683,6 @@ const PhieuNhap = () => {
             </h1>
           </B.Col>
           <B.Col lg={2}></B.Col>
-          
         </B.Row>
 
         <B.Row className="pe-xl-5 mb-5">
@@ -1036,7 +1039,7 @@ const PhieuNhap = () => {
                                     data-toggle="tooltip"
                                     data-placement="bottom"
                                     title="in phiếu nhập"
-                                    onClick={()=>handlePrintPN(item)}
+                                    onClick={() => handlePrintPN(item)}
                                   />
                                 ) : null}
                               </td>

@@ -5,8 +5,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class ManageUserController extends Controller
 {
@@ -251,5 +252,43 @@ class ManageUserController extends Controller
             'status' => 200,
             'message' => 'xóa thành công',
         ]);
+    }
+    public function reset_password(Request $request, $user_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:8',
+            're_password' => 'required|min:8',
+            
+        ], [
+            'password.required' => 'Ô password Không được bỏ trống',
+            'password.min' => 'Ô password tối thiểu 8 ký tự',
+
+            're_password.required' => 'Ô password Không được bỏ trống',
+            're_password.min' => 'Ô password tối thiểu 8 ký tự',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => $validator->messages(),
+                'check'=> 0,
+
+            ]);
+        }
+        if ($request->password != $request->re_password) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'Mật khẩu không trùng khớp',
+                'check'=> 1,
+            ]);
+        } else {
+            $user = User::find($user_id);
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Cập nhật mật khẩu thành công',
+            ]);
+        }
     }
 }

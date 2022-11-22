@@ -91,7 +91,7 @@ const Ctpn = ({
           </tbody>
         </B.Table>
         <h5 className="text-right mt-2 text-primary">
-          Tổng tiền: {formatMoney(tongTienPN)}
+          {/* Tổng tiền: {formatMoney(tongTienPN)} */}
         </h5>
       </B.Form>
     </>

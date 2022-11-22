@@ -93,34 +93,7 @@ const UpdateCtPN = ({
           value={tenSP}
           disabled
         ></Bt.FormControl>
-        {/* <div className="w-100 me-2" style={{ pointerEvents: "none" }}>
-          <ReactSearchAutocomplete
-            placeholder="sản phẩm"
-            items={listProduct}
-            onSearch={handleOnSearchSp}
-            onSelect={handleOnSelectSp}
-            fuseOptions={{ keys: ["id", "tenSP"] }}
-            resultStringKeyName="tenSP"
-            formatResult={formatResult}
-            showIcon={false}
-            inputSearchString={tenSP}
-            styling={{
-              height: "36px",
-              border: "1px solid lightgray",
-              borderRadius: "0",
-              backgroundColor: "white",
-              boxShadow: "none",
-              hoverBackgroundColor: "#d19c97",
-              color: "black",
-              fontSize: "15px",
-              // fontFamily: "Courier",
-              iconColor: "black",
-              lineColor: "#d19c97",
-              // placeholderColor: "black",
-              clearIconMargin: "3px 8px 0 0",
-            }}
-          />
-        </div> */}
+      
         <Bt.FormGroup className="mb-3" controlId="formName">
           <Bt.FormLabel className="fw-semibold fs-4">Số lượng</Bt.FormLabel>
           <Bt.FormControl
