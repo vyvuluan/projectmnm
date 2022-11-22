@@ -1,29 +1,57 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import swal from "sweetalert";
 
 const ComfirmMail = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [code,setCode] = useState()
-    const email = searchParams.get("email")
+  const [searchParams, setSearchParams] = useSearchParams();
+  const history = useNavigate();
 
-    const handleInput = (e) => {
-        setCode(e.target.value)
-    }
+  const email = searchParams.get("email");
 
-    const handleComfirmEmail = () => {
-        const data = code
-        axios.put(`/api/confirm-email/${email}`, data)
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-    }
+  const [code, setCode] = useState({
+    code: "",
+  });
+  const handleInput = (e) => {
+    e.persist();
+    setCode({ ...code, [e.target.name]: e.target.value });
+  };
+  // console.log(code);
+  const handleComfirmEmail = (e) => {
+    e.preventDefault();
+    const data = {
+      code: code.code,
+    };
+    axios
+      .put(`api/confirm-email/${email}`, data)
+      .then((res) => {
+        if (res.data.status == 200) {
+          swal("Success", res.data.message, "success");
+        }
+        history("/login");
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
+  const handleBackCode = (e) => {
+    e.preventDefault();
+    axios
+      .post(`api/gui-lai-code/${email}`)
+      .then((res) => {
+        if (res.data.status == 200) {
+          swal("Success", res.data.message, "success");
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
   return (
     <>
-      <div className="Auth-form-container" >
+      <div className="Auth-form-container">
         <form className="Auth-form" onSubmit={handleComfirmEmail}>
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Xác nhận Email</h3>
@@ -36,11 +64,11 @@ const ComfirmMail = () => {
               </div>
               <input
                 type="number"
-                name="comfirmMail"
+                name="code"
                 className="form-control mt-1 shadow-sm"
                 placeholder="Nhập mã xác nhận"
                 onChange={handleInput}
-                value={code}
+                value={code.code}
                 required
               />
             </div>
@@ -51,11 +79,10 @@ const ComfirmMail = () => {
               </button>
             </div>
             <div className="text-center text-uppercase mt-3 fw-bold">
-              <a href="#">lấy lại mã xác nhận</a>
+              <a href="#" onClick={handleBackCode}>
+                lấy lại mã xác nhận
+              </a>
             </div>
-            <p className="text-center mt-2">
-              Quay lại <Link to={`/Register`}>đăng nhập</Link>
-            </p>
           </div>
         </form>
       </div>
