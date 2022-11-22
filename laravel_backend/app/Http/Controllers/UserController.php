@@ -72,6 +72,11 @@ class UserController extends Controller
 
                         'message' => 'Đăng nhập thành công',
                     ]);
+                } else if ($user->status == 2) {
+                    return response()->json([
+                        'status' => 402,
+                        'message' => 'Tài khoản của khách hàng chưa xác thực',
+                    ]);
                 } else {
                     return response()->json([
                         'status' => 402,
