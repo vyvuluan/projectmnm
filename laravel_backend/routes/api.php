@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Redirect;
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::get('test', function () {
-    return Redirect::away('http://localhost:3000');
+    return Redirect::away('http://localhost:3000/confirm-email?email=');
 });
 
 Route::put('/confirm-email/{email}', [UserController::class, 'confirm_email']);
