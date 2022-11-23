@@ -116,7 +116,7 @@ function Index() {
   };
 
   const handleOnSearch = (key) => {
-    axios.get(`http://localhost:8000/api/searchNcc?key=${key}`).then((res) => {
+    axios.get(`/api/searchNcc?key=${key}`).then((res) => {
       if (res.data.status === 200) {
         setNcclist(res.data.ncc);
       }
@@ -128,7 +128,7 @@ function Index() {
   };
 
   const handleOnNsxSearch = (key) => {
-    axios.get(`http://localhost:8000/api/searchNsx?key=${key}`).then((res) => {
+    axios.get(`/api/searchNsx?key=${key}`).then((res) => {
       if (res.data.status === 200) {
         setNsxlist(res.data.nsx);
       }
@@ -141,7 +141,7 @@ function Index() {
 
   const handleOnProdSearch = (key) => {
     if (key !== '') {
-      axios.get(`http://localhost:8000/api/searchProduct?key=${key}`).then((res) => {
+      axios.get(`/api/searchProduct?key=${key}`).then((res) => {
         if (res.data.status === 200) {
           setProdSearchlist(res.data.product);
           setShowtable(true);
@@ -158,7 +158,7 @@ function Index() {
   useEffect(() => {
     let isMounted = true;
 
-    axios.get(`http://localhost:8000/api/loaisp/view`).then((res) => {
+    axios.get(`/api/loaisp/view`).then((res) => {
       if (isMounted) {
         if (res.data.status === 200) {
           setCategorylist(res.data.Loaisp);
@@ -316,13 +316,17 @@ function Index() {
                       <div className="prev-container mb-4">
                         {previewIMG && <img src={previewIMG.preview} alt=""></img>}
                       </div>
+                      {previewIMG ?
+                        <label className="custom-file-input1" for='imageinput'>Chọn ảnh khác</label>
+                        : <label className="custom-file-input1" for='imageinput'>Chọn ảnh</label>}
                       <B.FormGroup className="file_wrap">
                         <B.FormControl
+                          id='imageinput'
                           size="md"
                           type="file"
                           name="image"
                           onChange={handleImage}
-                          className="rounded-0 shadow-none mb-3 w-50"
+                          className="d-none"
                         ></B.FormControl>
                         <small className="text-danger">{errorlist.image}</small>
                       </B.FormGroup>
