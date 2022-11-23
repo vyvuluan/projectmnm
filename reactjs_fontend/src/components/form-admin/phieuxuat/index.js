@@ -688,7 +688,7 @@ function Index() {
                                     <B.InputGroup.Text className="form-control-sm text-center">
                                         {prodQuantity}
                                     </B.InputGroup.Text>
-                                    {prodQuantity >= 4 || prodQuantity === editProd?.product.soluong ?
+                                    {prodQuantity === editProd?.product.soLuongSP ?
                                         <B.Button
                                             className="btn-sm rounded-0 shadow-none btnclick"
                                             variant="primary"
@@ -972,7 +972,7 @@ function Index() {
                                                                     <B.InputGroup.Text className="form-control-sm text-center">
                                                                         {quantity}
                                                                     </B.InputGroup.Text>
-                                                                    {quantity >= 4 || quantity === prodData.soLuongSP ?
+                                                                    {quantity === prodData.soLuongSP ?
                                                                         <B.Button
                                                                             className="btn-sm rounded-0 shadow-none btnclick"
                                                                             variant="primary"
