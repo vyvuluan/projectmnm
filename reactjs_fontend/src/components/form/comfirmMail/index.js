@@ -59,7 +59,7 @@ const ComfirmMail = () => {
             <div className="form-group mt-3">
               <div className="text-center">
                 <label style={{ color: "green" }}>
-                  Vui lòng kiểm tra email để lấy mã xác nhận
+                  Vui lòng kiểm tra email để lấy mã xác nhận. Nếu trong vòng 3 phút bạn không xác nhận hệ thống sẽ tự động xóa tài khoản bạn vừa tạo.
                 </label>
               </div>
               <input

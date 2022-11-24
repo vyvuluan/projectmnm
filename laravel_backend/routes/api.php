@@ -27,6 +27,11 @@ use  App\Http\Controllers\admin\ManagePhieuNhapController;
 use  App\Http\Controllers\admin\ManageBaoCaoController;
 use  App\Http\Controllers\admin\DiscountController;
 use Illuminate\Support\Facades\Redirect;
+
+
+
+use App\Models\ConfirmMail;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,7 +46,15 @@ use Illuminate\Support\Facades\Redirect;
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::get('test', function () {
-    return Redirect::away('http://localhost:3000/confirm-email?email=');
+    //return Redirect::away('http://localhost:3000/confirm-email?email=');
+    $today = Carbon::now();
+    $confirms = ConfirmMail::get();
+    foreach ($confirms as $confirm) {
+        if (strtotime($today) > strtotime(strtotime($confirm->create_at . ' + 3 minute'))) {
+            echo $confirm->code;
+            echo '</br>';
+        }
+    }
 });
 
 Route::put('/confirm-email/{email}', [UserController::class, 'confirm_email']);
