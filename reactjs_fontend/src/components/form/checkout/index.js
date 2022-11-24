@@ -10,6 +10,7 @@ import LoaderIcon from "../../layouts/Loading/index";
 import * as B from "react-bootstrap";
 import vnpaylogo from "../../../img/vnpaylogo.png"
 import './style.css'
+import Breadcum from '../breadcum/index'
 
 function Checkout() {
     const navigate = useNavigate();
@@ -211,37 +212,13 @@ function Checkout() {
     if (loading) {
         return (
             <div>
-                <B.Container fluid className="bg-secondary mb-5">
-                    <div
-                        className="d-flex flex-column align-items-center justify-content-center"
-                        style={{ minHeight: "300px" }}
-                    >
-                        <h1 className="fw-semibold text-uppercase mb-3">Thanh toán</h1>
-                        <div className="d-inline-flex">
-                            <p className="m-0">
-                                <Link
-                                    to={"/"}
-                                    className="text-decoration-none"
-                                    variant="primary"
-                                >
-                                    Home
-                                </Link>
-                            </p>
-                            <p className="m-0 px-2">-</p>
-                            <p className="m-0">
-                                <Link
-                                    to={"/cart"}
-                                    className="text-decoration-none"
-                                    variant="primary"
-                                >
-                                    Giỏ hàng
-                                </Link>
-                            </p>
-                            <p className="m-0 px-2">-</p>
-                            <p className="m-0 text-muted">Thanh toán</p>
-                        </div>
-                    </div>
-                </B.Container>
+                <Breadcum
+                    title='Thanh toán'
+                    name='Thanh toán'
+                    BC={2}
+                    link='/cart'
+                    linkName='Giỏ hàng'
+                />
 
                 <LoaderIcon />
             </div>
@@ -432,33 +409,13 @@ function Checkout() {
                 </B.ModalBody>
             </B.Modal>
 
-            <B.Container fluid className="bg-secondary mb-5">
-                <div
-                    className="d-flex flex-column align-items-center justify-content-center"
-                    style={{ minHeight: "300px" }}
-                >
-                    <h1 className="fw-semibold text-uppercase mb-3">Thanh toán</h1>
-                    <div className="d-inline-flex">
-                        <p className="m-0">
-                            <Link to={"/"} className="text-decoration-none" variant="primary">
-                                Home
-                            </Link>
-                        </p>
-                        <p className="m-0 px-2">-</p>
-                        <p className="m-0">
-                            <Link
-                                to={"/cart"}
-                                className="text-decoration-none"
-                                variant="primary"
-                            >
-                                Giỏ hàng
-                            </Link>
-                        </p>
-                        <p className="m-0 px-2">-</p>
-                        <p className="m-0 text-muted">Thanh toán</p>
-                    </div>
-                </div>
-            </B.Container>
+            <Breadcum
+                title='Thanh toán'
+                name='Thanh toán'
+                BC={2}
+                link='/cart'
+                linkName='Giỏ hàng'
+            />
 
             <B.Container fluid pt={5} className="mb-5">
                 <B.Form>{checkout_HTML}</B.Form>

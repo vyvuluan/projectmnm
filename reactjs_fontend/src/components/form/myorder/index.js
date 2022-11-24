@@ -5,6 +5,7 @@ import imgage from '../../../img/user.jpg'
 import axios from 'axios'
 import Pagination from '../../form/pagination/index'
 import swal from 'sweetalert'
+import Breadcum from '../breadcum/index'
 
 function Index() {
     const [orderlist, setOrderlist] = useState([]);
@@ -109,23 +110,11 @@ function Index() {
 
     return (
         <>
-            <B.Container fluid className="bg-secondary mb-5">
-                <div
-                    className="d-flex flex-column align-items-center justify-content-center"
-                    style={{ minHeight: "300px" }}
-                >
-                    <h1 className="fw-semibold text-uppercase mb-3">Đơn hàng của tôi</h1>
-                    <div className="d-inline-flex">
-                        <p className="m-0">
-                            <Link to={"/"} className="text-decoration-none" variant="primary">
-                                Trang chủ
-                            </Link>
-                        </p>
-                        <p className="m-0 px-2">-</p>
-                        <p className="m-0 text-muted">Đơn hàng</p>
-                    </div>
-                </div>
-            </B.Container>
+            <Breadcum
+                title='Đơn hàng của tôi'
+                name='Đơn hàng'
+                BC={1}
+            />
 
             <B.Container className='px-lg-5 pb-lg-5'>
                 <B.Row>

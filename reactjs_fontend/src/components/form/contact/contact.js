@@ -6,6 +6,7 @@ import { HiMail } from 'react-icons/hi'
 import { BsTelephoneFill } from 'react-icons/bs'
 import axios from 'axios'
 import swal from 'sweetalert'
+import Breadcum from '../breadcum/index'
 
 export default function Contact() {
     const [messageInput, setMessage] = useState();
@@ -33,16 +34,11 @@ export default function Contact() {
 
     return (
         <>
-            <Bt.Container fluid className='bg-secondary mb-5'>
-                <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
-                    <h1 className='fw-semibold text-uppercase mb-3'>Liên hệ với chúng tôi</h1>
-                    <div className='d-inline-flex'>
-                        <p className='m-0'><Link to='/' className='text-decoration-none' variant='primary'>Home</Link></p>
-                        <p className='m-0 px-2'>-</p>
-                        <p className='m-0 text-muted'>Liên hệ</p>
-                    </div>
-                </div>
-            </Bt.Container>
+            <Breadcum
+                title='Liên hệ với chúng tôi'
+                name='Liên hệ'
+                BC={1}
+            />
 
             <Bt.Container pt={5}>
                 <div className='text-center mb-5'>

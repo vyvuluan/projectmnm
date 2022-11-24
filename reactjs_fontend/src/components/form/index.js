@@ -25,6 +25,8 @@ export { default as SortProduct } from "./sortProduct/index.js";
 export { default as PaymentReturn } from "./payment/payment-return";
 export { default as Discount } from "./khuyenmai/index";
 export { default as ComFirmMail } from "./comfirmMail/index";
+export { default as Breadcum } from "./breadcum/index";
+export { default as AboutUs } from "./about-us/index";
 
 
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import AccountEdit from "./accountEdit";
 import ChangePassAccount from "./changePassAccount";
+import Breadcrumb from "../breadcum/index";
 
 const AccountInfo = () => {
   const [auth, setAuth] = useState();
@@ -108,25 +109,11 @@ const AccountInfo = () => {
           </Bt.Button>
         </Bt.ModalFooter>
       </Bt.Modal>
-      <Bt.Container fluid className="bg-secondary mb-5">
-        <div
-          className="d-flex flex-column align-items-center justify-content-center"
-          style={{ minHeight: "300px" }}
-        >
-          <h1 className="fw-semibold text-uppercase mb-3">
-            Thông tin tài khoản
-          </h1>
-          <div className="d-inline-flex">
-            <p className="m-0">
-              <a href="" className="text-decoration-none" variant="primary">
-                Home
-              </a>
-            </p>
-            <p className="m-0 px-2">-</p>
-            <p className="m-0 text-muted">Thông tin tài khoản</p>
-          </div>
-        </div>
-      </Bt.Container>
+      <Breadcrumb
+        title='thông tin tài khoản'
+        BC={1}
+        name='Thông tin tài khoản'
+      />
       {/* Account information start */}
       <Bt.Container fluid pt={5}>
         <Bt.Row className="px-xl-5">

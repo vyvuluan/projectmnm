@@ -151,8 +151,8 @@ export default function Header() {
         <Bt.Row className="py-2 px-xl-5" style={{ backgroundColor: "#edf1ff" }}>
           <Bt.Col lg={6} className="d-none d-lg-block">
             <div className="d-inline-flex align-items-center">
-              <Link to="/" className="text-dark text-decoration-none">
-                Chính sách
+              <Link to="/aboutus" className="text-dark text-decoration-none">
+                Về chúng tôi
               </Link>
               <span className="text-muted px-2">|</span>
               <Link to="/warranty" className="text-dark text-decoration-none">

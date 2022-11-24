@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import * as Bt from 'react-bootstrap'
 import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
-
+import Breadcum from '../breadcum/index'
 
 function useInterval(callback, delay) {
     const savedCallback = useRef();
@@ -33,18 +33,11 @@ export default function Paymentreturn() {
 
     return (
         <>
-            <Bt.Container fluid className='bg-secondary mb-5'>
-                <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '300px' }}>
-                    <h1 className='fw-semibold text-uppercase mb-3'>Cảm ơn</h1>
-                    <div className='d-inline-flex'>
-                        <p className='m-0'><a href='' className='text-decoration-none' variant='primary'>Home</a></p>
-                        <p className='m-0 px-2'>-</p>
-                        <p className='m-0'><a href='' className='text-decoration-none' variant='primary'>Thanh toán</a></p>
-                        <p className='m-0 px-2'>-</p>
-                        <p className='m-0 text-muted'>Thanh toán thành công</p>
-                    </div>
-                </div>
-            </Bt.Container>
+            <Breadcum
+                title='Cảm ơn'
+                name='Thanh toán thành công'
+                BC={1}
+            />
 
             <Bt.Container fluid pt={5} className='mb-5'>
                 <Bt.Row className='px-xl-5 py-5 text-center'>
