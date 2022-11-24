@@ -42,7 +42,7 @@ const DropDownMenuAdmin = (props) => {
 
         <div className={`dropdown-menu1 ${open ? "active" : "inactive"}`}>
           <ul className="ul">
-            <DropdownItem icon={<RiLogoutBoxFill />} text={"Logout"} logout1={props.logout} />
+            <DropdownItem icon={<RiLogoutBoxFill />} text={"Đăng xuất"} logout1={props.logout} />
           </ul>
         </div>
       </div>

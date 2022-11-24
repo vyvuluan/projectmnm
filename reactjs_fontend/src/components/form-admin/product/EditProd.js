@@ -117,6 +117,7 @@ const Prodedit = ({ product, showModal, category, roleID }) => {
                                         name="image"
                                         onChange={handleImage}
                                         className="d-none"
+                                        accept=".jpg, .png, .svg, .webp, .tif, .tiff, .gif, .raw"
                                     ></B.FormControl>
                                 </B.FormGroup>
                             </B.Col>

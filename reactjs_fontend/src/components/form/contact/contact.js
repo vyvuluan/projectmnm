@@ -61,9 +61,9 @@ export default function Contact() {
                         <p className='text-muted'>Chúng tôi sẽ trả lời bằng mail sau khi tiết nhận thông tin quý khách đã gửi từ 3-5 ngày làm việc. Hoặc liên hệ trực tiếp đến số điện thoại bên dưới để được hỗ trợ sớm nhất, xin cảm ơn.</p>
                         <div className='d-flex flex-column mb-3'>
                             <h5 className='fw-semibold mb-3'>Thông tin liên hệ</h5>
-                            <p className='mb-2'><RiMapPinFill className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />273 An D. Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</p>
+                            <p className='mb-2'><RiMapPinFill className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />273 An D.Vương, Phường 3, Quận 5, Thành phố Hồ Chí Minh</p>
                             <p className='mb-2'><HiMail className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />hotrol3m@gmail.com</p>
-                            <p className='mb-2'><BsTelephoneFill className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />+84 01234 43210</p>
+                            <p className='mb-2'><BsTelephoneFill className='text-primary me-2' style={{ width: 'auto', height: '20px' }} />+84 349 262 670</p>
                         </div>
                     </Bt.Col>
                 </Bt.Row>

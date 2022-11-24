@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import * as Loader from "react-spinners";
 
 function LoadingPage() {
-    const [color, setColor] = useState('#d19c97');
+    const [color, setColor] = useState('#d70018');
     const [loading, setLoading] = useState(true);
 
     return (

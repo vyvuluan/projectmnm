@@ -77,7 +77,7 @@ export default function Header() {
     AuthButton = (
       <Bt.NavLink className="fs-5 fw-normal  text-end mt-2">
         <Link className="text-decoration-none aEffect" to="/login">
-          Login
+          Đăng nhập
         </Link>
       </Bt.NavLink>
     );

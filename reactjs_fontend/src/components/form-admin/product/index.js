@@ -327,6 +327,7 @@ function Index() {
                           name="image"
                           onChange={handleImage}
                           className="d-none"
+                          accept=".jpg, .png, .svg, .webp, .tif, .tiff, .gif, .raw"
                         ></B.FormControl>
                         <small className="text-danger">{errorlist.image}</small>
                       </B.FormGroup>
