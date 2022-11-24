@@ -1154,7 +1154,7 @@ function Index() {
                                                                     <B.InputGroup.Text className="form-control-sm text-center">
                                                                         {quantity}
                                                                     </B.InputGroup.Text>
-                                                                    {quantity >= 4 || quantity === prodData.soLuongSP ?
+                                                                    {quantity === prodData.soLuongSP ?
                                                                         <B.Button
                                                                             className="btn-sm rounded-0 shadow-none btnclick"
                                                                             variant="primary"
