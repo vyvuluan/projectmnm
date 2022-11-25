@@ -18,9 +18,9 @@ export const Nsxedit = ({ nsx, showModal }) => {
 
         axios.put(`/api/kho/nsx/${id}`, data).then(res => {
             if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success')
+                swal('Thành công', res.data.message, 'success')
             } else if (res.data.status === 404) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             }
         })
     }

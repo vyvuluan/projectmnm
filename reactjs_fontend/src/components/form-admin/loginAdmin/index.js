@@ -44,6 +44,7 @@ const LoginAdmin = () => {
 
             localStorage.setItem("auth_token", res.data.token);
             localStorage.setItem("auth_name", res.data.username);
+            localStorage.removeItem("auth_fullname");
             cookies.set("role_id", res.data.role_id, { path: "/" });
             // setIdRole(res.data.role_id)
             // console.log(cookies.get('role_id'));

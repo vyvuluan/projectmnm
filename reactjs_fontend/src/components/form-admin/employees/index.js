@@ -121,17 +121,17 @@ const Employees = () => {
       .then((res) => {
         // console.log(res.data);
         if (res.data.status == 200) {
-          swal("Success", res.data.message, "success");
+          swal("Thành công", res.data.message, "success");
           setSubmitting(true);
         }
         if (res.data.status == 400) {
-          swal("Warning", res.data.message, "error");
+          swal("Cảnh báo", res.data.message, "error");
         }
       })
       .catch(function (error) {
         // handle error
         console.log(error);
-        swal("Warning", "vui lòng kiểm tra lại thông tin vừa nhập ", "warning");
+        swal("Cảnh báo", "vui lòng kiểm tra lại thông tin vừa nhập ", "warning");
       });
   };
   const handleDeleteNV = (id) => {
