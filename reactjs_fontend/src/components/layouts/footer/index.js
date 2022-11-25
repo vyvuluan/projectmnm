@@ -1,8 +1,9 @@
 import React from "react";
 import * as Icon from "react-bootstrap-icons";
+import { Link } from 'react-router-dom'
 import { RiHomeSmileFill } from 'react-icons/ri'
-import { FaEnvelope } from 'react-icons/fa'
-import { MdOutlineSmartphone } from 'react-icons/md'
+import { FaEnvelope, FaWrench } from 'react-icons/fa'
+import { MdOutlineSmartphone, MdGroups } from 'react-icons/md'
 
 const Footers = () => {
 
@@ -52,7 +53,6 @@ const Footers = () => {
           </div>
 
           <div className="col-lg-4 col-md-6 mb-4 mb-md-0">
-
             <ul className="fa-ul text-dark list-unstyled" style={{ marginLeft: "1.65em;" }}
             >
               <li className="mb-3">
@@ -62,7 +62,10 @@ const Footers = () => {
                 <span className="fa-li"><FaEnvelope /></span><span className="ms-2 text-dark">hotrol3m@gmail.com</span>
               </li>
               <li className="mb-3">
-                <span className="fa-li"><MdOutlineSmartphone /></span><span className="ms-2 text-dark">+84 349 262 670</span>
+                <span className="fa-li"><MdGroups /></span><Link to='/aboutus' className="text-decoration-none"><span className="ms-2 text-dark">Về chúng tôi</span></Link>
+              </li>
+              <li className="mb-3">
+                <span className="fa-li"><FaWrench /></span><Link to='/warranty' className="text-decoration-none"><span className="ms-2 text-dark">Kiểm tra bảo hành</span></Link>
               </li>
             </ul>
           </div>
@@ -88,6 +91,11 @@ const Footers = () => {
             </table>
           </div>
         </div>
+      </div>
+
+      <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+        © 2022 Copyright:
+        <Link className="text-white text-decoration-none" to="/"> L3M SHOP</Link>
       </div>
     </footer>
   );
