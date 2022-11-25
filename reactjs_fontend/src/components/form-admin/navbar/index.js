@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-// import '../../../../node_modules/bootstrap/dist/css/bootstrap.css';
-// import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./style.css";
 import { FaBars, FaSearch, FaBell, FaEnvelope, FaUser } from "react-icons/fa";
 import SearchAdmin from "../search-admin";
@@ -12,8 +10,9 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 const NavBarAdmin = () => {
   const [nameUserAdmin, setNameUserAdmin] = useState();
-  const history = useNavigate();
   const cookies = new Cookies();
+  const location = useLocation();
+  const history = useNavigate();
 
   const logoutSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +34,18 @@ const NavBarAdmin = () => {
     });
   };
 
+  const showNav = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(location.search);
+
+    if (params.has("show")) {
+      params.delete("show");
+      history(`?show=${true}`);
+    } else {
+      history(`?show=${true}`);
+    }
+  };
+
   useEffect(() => {
     if (localStorage.getItem("auth_name")) {
       setNameUserAdmin(localStorage.getItem("auth_name"));
@@ -45,10 +56,9 @@ const NavBarAdmin = () => {
       <nav className="navbar navbar-expand navbar-light bg-dark topbar fixed-top">
         <button
           id="sidebarToggleTop"
-          className="btn btn-link d-md-none rounded-circle mr-3"
+          className="btn btn-link d-xl-none rounded-circle mr-3"
         >
-          {/* <i className="fa fa-bars"></i> */}
-          <FaBars />
+          <FaBars onClick={showNav} />
         </button>
         {/* form tìm kiếm */}
         <div className="row m-3 " style={{ color: "#d19c97" }}>
@@ -61,10 +71,6 @@ const NavBarAdmin = () => {
           <div className="text-muted fs-6">ADMINISTRATOR</div>
         </div>
         <ul className="navbar-nav ml-auto">
-
-          {/* <div className="topbar-divider d-none d-sm-block"></div> */}
-
-          {/* <!-- Nav Item - User Information --> */}
           <li className="nav-item no-arrow">
             <a className="nav-link" id="userDropdown">
               <span className="mr-2 d-none d-lg-inline text-gray-600 small">
@@ -73,9 +79,6 @@ const NavBarAdmin = () => {
 
               <DropDownMenuAdmin logout={logoutSubmit} />
             </a>
-
-
-
           </li>
         </ul>
       </nav>

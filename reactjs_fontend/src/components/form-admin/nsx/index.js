@@ -57,7 +57,7 @@ function Index() {
         axios.post(`/api/kho/nsx`, data).then(res => {
             if (res.data.status === 200) {
                 setSubmitting(true);
-                swal('Success', res.data.message, 'success')
+                swal('Thành công', res.data.message, 'success')
             }
         })
     }

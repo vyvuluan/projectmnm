@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from 'react-router-dom'
 import product1 from "../../../img/product-1.jpg";
 import * as Bt from "react-bootstrap";
 import axios from "axios";
@@ -6,6 +7,10 @@ import Cookies from "universal-cookie";
 import AccountEdit from "./accountEdit";
 import ChangePassAccount from "./changePassAccount";
 import Breadcrumb from "../breadcum/index";
+import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import { MdFavoriteBorder } from "react-icons/md";
+import { RiHomeSmile2Fill } from 'react-icons/ri'
+import { BiCategory } from 'react-icons/bi'
 
 const AccountInfo = () => {
   const [auth, setAuth] = useState();
@@ -115,9 +120,70 @@ const AccountInfo = () => {
         name='Thông tin tài khoản'
       />
       {/* Account information start */}
-      <Bt.Container fluid pt={5}>
+      <Bt.Container fluid pt={5} className="mb-5">
         <Bt.Row className="px-xl-5">
-          <Bt.Col lg={6} className="py-5 text-end">
+          <Bt.Col lg={3} className="py-5 d-none d-lg-block">
+            <Bt.Navbar className="pull-right">
+              <Bt.Nav className="flex-column">
+                <Bt.NavItem>
+                  <Bt.NavLink className="fs-5 fw-normal me-2">
+                    <Link className="text-decoration-none aEffect" to="/">
+                      <RiHomeSmile2Fill className="me-2 mb-1" />Trang chủ
+                    </Link>
+                  </Bt.NavLink>
+                </Bt.NavItem>
+                <Bt.NavItem>
+                  <Bt.NavLink
+                    className="fs-5 fw-normal me-2 "
+                  >
+                    <Link
+                      className="text-decoration-none aEffect"
+                      to="/pageproducts"
+                    >
+                      <BiCategory className="me-2 mb-1" />Sản phẩm
+                    </Link>
+                  </Bt.NavLink>
+                </Bt.NavItem>
+                <Bt.NavItem>
+                  <Bt.NavLink
+                    className="fs-5 fw-normal me-2 " active
+                  >
+                    <Link
+                      className="text-decoration-none aEffect border-bottom-0"
+                      to="/acountinfo"
+                    >
+                      <FaUserCircle className="me-2 mb-1" />Tài khoản
+                    </Link>
+                  </Bt.NavLink>
+                </Bt.NavItem>
+                <Bt.NavItem>
+                  <Bt.NavLink
+                    className="fs-5 fw-normal me-2"
+                  >
+                    <Link
+                      className="text-decoration-none aEffect"
+                      to="/myorder"
+                    >
+                      <MdFavoriteBorder className="me-2 mb-1" />Đơn hàng
+                    </Link>
+                  </Bt.NavLink>
+                </Bt.NavItem>
+                <Bt.NavItem>
+                  <Bt.NavLink
+                    className="fs-5 fw-normal me-2 "
+                  >
+                    <Link
+                      className="text-decoration-none aEffect"
+                      to="/cart"
+                    >
+                      <FaShoppingCart className="me-2 mb-1" />Giỏ hàng
+                    </Link>
+                  </Bt.NavLink>
+                </Bt.NavItem>
+              </Bt.Nav>
+            </Bt.Navbar>
+          </Bt.Col>
+          <Bt.Col lg={5} className="py-5 d-none d-lg-block text-center">
             <Bt.Image
               className="thumbnail border rounded-0"
               width={"auto"}
@@ -125,7 +191,7 @@ const AccountInfo = () => {
               src={product1}
             ></Bt.Image>
           </Bt.Col>
-          <Bt.Col lg={6} className="py-5 ps-5 text-start">
+          <Bt.Col lg={4} className="py-5">
             <h4 className="text-dark fw-semibold mb-3">Họ và tên</h4>
             <h6 className="text-muted mb-3">{userName}</h6>
             <h4 className="text-dark fw-semibold mb-3">Ngày Sinh</h4>
@@ -159,31 +225,6 @@ const AccountInfo = () => {
           </Bt.Col>
         </Bt.Row>
       </Bt.Container>
-      {/* Account information end */}
-
-      {/* Account information-edit start */}
-      {/* <Bt.Container fluid pt={5}>
-        <Bt.Row className="px-xl-5"> */}
-      {/* <Bt.Col lg={6} className='py-5 text-end'>
-                        <Bt.Image className='thumbnail border rounded-0' width={'auto'} height={'500px'} src={product1}></Bt.Image>
-                    </Bt.Col> */}
-      {/* <Bt.Col lg={4} className="py-5 ps-5 text-start">
-            
-          </Bt.Col>
-        </Bt.Row>
-      </Bt.Container> */}
-      {/* Account information-edit end */}
-
-      {/* Forgot password start */}
-      {/* <Bt.Container fluid pt={5}>
-        <Bt.Row className="px-xl-5">
-
-          <Bt.Col lg={4} className="py-5 ps-5 text-start">
-            
-          </Bt.Col>
-        </Bt.Row>
-      </Bt.Container> */}
-      {/* Forgot password end */}
     </>
   );
 };

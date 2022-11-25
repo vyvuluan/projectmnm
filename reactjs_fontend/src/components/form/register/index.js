@@ -63,7 +63,7 @@ const Resgiter = () => {
                 name="fullname"
                 type="text"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: Đỗ Đình Mạnh"
+                placeholder="Ví dụ: Đỗ Đình Mạnh"
                 onChange={handleInput}
                 value={registerInput?.fullname}
                 required
@@ -71,13 +71,13 @@ const Resgiter = () => {
             </div>
 
             <div className="form-group mt-3">
-              <label>UserName</label>
+              <label>Username</label>
               <span className="error1 ms-2">{errorTrung?.username}</span>
               <input
                 name="name"
                 type="text"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: abc"
+                placeholder="Ví dụ: abc123"
                 onChange={handleInput}
                 value={registerInput?.name}
                 required
@@ -91,7 +91,7 @@ const Resgiter = () => {
                 type="email"
                 name="email"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: abc@gmail.com"
+                placeholder="Ví dụ: abc123@gmail.com"
                 onChange={handleInput}
                 value={registerInput?.email}
                 required
@@ -99,13 +99,13 @@ const Resgiter = () => {
             </div>
 
             <div className="form-group mt-3">
-              <label>Password</label>
+              <label>Mật khẩu</label>
               <span className="error1 ms-2">{errorTrung?.password}</span>
               <input
                 type="password"
                 name="pass"
                 className="form-control mt-1 shadow-sm"
-                placeholder="Nhập password"
+                placeholder="Nhập mật khẩu"
                 onChange={handleInput}
                 value={registerInput?.pass}
                 required
@@ -119,7 +119,7 @@ const Resgiter = () => {
                 type="password"
                 name="repass"
                 className="form-control mt-1 shadow-sm"
-                placeholder="Xác nhận password"
+                placeholder="Xác nhận mật khẩu"
                 onChange={handleInput}
                 value={registerInput?.repass}
                 required

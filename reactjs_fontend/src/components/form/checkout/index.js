@@ -48,7 +48,7 @@ function Checkout() {
 
     if (!localStorage.getItem("auth_token")) {
         navigate("/");
-        swal("Warning", "Vui lòng login để mua hàng", "error");
+        swal("Thất bại", "Vui lòng login để mua hàng", "error");
     }
 
     function formatMoney(money) {
@@ -68,7 +68,7 @@ function Checkout() {
                     setLoading(false);
                 } else if (res.data.status === 401) {
                     navigate("/");
-                    swal("Warning", res.data.message, "error");
+                    swal("Thất bại", res.data.message, "error");
                 }
             }
         });

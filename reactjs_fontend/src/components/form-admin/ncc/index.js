@@ -63,7 +63,7 @@ const Ncc = () => {
 
     axios.post(`http://localhost:8000/api/kho/ncc`, data).then((res) => {
       if (res.data.status === 200) {
-        swal("Success", res.data.message, "success");
+        swal("Thành công", res.data.message, "success");
         setNcc({
           tenNCC: "",
           sdt: "",
@@ -72,7 +72,7 @@ const Ncc = () => {
         setSubmitting(true);
         setError([]);
       } else if (res.data.status === 400) {
-        swal("Error", res.data.message, "error");
+        swal("Thất bại", res.data.message, "error");
         setError(res.data.errors);
       }
     });

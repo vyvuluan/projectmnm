@@ -50,7 +50,7 @@ const DetailProduct = (props) => {
             setLoading(false);
           } else if (res.data.status === 404) {
             navaigate.push("/pageproducts");
-            swal("Warning", res.data.message, "error");
+            swal("Thất bại", res.data.message, "error");
           }
         }
       });
