@@ -72,17 +72,17 @@ class UserController extends Controller
 
                         'message' => 'Đăng nhập thành công',
                     ]);
-                } else if ($user->status == 2) {
-                    return response()->json([
-                        'status' => 402,
-                        'message' => 'Tài khoản của khách hàng chưa xác thực',
-                    ]);
                 } else {
                     return response()->json([
                         'status' => 402,
                         'message' => 'Tài khoản bạn đang có quyền quản lý ko có quyền đăng nhập ở trang khách hàng',
                     ]);
                 }
+            } else if ($user->status == 2) {
+                return response()->json([
+                    'status' => 402,
+                    'message' => 'Tài khoản của khách hàng chưa xác thực. Vui lòng truy cập http://localhost:3000/confirm-email?email=' . $user->email . ' để xác nhận tài khoản',
+                ]);
             } else {
                 return response()->json([
                     'status' => 402,

@@ -36,7 +36,7 @@ class LichCommand extends Command
         $today = Carbon::now();
         $confirms = ConfirmMail::get();
         foreach ($confirms as $confirm) {
-            if (strtotime($today) > strtotime(strtotime($confirm->create_at . ' + 3 minute'))) {
+            if (strtotime($today) > strtotime($confirm->created_at . ' + 3 minute')) {
                 $confirm->delete();
                 User::where('email', $confirm->email)->delete();
             }

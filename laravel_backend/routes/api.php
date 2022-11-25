@@ -50,10 +50,15 @@ Route::get('test', function () {
     $today = Carbon::now();
     $confirms = ConfirmMail::get();
     foreach ($confirms as $confirm) {
-        if (strtotime($today) > strtotime(strtotime($confirm->create_at . ' + 3 minute'))) {
+        if (strtotime($today) > strtotime($confirm->created_at . ' + 3 minute')) {
             echo $confirm->code;
+
             echo '</br>';
         }
+        echo  strtotime($today);
+        echo '</br>';
+
+        echo strtotime($confirm->created_at . ' + 3 minute');
     }
 });
 
