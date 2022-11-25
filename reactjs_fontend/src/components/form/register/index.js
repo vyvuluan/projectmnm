@@ -71,7 +71,7 @@ const Resgiter = () => {
             </div>
 
             <div className="form-group mt-3">
-              <label>UserName</label>
+              <label>Username</label>
               <span className="error1 ms-2">{errorTrung?.username}</span>
               <input
                 name="name"
