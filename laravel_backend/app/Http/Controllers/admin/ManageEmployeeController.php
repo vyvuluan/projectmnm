@@ -79,7 +79,7 @@ class ManageEmployeeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'fullname' => 'required|min:8',
+            //'fullname' => 'required|min:8',
             'username' => 'required|min:8|unique:users|string|regex:/^\S*$/u',
             'password' => 'required|min:8|regex:/^\S*$/u',
             're_password' => 'required|min:8|regex:/^\S*$/u',
@@ -95,8 +95,8 @@ class ManageEmployeeController extends Controller
             'username.regex' => 'username không được có khoảng trống',
 
 
-            'fullname.required' => 'Ô fullname không được bỏ trống',
-            'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
+            //'fullname.required' => 'Ô fullname không được bỏ trống',
+            //'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
 
             'password.required' => 'Ô password không được bỏ trống',
             'password.min' => 'Ô password tối thiểu 8 ký tự',
