@@ -901,6 +901,10 @@ function Index() {
                                         <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.discount}%</B.FormLabel>
                                     </B.FormGroup>
                                     <B.FormGroup className='d-flex'>
+                                        <B.FormLabel className='fs-6'>Ngày mua:</B.FormLabel>
+                                        <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{viewPx.created_at.slice(0, 10)}</B.FormLabel>
+                                    </B.FormGroup>
+                                    <B.FormGroup className='d-flex'>
                                         <B.FormLabel className='fs-6'>Đơn giá:</B.FormLabel>
                                         <B.FormLabel className='fs-6 ms-2 mb-3 text-success'>{formatMoney(viewPx.tongTien)}</B.FormLabel>
                                     </B.FormGroup>
