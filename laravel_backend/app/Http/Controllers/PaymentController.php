@@ -434,7 +434,7 @@ class PaymentController extends Controller
         $Status = 0; // Là trạng thái thanh toán của giao dịch chưa có IPN lưu tại hệ thống của merchant chiều khởi tạo URL thanh toán.
         $orderId = $inputData['vnp_TxnRef'];
         $Status =  $inputData['vnp_ResponseCode'];
-
+        $checkpx = PhieuXuat::where('payment_id', $orderId);
 
         if ($secureHash == $vnp_SecureHash &&  $Status == '00') {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
@@ -442,6 +442,14 @@ class PaymentController extends Controller
             return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=success');
         } else {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
+            $pxcts = $checkpx->pxct;
+            foreach ($pxcts as $pxct) {
+                $product = Product::find($pxct->product_id);
+                if ($product) {
+                    $product->soLuongSP += $pxct->soluong;
+                    $product->save();
+                }
+            }
             return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=fail');
         }
         // }
