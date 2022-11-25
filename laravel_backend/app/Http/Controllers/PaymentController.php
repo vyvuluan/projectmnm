@@ -415,7 +415,8 @@ class PaymentController extends Controller
 
         if ($Status = '00' && $secureHash == $vnp_SecureHash) {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
-            return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            //return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay');
         }
         // }
         // else
