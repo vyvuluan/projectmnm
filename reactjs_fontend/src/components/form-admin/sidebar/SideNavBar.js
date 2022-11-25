@@ -74,7 +74,7 @@ function SideNavBar() {
           </B.Nav>
         </B.Row>
 
-        <B.Offcanvas show={show} onHide={handleClose} className="bg-dark d-xl-none d-lg-block">
+        <B.Offcanvas show={show} onHide={handleClose} className="bg-dark d-xl-none d-lg-block w-75">
           <B.Offcanvas.Header closeButton className='border-bottom border-secondary'>
             <B.Offcanvas.Title>
               <h1 className="text-white m-0 display-5 fw-semibold">
