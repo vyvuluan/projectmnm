@@ -89,7 +89,7 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
               type="text"
               name="fullname"
               className="form-control mt-1 shadow-sm"
-              placeholder="Ví dụ: abc@gmail.com"
+              placeholder="Ví dụ: Trần Hoàng Long"
               onChange={handleInput}
               value={registerInput.fullname}
               required
