@@ -92,12 +92,12 @@ export default function Header() {
           </div>
         </div> */}
         <div className="row">
-          <div className="col-lg-9 d-none d-md-block text-center m-auto badge text-wrap">
+          <div className="col-xl-9 d-none d-xl-block text-center m-auto badge text-wrap">
             <span className="text-danger">
               {nameUser ? `Chào, ${nameUser}` : null}
             </span>
           </div>
-          <div className="col-lg-3 btn rounded-0" style={{ width: "51px" }}>
+          <div className="col-xl-3 col btn rounded-0" style={{ width: "51px" }}>
             <DropDownMenu logout={logoutSubmit} />
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function Header() {
               </h1>
             </Link>
           </Bt.Col>
-          <Bt.Col className="col-lg-6 col-6 text-start">
+          <Bt.Col className="col-lg-6 col-8 text-start">
             <Bt.Form onSubmit={OnSearch}>
               <Bt.Form.Group>
                 <Bt.InputGroup>
@@ -227,10 +227,10 @@ export default function Header() {
               </Bt.Form.Group>
             </Bt.Form>
           </Bt.Col>
-          <Bt.Col className="col-lg-3 col-6">
+          <Bt.Col className="col-lg-3 col-4">
             <Bt.Row>
-              <Bt.Col className="col-md-9 col-6">{AuthButton}</Bt.Col>
-              <Bt.Col className="col-md-3 col-6">
+              <Bt.Col className="col-md-9 col-5">{AuthButton}</Bt.Col>
+              <Bt.Col className="col-md-3 col-7">
                 <Link to={`/Cart`} className="btn rounded-0">
                   <FaShoppingCart
                     style={{ width: "auto", height: "25px" }}
