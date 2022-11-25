@@ -256,7 +256,7 @@ export default function Header() {
       </Bt.Container>
 
       <Bt.Container fluid mb={5}>
-        <Bt.Row className="border-top border-bottom border-secondary px-xl-5">
+        <Bt.Row className="border-top border-secondary px-xl-5">
           <Bt.Col
             lg={3}
             className="d-none d-lg-block"
