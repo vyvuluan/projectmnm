@@ -219,7 +219,9 @@ function Index() {
                                         </>
                                         : order.status === 0 && (order.pt_ThanhToan === 'VnPay' || order.pt_ThanhToan === 'PayPal') ?
                                             <h5 className='text-primary'>Thanh toán thất bại</h5>
-                                            : <h5 className='text-primary'>Đã thanh toán</h5>
+                                            : order.status === 5 ?
+                                                <h5 className='text-primary'>Đơn hàng đã hủy</h5>
+                                                : <h5 className='text-primary'>Đã thanh toán</h5>
                                     }
                                 </div>
                                 <div>

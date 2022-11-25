@@ -63,6 +63,7 @@ const bill = (props) => {
                         <B.Table responsive='sm' className='table-borderless border border-muted mb-0'>
                             <thead className='text-dark'>
                                 <tr>
+                                    <th>Mã</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Số lượng</th>
                                     <th>Bảo hành</th>
@@ -74,6 +75,7 @@ const bill = (props) => {
                                     return (
                                         <>
                                             <tr key={prod.product.id}>
+                                                <td>{prod.product.id}</td>
                                                 <td>{prod.product.tenSP}</td>
                                                 <td>{prod.soluong}</td>
                                                 <td>{prod.product.baoHanh} tháng</td>

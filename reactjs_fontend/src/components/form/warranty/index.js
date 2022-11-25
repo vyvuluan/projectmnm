@@ -54,7 +54,7 @@ export default function Warrantycheck() {
                     <Bt.Row className='px-xl-5 py-5'>
                         <Bt.Col lg={6} className='d-grid gap-2 mx-auto'>
                             <Bt.FormGroup className='mb-3' controlId='formSearchWarranty'>
-                                <Bt.FormControl type='text' name='orderID' placeholder='Nhập vào mã hóa đơn' className='rounded-0' value={warrantyInput} onChange={(e) => setWarrantyInput(e.target.value)}></Bt.FormControl>
+                                <Bt.FormControl type='text' name='orderID' placeholder='Nhập vào mã sản phẩm' className='rounded-0' value={warrantyInput} onChange={(e) => setWarrantyInput(e.target.value)}></Bt.FormControl>
                             </Bt.FormGroup>
                             <Bt.ButtonGroup className='d-flex justify-content-center'>
                                 <Bt.Button variant='primary' className='rounded-0 px-3 py-2' style={{ maxWidth: '120px' }} onClick={handleCheckWarranty}>Kiểm tra</Bt.Button>
