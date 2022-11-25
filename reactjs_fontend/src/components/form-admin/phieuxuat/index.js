@@ -345,7 +345,7 @@ function Index() {
 
         axios.post(`/api/kho/addctpx`, data).then(res => {
             if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success');
+                swal('Thành công', res.data.message, 'success');
                 setQuantity(1);
                 setProdData([]);
                 setError([]);
