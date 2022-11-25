@@ -190,7 +190,7 @@ function Index() {
                             <B.Row className='bg-secondary px-3 py-3 mb-3' key={order.id}>
                                 <div className='d-flex justify-content-between border-bottom border-muted mb-2'>
                                     <div><span className='fs-6'>Đơn hàng số: {order.id}</span><span className='mx-2'>|</span><span>{order.pt_ThanhToan}</span></div>
-                                    <span className='text-danger fs-6 mb-1'>{order.status === 0 && (order.pt_ThanhToan === 'VnPay' || order.pt_ThanhToan === 'Paypal') ?
+                                    <span className='text-danger fs-6 mb-1'>{order.status === 0 && (order.pt_ThanhToan === 'VnPay' || order.pt_ThanhToan === 'PayPal') ?
                                         'Thanh toán thất bại'
                                         : checkStatus(order.status)}</span>
                                 </div>
@@ -216,7 +216,7 @@ function Index() {
                                             <h6>Giảm giá: <span className='fs-5'>{order.discount}%</span></h6>
                                             <h6>Tổng tiền: <span className='fs-5'>{formatMoney(order.tongTien)}</span></h6>
                                         </>
-                                        : order.status === 0 && (order.pt_ThanhToan === 'VnPay' || order.pt_ThanhToan === 'Paypal') ?
+                                        : order.status === 0 && (order.pt_ThanhToan === 'VnPay' || order.pt_ThanhToan === 'PayPal') ?
                                             <h5 className='text-primary'>Thanh toán thất bại</h5>
                                             : <h5 className='text-primary'>Đã thanh toán</h5>
                                     }

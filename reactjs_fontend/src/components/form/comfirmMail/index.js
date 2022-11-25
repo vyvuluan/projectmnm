@@ -26,7 +26,7 @@ const ComfirmMail = () => {
       .put(`api/confirm-email/${email}`, data)
       .then((res) => {
         if (res.data.status == 200) {
-          swal("Success", res.data.message, "success");
+          swal("Thành công", res.data.message, "success");
         }
         history("/login");
       })
@@ -41,7 +41,7 @@ const ComfirmMail = () => {
       .post(`api/gui-lai-code/${email}`)
       .then((res) => {
         if (res.data.status == 200) {
-          swal("Success", res.data.message, "success");
+          swal("Thành công", res.data.message, "success");
         }
       })
       .catch(function (error) {

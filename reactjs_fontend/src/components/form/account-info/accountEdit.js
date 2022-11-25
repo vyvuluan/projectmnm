@@ -39,9 +39,9 @@ const AccountEdit = ({ accountData, showModal }) => {
       .then((res) => {
         console.log(res);
         if (res.data.status === 200) {
-          swal("Success", res.data.message, "success");
+          swal("Thành công", res.data.message, "success");
         } else if (res.data.status === 404) {
-          swal("Error", res.data.message, "error");
+          swal("Thất bại", res.data.message, "error");
         } else if (res.data.status === 400) {
           setErrorSdt(res.data.message.sdt);
           // console.log(res.data.message.sdt);

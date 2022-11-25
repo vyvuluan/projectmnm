@@ -130,7 +130,7 @@ function Index() {
 
         axios.post(`/api/kho/px`, data).then(res => {
             if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success')
+                swal('Thành công', res.data.message, 'success')
                 setPXid(res.data.px_id);
                 setShowCtpx(true);
                 setSubmitting(true);
@@ -159,7 +159,7 @@ function Index() {
 
         axios.post(`/api/kho/addctpx`, data).then(res => {
             if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success');
+                swal('Thành công', res.data.message, 'success');
                 setProdData([]);
                 setSubmitting(true);
                 setError([]);
@@ -169,13 +169,13 @@ function Index() {
             } else if (res.data.status === 400) {
                 setError(res.data.error);
             } else if (res.data.status === 401) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             } else if (res.data.status === 402) {
-                swal('Warning', res.data.message, 'error')
+                swal('Cảnh báo', res.data.message, 'error')
             } else if (res.data.status === 403) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             } else if (res.data.status === 404) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             }
         })
 
@@ -295,7 +295,7 @@ function Index() {
     };
 
     const handleIncrement = () => {
-        if (quantity < 4 && quantity < prodData.soLuongSP) {
+        if (quantity < prodData.soLuongSP) {
             setQuantity((prevCount) => prevCount + 1);
         }
     };
@@ -353,13 +353,13 @@ function Index() {
                 swal('Thất bại', res.data.message, 'error')
                 setError(res.data.error);
             } else if (res.data.status === 401) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             } else if (res.data.status === 402) {
-                swal('Warning', res.data.message, 'error')
+                swal('Cảnh báo', res.data.message, 'error')
             } else if (res.data.status === 403) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             } else if (res.data.status === 404) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             }
         })
     }
@@ -535,7 +535,7 @@ function Index() {
     };
 
     const handleProdIncrement = () => {
-        if (prodQuantity < 10) {
+        if (prodQuantity < editProd?.product.soLuongSP) {
             setProdQuantity((prevCount) => prevCount + 1);
         }
     };

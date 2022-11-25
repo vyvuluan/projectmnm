@@ -80,7 +80,7 @@ function Index() {
 
         axios.post(`http://localhost:8000/api/nhanvien/discount`, data).then(res => {
             if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success');
+                swal('Thành công', res.data.message, 'success');
                 setDiscInput({
                     discount: '',
                     percent: '',

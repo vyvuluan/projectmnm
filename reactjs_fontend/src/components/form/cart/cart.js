@@ -20,7 +20,7 @@ export default function Cart() {
 
   if (!localStorage.getItem("auth_token")) {
     navaigate("/");
-    swal("Warning", "Vui lòng login để mua hàng", "error");
+    swal("Cảnh báo", "Vui lòng login để mua hàng", "error");
   }
 
   function formatMoney(money) {
@@ -37,7 +37,7 @@ export default function Cart() {
       setLoading(false);
     } else if (res.data.status === 401) {
       navaigate("/");
-      swal("Warning", res.data.message, "error");
+      swal("Thất bại", res.data.message, "error");
     }
   }, [])
 
@@ -85,7 +85,7 @@ export default function Cart() {
                 : item
             )
           );
-          swal('Thất bại', res.data.message, 'warning')
+          swal('Cảnh báo', res.data.message, 'warning')
         }
       });
   }
@@ -100,7 +100,7 @@ export default function Cart() {
           localStorage.setItem("count", localStorage.getItem("count") - 1)
           setSubmitting(true);
         } else if (res.data.status === 404) {
-          swal("Error", res.data.message, "error");
+          swal("Thất bại", res.data.message, "error");
         }
       });
   };

@@ -23,7 +23,7 @@ export default function Warrantycheck() {
                 setWarrantyData(res.data.kq);
                 setShowWarranty(true);
             } else if (res.data.status === 404) {
-                swal('Error', res.data.message, 'error')
+                swal('Thất bại', res.data.message, 'error')
             }
         })
     }
