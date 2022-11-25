@@ -210,6 +210,7 @@ function Index() {
                                         </div>
                                     )
                                 })}
+                                <label>Ngày mua: {order.created_at.slice(0, 10)}</label>
                                 <div className='text-end mb-2'>
                                     {order.pt_ThanhToan === 'COD' ?
                                         <>

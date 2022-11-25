@@ -452,7 +452,8 @@ const DonHang = () => {
                       <th>Số điện thoại</th>
                       <th>Địa chỉ</th>
                       <th>Giảm giá</th>
-                      <th>Phương thức thanh toán</th>
+                      <th>Thanh toán</th>
+                      <th>Ngày đặt</th>
                       <th>Tổng tiền</th>
                       <th>Trạng thái</th>
                       <th className="text-center">Thao tác</th>
@@ -460,6 +461,8 @@ const DonHang = () => {
                   </thead>
                   <tbody>
                     {orderList && orderList.map((item, index) => {
+                      let chuoi = item.created_at;
+                      let tachChuoi = chuoi.slice(0, 10);
                       return (
                         <tr key={item.id}>
                           <td>{index + 1}</td>
@@ -468,6 +471,7 @@ const DonHang = () => {
                           <td>{item.diaChi}</td>
                           <td>{item.discount}%</td>
                           <td>{item.pt_ThanhToan}</td>
+                          <td>{tachChuoi}</td>
                           <td>{formatMoney(item.tongTien)}</td>
                           <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
                             {checkStatus.map((val) => {
@@ -513,7 +517,8 @@ const DonHang = () => {
                       <th>Số điện thoại</th>
                       <th>Địa chỉ</th>
                       <th>Giảm giá</th>
-                      <th>Phương thức thanh toán</th>
+                      <th>Thanh toán</th>
+                      <th>Ngày đặt</th>
                       <th>Tổng tiền</th>
                       <th>Trạng thái</th>
                       <th className="text-center">Thao tác</th>
@@ -521,6 +526,8 @@ const DonHang = () => {
                   </thead>
                   <tbody>
                     {searchList && searchList.map((item, index) => {
+                      let chuoi = item.created_at;
+                      let tachChuoi = chuoi.slice(0, 10);
                       return (
                         <tr key={item.id}>
                           <td>{index + 1}</td>
@@ -529,6 +536,7 @@ const DonHang = () => {
                           <td>{item.diaChi}</td>
                           <td>{item.discount}%</td>
                           <td>{item.pt_ThanhToan}</td>
+                          <td>{tachChuoi}</td>
                           <td>{formatMoney(item.tongTien)}</td>
                           <td><B.DropdownButton variant={variant(item.status)} className='me-2' title={test(item.status)}>
                             {checkStatus.map((val) => (

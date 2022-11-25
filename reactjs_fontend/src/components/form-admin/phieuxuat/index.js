@@ -795,6 +795,8 @@ function Index() {
                                     <tbody>
                                         {!showSearchTable && (
                                             pxlist && pxlist.map((px, index) => {
+                                                let chuoi = px.created_at;
+                                                let tachChuoi = chuoi.slice(0, 10);
                                                 return (
                                                     <tr key={px.id}>
                                                         <td>{index + 1}</td>
@@ -803,7 +805,7 @@ function Index() {
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
                                                         <td>{px.discount}%</td>
-                                                        <td>{px.creaated_at}</td>
+                                                        <td>{tachChuoi}</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
@@ -826,6 +828,8 @@ function Index() {
 
                                         {showSearchTable && (
                                             pxsearchList && pxsearchList.map((px, index) => {
+                                                let chuoi = px.created_at;
+                                                let tachChuoi = chuoi.slice(0, 10);
                                                 return (
                                                     <tr key={px.id}>
                                                         <td>{index + 1}</td>
@@ -834,7 +838,7 @@ function Index() {
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
                                                         <td>{px.discount}%</td>
-                                                        <td>{px.creaated_at}</td>
+                                                        <td>{tachChuoi}</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
