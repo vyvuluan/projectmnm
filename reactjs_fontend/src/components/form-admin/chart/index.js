@@ -77,12 +77,12 @@ const Chart = ({ data1, dataKho, dataKho2, dataNV }) => {
 
   const dataBaoCaoAdmin = [
     {
-      label: "Tổng phiếu nhập",
+      label: "Tổng tiền phiếu nhập",
       data: dataTongPN,
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
-      label: "Tổng phiếu xuất",
+      label: "Tổng tiền phiếu xuất",
       data: dataTongPX,
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
@@ -111,17 +111,17 @@ const Chart = ({ data1, dataKho, dataKho2, dataNV }) => {
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
     {
-      label: "Doanh thu phiếu xuất",
+      label: "Tổng tiền phiếu xuất",
       data: dataTongPXKho,
       backgroundColor: "rgba(255, 120, 0, 0.5)",
     },
     {
-      label: "Tổng số lượng Phiếu nhập",
+      label: "Tổng số lượng nhập hàng",
       data: dataTongSL,
       backgroundColor: "rgba(53, 162, 235, 0.5)",
     },
     {
-      label: "Tổng số lượng Phiếu xuất",
+      label: "Tổng số lượng xuất hàng",
       data: dataTongSL2,
       backgroundColor: "rgba(0, 255, 128, 0.5)",
     },
