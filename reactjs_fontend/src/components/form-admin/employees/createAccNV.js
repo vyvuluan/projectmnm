@@ -17,6 +17,7 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
     username: "",
     password: "",
     re_password: "",
+    fullname: "",
   });
 
   const handleInput = (e) => {
@@ -28,6 +29,7 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
   const registerSubmit = (e) => {
     e.preventDefault();
     const data = {
+      fullname: registerInput.fullname,
       username: registerInput.username,
       email: registerInput.email,
       password: registerInput.password,
@@ -74,13 +76,25 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
               name="username"
               type="text"
               className="form-control mt-1 shadow-sm"
-              placeholder="example: abc"
+              placeholder="Ví dụ: abc"
               onChange={handleInput}
               value={registerInput.username}
               required
             />
           </div>
-
+          <div className="form-group mt-3">
+            <label>Họ và tên</label>
+            <span className="error1 ms-2">{error?.fullname}</span>
+            <input
+              type="text"
+              name="fullname"
+              className="form-control mt-1 shadow-sm"
+              placeholder="Ví dụ: abc@gmail.com"
+              onChange={handleInput}
+              value={registerInput.fullname}
+              required
+            />
+          </div>
           <div className="form-group mt-3">
             <label>Email</label>
             <span className="error1 ms-2">{error?.email}</span>
@@ -88,13 +102,13 @@ const CreateAccNV = ({ createAcc, showModal, setSubmitting }) => {
               type="email"
               name="email"
               className="form-control mt-1 shadow-sm"
-              placeholder="example: abc@gmail.com"
+              placeholder="Ví dụ: abc@gmail.com"
               onChange={handleInput}
               value={registerInput.email}
               required
             />
           </div>
-
+          
           <div className="form-group mt-3">
             <label>Password</label>
             <span className="error1 ms-2">{error?.password}</span>

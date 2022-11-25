@@ -103,7 +103,7 @@ const LoginAdmin = () => {
                 type="email"
                 name="email"
                 className="form-control mt-1 shadow-sm shadow-sm"
-                placeholder="Enter email"
+                placeholder="Nhập email"
                 onChange={handleInput}
                 value={loginInput.email}
                 required
@@ -115,7 +115,7 @@ const LoginAdmin = () => {
                 type="password"
                 name="password"
                 className="form-control mt-1 shadow-sm shadow-sm"
-                placeholder="Enter password"
+                placeholder="Nhập mật khẩu"
                 onChange={handleInput}
                 value={loginInput.password}
                 required
