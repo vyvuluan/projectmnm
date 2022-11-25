@@ -42,11 +42,18 @@ export default function Paymentreturn() {
 
     return (
         <>
-            <Breadcum
-                title='Cảm ơn'
-                name='Thanh toán thành công'
-                BC={1}
-            />
+            {orderStatus === true ?
+                <Breadcum
+                    title='Cảm ơn'
+                    name='Thanh toán thành công'
+                    BC={1}
+                />
+                :
+                <Breadcum
+                    title='Rất tiếc'
+                    name='Thanh toán thất bại'
+                    BC={1}
+                />}
 
             <Bt.Container fluid pt={5} className='mb-5'>
                 <Bt.Row className='px-xl-5 py-5 text-center'>
