@@ -368,8 +368,15 @@ export default function Header() {
                 </Bt.Nav>
               </Bt.Navbar.Collapse>
               <Bt.Offcanvas show={show} onHide={handleClose} placement='end' className='d-lg-none'>
-                <Bt.Offcanvas.Header closeButton>
-                  <Bt.Offcanvas.Title></Bt.Offcanvas.Title>
+                <Bt.Offcanvas.Header closeButton className='border-bottom border-secondary'>
+                  <Bt.Offcanvas.Title>
+                    <h1 className="text-dark m-0 display-5 fw-semibold">
+                      <span className="fw-bold border px-3 me-1 text-primary">
+                        L3M
+                      </span>
+                      Shop
+                    </h1>
+                  </Bt.Offcanvas.Title>
                 </Bt.Offcanvas.Header>
                 <Bt.Offcanvas.Body>
                   <Bt.Nav
