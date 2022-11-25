@@ -1,26 +1,26 @@
 .aEffect {
-  /* border-bottom: #d70018; */
   color: #000000;
   margin: 0 -.25rem;
   padding: 0 .25rem;
 }
 
 Link.aEffect:hover {
-  /* padding-bottom: 2px; */
   color: #d70018;
 }
 
 .nav-link.active .aEffect {
-  padding-bottom: 2px;
-  border-bottom: 5px solid #d70018;
+  padding-bottom: 4px;
+  border-bottom: 3px solid #d70018;
   color: #d70018 !important;
   transition: 0.1s;
 }
 
-/* .btnclick {
-  background-color: #d70018 !important;
+.aEffectMobile {
+  color: #000000;
+  margin: 0 -.25rem;
+  padding: 0 .25rem;
 }
 
-.btnclick::after {
-  background-color: #d70018 !important;
-} */
+.nav-link.active .aEffectMobile {
+  color: #d70018 !important;
+}

@@ -5,24 +5,19 @@ import * as Icon from "react-bootstrap-icons";
 import {
   FaSearch,
   FaShoppingCart,
-  FaUser,
-  FaShoppingBag,
+  FaWrench,
 } from "react-icons/fa";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineKeyboardArrowDown, MdContactPhone, MdGroups } from "react-icons/md";
+import { RiHomeSmile2Fill } from 'react-icons/ri'
+import { BiCategory } from 'react-icons/bi'
 import {
   Link,
-  Navigate,
-  NavLink,
-  Route,
   useLocation,
-  useParams,
-  useSearchParams,
 } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import HomePage from "../../pages/home";
-import { Category, DropDownMenu, Slideshow } from "../../form";
+import { Category, DropDownMenu } from "../../form";
 
 export default function Header() {
   const [count, setCount] = useState();
@@ -34,6 +29,9 @@ export default function Header() {
   const [cart, setCart] = useState();
   const [search, setSearch] = useState("");
   const [none, setNone] = useState("d-none");
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     if (localStorage.getItem("auth_fullname")) {
@@ -298,9 +296,8 @@ export default function Header() {
               </div>
             </div>
           </Bt.Col>
-          <Bt.Col className="">
+          <Bt.Col>
             <Bt.Navbar
-              collapseOnSelect
               expand="lg"
               className="py-3 py-lg-0 px-0"
             >
@@ -316,10 +313,10 @@ export default function Header() {
               </Bt.NavbarBrand>
               <Bt.Navbar.Toggle
                 className="text-primary rounded-0"
-                aria-controls="responsive-navbar-nav"
+                onClick={handleShow}
               />
               <Bt.Navbar.Collapse
-                className="d-flex justify-content-between"
+                className="d-flex justify-content-between d-none d-lg-block"
                 id="responsive-navbar-nav"
               >
                 <Bt.Nav
@@ -363,28 +360,102 @@ export default function Header() {
                     </Bt.NavLink>
                   </Bt.NavItem>
                 </Bt.Nav>
-
-                {/* <Bt.Nav className="ms-auto py-2">
-                  <Bt.NavLink className="fs-5 fw-normal me-2">
-                    <Link className="text-decoration-none" to="/login">
-                      Login
-                    </Link>
-                  </Bt.NavLink>
-                  <Bt.NavLink className="fs-5 fw-normal me-2">
-                  <Link className="text-decoration-none" to="/login">
-                  Logout
-                  </Link>
-                  </Bt.NavLink>
-
-                  <Bt.NavLink href="#" className="fs-5 fw-normal me-2">
-                    Register
-                  </Bt.NavLink>
-                  <Bt.NavLink>xin chào, user</Bt.NavLink>
-                  {AuthButton}
-                </Bt.Nav> */}
               </Bt.Navbar.Collapse>
+              <Bt.Offcanvas show={show} onHide={handleClose} placement='end' className='d-lg-none'>
+                <Bt.Offcanvas.Header closeButton>
+                  <Bt.Offcanvas.Title></Bt.Offcanvas.Title>
+                </Bt.Offcanvas.Header>
+                <Bt.Offcanvas.Body>
+                  <Bt.Nav
+                    className="me-auto py-2 ms-md-5 ms-2"
+                    activeKey={location.pathname}
+                    onClick={handleClose}
+                  >
+                    <Bt.NavItem>
+                      <Bt.NavLink
+                        eventKey={"/"}
+                        className="fs-5 fw-normal me-2 effect-box"
+                      >
+                        <Link className="text-decoration-none aEffectMobile" to="/">
+                          <RiHomeSmile2Fill className="me-2 mb-1" />Trang chủ
+                        </Link>
+                      </Bt.NavLink>
+                    </Bt.NavItem>
+                    <Bt.NavItem>
+                      <Bt.NavLink
+                        className="fs-5 fw-normal me-2 "
+                        eventKey={"/pageproducts"}
+                        onClick={handleClose}
+                      >
+                        <Link
+                          className="text-decoration-none aEffectMobile"
+                          to="/pageproducts"
+                        >
+                          <BiCategory className="me-2 mb-1" />Sản phẩm
+                        </Link>
+                      </Bt.NavLink>
+                    </Bt.NavItem>
+                    <Bt.NavItem>
+                      <Bt.NavLink
+                        className="fs-5 fw-normal me-2 "
+                        eventKey={"/contact"}
+                        onClick={handleClose}
+                      >
+                        <Link
+                          className="text-decoration-none aEffectMobile"
+                          to="/contact"
+                        >
+                          <MdContactPhone className="me-2 mb-1" />Liên hệ
+                        </Link>
+                      </Bt.NavLink>
+                    </Bt.NavItem>
+                    <Bt.NavItem>
+                      <Bt.NavLink
+                        className="fs-5 fw-normal me-2 "
+                        eventKey={"/cart"}
+                        onClick={handleClose}
+                      >
+                        <Link
+                          className="text-decoration-none aEffectMobile"
+                          to="/cart"
+                        >
+                          <FaShoppingCart className="me-2 mb-1" />Giỏ hàng
+                        </Link>
+                      </Bt.NavLink>
+                    </Bt.NavItem>
+                    <Bt.NavItem>
+                      <Bt.NavLink
+                        className="fs-5 fw-normal me-2 "
+                        eventKey={"/warranty"}
+                        onClick={handleClose}
+                      >
+                        <Link
+                          className="text-decoration-none aEffectMobile"
+                          to="/warranty"
+                        >
+                          <FaWrench className="me-2 mb-1" />Bảo hành
+                        </Link>
+                      </Bt.NavLink>
+                    </Bt.NavItem>
+                    <Bt.NavItem>
+                      <Bt.NavLink
+                        className="fs-5 fw-normal me-2 "
+                        eventKey={"/aboutus"}
+                        onClick={handleClose}
+                      >
+                        <Link
+                          className="text-decoration-none aEffectMobile"
+                          to="/aboutus"
+                        >
+                          <MdContactPhone className="me-2 mb-1" />Về chúng tôi
+                        </Link>
+                      </Bt.NavLink>
+                    </Bt.NavItem>
+                  </Bt.Nav>
+                </Bt.Offcanvas.Body>
+              </Bt.Offcanvas>
+
             </Bt.Navbar>
-            {/* <Slideshow /> */}
           </Bt.Col>
         </Bt.Row>
       </Bt.Container>
