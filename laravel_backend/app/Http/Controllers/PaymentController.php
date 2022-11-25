@@ -335,7 +335,7 @@ class PaymentController extends Controller
             $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
             $vnp_OrderInfo = 'Noi dung thanh toan';
             $vnp_OrderType = 'other';
-            $vnp_Amount = $tongTien * 100;
+            $vnp_Amount = $payment->tongTien * 100;
             $vnp_Locale = 'vn';
             $vnp_BankCode = 'NCB';
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -436,12 +436,13 @@ class PaymentController extends Controller
         $Status =  $inputData['vnp_ResponseCode'];
 
 
-        if ($Status = '00' && $secureHash == $vnp_SecureHash) {
+        if ($secureHash == $vnp_SecureHash &&  $Status == '00') {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
             //return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
-            return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay');
+            return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=success');
         } else {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
+            return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=fail');
         }
         // }
         // else
