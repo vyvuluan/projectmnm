@@ -166,7 +166,7 @@ class UserController extends Controller
                 //$contact = Contact::where('customer_id', $customer_id)->first();
                 $user->notify(new SendMailConfirmRegister($user->email, $code));
                 return response()->json([
-
+                    'check' => 1,
                     'url' => 'http://localhost:3000/confirm-email?email=' . $user->email,
                 ]);
             }
