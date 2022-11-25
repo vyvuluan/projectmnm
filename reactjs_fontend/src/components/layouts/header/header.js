@@ -18,6 +18,7 @@ import swal from "sweetalert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Category, DropDownMenu } from "../../form";
+import Cookies from "universal-cookie";
 
 export default function Header() {
   const [count, setCount] = useState();
@@ -30,12 +31,16 @@ export default function Header() {
   const [search, setSearch] = useState("");
   const [none, setNone] = useState("d-none");
   const [show, setShow] = useState(false);
+  const [auth, setAuth] = useState();
+  const cookies = new Cookies();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   useEffect(() => {
     if (localStorage.getItem("auth_fullname")) {
       setNameUser(localStorage.getItem("auth_fullname"));
+    } else if (cookies.get("role_id") === "2" || cookies.get("role_id") === "3" || cookies.get("role_id") === "4") {
+      setNameUser(localStorage.getItem("auth_name"));
     }
   }, []);
 
@@ -58,6 +63,7 @@ export default function Header() {
           localStorage.removeItem("auth_name");
           localStorage.removeItem("auth_fullname");
           localStorage.removeItem("count");
+          cookies.remove("role_id")
           swal({
             title: res.data.message,
             icon: "success",
@@ -93,8 +99,8 @@ export default function Header() {
         </div> */}
         <div className="row">
           <div className="col-xl-9 d-none d-xl-block text-center m-auto badge text-wrap">
-            <span className="text-danger">
-              {nameUser ? `Chào, ${nameUser}` : null}
+            <span className="text-danger fs-6 fw-semibold">
+              {nameUser ? nameUser : null}
             </span>
           </div>
           <div className="col-xl-3 col btn rounded-0" style={{ width: "51px" }}>

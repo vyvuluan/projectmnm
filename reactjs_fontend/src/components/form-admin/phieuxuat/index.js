@@ -784,8 +784,9 @@ function Index() {
                                             <th>Tên Khách hàng</th>
                                             <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
-                                            <th>Phương thức thanh toán</th>
+                                            <th>Thanh toán</th>
                                             <th>Giảm giá</th>
+                                            <th>Ngày đặt</th>
                                             <th>Tổng tiền</th>
                                             <th>Trạng thái</th>
                                             <th>Thao tác</th>
@@ -802,6 +803,7 @@ function Index() {
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
                                                         <td>{px.discount}%</td>
+                                                        <td>{px.creaated_at}</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
@@ -832,6 +834,7 @@ function Index() {
                                                         <td>{px.diaChi}</td>
                                                         <td>{px.pt_ThanhToan}</td>
                                                         <td>{px.discount}%</td>
+                                                        <td>{px.creaated_at}</td>
                                                         <td>{formatMoney(px.tongTien)}</td>
                                                         <td>
                                                             <B.DropdownButton variant={variant(px.status)} className='me-2' title={test(px.status)}>
