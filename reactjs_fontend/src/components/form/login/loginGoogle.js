@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 const LoginGoogle = (props) => {
-  
   // const [data, setData] = useState({});
   // console.log(props.l);
-  
+
   return (
     <>
       <a
@@ -13,7 +12,7 @@ const LoginGoogle = (props) => {
         color="primary"
         href={props.loginGG}
         className="p-1 border m-1 btnCus shadow-sm rounded"
-        style={{textDecoration:"none", textAlign:"center"}}
+        style={{ textDecoration: "none", textAlign: "center", width: "100%" }}
       >
         <img
           width="20px"
@@ -21,7 +20,7 @@ const LoginGoogle = (props) => {
           alt="Google sign-in"
           src="https://img.icons8.com/color/48/000000/google-logo.png"
         />
-        Login with Google
+        Đăng nhập với Google
       </a>
     </>
   );

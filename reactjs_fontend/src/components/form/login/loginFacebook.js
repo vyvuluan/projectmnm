@@ -8,8 +8,8 @@ const LoginFaceBook = (props) => {
         variant="contained"
         color="primary"
         className="p-1 border m-1 btnCus shadow-sm rounded"
-        style={{ textDecoration: "none", textAlign: "center" }}
-        // onClick={props.loginFB}
+        style={{ textDecoration: "none", textAlign: "center",width:"100%" }}
+     
         href={props.loginFB}
       >
         <img
@@ -18,7 +18,7 @@ const LoginFaceBook = (props) => {
           alt="Google sign-in"
           src="https://img.icons8.com/fluency/48/000000/facebook-new.png"
         />
-        Login with Facebook
+        Đăng nhập với Facebook
       </a>
     </>
   );
