@@ -221,7 +221,12 @@ function Index() {
                                             <h5 className='text-primary'>Thanh toán thất bại</h5>
                                             : order.status === 5 ?
                                                 <h5 className='text-primary'>Đơn hàng đã hủy</h5>
-                                                : <h5 className='text-primary'>Đã thanh toán</h5>
+                                                :
+                                                <>
+                                                    <h6>Giảm giá: <span className='fs-5'>{order.discount}%</span></h6>
+                                                    <h6>Tổng tiền: <span className='fs-5'>{formatMoney(order.tongTien)}</span></h6>
+                                                    <h5 className='text-primary'>Đã thanh toán</h5>
+                                                </>
                                     }
                                 </div>
                                 <div>
