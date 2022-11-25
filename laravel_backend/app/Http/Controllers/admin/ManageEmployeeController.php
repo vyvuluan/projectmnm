@@ -79,9 +79,10 @@ class ManageEmployeeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'username' => 'required|min:8|unique:users',
-            'password' => 'required|min:8',
-            're_password' => 'required|min:8',
+            'fullname' => 'required|min:8',
+            'username' => 'required|min:8|unique:users|string|regex:/^\S*$/u',
+            'password' => 'required|min:8|regex:/^\S*$/u',
+            're_password' => 'required|min:8|regex:/^\S*$/u',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
@@ -90,12 +91,21 @@ class ManageEmployeeController extends Controller
             'username.required' => 'Ô username không được bỏ trống',
             'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
+            'username.string' => 'username phải là một chuỗi',
+            'username.regex' => 'username không được có khoảng trống',
+
+
+            'fullname.required' => 'Ô fullname không được bỏ trống',
+            'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
 
             'password.required' => 'Ô password không được bỏ trống',
             'password.min' => 'Ô password tối thiểu 8 ký tự',
 
             're_password.required' => 'Ô re_password không được bỏ trống',
-            're_password.min' => 'Ô re_password tối thiểu 8 ký tự',
+            're_password.min' => 'Ô re_password thiểu đa 8 ký tự',
+
+            'password.regex' => 'password không được có khoảng trống',
+            're_password.regex' => 're_password không được có khoảng trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
