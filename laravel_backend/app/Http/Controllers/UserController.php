@@ -110,9 +110,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'fullname' => 'required|min:8',
-            'username' => 'required|min:8|unique:users',
-            'password' => 'required|min:8',
-            're_password' => 'required|min:8',
+            'username' => 'required|min:8|unique:users|string|regex:/^\S*$/u',
+            'password' => 'required|min:8|regex:/^\S*$/u',
+            're_password' => 'required|min:8|regex:/^\S*$/u',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
@@ -121,6 +121,9 @@ class UserController extends Controller
             'username.required' => 'Ô username không được bỏ trống',
             'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
+            'username.string' => 'username phải là một chuỗi',
+            'username.regex' => 'username không được có khoảng trống',
+
 
             'fullname.required' => 'Ô fullname không được bỏ trống',
             'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
@@ -130,6 +133,9 @@ class UserController extends Controller
 
             're_password.required' => 'Ô re_password không được bỏ trống',
             're_password.min' => 'Ô re_password thiểu đa 8 ký tự',
+
+            ' password.regex' => 'password không được có khoảng trống',
+            're_password.regex' => 're_password không được có khoảng trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -163,10 +169,9 @@ class UserController extends Controller
                 'code' => $code,
             ]);
             if ($user) {
-                //$contact = Contact::where('customer_id', $customer_id)->first();
                 $user->notify(new SendMailConfirmRegister($user->email, $code));
                 return response()->json([
-
+                    'check' => 1,
                     'url' => 'http://localhost:3000/confirm-email?email=' . $user->email,
                 ]);
             }
@@ -420,9 +425,9 @@ class UserController extends Controller
 
         // ]);
         $validator = Validator::make($request->all(), [
-            'password_old' => 'max:255',
-            'password' => 'required|max:255',
-            're_password' => 'required|max:255',
+            'password_old' => 'max:255|regex:/^\S*$/u',
+            'password' => 'required|max:255|regex:/^\S*$/u',
+            're_password' => 'required|max:255|regex:/^\S*$/u',
         ], [
             // 'password_old.required' => 'Ô password Không được bỏ trống',
             'password_old.max' => 'Ô password tối đa 255 ký tự',
@@ -432,6 +437,10 @@ class UserController extends Controller
 
             're_password.required' => 'Ô re_password không được bỏ trống',
             're_password.max' => 'Ô re_password tối đa 255 ký tự',
+
+            'password.regex' => 'password không được có khoảng trống',
+            're_password.regex' => 're_password không được có khoảng trống',
+            'password_old.regex' => 'password_old không được có khoảng trống',
         ]);
         if ($validator->fails()) {
             return response()->json([

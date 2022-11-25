@@ -37,13 +37,18 @@ const Resgiter = () => {
     // console.log(data);
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/register", data).then((res) => {
-        if (res.status === 200) {
-          window.location.replace(res.data.url) ;
+        if (res?.data?.check == 1) {
+          window.location.replace(res.data.url);
+        } else if (res.data.status === 401) {
+          setErrorPass(res.data.error);
+        } else if (res.data.status === 400) {
+          console.log(res.data.error);
+          setErrorTrung(res.data.error);
         }
       });
     });
   };
- 
+
   return (
     <>
       <div className="Auth-form-container">

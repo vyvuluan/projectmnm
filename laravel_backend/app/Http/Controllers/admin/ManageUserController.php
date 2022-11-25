@@ -256,8 +256,8 @@ class ManageUserController extends Controller
     public function reset_password(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
-            'password' => 'required|min:8',
-            're_password' => 'required|min:8',
+            'password' => 'required|min:8|regex:/^\S*$/u',
+            're_password' => 'required|min:8|regex:/^\S*$/u',
             
         ], [
             'password.required' => 'Ô password Không được bỏ trống',
@@ -265,6 +265,8 @@ class ManageUserController extends Controller
 
             're_password.required' => 'Ô password Không được bỏ trống',
             're_password.min' => 'Ô password tối thiểu 8 ký tự',
+            'password.regex' => 'password không được có khoảng trống',
+            're_password.regex' => 're_password không được có khoảng trống',
 
         ]);
         if ($validator->fails()) {
