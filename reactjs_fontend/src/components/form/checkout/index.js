@@ -160,7 +160,7 @@ function Checkout() {
                             if (resp.data.status === 200) {
                                 swal("Thành công", resp.data.message, "success");
                                 localStorage.removeItem("count");
-                                navigate("/paymentreturn");
+                                navigate("/paymentreturn?status=success");
                             } else if (resp.data.status === 401) {
                                 swal("Thất bại", resp.data.message, "error");
                             } else if (resp.data.status === 400) {

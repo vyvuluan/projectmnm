@@ -440,7 +440,7 @@ class PaymentController extends Controller
         if ($secureHash == $vnp_SecureHash &&  $Status == '00') {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
             //return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
-            return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=success');
+            return Redirect::to('http://localhost:3000/paymentreturn?status=success');
         } else {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
             $checkpx = PhieuXuat::where('payment_id', $orderId)->first();
@@ -452,7 +452,7 @@ class PaymentController extends Controller
                     $product->save();
                 }
             }
-            return Redirect::to('https://deploy-react-flax.vercel.app/paymentreturn?status=fail');
+            return Redirect::to('http://localhost:3000/paymentreturn?status=fail');
         }
         // }
         // else
