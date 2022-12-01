@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import * as Bt from "react-bootstrap";
-import { AiFillFire } from 'react-icons/ai'
+import { AiFillFire, AiOutlineStock } from 'react-icons/ai'
+import { RiShoppingBag2Fill, RiMedalFill } from 'react-icons/ri'
+import { Link } from 'react-router-dom'
 
 import {
   Slideshow,
@@ -75,21 +77,24 @@ const HomePage = () => {
           <Slideshow />
         </Bt.Row>
       </Bt.Container>
+      <SectionTitle title="Mã khuyến mại" icon={<AiFillFire className='fs-2 text-danger mt-1' />} />
       <Discount />
       {/* <SectionTitle title="Service" /> */}
-      <Features />
-      <SectionTitle title="Sản phẩm mới" />
+      {/* <SectionTitle title="Sản phẩm mới" /> */}
+      <Link to='/pageproducts' className="text-decoration-none text-dark"><SectionTitle title="Sản phẩm mới" icon={<RiShoppingBag2Fill className='fs-2 text-danger mt-1' />} /></Link>
       {listProductNew ? (
         <Product item={listProductNew} />
       ) : (
         <div className="text-center">không có sản phẩm</div>
       )}
-      <SectionTitle title="Sản phẩm bán chạy" />
+      <Link to='/pageproducts' className="text-decoration-none text-dark"><SectionTitle title="Sản phẩm bán chạy" icon={<RiMedalFill className='fs-2 text-danger mt-1' />} /></Link>
+      {/* <SectionTitle title="Sản phẩm bán chạy" /> */}
       {listProductBestSell ? (
         <Product item={listProductBestSell} />
       ) : (
         <div className="text-center">không có sản phẩm</div>
       )}
+      <Features />
     </>
   );
 };

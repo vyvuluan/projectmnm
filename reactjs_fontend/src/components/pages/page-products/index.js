@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import * as Bt from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Breadcum from '../../form/breadcum/index'
 
 import {
   SectionTitle,
@@ -173,23 +174,11 @@ const PageProducts = () => {
   if (loading) {
     return (
       <>
-        <Bt.Container fluid className="bg-secondary mb-5">
-          <div
-            className="d-flex flex-column align-items-center justify-content-center"
-            style={{ minHeight: "300px" }}
-          >
-            <h1 className="fw-semibold text-uppercase mb-3">SẢN PHẨM</h1>
-            <div className="d-inline-flex">
-              <p className="m-0">
-                <Link to="/" className="text-decoration-none" variant="primary">
-                  Home
-                </Link>
-              </p>
-              <p className="m-0 px-2">-</p>
-              <p className="m-0 text-muted">Sản phẩm</p>
-            </div>
-          </div>
-        </Bt.Container>
+        <Breadcum
+          title='sản phẩm'
+          BC={1}
+          name='Sản phẩm'
+        />
         <LoadingPage />
       </>
     );
@@ -254,8 +243,7 @@ const PageProducts = () => {
     // console.log(Checked);
     axios
       .get(
-        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${
-          value1[0]
+        `/api/sort-chitiet-minmax?nsx_id=${b ? b : Checked}&giaMin=${value1[0]
         }&giaMax=${value1[1]}&page=${page}`
       )
       .then(
@@ -275,23 +263,12 @@ const PageProducts = () => {
 
   return (
     <>
-      <Bt.Container fluid className="bg-secondary mb-5">
-        <div
-          className="d-flex flex-column align-items-center justify-content-center"
-          style={{ minHeight: "300px" }}
-        >
-          <h1 className="fw-semibold text-uppercase mb-3">SẢN PHẨM</h1>
-          <div className="d-inline-flex">
-            <p className="m-0">
-              <Link to="/" className="text-decoration-none" variant="primary">
-                Home
-              </Link>
-            </p>
-            <p className="m-0 px-2">-</p>
-            <p className="m-0 text-muted">Sản phẩm</p>
-          </div>
-        </div>
-      </Bt.Container>
+      <Breadcum
+        title='sản phẩm'
+        BC={1}
+        name='Sản phẩm'
+      />
+
       <Container fluid className="mt-5">
         <Row>
           <Col sm={2}>

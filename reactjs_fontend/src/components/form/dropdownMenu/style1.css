@@ -38,7 +38,34 @@
   padding: 10px 20px;
   width: 200px;
   border: 1px solid #edf1ff;
+}
 
+@media only screen and (max-width: 790px) {
+  .dropdown-menu12 {
+    z-index: 10;
+    position: absolute;
+    top: 50px;
+    left: -70px;
+    background-color: rgb(255, 255, 255);
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    width: 200px;
+    border: 1px solid #edf1ff;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .dropdown-menu12 {
+    z-index: 10;
+    position: absolute;
+    top: 50px;
+    left: -100px;
+    background-color: rgb(255, 255, 255);
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    width: 200px;
+    border: 1px solid #edf1ff;
+  }
 }
 
 /* .dropdown-menu1::before {

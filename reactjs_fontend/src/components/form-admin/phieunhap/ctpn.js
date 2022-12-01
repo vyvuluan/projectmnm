@@ -11,8 +11,10 @@ const Ctpn = ({
   handleShowUpdateCtPN,
   viewPn,
   handleCloseTab,
+  handleReloadCTPN,
   // handleReloadShowCTPNtab3,
 }) => {
+  // console.log(viewPn);
   const status = viewPn.status;
   function formatMoney(money) {
     return new Intl.NumberFormat("vi-VN", {
@@ -34,6 +36,7 @@ const Ctpn = ({
             className="fs-3 customborder"
             onClick={handleCloseTab}
           />
+           
         </B.Col>
       </B.Row>
       <B.Form>
@@ -52,14 +55,14 @@ const Ctpn = ({
             </tr>
           </thead>
           <tbody className="align-middle">
-            {viewPn.pnct.map((item1, index) => {
+            {viewPn.pnct && viewPn.pnct.map((item1, index) => {
               return (
                 <>
                   <tr key={item1.pn_id}>
                     <td className="align-middle">{index + 1}</td>
                     <td className="align-middle">{item1.product.tenSP}</td>
                     <td className="align-middle">{item1.soluong}</td>
-                    <td className="align-middle">{item1.gia}</td>
+                    <td className="align-middle">{formatMoney(item1.gia)}</td>
 
                     {status == 1 ? null : (
                       <>
@@ -98,3 +101,4 @@ const Ctpn = ({
   );
 };
 export default Ctpn;
+ 

@@ -8,6 +8,7 @@ import axios from "axios";
 import swal from "sweetalert";
 import { Link, useNavigate } from "react-router-dom";
 import LoaderIcon from "../../layouts/Loading/index";
+import Breadcum from '../breadcum/index'
 
 export default function Cart() {
   const [submitting, setSubmitting] = useState(true);
@@ -19,7 +20,7 @@ export default function Cart() {
 
   if (!localStorage.getItem("auth_token")) {
     navaigate("/");
-    swal("Warning", "Vui lòng login để mua hàng", "error");
+    swal("Cảnh báo", "Vui lòng login để mua hàng", "error");
   }
 
   function formatMoney(money) {
@@ -36,7 +37,7 @@ export default function Cart() {
       setLoading(false);
     } else if (res.data.status === 401) {
       navaigate("/");
-      swal("Warning", res.data.message, "error");
+      swal("Thất bại", res.data.message, "error");
     }
   }, [])
 
@@ -79,16 +80,12 @@ export default function Cart() {
         if (res.data.status === 400) {
           setCart((cart) =>
             cart.map((item) =>
-              id_cart === item.id
-                ? {
-                  ...item,
-                  soLuongSP: item.soLuongSP - 1,
-                }
+              id_cart === item.id ?
+                { ...item, soLuongSP: item.soLuongSP - 1 }
                 : item
             )
           );
-          updateCartQuantity(id_cart, "dec");
-          swal('Thất bại', res.data.message, 'error')
+          swal('Cảnh báo', res.data.message, 'warning')
         }
       });
   }
@@ -100,39 +97,23 @@ export default function Cart() {
       .delete(`http://localhost:8000/api/deletecart/${id_cart}`)
       .then((res) => {
         if (res.data.status === 200) {
-          swal("Success", res.data.message, "success");
           localStorage.setItem("count", localStorage.getItem("count") - 1)
           setSubmitting(true);
         } else if (res.data.status === 404) {
-          swal("Error", res.data.message, "error");
+          swal("Thất bại", res.data.message, "error");
         }
       });
   };
 
+
   if (loading) {
     return (
       <div>
-        <Bt.Container fluid className="bg-secondary mb-5">
-          <div
-            className="d-flex flex-column align-items-center justify-content-center"
-            style={{ minHeight: "300px" }}
-          >
-            <h1 className="fw-semibold text-uppercase mb-3">Giỏ hàng</h1>
-            <div className="d-inline-flex">
-              <p className="m-0">
-                <Link
-                  to={"/"}
-                  className="text-decoration-none"
-                  variant="primary"
-                >
-                  Home
-                </Link>
-              </p>
-              <p className="m-0 px-2">-</p>
-              <p className="m-0 text-muted">Giỏ hàng</p>
-            </div>
-          </div>
-        </Bt.Container>
+        <Breadcum
+          title='giỏ hàng'
+          BC={1}
+          name='Giỏ hàng'
+        />
         <LoaderIcon />
       </div>
     );
@@ -173,25 +154,45 @@ export default function Cart() {
                       <td>{formatMoney(item.product.gia)}</td>
                       <td>
                         <Bt.InputGroup className="quantity mx-auto">
-                          <Bt.Button
-                            className="btn-sm rounded-0 shadow-none btnclick"
-                            variant="primary"
-                            type="button"
-                            onClick={() => handleDecrement(item.id)}
-                          >
-                            <FaMinus />
-                          </Bt.Button>
+                          {item.soLuongSP <= 1 ?
+                            <Bt.Button
+                              className="btn-sm rounded-0 shadow-none btnclick"
+                              variant="primary"
+                              type="button"
+                              disabled
+                            >
+                              <FaMinus />
+                            </Bt.Button>
+                            :
+                            <Bt.Button
+                              className="btn-sm rounded-0 shadow-none btnclick"
+                              variant="primary"
+                              type="button"
+                              onClick={() => handleDecrement(item.id)}
+                            >
+                              <FaMinus />
+                            </Bt.Button>}
                           <Bt.InputGroup.Text className="form-control-sm text-center">
                             {item.soLuongSP}
                           </Bt.InputGroup.Text>
-                          <Bt.Button
-                            className="btn-sm rounded-0 shadow-none btnclick"
-                            variant="primary"
-                            type="button"
-                            onClick={() => handleIncrement(item.id)}
-                          >
-                            <FaPlus />
-                          </Bt.Button>
+                          {item.soLuongSP >= 4 || item.soLuongSP === item.product.soLuongSP ?
+                            <Bt.Button
+                              className="btn-sm rounded-0 shadow-none btnclick"
+                              variant="primary"
+                              type="button"
+                              disabled
+                            >
+                              <FaPlus />
+                            </Bt.Button>
+                            :
+                            <Bt.Button
+                              className="btn-sm rounded-0 shadow-none btnclick"
+                              variant="primary"
+                              type="button"
+                              onClick={() => handleIncrement(item.id)}
+                            >
+                              <FaPlus />
+                            </Bt.Button>}
                         </Bt.InputGroup>
                       </td>
                       <td className="">
@@ -273,23 +274,11 @@ export default function Cart() {
 
   return (
     <>
-      <Bt.Container fluid className="bg-secondary mb-5">
-        <div
-          className="d-flex flex-column align-items-center justify-content-center"
-          style={{ minHeight: "300px" }}
-        >
-          <h1 className="fw-semibold text-uppercase mb-3">Giỏ hàng</h1>
-          <div className="d-inline-flex">
-            <p className="m-0">
-              <Link to={"/"} className="text-decoration-none" variant="primary">
-                Home
-              </Link>
-            </p>
-            <p className="m-0 px-2">-</p>
-            <p className="m-0 text-muted">Giỏ hàng</p>
-          </div>
-        </div>
-      </Bt.Container>
+      <Breadcum
+        title='giỏ hàng'
+        BC={1}
+        name='Giỏ hàng'
+      />
 
       <Bt.Container fluid pt={5} className="mb-5">
         <Bt.Form>{cart_HTML}</Bt.Form>

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConfirmMail;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Employee;
-
+use App\Notifications\SendMailConfirmRegister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -77,6 +78,11 @@ class UserController extends Controller
                         'message' => 'Tài khoản bạn đang có quyền quản lý ko có quyền đăng nhập ở trang khách hàng',
                     ]);
                 }
+            } else if ($user->status == 2) {
+                return response()->json([
+                    'status' => 402,
+                    'message' => 'Tài khoản của khách hàng chưa xác thực. Vui lòng truy cập http://localhost:3000/confirm-email?email=' . $user->email . ' để xác nhận tài khoản',
+                ]);
             } else {
                 return response()->json([
                     'status' => 402,
@@ -91,14 +97,22 @@ class UserController extends Controller
             'data' => User::all(),
         ]);
     }
+    public function generateUniqueCode()
+    {
+        do {
+            $code = random_int(100000, 999999);
+        } while (ConfirmMail::where("code", "=", $code)->first());
+
+        return $code;
+    }
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'fullname' => 'required|min:8',
-            'username' => 'required|min:8|unique:users',
-            'password' => 'required|min:8',
-            're_password' => 'required|min:8',
+            'username' => 'required|min:8|unique:users|string|regex:/^\S*$/u',
+            'password' => 'required|min:8|regex:/^\S*$/u',
+            're_password' => 'required|min:8|regex:/^\S*$/u',
         ], [
             'email.required' => 'Ô email Không được bỏ trống',
             'email.email' => 'Địa chỉ email không hợp lệ',
@@ -107,6 +121,9 @@ class UserController extends Controller
             'username.required' => 'Ô username không được bỏ trống',
             'username.min' => 'Ô username tối thiểu 8 ký tự',
             'username.unique' => 'username đã tồn tại',
+            'username.string' => 'username phải là một chuỗi',
+            'username.regex' => 'username không được có khoảng trống',
+
 
             'fullname.required' => 'Ô fullname không được bỏ trống',
             'fullname.min' => 'Ô fullname tối thiểu 8 ký tự',
@@ -116,6 +133,9 @@ class UserController extends Controller
 
             're_password.required' => 'Ô re_password không được bỏ trống',
             're_password.min' => 'Ô re_password thiểu đa 8 ký tự',
+
+            ' password.regex' => 'password không được có khoảng trống',
+            're_password.regex' => 're_password không được có khoảng trống',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -134,20 +154,72 @@ class UserController extends Controller
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'status' => 2,
             ]);
 
 
-            $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+            // $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
             $customer = new Customer();
             $customer->user_id = $user->id;
             $customer->ten = $request->fullname;
             $customer->save();
+            $code = $this->generateUniqueCode();
+            $confirm = ConfirmMail::create([
+                'email' => $request->email,
+                'code' => $code,
+            ]);
+            if ($user) {
+                $user->notify(new SendMailConfirmRegister($user->email, $code));
+                return response()->json([
+                    'check' => 1,
+                    'url' => 'http://localhost:3000/confirm-email?email=' . $user->email,
+                ]);
+            }
+            // return response()->json([
+            //     'status' => 200,
+            //     'username' => $user->username,
+            //     'fullname' => $request->fullname,
+            //     'token' => $token,
+            //     'message' => 'Đăng ký thành công',
+            // ]);
+        }
+    }
+
+    public function gui_lai_code($email)
+    {
+        $confirm = ConfirmMail::where('email', $email)->first();
+        $confirm->delete();
+        $code = $this->generateUniqueCode();
+        $confirm = ConfirmMail::create([
+            'email' => $email,
+            'code' => $code,
+        ]);
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $user->notify(new SendMailConfirmRegister($email, $code));
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Gửi lại mã thành công vui lòng check mail',
+        ]);
+    }
+
+    public function confirm_email(Request $request, $email)
+    {
+        $confirm = ConfirmMail::where('email', $email)->first();
+        if ($confirm->code == $request->code) {
+            $user = User::where('email', $email)->first();
+            $user->status = 1;
+            $user->save();
+            $confirm->delete();
             return response()->json([
                 'status' => 200,
-                'username' => $user->username,
-                'fullname' => $request->fullname,
-                'token' => $token,
-                'message' => 'Đăng ký thành công',
+                'message' => 'Đăng ký thành công'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Mã code không chính xác'
             ]);
         }
     }
@@ -229,6 +301,7 @@ class UserController extends Controller
         // 'userCreated' =>$userCreated ,
         // 'Access-Token' => $token]);
     }
+
 
     /**
      * @param $provider
@@ -352,9 +425,9 @@ class UserController extends Controller
 
         // ]);
         $validator = Validator::make($request->all(), [
-            'password_old' => 'max:255',
-            'password' => 'required|max:255',
-            're_password' => 'required|max:255',
+            'password_old' => 'max:255|regex:/^\S*$/u',
+            'password' => 'required|max:255|regex:/^\S*$/u',
+            're_password' => 'required|max:255|regex:/^\S*$/u',
         ], [
             // 'password_old.required' => 'Ô password Không được bỏ trống',
             'password_old.max' => 'Ô password tối đa 255 ký tự',
@@ -364,6 +437,10 @@ class UserController extends Controller
 
             're_password.required' => 'Ô re_password không được bỏ trống',
             're_password.max' => 'Ô re_password tối đa 255 ký tự',
+
+            'password.regex' => 'password không được có khoảng trống',
+            're_password.regex' => 're_password không được có khoảng trống',
+            'password_old.regex' => 'password_old không được có khoảng trống',
         ]);
         if ($validator->fails()) {
             return response()->json([

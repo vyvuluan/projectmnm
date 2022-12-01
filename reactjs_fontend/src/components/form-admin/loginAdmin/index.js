@@ -44,6 +44,7 @@ const LoginAdmin = () => {
 
             localStorage.setItem("auth_token", res.data.token);
             localStorage.setItem("auth_name", res.data.username);
+            localStorage.removeItem("auth_fullname");
             cookies.set("role_id", res.data.role_id, { path: "/" });
             // setIdRole(res.data.role_id)
             // console.log(cookies.get('role_id'));
@@ -102,7 +103,7 @@ const LoginAdmin = () => {
                 type="email"
                 name="email"
                 className="form-control mt-1 shadow-sm shadow-sm"
-                placeholder="Enter email"
+                placeholder="Nhập email"
                 onChange={handleInput}
                 value={loginInput.email}
                 required
@@ -114,7 +115,7 @@ const LoginAdmin = () => {
                 type="password"
                 name="password"
                 className="form-control mt-1 shadow-sm shadow-sm"
-                placeholder="Enter password"
+                placeholder="Nhập mật khẩu"
                 onChange={handleInput}
                 value={loginInput.password}
                 required

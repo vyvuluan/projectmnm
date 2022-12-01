@@ -26,6 +26,12 @@ use  App\Http\Controllers\admin\ManageCustomerController;
 use  App\Http\Controllers\admin\ManagePhieuNhapController;
 use  App\Http\Controllers\admin\ManageBaoCaoController;
 use  App\Http\Controllers\admin\DiscountController;
+use Illuminate\Support\Facades\Redirect;
+
+
+
+use App\Models\ConfirmMail;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,6 +45,26 @@ use  App\Http\Controllers\admin\DiscountController;
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
+Route::get('test', function () {
+    //return Redirect::away('http://localhost:3000/confirm-email?email=');
+    $today = Carbon::now();
+    $confirms = ConfirmMail::get();
+    foreach ($confirms as $confirm) {
+        if (strtotime($today) > strtotime($confirm->created_at . ' + 3 minute')) {
+            echo $confirm->code;
+
+            echo '</br>';
+        }
+        echo  strtotime($today);
+        echo '</br>';
+
+        echo strtotime($confirm->created_at . ' + 3 minute');
+    }
+});
+
+Route::put('/confirm-email/{email}', [UserController::class, 'confirm_email']);
+Route::post('/gui-lai-code/{email}', [UserController::class, 'gui_lai_code']);
+
 //api search nhà cung cấp theo tên mã số điện thoại
 Route::get('/searchNcc', [ManageNccController::class, 'searchNcc']);
 //api search nhà sản xuất theo tên mã quốc gia
@@ -98,6 +124,9 @@ Route::middleware('auth:sanctum', 'role')->prefix('admin')->group(function () {
     //api báo cáo thống kê
     Route::get('baocao', [ManageBaoCaoController::class, 'thongKeDoanhThuThang']);
     //api tính số contact chưa đọc
+
+
+    Route::put('reset-password/{user_id}', [ManageUserController::class, 'reset_password']);
 });
 
 

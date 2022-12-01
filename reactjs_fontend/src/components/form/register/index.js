@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 
@@ -11,13 +11,14 @@ const Resgiter = () => {
   const history = useNavigate();
 
   const [registerInput, setRegister] = useState({
-    fullname:"",
+    fullname: "",
     name: "",
     email: "",
     pass: "",
     repass: "",
   });
   const [errorPass, setErrorPass] = useState();
+
   const [errorTrung, setErrorTrung] = useState();
   const handleInput = (e) => {
     e.persist();
@@ -36,31 +37,15 @@ const Resgiter = () => {
     // console.log(data);
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/register", data).then((res) => {
-        console.log(res);
-        if (res.data.status === 200) {
-          
-          localStorage.setItem("auth_token", res.data.token);
-          localStorage.setItem("auth_name", res.data.username);
-          localStorage.setItem("auth_fullname", res.data.fullname);
-
-          // console.log("thanh cong");
-          swal({
-            title: "Đăng ký thành công",
-            icon: "success",
-            button: "đóng",
-          });
-
-          history("/");
+        if (res?.data?.check == 1) {
+          window.location.replace(res.data.url);
         } else if (res.data.status === 401) {
           setErrorPass(res.data.error);
         } else if (res.data.status === 400) {
           console.log(res.data.error);
           setErrorTrung(res.data.error);
-          // console.log(errorTrung.username);
         }
-        
       });
-      
     });
   };
 
@@ -77,73 +62,74 @@ const Resgiter = () => {
               </Link>
             </div>
             <div className="form-group mt-3">
-              <label>Họ và Tên</label><span className="error1 ms-2">{errorTrung?.fullname}</span>
+              <label>Họ và Tên</label>
+              <span className="error1 ms-2">{errorTrung?.fullname}</span>
               <input
                 name="fullname"
                 type="text"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: Đỗ Đình Mạnh"
+                placeholder="Ví dụ: Đỗ Đình Mạnh"
                 onChange={handleInput}
                 value={registerInput?.fullname}
                 required
               />
             </div>
-            
 
             <div className="form-group mt-3">
-              <label>UserName</label><span className="error1 ms-2">{errorTrung?.username}</span>
+              <label>Username</label>
+              <span className="error1 ms-2">{errorTrung?.username}</span>
               <input
                 name="name"
                 type="text"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: abc"
+                placeholder="Ví dụ: abc123"
                 onChange={handleInput}
                 value={registerInput?.name}
                 required
               />
             </div>
-            
+
             <div className="form-group mt-3">
-              <label>Email</label><span className="error1 ms-2">{errorTrung?.email}</span>
+              <label>Email</label>
+              <span className="error1 ms-2">{errorTrung?.email}</span>
               <input
                 type="email"
                 name="email"
                 className="form-control mt-1 shadow-sm"
-                placeholder="example: abc@gmail.com"
+                placeholder="Ví dụ: abc123@gmail.com"
                 onChange={handleInput}
                 value={registerInput?.email}
                 required
               />
             </div>
-            
 
             <div className="form-group mt-3">
-              <label>Password</label><span className="error1 ms-2">{errorTrung?.password}</span>
+              <label>Mật khẩu</label>
+              <span className="error1 ms-2">{errorTrung?.password}</span>
               <input
                 type="password"
                 name="pass"
                 className="form-control mt-1 shadow-sm"
-                placeholder="Nhập password"
+                placeholder="Nhập mật khẩu"
                 onChange={handleInput}
                 value={registerInput?.pass}
                 required
               />
             </div>
-            
 
             <div className="form-group mt-3">
-              <label>Xác nhận mật khẩu</label><span className="error1 ms-2">{errorTrung?.re_password}</span>
+              <label>Xác nhận mật khẩu</label>
+              <span className="error1 ms-2">{errorTrung?.re_password}</span>
               <input
                 type="password"
                 name="repass"
                 className="form-control mt-1 shadow-sm"
-                placeholder="Xác nhận password"
+                placeholder="Xác nhận mật khẩu"
                 onChange={handleInput}
                 value={registerInput?.repass}
                 required
               />
             </div>
-            
 
             <span className="error1">{errorPass}</span>
             <div className="d-grid gap-2 mt-3">

@@ -3,8 +3,6 @@ import * as B from 'react-bootstrap'
 import magiamgia from './magiamgia.png'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { AiFillFire } from 'react-icons/ai'
-import { MdArrowForwardIos } from 'react-icons/md'
 import './style.css'
 import axios from 'axios';
 
@@ -41,10 +39,11 @@ const Index = () => {
         discount_html =
             <Carousel
                 additionalTransfrom={0}
-                removeArrowOnDeviceType={['mobile']}
+                removeArrowOnDeviceType={['mobile', 'smallmobile']}
                 autoPlay
                 autoPlaySpeed={3000}
-                centerMode={true}
+                centerMode={false}
+                partialVisible
                 containerClass="container-with-dots"
                 dotListClass=""
                 draggable={false}
@@ -60,34 +59,42 @@ const Index = () => {
                     desktop: {
                         breakpoint: {
                             max: 3000,
-                            min: 1024
+                            min: 1600
                         },
                         items: 4,
-                        partialVisibilityGutter: 100
+                        partialVisibilityGutter: 40
                     },
                     desktopMd: {
                         breakpoint: {
                             max: 1600,
-                            min: 600
+                            min: 1024
                         },
                         items: 3,
-                        partialVisibilityGutter: 100
+                        partialVisibilityGutter: 35
                     },
-                    mobile: {
+                    smallmobile: {
                         breakpoint: {
-                            max: 464,
+                            max: 420,
                             min: 0
                         },
                         items: 1,
-                        partialVisibilityGutter: 50
+                        partialVisibilityGutter: 30
+                    },
+                    mobile: {
+                        breakpoint: {
+                            max: 720,
+                            min: 420
+                        },
+                        items: 1,
+                        partialVisibilityGutter: 100
                     },
                     tablet: {
                         breakpoint: {
                             max: 1024,
-                            min: 464
+                            min: 720
                         },
                         items: 2,
-                        partialVisibilityGutter: 80
+                        partialVisibilityGutter: 30
                     }
                 }}
                 rewind={false}
@@ -101,7 +108,7 @@ const Index = () => {
                 {discountList.map((item, index) => (
                     <div className='imgcontainer' key={index}>
                         <img src={magiamgia} alt='' className='bgimg'></img>
-                        <label className='textimg text-white'>{item.discount_id}</label>
+                        <label className='textimg text-white'>{item.discount_id} {item.phantram}%</label>
                         <div className='textimg-bottom text-danger'>
                             <span>{item.start}</span>
                             <span> - </span>
@@ -115,10 +122,11 @@ const Index = () => {
         discount_html =
             <Carousel
                 additionalTransfrom={0}
-                removeArrowOnDeviceType={['mobile']}
+                removeArrowOnDeviceType={['mobile', 'smallmobile']}
                 autoPlay
                 autoPlaySpeed={3000}
-                centerMode={true}
+                centerMode={false}
+                partialVisible
                 containerClass="container-with-dots"
                 dotListClass=""
                 draggable={false}
@@ -134,34 +142,42 @@ const Index = () => {
                     desktop: {
                         breakpoint: {
                             max: 3000,
-                            min: 1024
+                            min: 1600
                         },
                         items: 4,
-                        partialVisibilityGutter: 100
+                        partialVisibilityGutter: 40
                     },
                     desktopMd: {
                         breakpoint: {
                             max: 1600,
-                            min: 600
+                            min: 1024
                         },
                         items: 3,
-                        partialVisibilityGutter: 100
+                        partialVisibilityGutter: 35
                     },
-                    mobile: {
+                    smallmobile: {
                         breakpoint: {
-                            max: 464,
+                            max: 420,
                             min: 0
                         },
                         items: 1,
-                        partialVisibilityGutter: 50
+                        partialVisibilityGutter: 30
+                    },
+                    mobile: {
+                        breakpoint: {
+                            max: 720,
+                            min: 420
+                        },
+                        items: 1,
+                        partialVisibilityGutter: 100
                     },
                     tablet: {
                         breakpoint: {
                             max: 1024,
-                            min: 464
+                            min: 720
                         },
                         items: 2,
-                        partialVisibilityGutter: 80
+                        partialVisibilityGutter: 30
                     }
                 }}
                 rewind={false}
@@ -186,15 +202,15 @@ const Index = () => {
 
     return (
         <>
-            <B.Container fluid className='pt-5'>
-                <B.Row className='px-xl-5 mb-2'>
+            <B.Container fluid className='pt-5 mb-5'>
+                {/* <B.Row className='px-xl-5 mb-2'>
                     <div className='d-flex'>
                         <AiFillFire className='fs-2 text-danger mt-1' />
                         <MdArrowForwardIos className='iconsize mt-2' />
                         <h2 className=''>Mã khuyến mại sốc</h2>
                     </div>
-                </B.Row>
-                <B.Row className='px-xl-5 mx-0'>
+                </B.Row> */}
+                <B.Row className='px-xl-5 me-0'>
                     {discount_html}
                 </B.Row>
             </B.Container>

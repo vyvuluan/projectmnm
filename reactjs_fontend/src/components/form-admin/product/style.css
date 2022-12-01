@@ -10,7 +10,7 @@
     width: 100%;
     max-width: 336px;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 @media screen and (max-width: 1600px) {
@@ -18,4 +18,19 @@
         width: auto;
         height: auto;
     }
+}
+
+.custom-file-input1 {
+    background-color: #d70018;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 16px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.custom-file-input1:hover {
+    background-color: #aa000e;
+    color: white;
+    cursor: pointer;
 }

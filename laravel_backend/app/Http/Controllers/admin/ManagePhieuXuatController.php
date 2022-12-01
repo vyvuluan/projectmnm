@@ -232,10 +232,10 @@ class ManagePhieuXuatController extends Controller
             ]);
         } else {
             $checkpx = PhieuXuat::find($request->px_id);
-            if ($checkpx->status > 1) {
+            if ($checkpx->status >= 1) {
                 return response()->json([
                     'status' => 400,
-                    'message' => 'Đơn hành đã thánh toán !',
+                    'message' => 'Đơn hành đã thanh toán không thể chỉnh sửa !',
                 ]);
             }
             if ($checkpx) {
@@ -244,7 +244,7 @@ class ManagePhieuXuatController extends Controller
                     if ($request->soluong > $checksp->soLuongSP) {
                         return response()->json([
                             'status' => 400,
-                            'message' => 'Kho không đủ hàng !',
+                            'message' => 'Kho không còn đủ hàng , Số hàng tồn kho : ' . $checksp->soLuongSP,
                         ]);
                     }
                     $pxcts = PhieuXuat::find($request->px_id)->pxct;
@@ -356,11 +356,29 @@ class ManagePhieuXuatController extends Controller
                 'status' => 400,
                 'message' => 'Bạn không thể thay đổi tình trạng đơn hàng tạo tại quầy',
             ]);
+        } else if ($px->status == 0 && ($px->pt_ThanhToan == 'VnPay' || $px->pt_ThanhToan == 'PayPal')) {
+            $px->status = 5;
+            $px->employee_id = $maNV;
+            $px->save();
+            if ($px->status == 5) {
+                $pxcts = $px->pxct;
+                foreach ($pxcts as $pxct) {
+                    $product = Product::find($pxct->product_id);
+                    if ($product) {
+                        $product->soLuongSP += $pxct->soluong;
+                        $product->save();
+                    }
+                }
+            }
+            return response()->json([
+                'status' => 400,
+                'message' => 'Đơn hàng online thanh toán thất bại không thể chỉnh sửa , đơn hàng sẽ bị hủy !',
+            ]);
         }
         $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
-        if ($px->status = 5) {
+        if ($px->status == 5) {
             $pxcts = $px->pxct;
             foreach ($pxcts as $pxct) {
                 $product = Product::find($pxct->product_id);
@@ -448,7 +466,7 @@ class ManagePhieuXuatController extends Controller
         $px->status = $request->status;
         $px->employee_id = $maNV;
         $px->save();
-        if ($px->status = 5) {
+        if ($px->status == 5) {
             $pxcts = $px->pxct;
             foreach ($pxcts as $pxct) {
                 $product = Product::find($pxct->product_id);
@@ -590,7 +608,7 @@ class ManagePhieuXuatController extends Controller
                         } else {
                             return response()->json([
                                 'status' => 402,
-                                'message' => 'Kho không còn đủ hàng',
+                                'message' => 'Kho không còn đủ hàng , Số hàng tồn kho : ' . $checksp->soLuongSP,
                             ]);
                         }
                     } else {

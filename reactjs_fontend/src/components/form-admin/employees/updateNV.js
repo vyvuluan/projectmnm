@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 
 import axios from "axios";
-const UpdateNV = ({ username,setSubmitting }) => {
+const UpdateNV = ({ username, setSubmitting }) => {
   //   console.log(username);
   const [valueGT, setValueGT] = useState();
   const [valueCV, setValueCV] = useState();
@@ -44,14 +44,18 @@ const UpdateNV = ({ username,setSubmitting }) => {
       .then((res) => {
         console.log(res.data);
         if (res.data.status == 200) {
-          swal("Success", res.data.message, "success");
-          setSubmitting(true)
+          swal("Thành công", res.data.message, "success");
+          setSubmitting(true);
         }
       })
       .catch(function (error) {
         // handle error
         console.log(error);
-        swal("Warning", "vui lòng kiểm tra lại thông tin vừa nhập ", "warning");
+        swal(
+          "Cảnh báo",
+          "vui lòng kiểm tra lại thông tin vừa nhập ",
+          "warning"
+        );
       });
   };
 
@@ -59,6 +63,7 @@ const UpdateNV = ({ username,setSubmitting }) => {
     <>
       <B.Form className="mt-2">
         <B.FormGroup>
+          <span>Họ và tên</span>
           <B.FormControl
             type="text"
             name="ten"
@@ -70,6 +75,8 @@ const UpdateNV = ({ username,setSubmitting }) => {
           ></B.FormControl>
         </B.FormGroup>
         <B.FormGroup>
+          <span>Giới tính</span>
+
           <B.FormSelect
             name="gioiTinh"
             defaultValue={updateNV.gioiTinh}
@@ -83,6 +90,8 @@ const UpdateNV = ({ username,setSubmitting }) => {
           </B.FormSelect>
         </B.FormGroup>
         <B.FormGroup>
+          <span>Địa chỉ</span>
+
           <B.FormControl
             name="diaChi"
             type="textarea"
@@ -95,6 +104,8 @@ const UpdateNV = ({ username,setSubmitting }) => {
         </B.FormGroup>
 
         <B.FormGroup>
+          <span>Số điện thoại</span>
+
           <B.FormControl
             name="sdt"
             type="text"
@@ -106,6 +117,8 @@ const UpdateNV = ({ username,setSubmitting }) => {
           ></B.FormControl>
         </B.FormGroup>
         <B.FormGroup>
+          <span>Chức vụ</span>
+
           <B.FormSelect
             name="cv_id"
             // value={}

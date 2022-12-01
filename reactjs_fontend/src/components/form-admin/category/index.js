@@ -68,7 +68,7 @@ function Index() {
 
         axios.post(`http://localhost:8000/api/kho/loaisp`, data).then(res => {
             if (res.data.status === 200) {
-                swal('Success', res.data.message, 'success');
+                swal('Thành công', res.data.message, 'success');
                 setCategory({
                     tenLoai: '',
                     error_list: [],
@@ -176,11 +176,6 @@ function Index() {
                 <B.Row className='pe-xl-5'>
                     <B.Col lg className='d-grd gap-2 mx-auto table-responsive mb-5' >
                         <B.FormGroup className='d-flex justify-content-between mb-2'>
-                            <B.FormSelect className='rounded-0 shadow-none' style={{ width: '200px' }}>
-                                <option>Sắp xếp</option>
-                                <option>Từ A-Z</option>
-                                <option>Theo ID</option>
-                            </B.FormSelect>
                             <B.Button variant='primary' className='rounded-0 py-2' onClick={handleShowAddCate}>
                                 <CgExtensionAdd />
                                 Thêm loại sản phẩm

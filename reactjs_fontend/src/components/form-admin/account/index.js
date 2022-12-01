@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import * as B from "react-bootstrap";
 import { AiFillEye } from "react-icons/ai";
-import { FaUserEdit, FaSearch } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import Swal from "sweetalert2";
+
 import { MdDeleteForever } from "react-icons/md";
-import { BiEdit } from "react-icons/bi";
+
 import axios from "axios";
 import Cookies from "universal-cookie";
 import ViewAccount from "./viewAccount";
 import swal from "sweetalert";
 import Pagination from "../../form/pagination";
 import LoadingPage from "../../layouts/Loading";
+import NewPassAdmin from "./resetPassNV";
 const Account = () => {
   const cookies = new Cookies();
   const [user, setUser] = useState([]);
@@ -17,18 +20,21 @@ const Account = () => {
   const [loading, setLoading] = useState(true);
 
   const [show, setShow] = useState(false);
+  const [showResetAcc, setShowResetAcc] = useState(false);
+
   const handleClose = () => setShow((prev) => !prev);
+  const handleCloseResetAcc = () => setShowResetAcc((prev) => !prev);
+
   const handleShow = (item) => {
     // console.log(item);
     setViewAcc(item);
     setShow(true);
   };
-  const [addAccount, setAddAccount] = useState({
-    username: "",
-    email: "",
-    password: "",
-    role_id: "",
-  });
+  const handleShowResetAcc = (item) => {
+    // console.log(item);
+    setViewAcc(item);
+    setShowResetAcc(true);
+  };
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
@@ -56,7 +62,7 @@ const Account = () => {
           setTotalPage(res.data.users.total);
           setPerPage(res.data.users.per_page);
           setCurrentPage(res.data.users.current_page);
-          setLoading(false)
+          setLoading(false);
         })
         .catch(function (error) {
           // handle error
@@ -69,8 +75,7 @@ const Account = () => {
         .then((res) => {
           // console.log(res.data.users.data);
           setUser(res.data.users.data);
-          setLoading(false)
-
+          setLoading(false);
         })
         .catch(function (error) {
           // handle error
@@ -82,14 +87,12 @@ const Account = () => {
 
   const refresh = useCallback(async () => {
     if (cookies.get("role_id") == 2) {
-
       const res = await axios.get(`/api/admin/manageUser?page=${page}`);
       setUser(res.data.users.data);
       setTotalPage(res.data.users.total);
       setPerPage(res.data.users.per_page);
       setCurrentPage(res.data.users.current_page);
-    }
-    else if (cookies.get("role_id") == 4) {
+    } else if (cookies.get("role_id") == 4) {
       const res = await axios.get(`/api/nhanvien/manageUser?page=${page}`);
       setUser(res.data.users.data);
       setTotalPage(res.data.users.total);
@@ -105,66 +108,76 @@ const Account = () => {
   const handleDeleteAccount = (item) => {
     // console.log(item.id);
     const id = item.id;
-    swal({
-      title: "Bạn chắc chứ?",
-      text: "Xóa tài khoản sẽ không thể hoàn tác",
-      buttons: {
-        catch: {
-          text: "Xóa tài khoản",
-          value: "catch",
-        },
-        no: {
-          text: "Hủy bỏ",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "catch":
-          if (cookies.get("role_id") == 2) {
-            axios
-              .delete(`/api/admin/manageUser/${id}`)
-              .then((res) => {
-                // console.log(res.data);
-                if (res.data.status === 200) {
-                  swal({
-                    title: res.data.message,
-                    icon: "success",
-                    button: "đóng",
-                  });
-                  setSubmitting(true);
-                }
-              })
-              .catch(function (error) {
-                // handle error
-                console.log(error);
-              });
-          } else if (cookies.get("role_id") == 4) {
-            axios
-              .delete(`/api/nhanvien/manageUser/${id}`)
-              .then((res) => {
-                // console.log(res.data);
-                if (res.data.status === 200) {
-                  swal({
-                    title: res.data.message,
-                    icon: "success",
-                    button: "đóng",
-                  });
-                  setSubmitting(true);
-                }
-              })
-              .catch(function (error) {
-                // handle error
-                console.log(error);
-              });
-          } break;
-        default:
-          break;
-
+    Swal.fire({
+      title: "Xóa?",
+      text: "Bạn có muốn thực hiện thao tác này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chấp nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (cookies.get("role_id") == 2) {
+          axios
+            .delete(`/api/admin/manageUser/${id}`)
+            .then((res) => {
+              // console.log(res.data);
+              if (res.data.status === 200) {
+                swal({
+                  title: res.data.message,
+                  icon: "success",
+                  button: "đóng",
+                });
+                setSubmitting(true);
+              }
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            });
+        } else if (cookies.get("role_id") == 4) {
+          axios
+            .delete(`/api/nhanvien/manageUser/${id}`)
+            .then((res) => {
+              // console.log(res.data);
+              if (res.data.status === 200) {
+                swal({
+                  title: res.data.message,
+                  icon: "success",
+                  button: "đóng",
+                });
+                setSubmitting(true);
+              }
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            });
+        }
       }
     });
   };
 
+  // const handleResetAccount = (id) => {
+  //   axios
+  //     .put(`/api/admin/reset-password/${id}`)
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       if (res.data.status === 200) {
+  //         swal({
+  //           title: res.data.message,
+  //           icon: "success",
+  //           button: "đóng",
+  //         });
+  //         setSubmitting(true);
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       console.log(error);
+  //     });
+  // };
   var htmlRole;
   var htmlStatus;
   return (
@@ -179,6 +192,14 @@ const Account = () => {
             showModal={handleClose}
             setSubmitting={setSubmitting}
           />
+        </B.ModalBody>
+      </B.Modal>
+      <B.Modal show={showResetAcc} onHide={handleCloseResetAcc}>
+        <B.ModalHeader closeButton className="bg-secondary">
+          <B.ModalTitle>Reset pass</B.ModalTitle>
+        </B.ModalHeader>
+        <B.ModalBody>
+          <NewPassAdmin data={viewAcc} />
         </B.ModalBody>
       </B.Modal>
       <B.Container fluid>
@@ -297,8 +318,20 @@ const Account = () => {
                           data-toggle="tooltip"
                           data-placement="bottom"
                           title="Xóa tài khoản"
+                          style={{ marginRight: "15px" }}
                           onClick={() => handleDeleteAccount(item)}
                         />
+                        {cookies.get("role_id") == 2 ? (
+                          <>
+                            <RiLockPasswordFill
+                              type="button"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="Reset mật khẩu"
+                              onClick={() => handleShowResetAcc(item)}
+                            />
+                          </>
+                        ) : null}
                       </td>
                     </tr>
                   );

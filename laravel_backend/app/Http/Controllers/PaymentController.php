@@ -7,6 +7,7 @@ use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use App\Models\PhieuXuat;
 use App\Models\Discount;
+use App\Models\Product;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -283,6 +284,29 @@ class PaymentController extends Controller
                 $tongTien += ($item->soLuongSP) * ($item->product->gia);
             }
             $payment->tongTien = $tongTien;
+            if (isset($request->discount)) {
+                $date = Carbon::today();
+                $discount = Discount::where('discount_id', $request->discount)
+                    ->where('start', '<', $date)
+                    ->where('end', '>', $date)
+                    ->first();
+                if (!empty($discount)) {
+                    if ($discount->dieukien <= $tongTien) {
+                        $payment->discount = $discount->phantram;
+                        $payment->tongTien = $payment->tongTien * (100 * 1.0 - $discount->phantram) / 100;
+                    } else {
+                        return response()->json([
+                            'status' => 400,
+                            'message' => 'Đơn hàng cần tối thiểu ' . $discount->dieukien . ' để áp dụng',
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Không có mã giảm giá bạn vừa nhập',
+                    ]);
+                }
+            }
             $payment->save();
             $payment->pxct()->createMany($pxChiTiet);
             Cart::destroy($cart);
@@ -312,7 +336,7 @@ class PaymentController extends Controller
             $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
             $vnp_OrderInfo = 'Noi dung thanh toan';
             $vnp_OrderType = 'other';
-            $vnp_Amount = $tongTien * 100;
+            $vnp_Amount = $payment->tongTien * 100;
             $vnp_Locale = 'vn';
             $vnp_BankCode = 'NCB';
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -413,9 +437,22 @@ class PaymentController extends Controller
         $Status =  $inputData['vnp_ResponseCode'];
 
 
-        if ($Status = '00' && $secureHash == $vnp_SecureHash) {
+        if ($secureHash == $vnp_SecureHash &&  $Status == '00') {
             $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '1']);
-            return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            //return Redirect::to('http://localhost:3000/paymentreturn?status=200&orderId=' . $orderId . '&Amount=' . $vnp_Amount . '&pt=VnPay')->with('data', 'test');
+            return Redirect::to('http://localhost:3000/paymentreturn?status=success');
+        } else {
+            $px =  DB::table('phieu_xuats')->where('payment_id', $orderId)->update(['status' => '0']);
+            $checkpx = PhieuXuat::where('payment_id', $orderId)->first();
+            $pxcts = $checkpx->pxct;
+            foreach ($pxcts as $pxct) {
+                $product = Product::find($pxct->product_id);
+                if ($product) {
+                    $product->soLuongSP += $pxct->soluong;
+                    $product->save();
+                }
+            }
+            return Redirect::to('http://localhost:3000/paymentreturn?status=fail');
         }
         // }
         // else

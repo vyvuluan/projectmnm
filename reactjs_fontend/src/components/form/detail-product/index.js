@@ -50,7 +50,7 @@ const DetailProduct = (props) => {
             setLoading(false);
           } else if (res.data.status === 404) {
             navaigate.push("/pageproducts");
-            swal("Warning", res.data.message, "error");
+            swal("Thất bại", res.data.message, "error");
           }
         }
       });
@@ -66,7 +66,7 @@ const DetailProduct = (props) => {
     }
   };
   const handleIncrement = () => {
-    if (quantity < product.soLuongSP) {
+    if (quantity < 4 && quantity < product.soLuongSP) {
       setQuantity((prevCount) => prevCount + 1);
     }
   };
@@ -84,13 +84,15 @@ const DetailProduct = (props) => {
         // console.log(res);
         localStorage.setItem("count", res.data.count)
 
-        swal("Success", res.data.message, "success");
+        swal("Thành công", res.data.message, "success");
+      } else if (res.data.status === 400) {
+        swal("Cảnh báo", res.data.message, "warning");
       } else if (res.data.status === 409) {
-        swal("Warning", res.data.message, "warning");
+        swal("Cảnh báo", res.data.message, "warning");
       } else if (res.data.status === 401) {
-        swal("Error", res.data.message, "error");
+        swal("Thất bại", res.data.message, "error");
       } else if (res.data.status === 404) {
-        swal("Warning", res.data.message, "warning");
+        swal("Cảnh báo", res.data.message, "warning");
       }
     });
   };
@@ -129,9 +131,9 @@ const DetailProduct = (props) => {
     axios.post(`/api/addcomment`, data).then(res => {
       if (res.data.status === 200) {
         setSubmitting(true);
-        swal('Success', res.data.message, 'success');
+        swal('Thành công', res.data.message, 'success');
       } else if (res.data.status === 401) {
-        swal('Error', res.data.message, 'error')
+        swal('Thất bại', res.data.message, 'error')
       }
     })
   }
@@ -207,48 +209,14 @@ const DetailProduct = (props) => {
                 </div>
 
               </div>
-              {/* <a
-                className="carousel-control-prev"
-                href="#product-carousel"
-                data-slide="prev"
-              >
-                <GrPrevious />
-              </a>
-              <a
-                className="carousel-control-next"
-                href="#product-carousel"
-                data-slide="next"
-              >
-                <GrNext />
-              </a> */}
             </div>
           </div>
 
           <div className="col-lg-7 pb-5">
             <h3 className="font-weight-semi-bold">{product.tenSP}</h3>
-            {/* <div className="d-flex mb-3">
-              <div className="text-primary mr-2">
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-                <small>
-                  <BsStarFill />
-                </small>
-              </div>
-              <small className="pt-1">(50 Reviews)</small>
-            </div> */}
-            <small className="text-primary fw-semibold">{comment.length} bình luận</small>
-            <h3 className="font-weight-semi-bold mt-2 mb-4">
+            <h3 className="font-weight-semi-bold mt-3 mb-3 text-primary">
               {formatMoney(product.gia)}
+              <small className="fw-semibold text-dark fs-5"> ({comment.length} bình luận)</small>
             </h3>
             <p className="mb-4">
               <div dangerouslySetInnerHTML={{ __html: product.ctSanPham }} />

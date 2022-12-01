@@ -1,4 +1,4 @@
-export { default as ResetPass } from "./repass-confirm/index.js";
+// export { default as ResetPass } from "./repass-confirm/index.js";
 export { default as Login } from "./login/index.js";
 export { default as ForgotPass } from "./resetpass/index.js";
 export { default as Resgiter } from "./register/index.js";
@@ -24,6 +24,10 @@ export { default as MyOrder } from "./myorder/index.js";
 export { default as SortProduct } from "./sortProduct/index.js";
 export { default as PaymentReturn } from "./payment/payment-return";
 export { default as Discount } from "./khuyenmai/index";
+export { default as ComFirmMail } from "./comfirmMail/index";
+export { default as Breadcum } from "./breadcum/index";
+export { default as AboutUs } from "./about-us/index";
+
 
 
 

@@ -50,7 +50,7 @@ const NewPass = () => {
                 type="password"
                 name="password"
                 className="form-control mt-1 shadow-sm"
-                placeholder="password"
+                placeholder="Nhập mật khẩu mới"
                 onChange={handleInput}
                 value={resetPass.password}
                 required

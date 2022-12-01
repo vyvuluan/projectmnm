@@ -7,13 +7,11 @@ import { ProductCate } from "./components/form/index.js";
 import PrivateRoutes from "./Router/AdminPrivateRoute";
 import { EmptyCart, NotFoundPage, PageAdmin } from "./components";
 import Cookies from "universal-cookie";
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 import swal from "sweetalert";
 
 import { icons } from "react-icons/lib";
 import { useEffect } from "react";
-// import TestTable from "./components/form-admin/TestTable";
-// import { DropDownMenu } from "./components/form";
-// import HomePage from "./components/pages/home/index.js"
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Accept"] = "application/json";
@@ -60,6 +58,11 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
+
+      {/* <MessengerCustomerChat
+        pageId="100412282908828"
+        appId="514291876703666"
+      /> */}
     </>
   );
 }

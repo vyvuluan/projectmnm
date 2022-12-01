@@ -58,10 +58,21 @@ class CartController extends Controller
                     if ($cartItem) {
 
                         $cartItem->soLuongSP += $soLuongSP;
+                        //$warnSP = $cartItem->soLuongSP -= $soLuongSP;
                         if ($cartItem->soLuongSP > $spCheck->soLuongSP) {
                             return response()->json([
                                 'status' => 400,
-                                'message' => 'Kho chỉ còn : ' . $spCheck->soLuongSP . ' sản phẩm',
+                                'message' => '  Cửa hàng chỉ còn ' . $spCheck->soLuongSP . ' sản phẩm mà thôi
+                                 Vui lòng kiểm tra lại giỏ hàng của bạn !  ',
+
+                            ]);
+                        } else if ($cartItem->soLuongSP > 4) {
+                            return response()->json([
+                                'status' => 400,
+                                'message' => ' Bạn chỉ có thể mua tối đa 4 sản phẩm cho 1 loại mặt hàng
+                                 Vui lòng kiểm tra lại giỏ hàng của bạn !  ',
+
+
                             ]);
                         }
                         $cartItem->save();

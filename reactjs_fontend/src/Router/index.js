@@ -26,6 +26,8 @@ import {
   NewPass,
   MyOrder,
   PaymentReturn,
+  ComFirmMail,
+  AboutUs,
 
 } from "../components/form";
 import {
@@ -52,6 +54,11 @@ export const PublicRouter = [
   {
     path: "/Login",
     component: Login,
+    layout: null,
+  },
+  {
+    path: "/confirm-email",
+    component: ComFirmMail,
     layout: null,
   },
   {
@@ -150,6 +157,11 @@ export const PublicRouter = [
   {
     path: "/paymentreturn",
     component: PaymentReturn,
+    layout: _Layout,
+  },
+  {
+    path: "/aboutus",
+    component: AboutUs,
     layout: _Layout,
   },
 ];

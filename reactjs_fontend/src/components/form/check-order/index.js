@@ -4,6 +4,7 @@ import OrderDetail from "../order-detail";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import * as B from 'react-bootstrap'
+import Breadcum from '../breadcum/index'
 
 const checkStatus = [
   { id: 0, name: 'Đơn hàng chờ xác nhận', icon: 'pe-7s-cart' },
@@ -11,7 +12,6 @@ const checkStatus = [
   { id: 2, name: 'Đang đóng gói', icon: 'pe-7s-medal' },
   { id: 3, name: 'Đang vận chuyển', icon: 'pe-7s-car' },
   { id: 4, name: 'Giao hàng thành công', icon: 'pe-7s-home' },
-  { id: 5, name: 'Đơn hàng đã hủy', icon: 'pe-7s-close-circle' },
 ];
 
 const CheckOrder = () => {
@@ -67,29 +67,13 @@ const CheckOrder = () => {
 
   return (
     <>
-      <B.Container fluid className="bg-secondary mb-5">
-        <div
-          className="d-flex flex-column align-items-center justify-content-center"
-          style={{ minHeight: "300px" }}
-        >
-          <h1 className="fw-semibold text-uppercase mb-3">Tình trạng đơn hàng</h1>
-          <div className="d-inline-flex">
-            <p className="m-0">
-              <Link to={"/"} className="text-decoration-none" variant="primary">
-                Home
-              </Link>
-            </p>
-            <p className="m-0 px-2">-</p>
-            <p className="m-0">
-              <Link to={"/myorder"} className="text-decoration-none" variant="primary">
-                Đơn hàng
-              </Link>
-            </p>
-            <p className="m-0 px-2">-</p>
-            <p className="m-0 text-muted">Tình trạng đơn hàng</p>
-          </div>
-        </div>
-      </B.Container>
+      <Breadcum
+        title='Tình trạng đơn hàng'
+        BC={2}
+        name='Tình trạng đơn hàng'
+        link='/myorder'
+        linkName='Đơn hàng'
+      />
 
       <div className="container padding-bottom-3x mb-5 mt-5">
         <form action="">
@@ -106,16 +90,26 @@ const CheckOrder = () => {
 
             <div className="card-body">
               <div className="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
-                {checkStatus.map((item, index) => (
-                  <div key={item.id} className={'step' + [status >= index ? ' completed' : '']}>
+                {status !== 5 ?
+                  checkStatus.map((item, index) => (
+                    <div key={item.id} className={'step' + [status >= index ? ' completed' : '']}>
+                      <div className="step-icon-wrap">
+                        <div className="step-icon">
+                          <i className={item.icon}></i>
+                        </div>
+                      </div>
+                      <h4 className="step-title">{item.name}</h4>
+                    </div>
+                  ))
+                  :
+                  <div className={'step completed'}>
                     <div className="step-icon-wrap">
                       <div className="step-icon">
-                        <i className={item.icon}></i>
+                        <i className='pe-7s-close-circle'></i>
                       </div>
                     </div>
-                    <h4 className="step-title">{item.name}</h4>
-                  </div>
-                ))}
+                    <h4 className="step-title">Đơn hàng đã hủy</h4>
+                  </div>}
               </div>
             </div>
           </div>

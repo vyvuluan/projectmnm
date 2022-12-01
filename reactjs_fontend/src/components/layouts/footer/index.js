@@ -1,113 +1,103 @@
 import React from "react";
-import Footer from "rc-footer";
-import "rc-footer/assets/index.css"; // import 'rc-footer/asssets/index.less';
-import { render } from "react-dom";
+import * as Icon from "react-bootstrap-icons";
+import { Link } from 'react-router-dom'
+import { RiHomeSmileFill } from 'react-icons/ri'
+import { FaEnvelope, FaWrench } from 'react-icons/fa'
+import { MdOutlineSmartphone, MdGroups } from 'react-icons/md'
 
 const Footers = () => {
-    
+
   return (
-    <Footer
-    className="border-top shadow-sm"
-      theme={'light'}
-      maxColumnsPerRow={4}
-      columns={[
-        {
-          title: "GIỚI THIỆU",
-          items: [
-            {
-              title: "Về chúng tôi",
-              url: "http://localhost:3000/",
-              openExternal: true,
-            },
-            {
-              title: "Tư vấn mua hàng",
-              url: "http://localhost:3000/",
-              openExternal: true,
-            },
-            {
-              title: "Tuyển dụng",
-              url: "http://localhost:3000/",
-            },
-          ],
-        },
-        {
-          title: "CHÍNH SÁCH CHUNG",
-          items: [
-            {
-              title: "Chính sách trả góp",
-              url: "http://localhost:3000/",
-              openExternal: true,
-            },
-            {
-              title: "Chính sách bảo mật",
-              url: "http://localhost:3000",
-              openExternal: true,
-            },
-            {
-              title: "Chính sách giải quyết khiếu nại",
-              url: "http://localhost:3000",
-            },
-            {
-              title: "Chính sách bảo hành",
-              url: "http://localhost:3000",
-            },
-          ],
-        },
-        {
-          title: "THÔNG TIN KHUYẾN MÃI",
-          items: [
-            {
-              title: "Tổng hợp khuyến mãi",
-              url: "http://localhost:3000/",
-              openExternal: true,
-            },
-            {
-              title: "VGA Giảm Sâu",
-              url: "http://localhost:3000",
-              openExternal: true,
-            },
-            {
-              title: "Laptop 1.990k - Giảm đến 50%",
-              url: "http://localhost:3000",
-            },
-          ],
-        },
-        {
-          icon: (
-            <img
-              src="https://gw.alipayobjects.com/zos/rmsportal/nBVXkrFdWHxbZlmMbsaH.svg"
-              alt="more products"
-            />
-          ),
-          title: "HỖ TRỢ KHÁCH HÀNG",
-          items: [
-            {
-              icon: (
-                <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/XuVpGqBFxXplzvLjJBZB.svg"
-                  alt="yuque"
-                />
-              ),
-              title: "Tổng hợp Hotline CSKH, phản ánh",
-              url: "http://localhost:3000" ,
-              openExternal: true,
-            },
-            {
-              icon: (
-                <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/uHocHZfNWZOdsRUonZNr.png"
-                  alt="yuque"
-                />
-              ),
-              title: "Thông tin thanh toán",
-              url: "http://localhost:3000",
-              openExternal: true,
-            },
-          ],
-        },
-      ]}
-      bottom="Made with ❤️ L3M Team"
-    />
+    <footer className="text-white text-center text-lg-start bg-secondary">
+      <div className="container p-4">
+        <div className="row mt-4">
+          <div className="col-lg-4 col-md-12 mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-4 text-dark">Về L3M SHOP</h5>
+
+            <p className="text-dark">
+              Chuyên Laptop-PC-Workstation. Với giá cả phải chăng chúng tôi tự hào đi sau trong lĩnh vực bán lẻ thiết bị công nghệ và phần cứng.
+            </p>
+
+            <p className="text-dark">
+              Tự hào với chưa đầy 1 năm trong nghành chúng tôi đã lãnh nợ lên đến 4 nghìn tỷ.
+            </p>
+
+            <div className="mt-4 mb-3">
+              <a
+                className="text-dark px-2"
+                href={"https://www.facebook.com/profile.php?id=100007156123173"}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <Icon.Facebook></Icon.Facebook>
+              </a>
+              <a
+                className="text-dark px-2"
+                href={"https://www.instagram.com/sontungmtp/"}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <Icon.Instagram></Icon.Instagram>
+              </a>
+              <a
+                className="text-dark px-2"
+                href={
+                  "https://www.youtube.com/results?search_query=eunji+pyoapple"
+                }
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <Icon.Youtube></Icon.Youtube>
+              </a>
+            </div>
+          </div>
+
+          <div className="col-lg-4 col-md-6 mb-4 mb-md-0">
+            <ul className="fa-ul text-dark list-unstyled" style={{ marginLeft: "1.65em;" }}
+            >
+              <li className="mb-3">
+                <span className="fa-li"><RiHomeSmileFill /></span><span className="ms-2 text-dark">273 An D.Vương, Phường 3, Quận 5</span>
+              </li>
+              <li className="mb-3">
+                <span className="fa-li"><FaEnvelope /></span><span className="ms-2 text-dark">hotrol3m@gmail.com</span>
+              </li>
+              <li className="mb-3">
+                <span className="fa-li"><MdGroups /></span><Link to='/aboutus' className="text-decoration-none"><span className="ms-2 text-dark">Về chúng tôi</span></Link>
+              </li>
+              <li className="mb-3">
+                <span className="fa-li"><FaWrench /></span><Link to='/warranty' className="text-decoration-none"><span className="ms-2 text-dark">Kiểm tra bảo hành</span></Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-lg-4 col-md-6 mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-4 text-dark">Giờ mở cửa</h5>
+
+            <table className="table text-center text-dark">
+              <tbody className="font-weight-normal">
+                <tr>
+                  <td>Thứ 2 - 6:</td>
+                  <td>8am - 10pm</td>
+                </tr>
+                <tr>
+                  <td>Thứ 7:</td>
+                  <td>8am - 3pm</td>
+                </tr>
+                <tr>
+                  <td>Chủ nhật:</td>
+                  <td>Nghỉ</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+        © 2022 Copyright:
+        <Link className="text-white text-decoration-none" to="/"> L3M SHOP</Link>
+      </div>
+    </footer>
   );
 };
 

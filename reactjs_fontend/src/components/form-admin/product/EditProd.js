@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import * as B from 'react-bootstrap'
 import swal from 'sweetalert';
 import { Editor } from "@tinymce/tinymce-react";
+import './style.css'
 
 const Prodedit = ({ product, showModal, category, roleID }) => {
 
@@ -74,19 +75,19 @@ const Prodedit = ({ product, showModal, category, roleID }) => {
         if (roleID === '4') {
             axios.post(`/api/nhanvien/products/${id}?_method=PUT`, formData).then(res => {
                 if (res.data.status === 200) {
-                    swal('Success', res.data.message, 'success')
+                    swal('Thành công', res.data.message, 'success')
                     showModal();
                 } else if (res.data.status === 404) {
-                    swal('Error', res.data.message, 'error')
+                    swal('Thất bại', res.data.message, 'error')
                 }
             })
         } else if (roleID === '3') {
             axios.post(`/api/kho/products/update/${id}`, formData).then(res => {
                 if (res.data.status === 200) {
-                    swal('Success', res.data.message, 'success')
+                    swal('Thành công', res.data.message, 'success')
                     showModal();
                 } else if (res.data.status === 404) {
-                    swal('Error', res.data.message, 'error')
+                    swal('Thất bại', res.data.message, 'error')
                 }
             })
         }
@@ -109,12 +110,14 @@ const Prodedit = ({ product, showModal, category, roleID }) => {
                                     : <div className="prev-container mb-2 me-2">
                                         {<img src={`http://localhost:8000/uploadhinh/${product.hinh}`} alt=""></img>}
                                     </div>}
+                                <label className="custom-file-input1" for='imageinput'>Chọn ảnh khác</label>
                                 <B.FormGroup className="">
                                     <B.FormControl
                                         type="file"
                                         name="image"
                                         onChange={handleImage}
-                                        className="rounded-0 shadow-none mb-3"
+                                        className="d-none"
+                                        accept=".jpg, .png, .svg, .webp, .tif, .tiff, .gif, .raw"
                                     ></B.FormControl>
                                 </B.FormGroup>
                             </B.Col>

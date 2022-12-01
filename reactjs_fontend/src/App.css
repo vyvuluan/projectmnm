@@ -1,7 +1,7 @@
 .App {
   text-align: center;
 }
-html{
+html {
   scroll-behavior: smooth;
 }
 .App-logo {
@@ -26,8 +26,6 @@ html{
   color: white;
 }
 
-
-
 .App-link {
   color: #61dafb;
 }
@@ -50,6 +48,11 @@ html{
   background-color: #af1729 !important;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 /* * {
   -ms-overflow-style: none;
 } */
